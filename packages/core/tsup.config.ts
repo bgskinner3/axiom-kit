@@ -1,53 +1,29 @@
-// // tsup.config
+// packages/react/tsup.config.ts
 // import { defineConfig } from 'tsup';
-// export default defineConfig([
-//   // 1. Build the main entry
-//   {
-//     entry: ['src/index.ts'],
-//     format: ['cjs', 'esm'],
-//     dts: true,
-//     clean: true,
-//     sourcemap: true,
-//     minify: true,
-//     external: ['react', 'react-dom'],
-//     outDir: 'dist',
-//   },
-//   // 2. Build the transformer separately into its own folder
-//   {
-//     entry: ['transformer/index.ts'],
-//     format: ['cjs', 'esm'],
-//     dts: true,
-//     clean: false, // Don't clean here or you'll delete the 'src' build
-//     sourcemap: true,
-//     minify: true,
-//     external: ['react', 'react-dom'],
-//     outDir: 'dist/transformer',
-//   },
-// ]);
 
 // export default defineConfig({
+//   // 1. Entry point for the React-specific suite
 //   entry: ['src/index.ts'],
-//   format: ['cjs', 'esm'], // Build for both CommonJS and ESModules
-//   dts: true, // Generate declaration file (.d.ts)
-//   splitting: false,
-//   sourcemap: true,
+  
+//   // 2. Output both modern ESM and legacy CJS
+//   format: ['cjs', 'esm'],
+  
+//   // 3. Generate .d.ts files for "Wizard-level" IntelliSense
+//   dts: true,
+  
+//   // 4. Clean the dist folder before each build
 //   clean: true,
-//   treeshake: true,
-//   minify: true,
+  
+//   // 5. CRITICAL: Do not bundle React or React-DOM
+//   // This forces the user's app to provide them
 //   external: ['react', 'react-dom'],
+  
+//   // 6. Optimization
+//   minify: true,
+//   sourcemap: true,
+//   treeshake: true,
+  
+//   // 7. Ensure JSX is handled correctly
+//   minifyWhitespace: true,
+//   splitting: true,
 // });
-/**
- color 
- common
- computation 
- debug 
- deepoperations
- dom
- guards
- link
- processors
- transfprmers
- utility-types
- validations
- 
- */

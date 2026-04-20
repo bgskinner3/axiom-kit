@@ -1,4 +1,4 @@
-class ObjectUtils {
+export class ObjectUtils {
     /**
      * @utilType util
      * @name keys
