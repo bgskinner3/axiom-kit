@@ -1,0 +1,32 @@
+{
+  "name": "axiom-kit",
+  "private": true,
+  "description": "High-performance TypeScript utility monorepo",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "eslint \"packages/**/src/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"packages/**/src/**/*.{ts,tsx,js,json,md}\"",
+    "prepare": "ts-patch install",
+    "clean": "rimraf packages/*/dist && rimraf packages/*/node_modules" 
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "eslint": "^9.38.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "tsup": "^8.5.1",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.2.5",
+    "ts-patch": "^3.3.0",
+    "tsx": "^4.21.0",
+    "rimraf": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/jest": "^29.5.0"
+  }
+}
