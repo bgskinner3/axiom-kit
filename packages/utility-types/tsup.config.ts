@@ -10,4 +10,5 @@ export default defineConfig({
   minify: true,
   // This helps tsup focus strictly on the types
   splitting: false,
+    tsconfig: 'tsconfig.build.json',
 });

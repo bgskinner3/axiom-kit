@@ -1,10 +1,21 @@
 {
   "name": "@axiom/utility-types",
   "version": "1.0.0",
+  "description": "Wizard-level TypeScript type utilities for the Axiom kit.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --dts-only --clean"
-  }
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "keywords": [
+    "typescript",
+    "types",
+    "utility",
+    "axiom"
+  ]
 }

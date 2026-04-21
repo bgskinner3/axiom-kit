@@ -24,4 +24,5 @@ export default defineConfig({
   // 6. Modern React logic (fixes React 19 / Next.js hydration issues)
   minifyWhitespace: true,
   platform: 'browser',
+      tsconfig: 'tsconfig.build.json',
 });

@@ -2,10 +2,34 @@
   "files": [],
   "references": [
     {
+      "path": "./packages/utility-types"
+    },
+    {
+      "path": "./packages/guards"
+    },
+    {
       "path": "./packages/core"
     },
     {
-      "path": "./packages/utility-types"
+      "path": "./packages/colors"
     },
+    {
+      "path": "./packages/morph"
+    },
+    {
+      "path": "./packages/dom"
+    },
+    {
+      "path": "./packages/deep-operations"
+    },
+    {
+      "path": "./packages/engine"
+    },
+    {
+      "path": "./packages/react"
+    },
+    {
+      "path": "./packages/debug"
+    }
   ]
 }

@@ -24,6 +24,8 @@
     "composite": true,
     "incremental": true,
     "skipLibCheck": true,
+    "ignoreDeprecations": "6.0", // 👈 Add this line
+    "baseUrl": "./",
     /* Interop & Modernity */
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -35,14 +37,32 @@
       "@axiom/utility-types": [
         "./packages/utility-types"
       ],
-      "@axiom/core": [
-        "./packages/core"
-      ],
       "@axiom/guards": [
         "./packages/guards"
       ],
+      "@axiom/core": [
+        "./packages/core"
+      ],
+      "@axiom/colors": [
+        "./packages/colors"
+      ],
+      "@axiom/morph": [
+        "./packages/morph"
+      ],
+      "@axiom/dom": [
+        "./packages/dom"
+      ],
+      "@axiom/deep-operations": [
+        "./packages/deep-operations"
+      ],
+      "@axiom/engine": [
+        "./packages/engine"
+      ],
       "@axiom/react": [
         "./packages/react"
+      ],
+      "@axiom/debug": [
+        "./packages/debug"
       ]
     }
   }

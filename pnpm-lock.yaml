@@ -75,8 +75,56 @@ importers:
         specifier: ^8.59.0
         version: 8.59.0(eslint@10.2.1)(typescript@6.0.3)
 
+  packages/colors:
+    dependencies:
+      '@axiom/guards':
+        specifier: workspace:*
+        version: link:../guards
+      '@axiom/utility-types':
+        specifier: workspace:*
+        version: link:../utility-types
+
   packages/core:
     dependencies:
+      '@axiom/utility-types':
+        specifier: workspace:*
+        version: link:../utility-types
+
+  packages/debug:
+    dependencies:
+      '@axiom/core':
+        specifier: workspace:*
+        version: link:../core
+      '@axiom/utility-types':
+        specifier: workspace:*
+        version: link:../utility-types
+
+  packages/deep-operations:
+    dependencies:
+      '@axiom/guards':
+        specifier: workspace:*
+        version: link:../guards
+      '@axiom/utility-types':
+        specifier: workspace:*
+        version: link:../utility-types
+
+  packages/dom:
+    dependencies:
+      '@axiom/guards':
+        specifier: workspace:*
+        version: link:../guards
+      '@axiom/utility-types':
+        specifier: workspace:*
+        version: link:../utility-types
+
+  packages/engine:
+    dependencies:
+      '@axiom/core':
+        specifier: workspace:*
+        version: link:../core
+      '@axiom/guards':
+        specifier: workspace:*
+        version: link:../guards
       '@axiom/utility-types':
         specifier: workspace:*
         version: link:../utility-types
@@ -86,6 +134,15 @@ importers:
       '@axiom/core':
         specifier: workspace:*
         version: link:../core
+      '@axiom/utility-types':
+        specifier: workspace:*
+        version: link:../utility-types
+
+  packages/morph:
+    dependencies:
+      '@axiom/guards':
+        specifier: workspace:*
+        version: link:../guards
       '@axiom/utility-types':
         specifier: workspace:*
         version: link:../utility-types

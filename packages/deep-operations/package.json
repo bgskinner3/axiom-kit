@@ -17,8 +17,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsup src/index.ts --format cjs,esm --watch --dts",
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "@axiom/guards": "workspace:*",
