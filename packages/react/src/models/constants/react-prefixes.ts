@@ -1,5 +1,4 @@
 /**
- * @internal
  * Prefixes that are always considered valid for DOM elements.
  * Moving these to a constant allows for easier framework updates.
  */

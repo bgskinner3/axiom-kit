@@ -34,13 +34,11 @@ export type TNamedComponent = {
 
 export type TValidPrefix = (typeof VALID_PROP_PREFIXES)[number];
 /**
- * @internal
  * Base dictionary keys for standard React/DOM attributes.
  */
 export type TValidDOMProp = keyof typeof VALID_DOM_PROPS;
 
 /**
- * @internal
  * The "Master Union" that powers your prop extraction.
  * Includes explicit keys + flexible patterns.
  */

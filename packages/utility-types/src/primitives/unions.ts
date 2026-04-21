@@ -13,20 +13,19 @@
  *
  * @template U - The union to be transformed.
  */
-type TUnionToIntersection<U> = (
+export type TUnionToIntersection<U> = (
   U extends unknown ? (k: U) => void : never
 ) extends (k: infer I) => void
   ? I
   : never;
-  
+
 /**
- * @internal
+ * 
  * Converts a readonly array of strings into a union of template literal patterns.
  * Example: ['data-', 'on'] -> `data-${string}` | `on${string}`
  */
-type TPrefixUnion<T extends readonly string[]> = T extends readonly [infer F, ...infer R]
+export type TPrefixUnion<T extends readonly string[]> = T extends readonly [infer F, ...infer R]
   ? F extends string
     ? `${F}${string}` | TPrefixUnion<R extends readonly string[] ? R : []>
     : never
   : never;
-export type { TUnionToIntersection, TPrefixUnion };
