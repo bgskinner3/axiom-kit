@@ -1,4 +1,4 @@
-import type { TTypeGuard } from '@axiom/core';
+import type { TTypeGuard } from '@axiom/utility-types';
 /**
  * @utilType Guard
  * @name isNumber

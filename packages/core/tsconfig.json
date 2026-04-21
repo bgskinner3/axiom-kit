@@ -3,8 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "composite": false,    // 👈 THE FIX: Disable for tsup run
-    "incremental": false,  // 👈 THE FIX: Fixes TS5074
+    "composite": true,    // 👈 THE FIX: Disable for tsup run
+    "incremental": true,  // 👈 THE FIX: Fixes TS5074
     "baseUrl": null,       // 👈 THE FIX: Fixes TS5101
     "ignoreDeprecations": "6.0"
   },

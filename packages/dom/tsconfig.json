@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true,
+    "incremental": true,
+    /* 🌐 THE DOM ENGINE */
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": [] 
+  },
+  "references": [
+    { "path": "../utility-types" },
+    { "path": "../guards" }
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["dist", "**/__tests__/*"]
+}

@@ -3,15 +3,14 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  // 🚀 WIZARD MOVE: Pull @axiom internal types into this package's d.ts
   dts: {
     resolve: true,
   },
-  // We keep Core as external for now unless you want to bundle it
-  external: [], 
   clean: true,
   minify: true,
+  tsconfig: 'tsconfig.build.json',
   splitting: true,
   treeshake: true,
-   tsconfig: 'tsconfig.build.json',
+  // ⚡ Optimization: Ensure heavy logic is properly minified
+  minifyWhitespace: true,
 });

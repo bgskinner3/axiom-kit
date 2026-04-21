@@ -5,10 +5,18 @@
     "rootDir": "./src",
     "composite": true, // 👈 MUST be true for the workspace link to work
     "incremental": true,
-    "types": [] // 👈 No Node or React types in Universal Guards
+    "types": [] 
   },
   "include": [
     "src/**/*"
+  ],
+  "references": [
+    {
+      "path": "../utility-types"
+    },
+    {
+      "path": "../core"
+    }
   ],
   "exclude": [
     "dist",

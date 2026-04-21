@@ -5,14 +5,12 @@
     "rootDir": "./src",
     "composite": true,
     "incremental": true,
-    "baseUrl": null,
-    "emitDeclarationOnly": true,
-    "ignoreDeprecations": "6.0"
+    "types": [] 
   },
-  "include": [
-    "src/**/*"
+  "references": [
+    { "path": "../utility-types" },
+    { "path": "../guards" }
   ],
-  "exclude": [
-    "dist"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["dist", "**/__tests__/*"]
 }
