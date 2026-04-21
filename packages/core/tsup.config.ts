@@ -5,8 +5,9 @@ export default defineConfig({
     entry: ['src/index.ts'],
     format: ['cjs', 'esm'],
     // 3. Generate .d.ts files for "Wizard-level" IntelliSense
-    dts: true,
-
+  dts: {
+    resolve: true, // 👈 Flattens your utilities into one index.d.ts
+  },
     // 4. Clean the dist folder before each build
     clean: true,
 

@@ -16,7 +16,7 @@ tree.md
 
 # Build files
 /dist
-
+dist/
 /notes.md
 
 # docs 

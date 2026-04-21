@@ -3,17 +3,17 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    // Allows other packages to reference Core for faster builds
-    "composite": true,
-    "types": [
-      "node"
-    ]
+    /* ⚡ THE FIXES ⚡ */
+    "composite": false,
+    "incremental": false,
+    "baseUrl": null,
+    "emitDeclarationOnly": true,
+    "ignoreDeprecations": "6.0"
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
-    "dist",
-    "**/__tests__/*"
+    "dist"
   ]
 }

@@ -2,8 +2,8 @@
   "compilerOptions": {
     /* Target & Module */
     "target": "ESNext",
-    "module": "NodeNext", // 👈 Critical: Handles ESM/CJS correctly
-    "moduleResolution": "NodeNext",
+    "module": "ESNext", // 👈 Critical: Handles ESM/CJS correctly
+    "moduleResolution": "bundler",
     "lib": [
       "ESNext",
       "DOM",
@@ -32,8 +32,17 @@
     "verbatimModuleSyntax": true, // 👈 TS 5.0+ standard for cleaner ESM imports
     /* Path Mapping for the Monorepo */
     "paths": {
-      "@axiom/*": [
-        "./packages/*/src"
+      "@axiom/utility-types": [
+        "./packages/utility-types"
+      ],
+      "@axiom/core": [
+        "./packages/core"
+      ],
+      "@axiom/guards": [
+        "./packages/guards"
+      ],
+      "@axiom/react": [
+        "./packages/react"
       ]
     }
   }

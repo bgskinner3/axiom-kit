@@ -1,0 +1,38 @@
+{
+  "name": "@axiom/react",
+  "version": "1.0.0",
+  "description": "High-performance React utilities and type guards for the Axiom kit.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsup src/index.ts --format cjs,esm --watch --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
+  },
+  "dependencies": {
+    "@axiom/core": "workspace:*",
+    "@axiom/guards": "workspace:*",
+    "@axiom/utility-types": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "keywords": [
+    "typescript",
+    "react",
+    "guards",
+    "axiom"
+  ]
+}

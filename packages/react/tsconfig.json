@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true,
+    /* 1. The React Engine */
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    
+    /* 2. Framework Isolation */
+    "types": ["react", "react-dom", "node"],
+    
+    /* 3. Performance */
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+  },
+  "references": [
+    { "path": "../utility-types" },
+    { "path": "../core" },
+    { "path": "../guards" }
+  ],
+  "include": ["src"],
+  "exclude": ["dist", "**/__tests__/*"]
+}
