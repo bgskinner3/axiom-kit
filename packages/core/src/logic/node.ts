@@ -1,6 +1,3 @@
-
-
-
 // /**
 //  * @utilType Guard
 //  * @name isBufferLikeObject
@@ -32,6 +29,5 @@
 
 //   return hasTypeBuffer && hasNumberArrayData;
 // };
-
 
 // isStream, isBuffer

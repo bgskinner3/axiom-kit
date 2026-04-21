@@ -3,7 +3,6 @@ import { ObjectUtils, yieldEntries } from '@axiom/core';
 import type { ElementType, ComponentPropsWithoutRef } from 'react';
 import { isDOMPropKey } from '../guards';
 
-
 /**
  * Extracts a subset of properties from an object based on a whitelist of keys.
  *
@@ -41,7 +40,7 @@ export function extractComponentProps<
     isTargetKey(entry[0]),
   );
 
-  return ObjectUtils.fromEntries<K, T[K]>(filteredEntries)
+  return ObjectUtils.fromEntries<K, T[K]>(filteredEntries);
 }
 // export function extractComponentProps<
 //   T extends Record<string, unknown>,

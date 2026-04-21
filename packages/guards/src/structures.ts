@@ -1,5 +1,9 @@
-import type { TTypeGuard, TAnyFunction, TAnyObject } from '@axiom/utility-types';
-import {isNull} from './primitives'
+import type {
+  TTypeGuard,
+  TAnyFunction,
+  TAnyObject,
+} from '@axiom/utility-types';
+import { isNull } from './primitives';
 /**
  * @utilType Guard
  * @name isFunction

@@ -1,4 +1,3 @@
-
 /**
  * @utilType util
  * @name yieldFiltered
@@ -34,11 +33,11 @@ export function* yieldFiltered<T, S extends T>(
  * const laptop: Device = { id: 101, model: "X1", isOnline: true };
  *
  * // Example: A guard that only yields string-based properties
- * const isStringProp = (key: keyof Device, value: any): key is "model" => 
+ * const isStringProp = (key: keyof Device, value: any): key is "model" =>
  *   typeof value === 'string';
  *
  * const entries = yieldEntries(laptop, isStringProp);
- * 
+ *
  * for (const [key, value] of entries) {
  *   console.log(key);   // type: "model"
  *   console.log(value); // type: string
@@ -49,7 +48,6 @@ export function* yieldEntries<T extends object, K extends keyof T>(
   obj: T,
   guard: (key: keyof T, value: T[keyof T]) => key is K,
 ): Generator<[K, T[K]]> {
-
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       if (guard(key, obj[key])) {

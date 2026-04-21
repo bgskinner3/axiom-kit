@@ -20,11 +20,14 @@ export type TUnionToIntersection<U> = (
   : never;
 
 /**
- * 
+ *
  * Converts a readonly array of strings into a union of template literal patterns.
  * Example: ['data-', 'on'] -> `data-${string}` | `on${string}`
  */
-export type TPrefixUnion<T extends readonly string[]> = T extends readonly [infer F, ...infer R]
+export type TPrefixUnion<T extends readonly string[]> = T extends readonly [
+  infer F,
+  ...infer R,
+]
   ? F extends string
     ? `${F}${string}` | TPrefixUnion<R extends readonly string[] ? R : []>
     : never

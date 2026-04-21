@@ -1,6 +1,6 @@
 import type { TTypeGuard } from '@axiom/utility-types';
 import { ObjectUtils } from '@axiom/core';
-import { isString, isNumber, isSymbol,  isDefined } from './primitives';
+import { isString, isNumber, isSymbol, isDefined } from './primitives';
 import { isObject } from './structures';
 /**
  * @utilType Guard
@@ -20,8 +20,7 @@ import { isObject } from './structures';
  */
 export const isInArray = <T>(target: readonly T[]): TTypeGuard<T> => {
   const set = new Set<unknown>(target);
-  return (value: unknown): value is T =>
-    set.has(value as T);
+  return (value: unknown): value is T => set.has(value as T);
 };
 
 /**
@@ -68,8 +67,9 @@ export const isKeyInObject =
  * @name isInSet
  * @description Type-safe wrapper for Set.has that narrows a value to a specific union.
  */
-export const isInSet = <T>(set: Set<unknown>) => 
-  (value: unknown): value is T => 
+export const isInSet =
+  <T>(set: Set<unknown>) =>
+  (value: unknown): value is T =>
     set.has(value);
 /**
  * @utilType Guard
@@ -103,8 +103,7 @@ export const isKeyOfArray =
     keys: T,
   ): TTypeGuard<T[number]> =>
   (key: unknown): key is T[number] =>
-    (isString(key) || isNumber(key) || isSymbol(key)) &&
-    keys.includes(key);
+    (isString(key) || isNumber(key) || isSymbol(key)) && keys.includes(key);
 
 /**
  * @utilType Guard
@@ -191,15 +190,15 @@ export const hasDefinedKeys = <T extends object>(
  * @param schema - A mapping of keys from `T` to their corresponding `TTypeGuard`.
  * @returns A type guard function that narrows `unknown` to `T`.
  */
-export const isShape = <T extends object>(
-  schema: { [K in keyof T]: TTypeGuard<T[K]> }
-): TTypeGuard<T> => {
+export const isShape = <T extends object>(schema: {
+  [K in keyof T]: TTypeGuard<T[K]>;
+}): TTypeGuard<T> => {
   const schemaKeys = Object.keys(schema) as (keyof T)[];
-  
+
   return (value: unknown): value is T => {
     if (!isObject(value)) return false;
     for (const key of schemaKeys) {
-        const guard = schema[key];
+      const guard = schema[key];
       // Direct check is faster than calling another higher-order guard
       if (!isKeyInObject(key)(value) || !guard(value[key])) {
         return false;
@@ -208,7 +207,6 @@ export const isShape = <T extends object>(
     return true;
   };
 };
-
 
 /**
  * @utilType Guard
@@ -251,7 +249,6 @@ export const isShape = <T extends object>(
 export const isType = <T>(value: unknown, schema: TTypeGuard<T>): value is T =>
   schema(value);
 
-
 /**
  * @utilType Guard
  * @name isRegExp
@@ -262,7 +259,6 @@ export const isType = <T>(value: unknown, schema: TTypeGuard<T>): value is T =>
 export const isRegExp = <T extends RegExp>(val: unknown): val is T => {
   return val instanceof RegExp;
 };
-
 
 /**
  * @utilType Guard
