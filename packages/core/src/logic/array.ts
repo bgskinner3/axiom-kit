@@ -4,7 +4,7 @@ type TPrettify<T> = { [K in keyof T]: T[K] } & {};
 
 type TArrayItems<T extends Array<unknown>> =
   T extends Array<infer TItems> ? TItems : never;
-  type TFixedLengthArray<T extends unknown[]> = TPrettify<
+type TFixedLengthArray<T extends unknown[]> = TPrettify<
   {
     // Filter to only keep numeric keys (indices)
     [K in keyof T as K extends `${number}` ? K : never]: T[K];

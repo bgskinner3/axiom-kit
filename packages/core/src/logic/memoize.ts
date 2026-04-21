@@ -1,5 +1,3 @@
-
-
 export const memoize = <T>(fn: (arg: string) => T) => {
   const cache: Record<string, T> = Object.create(null);
 

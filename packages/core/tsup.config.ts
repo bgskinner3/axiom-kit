@@ -3,11 +3,9 @@
 
 // export default defineConfig({
 //   // 1. Entry point for the React-specific suite
-//   entry: ['src/index.ts'],
-  
+//   entry: ['src/index.ts'], 
 //   // 2. Output both modern ESM and legacy CJS
-//   format: ['cjs', 'esm'],
-  
+//   format: ['cjs', 'esm'],n
 //   // 3. Generate .d.ts files for "Wizard-level" IntelliSense
 //   dts: true,
   

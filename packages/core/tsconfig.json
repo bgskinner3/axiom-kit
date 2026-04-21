@@ -4,8 +4,16 @@
     "outDir": "./dist",
     "rootDir": "./src",
     // Allows other packages to reference Core for faster builds
-    "composite": true
+    "composite": true,
+    "types": [
+      "node"
+    ]
   },
-  "include": ["src"],
-  "exclude": ["dist", "**/__tests__/*"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "dist",
+    "**/__tests__/*"
+  ]
 }
