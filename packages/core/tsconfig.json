@@ -3,11 +3,21 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "composite": true,    // 👈 THE FIX: Disable for tsup run
-    "incremental": true,  // 👈 THE FIX: Fixes TS5074
-    "baseUrl": null,       // 👈 THE FIX: Fixes TS5101
+    "composite": true, // 👈 THE FIX: Disable for tsup run
+    "incremental": true, // 👈 THE FIX: Fixes TS5074
+    "baseUrl": null, // 👈 THE FIX: Fixes TS5101
     "ignoreDeprecations": "6.0"
   },
-  "include": ["src/**/*"], // 👈 THE FIX: Fixes TS6307 (recursive include)
-  "exclude": ["dist", "**/__tests__/*"]
+  "include": [
+    "src/**/*"
+  ], // 👈 THE FIX: Fixes TS6307 (recursive include)
+  "exclude": [
+    "dist",
+    "**/__tests__/*"
+  ],
+  "references": [
+    {
+      "path": "../utility-types"
+    },
+  ],
 }

@@ -1,3 +1,4 @@
+import type { SyntheticEvent } from "react";
 /**
  * @utilType util
  * @name mergeEventHandlerClicks

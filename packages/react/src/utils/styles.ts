@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+import { ObjectUtils } from '@axiom/core';
 /**
  * @utilType util
  * @name mergeCssVars

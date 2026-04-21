@@ -19,10 +19,8 @@ import { isObject } from './structures';
  * @returns A type guard function that narrows `unknown` to `T`.
  */
 export const isInArray = <T>(target: readonly T[]): TTypeGuard<T> => {
-  const set = new Set(target);
+  const set = new Set<unknown>(target);
   return (value: unknown): value is T =>
-    // If it's undefined and not in your set, it returns false.
-    // This correctly fails a "Required" field check.
     set.has(value as T);
 };
 
@@ -65,7 +63,14 @@ export const isKeyInObject =
   <K extends PropertyKey>(key: K) =>
   (obj: unknown): obj is Record<K, unknown> =>
     isObject(obj) && key in obj;
-
+/**
+ * @utilType guard
+ * @name isInSet
+ * @description Type-safe wrapper for Set.has that narrows a value to a specific union.
+ */
+export const isInSet = <T>(set: Set<unknown>) => 
+  (value: unknown): value is T => 
+    set.has(value);
 /**
  * @utilType Guard
  * @name isKeyOfArray

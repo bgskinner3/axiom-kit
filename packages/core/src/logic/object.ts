@@ -16,11 +16,26 @@ export class ObjectUtils {
    * @description Returns an array of an object's own enumerable string-keyed [key, value] pairs with preserved inference.
    * @link #entries
    */
+  // static entries<T extends Record<string, unknown>>(
+  //   obj: T,
+  // ): [string, unknown][] {
+  //   return obj ? Object.entries(obj) : [];
+  // }
   static entries<T extends Record<string, unknown>>(
-    obj: T,
+    obj: T | null | undefined,
   ): [keyof T, T[keyof T]][] {
-    return obj ? (Object.entries(obj) as [keyof T, T[keyof T]][]) : [];
+    if (!obj) return [];
+    // We use one "internal" cast to the specific return type
+    // to override the default lib.dom string-only return.
+    return Object.entries(obj) as [keyof T, T[keyof T]][];
   }
+  // static entries<T extends Record<string, unknown>>(
+  //   obj: T,
+  // ): [keyof T, T[keyof T]][];
+  // static entries(obj: Record<string, unknown>): [string, unknown][];
+  // static entries(obj: any): [any, any][] {
+  //   return obj ? Object.entries(obj) : [];
+  // }
   /**
    * @utilType util
    * @name fromEntries
@@ -34,6 +49,30 @@ export class ObjectUtils {
   >(entries: [K, V][]): Record<K, V> {
     return Object.fromEntries(entries) as Record<K, V>;
   }
+  // static fromEntries<K extends PropertyKey, V>(
+  //   entries: Iterable<readonly [K, V]>,
+  // ): Record<K, V>;
+
+  // static fromEntries<T extends readonly (readonly [PropertyKey, any])[]>(
+  //   entries: T,
+  // ): {
+  //   [K in T[number] as K[0]]: K[1]
+  // };
+
+  // static fromEntries(entries: Iterable<readonly [PropertyKey, any]>) {
+  //   const result: any = {};
+
+  //   for (const [key, value] of entries) {
+  //     result[key] = value;
+  //   }
+
+  //   return result;
+  // }
+  // static fromEntries<K extends PropertyKey, V>(
+  //   entries: Iterable<readonly [K, V]>,
+  // ): Record<K, V> {
+  //   return Object.fromEntries(entries) as Record<K, V>;
+  // }
   /**
    * @utilType util
    * @name values

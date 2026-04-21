@@ -1,4 +1,4 @@
-import type { TTypeGuard, TNamedComponent } from '@axiom/utility-types';
+import type { TTypeGuard } from '@axiom/utility-types';
 import {
   isKeyOfObject,
   isFunction,
@@ -6,7 +6,7 @@ import {
   isKeyInObject,
 } from '@axiom/guards';
 import type { ComponentType, ForwardRefExoticComponent } from 'react';
-
+import type { TNamedComponent } from '../internal';
 /**
  * @utilType Guard
  * @name hasReactSymbol

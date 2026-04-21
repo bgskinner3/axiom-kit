@@ -1,28 +1,9 @@
-/**
- * @utilType util
- * @name extractDOMProps
- * @category React
- * @description Strips custom component props to return only valid HTML attributes for a specific element.
- * @link #extractdomprops
- *
- * ## 🧹 extractDOMProps — Safe Attribute Filtering
- *
- * Automatically extracts valid DOM props from a combined props object.
- * Prevents React "unknown prop" warnings by filtering against a whitelist.
- */
-export function extractDOMProps<
-  TElement extends ElementType,
-  TFullProps extends ComponentPropsWithoutRef<TElement>,
->(props: TFullProps): ComponentPropsWithoutRef<TElement> {
-  const entries = ObjectUtils.entries(props);
-  // 2. No cast needed: ArrayUtils.filter narrows based on the isDOMEntry predicate
-  const filteredEntries = ArrayUtils.filter(entries, isDOMEntry<TElement>);
-  // 3. No cast needed: ObjectUtils.fromEntries consumes the narrowed entries
+import { isFunction, isKeyOfArray, isString } from '@axiom/guards';
+import { ObjectUtils, yieldEntries } from '@axiom/core';
+import type { ElementType, ComponentPropsWithoutRef } from 'react';
+import { isDOMPropKey } from '../guards';
 
-  return ObjectUtils.fromEntries(
-    filteredEntries,
-  ) as ComponentPropsWithoutRef<TElement>;
-}
+
 /**
  * Extracts a subset of properties from an object based on a whitelist of keys.
  *
@@ -48,24 +29,10 @@ export function extractDOMProps<
  *
  * @returns A new object containing only the specified keys
  */
-// export function extractComponentProps<
-//   T extends Record<string, unknown>,
-//   K extends keyof T & string, // Constrain K to strings for fromEntries compatibility
-// >(props: T, keys: readonly K[]): Partial<Record<K, T[K]>> {
-//   const isTargetKey = isKeyOfArray(keys);
-
-//   const entries = ObjectUtils.entries(props);
-
-//   const filteredEntries = entries.filter((entry): entry is [K, T[K]] =>
-//     isTargetKey(entry[0]),
-//   );
-
-//   return ObjectUtils.fromEntries<K, T[K]>(filteredEntries)
-// }
 export function extractComponentProps<
   T extends Record<string, unknown>,
-  K extends keyof T,
->(props: T, keys: readonly K[]): Pick<T, K> {
+  K extends keyof T & string, // Constrain K to strings for fromEntries compatibility
+>(props: T, keys: readonly K[]): Partial<Record<K, T[K]>> {
   const isTargetKey = isKeyOfArray(keys);
 
   const entries = ObjectUtils.entries(props);
@@ -74,10 +41,24 @@ export function extractComponentProps<
     isTargetKey(entry[0]),
   );
 
-  // Using unknown as a bridge tells TS to trust that the
-  // filtered entries exactly match the specific Pick shape.
-  return ObjectUtils.fromEntries(filteredEntries) as Pick<T, K>;
+  return ObjectUtils.fromEntries<K, T[K]>(filteredEntries)
 }
+// export function extractComponentProps<
+//   T extends Record<string, unknown>,
+//   K extends keyof T,
+// >(props: T, keys: readonly K[]): Pick<T, K> {
+//   const isTargetKey = isKeyOfArray(keys);
+
+//   const entries = ObjectUtils.entries(props);
+
+//   const filteredEntries = entries.filter((entry): entry is [K, T[K]] =>
+//     isTargetKey(entry[0]),
+//   );
+//   // TODO: FIX AS CASTING
+//   // Using unknown as a bridge tells TS to trust that the
+//   // filtered entries exactly match the specific Pick shape.
+//   return ObjectUtils.fromEntries(filteredEntries) as Pick<T, K>;
+// }
 /**
  * @utilType util
  * @name lazyProxy
@@ -97,6 +78,7 @@ export function extractComponentProps<
  * @returns A proxied version of the object with cached evaluation.
  */
 export function lazyProxy<T extends Record<string, unknown>>(obj: T): T {
+  // TODO: FIX AS CASTING
   const cache = new Map<keyof T, unknown>();
   const keys = new Set<keyof T>(ObjectUtils.keys(obj));
 
@@ -120,4 +102,22 @@ export function lazyProxy<T extends Record<string, unknown>>(obj: T): T {
       return value;
     },
   });
+}
+/**
+ * @utilType util
+ * @name extractDOMProps
+ * @category React
+ * @description Strips custom component props to return only valid HTML attributes for a specific element.
+ * @link #extractdomprops
+ *
+ * ## 🧹 extractDOMProps — Safe Attribute Filtering
+ *
+ * Automatically extracts valid DOM props from a combined props object.
+ * Prevents React "unknown prop" warnings by filtering against a whitelist.
+ */
+export function extractDOMProps<
+  TElement extends ElementType,
+  TFullProps extends ComponentPropsWithoutRef<TElement>,
+>(props: TFullProps): Partial<ComponentPropsWithoutRef<TElement>> {
+  return Object.fromEntries(yieldEntries(props, isDOMPropKey));
 }

@@ -1,3 +1,8 @@
+import { isFunction } from '@axiom/guards';
+import { isRefObject, isRef } from '../guards';
+import type { RefCallback, Ref } from 'react';
+import { yieldFiltered } from '@axiom/core';
+
 /**
  * @utilType util
  * @name mergeRefs
@@ -17,10 +22,9 @@
 export const mergeRefs = <T>(
   ...refs: (Ref<T> | undefined)[]
 ): RefCallback<T> => {
-  const validRefs = ArrayUtils.filter<Ref<T> | undefined, Ref<T>>(refs, isRef);
-
   return (value: T | null) => {
-    for (const ref of validRefs) {
+    // 🚀 We pipe the refs through the lazy filter
+    for (const ref of yieldFiltered<Ref<T> | undefined, Ref<T>>(refs, isRef)) {
       if (isFunction(ref)) {
         ref(value);
       } else if (isRefObject(ref)) {
@@ -28,7 +32,9 @@ export const mergeRefs = <T>(
       }
     }
   };
-};/**
+};
+
+/**
  * @utilType util
  * @name getRefCurrent
  * @category Processors React
@@ -50,4 +56,17 @@ export function getRefCurrent<T>(ref: Ref<T> | undefined | null): T | null {
 
   // Callback refs (functions) don't have a 'current' property we can synchronously pull
   return null;
+}
+/**
+ * @category DeepOperations
+ * @description Lazily crawls a tree structure. Memory usage stays flat
+ * regardless of tree depth.
+ */
+export function* walkTree<T extends { children?: T[] }>(tree: T): Generator<T> {
+  yield tree;
+  if (tree.children) {
+    for (const child of tree.children) {
+      yield* walkTree(child); // 'yield*' delegates to the next generator
+    }
+  }
 }
