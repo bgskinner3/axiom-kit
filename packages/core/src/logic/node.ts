@@ -32,3 +32,6 @@
 
 //   return hasTypeBuffer && hasNumberArrayData;
 // };
+
+
+// isStream, isBuffer

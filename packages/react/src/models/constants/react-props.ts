@@ -1,5 +1,3 @@
-import type { TPropDictionary } from '../types';
-
 /**
  * VALID_DOM_PROPS
  *

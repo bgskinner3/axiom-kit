@@ -6,7 +6,7 @@ import {
   isKeyInObject,
 } from '@axiom/guards';
 import type { ComponentType, ForwardRefExoticComponent } from 'react';
-import type { TNamedComponent } from '../internal';
+import type { TNamedComponent } from '../models';
 /**
  * @utilType Guard
  * @name hasReactSymbol

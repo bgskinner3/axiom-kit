@@ -252,4 +252,25 @@ export const isType = <T>(value: unknown, schema: TTypeGuard<T>): value is T =>
   schema(value);
 
 
+/**
+ * @utilType Guard
+ * @name isRegExp
+ * @category Guards Core
+ * @description A helper to execute a type guard schema against a value for immediate narrowing.
+ * @link #isRegExp
+ */
+export const isRegExp = <T extends RegExp>(val: unknown): val is T => {
+  return val instanceof RegExp;
+};
 
+
+/**
+ * @utilType Guard
+ * @name isDate
+ * @category Guards Core
+ * @description Checks if a value is a valid Date instance.
+ * @link #isDate
+ */
+export const isDate = <T extends Date>(val: unknown): val is T => {
+  return val instanceof Date && !isNaN(val.getTime());
+};

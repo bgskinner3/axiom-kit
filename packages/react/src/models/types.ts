@@ -31,12 +31,6 @@ export type TNamedComponent = {
   render?: { displayName?: string; name?: string };
   type?: TNamedComponent;
 };
-/**
- * @internal
- * Simple map for prop dictionaries.
- * Using 'boolean' allows for easy toggling during maintenance.
- */
-export type TPropDictionary = Record<string, boolean>;
 
 export type TValidPrefix = (typeof VALID_PROP_PREFIXES)[number];
 /**

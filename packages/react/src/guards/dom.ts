@@ -1,9 +1,5 @@
-import { VALID_DOM_PROPS, VALID_PROP_PREFIXES } from '../internal';
-import type {
-  TValidPrefix,
-  TAllValidDOMProps,
-  TValidDOMProp,
-} from '../internal';
+import { VALID_DOM_PROPS, VALID_PROP_PREFIXES } from '../models';
+import type { TValidPrefix, TAllValidDOMProps, TValidDOMProp } from '../models';
 import { memoize, ObjectUtils } from '@axiom/core';
 import type { TTypeGuard } from '@axiom/utility-types';
 import { isString, isInSet } from '@axiom/guards';
@@ -100,4 +96,3 @@ export const isDOMPropKey: TTypeGuard<TValidDOMProp> = (
 //     TProps[keyof TProps],
 //   ]
 // > => isString(entry[0]) && isPropValid(entry[0]);
-
