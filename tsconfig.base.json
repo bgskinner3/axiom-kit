@@ -63,6 +63,9 @@
       ],
       "@axiom/debug": [
         "./packages/debug"
+      ],
+      "@axiom/regex-engine": [
+        "./packages/regex-engine"
       ]
     }
   }
