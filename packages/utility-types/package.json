@@ -17,5 +17,8 @@
     "types",
     "utility",
     "axiom"
-  ]
+  ],
+  "devDependencies": {
+    "@types/react": ">=16.8.0"
+  }
 }
