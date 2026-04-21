@@ -5,12 +5,24 @@
     "rootDir": "./src",
     "composite": true,
     "incremental": true,
-    "types": [] 
+    "types": []
   },
   "references": [
-    { "path": "../utility-types" },
-    { "path": "../guards" }
+    {
+      "path": "../utility-types"
+    },
+    {
+      "path": "../guards"
+    },
+    {
+      "path": "../core"
+    }
   ],
-  "include": ["src/**/*"],
-  "exclude": ["dist", "**/__tests__/*"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "**/__tests__/*"
+  ]
 }
