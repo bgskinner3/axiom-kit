@@ -2,10 +2,14 @@
   "compilerOptions": {
     /* Target & Module */
     "target": "ESNext",
-    "module": "NodeNext",
+    "module": "NodeNext", // 👈 Critical: Handles ESM/CJS correctly
     "moduleResolution": "NodeNext",
-    "lib": ["ESNext", "DOM", "DOM.Iterable", "ESNext.AsyncIterable"],
-    
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "ESNext.AsyncIterable"
+    ],
     /* Strictness - The "Axiom" Pillar */
     "strict": true,
     "noImplicitReturns": true,
@@ -13,7 +17,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
-
     /* Output & Performance */
     "declaration": true,
     "declarationMap": true,
@@ -21,16 +24,17 @@
     "composite": true,
     "incremental": true,
     "skipLibCheck": true,
-    
     /* Interop & Modernity */
     "esModuleInterop": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "stripInternal": true,
-    
+    "stripInternal": true, // 👈 Keeps your public API clean (Wizard-level)
+    "verbatimModuleSyntax": true, // 👈 TS 5.0+ standard for cleaner ESM imports
     /* Path Mapping for the Monorepo */
     "paths": {
-      "@axiom/*": ["./packages/*/src"]
+      "@axiom/*": [
+        "./packages/*/src"
+      ]
     }
   }
 }

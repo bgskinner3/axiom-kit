@@ -13,6 +13,7 @@ type TFixedLengthArray<T extends unknown[]> = TPrettify<
     length: number;
   }
 >;
+
 export class ArrayUtils {
   /**
    * @utilType util
