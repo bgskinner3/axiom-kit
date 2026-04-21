@@ -2,27 +2,16 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-    entry: ['src/index.ts'],
-    format: ['cjs', 'esm'],
-    // 3. Generate .d.ts files for "Wizard-level" IntelliSense
+  entry: ['src/index.ts'],
+  format: ['cjs', 'esm'],
   dts: {
-    resolve: true, // 👈 Flattens your utilities into one index.d.ts
+    resolve: true, 
   },
-    // 4. Clean the dist folder before each build
-    clean: true,
-
-    // 5. CRITICAL: Do not bundle React or React-DOM
-    // This forces the user's app to provide them
-    external: ['react', 'react-dom'],
-
-    // 6. Optimization
-    minify: true,
-    sourcemap: true,
-    treeshake: true,
-
-    // 7. Ensure JSX is handled correctly
-    minifyWhitespace: true,
-
-
-    splitting: true
+  clean: true,
+  minify: true,
+  sourcemap: true,
+  treeshake: true,
+  splitting: true,
+  tsconfig: 'tsconfig.build.json',
+  external: ['react', 'react-dom'],
 });

@@ -3,19 +3,12 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "composite": true,
-    "types": [] // 👈 Pure logic: no Node or React types allowed here
+    "composite": true, // 👈 MUST be true for the workspace link to work
+    "incremental": true,
+    "types": [] // 👈 No Node or React types in Universal Guards
   },
-  "references": [
-    {
-      "path": "../utility-types"
-    },
-    {
-      "path": "../core"
-    }
-  ],
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
     "dist",

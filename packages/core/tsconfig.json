@@ -3,17 +3,11 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    // Allows other packages to reference Core for faster builds
-    "composite": true,
-    "types": [
-      "node"
-    ]
+    "composite": false,    // 👈 THE FIX: Disable for tsup run
+    "incremental": false,  // 👈 THE FIX: Fixes TS5074
+    "baseUrl": null,       // 👈 THE FIX: Fixes TS5101
+    "ignoreDeprecations": "6.0"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "dist",
-    "**/__tests__/*"
-  ]
+  "include": ["src/**/*"], // 👈 THE FIX: Fixes TS6307 (recursive include)
+  "exclude": ["dist", "**/__tests__/*"]
 }

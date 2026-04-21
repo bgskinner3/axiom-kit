@@ -1,3 +1,4 @@
+//packages/utility-types/src/utilities/core
 import type { TPrettify } from '../../primitives';
 
 type TConfigSchema = Record<string, Record<string, string>>;
