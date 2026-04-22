@@ -2,10 +2,12 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "composite": true,
     "incremental": true,
-    "types": []
+    "types": [
+      "node",
+      "jest"
+    ]
   },
   "references": [
     {
@@ -13,13 +15,13 @@
     },
     {
       "path": "../core"
-    },
+    }
   ],
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "__test__/**/*"
   ],
   "exclude": [
-    "dist",
-    "**/__tests__/*"
+    "dist"
   ]
 }

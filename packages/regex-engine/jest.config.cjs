@@ -1,20 +1,22 @@
-/** @type {import('jest').Config} */
+const path = require('path');
+
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  // 🔗 Link the setup file here
-  setupFilesAfterEnv: ['<rootDir>/__test__/setup.ts'],
-
+  // Use absolute path for reliability
+  rootDir: path.resolve(__dirname),
+  
   moduleNameMapper: {
     '^@axiom/(.*)$': '<rootDir>/../$1/src',
   },
+
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        tsconfig: 'tsconfig.json',
-        isolatedModules: false, // 👈 Required for branding check
-        diagnostics: { warnOnly: false },
+        // 🚀 THE KEY: Use the separate test config
+        tsconfig: 'tsconfig.test.json',
+        isolatedModules: false,
       },
     ],
   },
