@@ -1,15 +1,15 @@
 import { REGEX_DATE_PATTERNS } from './date';
 import { REGEX_COLOR_PATTERNS } from './color';
-import { createRegexRegistry } from '../../utils';
+
 
 const PATTERN_SOURCE = {
   ...REGEX_COLOR_PATTERNS,
   ...REGEX_DATE_PATTERNS,
 } as const;
 
-export const REGEX_PRE_REGISTRY = createRegexRegistry(PATTERN_SOURCE);
-export type TPreRegistry = typeof REGEX_PRE_REGISTRY;
-export type TRegexKey = keyof typeof REGEX_PRE_REGISTRY
+// export const REGEX_PRE_REGISTRY = createRegexRegistry(PATTERN_SOURCE);
+// export type TPreRegistry = typeof REGEX_PRE_REGISTRY;
+// export type TRegexKey = keyof typeof REGEX_PRE_REGISTRY
 // // Type helper for the Class
 // export type TPreRegistry = typeof REGEX_PRE_REGISTRY;
 

@@ -1,44 +1,45 @@
-import { REGEX_PRE_REGISTRY } from '../models';
+import { REGEX_CENTRAL_PATTERN_SOURCE } from '../models';
 import type { TBranded } from '../models';
-import type { TRegexKey, TPreRegistry } from '../models';
-import { regexStore } from './regex-lru';
-export interface RegexEngine extends TPreRegistry {}
+import type { TRegexPatternKeys } from '../models';
+import { regexStore } from './regex-registry';
+
 export class RegexEngine {
   private readonly REGISTRY_KEY = '__REGEX_ENGINE_REGISTRY__';
-
   constructor() {
     if (!globalThis[this.REGISTRY_KEY]) {
       globalThis[this.REGISTRY_KEY] = new Map<string, string>();
     }
-    Object.defineProperties(this, REGEX_PRE_REGISTRY);
+
+    // 2. Localize the descriptor creation to this class
+    // This avoids exporting a 'REGEX_PRE_REGISTRY' constant from models
+    const descriptors = regexStore.createDescriptors(
+      REGEX_CENTRAL_PATTERN_SOURCE,
+    );
+
+    // 3. Hydrate this instance
+    Object.defineProperties(this, descriptors);
   }
 
-  // private get _store(): Map<string, string> {
-  //   return globalThis[this.REGISTRY_KEY];
-  // }
+  public register<K extends string>(key: K, pattern: string): void {
+    // Update global map for persistence across the codebase
+    const globalMap = globalThis[this.REGISTRY_KEY];
+    globalMap.set(key, pattern);
 
-  public is<K extends TRegexKey>(
-    this: Record<TRegexKey, string>,
+    // Create and apply the branded descriptor to this instance
+    const [propKey, descriptor] = regexStore.createDescriptor<any, K>(
+      key as any,
+    );
+    Object.defineProperty(this, propKey, descriptor);
+  }
+  public is<K extends TRegexPatternKeys>(
     key: K,
     val: string,
   ): val is TBranded<string, K> {
-    return regexStore.get(this[key]).test(val);
+    // Access the branded string directly from 'this'
+    const pattern = (this as any)[key];
+    return pattern ? regexStore.get(pattern).test(val) : false;
   }
-  // public capture<Shape extends Record<string, string>>(
-  //   key: TRegexKey,
-  //   val: string,
-  // ): Shape | null {
-  //   const re = (this as any)[key] as RegExp;
-  //   const match = re.exec(val);
-  //   return (match?.groups as Shape) ?? null;
-  // }
-
-  // /**
-  //  * 🧼 The Purifier (clean)
-  //  * Replaces matches with a string (default empty).
-  //  */
-  // public clean(key: TRegexKey, val: string, replaceWith = ''): string {
-  //   const re = (this as any)[key] as RegExp;
-  //   return val.replace(re, replaceWith);
-  // }
+  public list(): string[] {
+    return Array.from(globalThis[this.REGISTRY_KEY].keys());
+  }
 }

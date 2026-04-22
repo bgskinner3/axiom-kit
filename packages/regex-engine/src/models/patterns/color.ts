@@ -58,6 +58,7 @@ export const REGEX_COLOR_PATTERNS = {
   rgbFormat: RGB_FORMAT_STR,
   rgbAFormat: RGBA_FORMAT_STR,
 } as const;
+
 // export const REGEX_COLOR_PATTERNS = {
 //   // hexStrict: /^[0-9A-Fa-f]{6}$/,
 //   // hexShorthand: /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/,

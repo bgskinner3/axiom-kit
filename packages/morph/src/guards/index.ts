@@ -1,3 +1,5 @@
+// import { isString } from "@axiom/guards";
+
 // /**
 //  * @utilType Guard
 //  * @name isCamelCase
@@ -8,7 +10,7 @@
 // export const isCamelCase: TTypeGuard<TCamelCase<string>> = (
 //   value,
 // ): value is TCamelCase<string> =>
-//   typeof value === 'string' && REGEX_CONSTANTS.camelCase.test(value);
+//   isString(value) && REGEX_CONSTANTS.camelCase.test(value);
 // /**
 //  * @utilType Guard
 //  * @name isSnakeCase

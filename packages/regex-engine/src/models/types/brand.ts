@@ -20,3 +20,8 @@ export const __brand: unique symbol = Symbol('brand');
  * ```
  */
 export type TBranded<T, B> = T & { readonly [__brand]: B };
+
+export type TBrandEntry<T> = [
+  keyof T,
+  PropertyDescriptor & { get: () => TBranded<string, keyof T> },
+];
