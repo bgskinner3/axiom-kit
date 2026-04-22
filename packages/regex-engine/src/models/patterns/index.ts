@@ -8,7 +8,8 @@ const PATTERN_SOURCE = {
 } as const;
 
 export const REGEX_PRE_REGISTRY = createRegexRegistry(PATTERN_SOURCE);
-// export type TPreRegistry = typeof REGEX_PRE_REGISTRY;
+export type TPreRegistry = typeof REGEX_PRE_REGISTRY;
+export type TRegexKey = keyof typeof REGEX_PRE_REGISTRY
 // // Type helper for the Class
 // export type TPreRegistry = typeof REGEX_PRE_REGISTRY;
 

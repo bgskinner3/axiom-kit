@@ -1,4 +1,4 @@
-const __brand: unique symbol = Symbol('brand');
+export const __brand: unique symbol = Symbol('brand');
 
 /**
  * @utilType type

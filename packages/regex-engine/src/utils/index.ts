@@ -1,24 +1,30 @@
 import type { TRegexRegistry } from '../models';
 import { ObjectUtils } from '@axiom/core';
-import { regexStore } from '../core/regex-lru';
+import type { TBranded } from '../models';
+import { __brand } from '../models';
+
+
+export function brandRegex<B>(regex: string): TBranded<string, B> {
+  return Object.assign(regex, { [__brand]: undefined as unknown as B });
+}
 
 export function createRegexRegistry<T extends Record<string, string>>(
   source: T,
 ): TRegexRegistry<T> {
-  type Entry = [keyof T, PropertyDescriptor & { get: () => RegExp }];
+  // Return type is now a branded STRING
+  type Entry = [keyof T, PropertyDescriptor & { get: () => TBranded<string, keyof T> }];
 
   const entries = ObjectUtils.keys(source).map((key): Entry => {
     const descriptor = {
       get: () => {
         const keyStr = String(key);
         const globalStore = globalThis.__REGEX_ENGINE_REGISTRY__;
+        
+        // 1. Get raw pattern
+        const rawPattern = globalStore?.get(keyStr) || source[key];
 
-        // 1. Get the pattern string (Priority: Global Store > Hardcoded Source)
-        const pattern = globalStore?.get(keyStr) || source[key];
-
-        // 2. PLUG IN THE LRU HERE
-        // Instead of 'new RegExp(pattern)', we let the store handle it.
-        return regexStore.get(pattern);
+        // 2. Brand the string pattern
+        return brandRegex<typeof key>(rawPattern);
       },
       enumerable: true,
       configurable: false,

@@ -5,3 +5,4 @@
 export type TRegexRegistry<T> = {
   readonly [K in keyof T]: PropertyDescriptor & { get: () => RegExp };
 };
+export * from './brand';
