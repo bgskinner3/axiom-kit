@@ -1,13 +1,5 @@
-import { isNonEmptyString } from '@axiom/guards';
-
-const __brand: unique symbol = Symbol('brand');
-
-type TBranded<T, B> = T & { [__brand]: B };
-
-export type TAbsoluteURL = TBranded<URL, 'TAbsoluteURL'>;
-export type TInternalUrl = TBranded<string, 'TInternalUrl'>;
-
-type TTypeGuard<T> = (value: unknown) => value is T;
+import type { TTypeGuard, TAbsoluteURL, TInternalUrl } from './types';
+import { isNonEmptyString } from './primitives';
 /**
  * @utilType Guard
  * @name isAbsoluteUrl
@@ -71,7 +63,7 @@ export const isAbsoluteUrl: TTypeGuard<TAbsoluteURL> = (
  * @param baseOrigin - Optional fallback origin for non-browser environments.
  * @returns `true` if the URL is internal to the specified or current origin.
  */
-export const isInternalUrl: TTypeGuard<TInternalUrl> = (
+export const isInternalUrl = (
   url: unknown,
   baseOrigin?: string,
 ): url is TInternalUrl => {
@@ -81,6 +73,16 @@ export const isInternalUrl: TTypeGuard<TInternalUrl> = (
     baseOrigin || (typeof location !== 'undefined' ? location.origin : null);
 
   if (!currentOrigin) return url.startsWith('/');
+
+  if (url.startsWith('//')) {
+    try {
+      const protocol = new URL(currentOrigin).protocol;
+      const parsed = new URL(`${protocol}${url}`);
+      return parsed.origin === currentOrigin;
+    } catch {
+      return false;
+    }
+  }
 
   if (url.startsWith('/')) return true;
 

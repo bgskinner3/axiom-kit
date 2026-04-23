@@ -2,13 +2,16 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "composite": true, // 👈 MUST be true for the workspace link to work
     "incremental": true,
-    "types": []
+    "types": [
+      "node",
+      "jest"
+    ]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "__tests__/**/*"
   ],
   "exclude": [
     "dist"
