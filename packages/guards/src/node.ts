@@ -33,7 +33,28 @@ export const isBufferLikeObject: TTypeGuard<TBufferLikeObject> = (
 
   return hasTypeBuffer && hasNumberArrayData;
 };
-
+/**
+ * @utilType Guard
+ * @name isStream
+ * @category Guards Core
+ * @description Validates if a value is a Node.js-like Stream by checking for the presence of 'pipe' and 'on' methods (duck typing).
+ * @link #isstream
+ * ---
+ * ### Example Usage
+ * ```ts
+ * import { Readable } from 'node:stream';
+ *
+ * const rs = new Readable();
+ * const notStream = { on: () => {} };
+ *
+ * isStream(rs);        // true
+ * isStream(notStream); // false
+ * ```
+ *
+ * ---
+ * @param value - The value to check
+ * @returns `true` if the value implements the Stream signature, otherwise `false`
+ */
 export const isStream: TTypeGuard<TStream> = (
   value: unknown,
 ): value is TStream => {
