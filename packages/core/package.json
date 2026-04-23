@@ -20,13 +20,16 @@
     "dev": "tsup --watch",
     "build": "tsup"
   },
-  "dependencies": {
-    "@axiom/utility-types": "workspace:*"
-  },
   "keywords": [
     "typescript",
     "core",
     "logic",
     "resilience"
-  ]
+  ],
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "tsup": "^8.5.1"
+  }
 }
