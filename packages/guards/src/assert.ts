@@ -1,4 +1,4 @@
-import type { TAssert, TTypeGuard } from '@axiom/utility-types';
+import type { TAssert, TTypeGuard } from './models';
 
 /**
  * @utilType util

@@ -1,4 +1,4 @@
-import type { TTypeGuard } from '@axiom/utility-types';
+import type { TTypeGuard } from './models';
 import { ObjectUtils } from '@axiom/core';
 import { isString, isNumber, isSymbol, isDefined } from './primitives';
 import { isObject } from './structures';

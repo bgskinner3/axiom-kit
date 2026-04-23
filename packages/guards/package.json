@@ -20,7 +20,6 @@
     "build": "tsup"
   },
   "dependencies": {
-    "@axiom/core": "workspace:*",
-    "@axiom/utility-types": "workspace:*"
+    "@axiom/core": "workspace:*"
   }
 }

@@ -10,14 +10,9 @@
   },
   "include": [
     "src/**/*"
-  ], // 👈 THE FIX: Fixes TS6307 (recursive include)
+  ],
   "exclude": [
     "dist",
     "**/__tests__/*"
   ]
-  // "references": [
-  //   {
-  //     "path": "../utility-types"
-  //   },
-  // ],
 }

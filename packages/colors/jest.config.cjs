@@ -9,7 +9,7 @@ module.exports = {
   moduleNameMapper: {
     '^@axiom/(.*)$': '<rootDir>/../$1/src',
   },
-
+  coverageReporters: ['text', 'text-summary'],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',

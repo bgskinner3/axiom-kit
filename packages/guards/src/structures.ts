@@ -2,7 +2,7 @@ import type {
   TTypeGuard,
   TAnyFunction,
   TAnyObject,
-} from '@axiom/utility-types';
+} from './models';
 import { isNull } from './primitives';
 /**
  * @utilType Guard

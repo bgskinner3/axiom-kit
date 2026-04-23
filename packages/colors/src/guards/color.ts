@@ -41,13 +41,13 @@ export const isRGBString: TTypeGuard<TRGB> = (
   return true;
 };
 
-// /**
-//  * @utilType Guard
-//  * @name isHexColor
-//  * @category Guards Core
-//  * @description Validates if a string is a valid 3 or 6-digit HEX color code.
-//  * @link #ishexcolor
-//  */
+/**
+ * @utilType Guard
+ * @name isHexColor
+ * @category Guards Core
+ * @description Validates if a string is a valid 3 or 6-digit HEX color code.
+ * @link #ishexcolor
+ */
 export const isHexColor: TTypeGuard<THex> = (value: unknown): value is THex => {
   return (
     isString(value) &&
