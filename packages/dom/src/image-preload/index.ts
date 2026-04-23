@@ -39,7 +39,7 @@ function* yieldUniqueUrls(urls: string[]): Generator<string> {
  *
  * ---
  *
- * ## 🖼️ preloadImages — Non-blocking Asset Hydration
+ * ## preloadImages — Non-blocking Asset Hydration
  *
  * This utility optimizes image preloading by:
  * 1. Using a **Worker Pool** to maintain a constant concurrency pipeline.

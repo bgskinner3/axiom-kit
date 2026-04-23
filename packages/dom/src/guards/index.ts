@@ -1,5 +1,12 @@
-import type { TAbsoluteURL, TInternalUrl } from '../models';
 import { isNonEmptyString } from '@axiom/guards';
+
+const __brand: unique symbol = Symbol('brand');
+
+type TBranded<T, B> = T & { [__brand]: B };
+
+export type TAbsoluteURL = TBranded<URL, 'TAbsoluteURL'>;
+export type TInternalUrl = TBranded<string, 'TInternalUrl'>;
+
 type TTypeGuard<T> = (value: unknown) => value is T;
 /**
  * @utilType Guard

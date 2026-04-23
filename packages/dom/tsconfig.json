@@ -2,17 +2,27 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "composite": true,
     "incremental": true,
-    /* 🌐 THE DOM ENGINE */
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": [] 
+    "baseUrl": ".",
+    "types": [
+      "node",
+      "jest"
+    ]
   },
   "references": [
-    { "path": "../utility-types" },
-    { "path": "../guards" }
+    {
+      "path": "../utility-types"
+    },
+    {
+      "path": "../guards"
+    }
   ],
-  "include": ["src/**/*"],
-  "exclude": ["dist", "**/__tests__/*"]
+  "include": [
+    "src/**/*",
+    "__tests__/**/*" // 🚀 THE FIX: The double asterisk catches nested folders like /navigation/
+  ],
+  "exclude": [
+    "dist"
+  ]
 }
