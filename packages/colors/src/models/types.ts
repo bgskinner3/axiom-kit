@@ -28,3 +28,8 @@ export type TCssHSL = `hsl(${number}, ${number}%, ${number}%)`;
 export type THex = `#${string}`;
 
 export type TColorInput = THex | TRGB | TRGBA | TCssRGB | TCssRGBA;
+
+
+export type TTypeGuard<T> = (value: unknown) => value is T;
+
+export type TAssert<T> = (value: unknown) => asserts value is T;

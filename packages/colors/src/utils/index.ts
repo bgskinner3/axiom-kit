@@ -1,7 +1,5 @@
 import type { TRGB, TCssRGB } from '../models';
-import { isString, makeAssert } from '@axiom/guards';
-import type { TAssert } from '@axiom/utility-types';
-import { isRGBTuple } from '../guards';
+import { assertIsRGBTuple } from '../guards';
 /**
  * @utilType util
  * @name hexToRGB
@@ -47,8 +45,7 @@ export const hexToRGB = (hex: string): TRGB => {
  *
  */
 export const validateRGB = (input: TRGB | string): TRGB => {
-  const assertIsRGBTuple: TAssert<TRGB> = makeAssert(isRGBTuple, 'isRGBTuple');
-  if (isString(input)) return hexToRGB(input);
+  if (typeof input === 'string') return hexToRGB(input);
   assertIsRGBTuple(input);
   return input satisfies TRGB;
 };

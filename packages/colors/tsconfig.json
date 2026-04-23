@@ -7,10 +7,6 @@
     "incremental": true,
     "types": [] 
   },
-  "references": [
-    { "path": "../utility-types" },
-    { "path": "../guards" }
-  ],
   "include": ["src/**/*"],
   "exclude": ["dist", "**/__tests__/*"]
 }

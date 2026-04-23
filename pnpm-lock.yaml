@@ -227,9 +227,24 @@ importers:
 
   packages/utility-types:
     devDependencies:
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
       '@types/react':
         specifier: '>=16.8.0'
         version: 19.2.14
+      jest:
+        specifier: ^30.3.0
+        version: 30.3.0(@types/node@25.6.0)
+      jest-tsd:
+        specifier: ^0.2.2
+        version: 0.2.2(@tsd/typescript@5.9.3)
+      ts-jest:
+        specifier: ^29.4.9
+        version: 29.4.9(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.29.0))(esbuild@0.27.7)(jest-util@30.3.0)(jest@30.3.0(@types/node@25.6.0))(typescript@6.0.3)
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(tsx@4.21.0)(typescript@6.0.3)
 
 packages:
 
@@ -896,6 +911,10 @@ packages:
 
   '@sinonjs/fake-timers@15.3.2':
     resolution: {integrity: sha512-mrn35Jl2pCpns+mE3HaZa1yPN5EYCRgiMI+135COjr2hr8Cls9DXqIZ57vZe2cz7y2XVSq92tcs6kGQcT1J8Rw==}
+
+  '@tsd/typescript@5.9.3':
+    resolution: {integrity: sha512-JSSdNiS0wgd8GHhBwnMAI18Y8XPhLVN+dNelPfZCXFhy9Lb3NbnFyp9JKxxr54jSUkEJPk3cidvCoHducSaRMQ==}
+    engines: {node: '>=14.17'}
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -1869,6 +1888,11 @@ packages:
     resolution: {integrity: sha512-f14c7atpb4O2DeNhwcvS810Y63wEn8O1HqK/luJ4F6M4NjvxmAKQwBUWjbExUtMxWJQ0wVgmCKymeJK6NZMnfQ==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
+  jest-tsd@0.2.2:
+    resolution: {integrity: sha512-Nzgo5E9F1RON3GDkAHxVOf1dqSSRMnhJ5txULHhhK+qs2xSLmLWBbtYjKSlAYNpW/fOXSrGPOs6uE0YyWAchhA==}
+    peerDependencies:
+      '@tsd/typescript': 4.x || 5.x
+
   jest-util@30.3.0:
     resolution: {integrity: sha512-/jZDa00a3Sz7rdyu55NLrQCIrbyIkbBxareejQI315f/i8HjYN+ZWsDLLpoQSiUIEIyZF/R8fDg3BmB8AtHttg==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -2413,6 +2437,13 @@ packages:
   ts-patch@3.3.0:
     resolution: {integrity: sha512-zAOzDnd5qsfEnjd9IGy1IRuvA7ygyyxxdxesbhMdutt8AHFjD8Vw8hU2rMF89HX1BKRWFYqKHrO8Q6lw0NeUZg==}
     hasBin: true
+
+  tsd-lite@0.7.0:
+    resolution: {integrity: sha512-XhQ7w/RPzfjSb98LIQB1qx7yAvRV6+h5JFP4dCvd79Hbp23X8CCx4EdRAQm6faTkRdprKYvZE8kxlK6LpJp8vg==}
+    engines: {node: '>=14'}
+    deprecated: '''tsd-lite'' is deprecated. For details, see the deprecation notice: https://github.com/mrazauskas/tsd-lite/issues/364'
+    peerDependencies:
+      '@tsd/typescript': 4.x || 5.x
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -3226,6 +3257,8 @@ snapshots:
   '@sinonjs/fake-timers@15.3.2':
     dependencies:
       '@sinonjs/commons': 3.0.1
+
+  '@tsd/typescript@5.9.3': {}
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
@@ -4376,6 +4409,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  jest-tsd@0.2.2(@tsd/typescript@5.9.3):
+    dependencies:
+      '@babel/code-frame': 7.29.0
+      '@tsd/typescript': 5.9.3
+      chalk: 4.1.2
+      tsd-lite: 0.7.0(@tsd/typescript@5.9.3)
+
   jest-util@30.3.0:
     dependencies:
       '@jest/types': 30.3.0
@@ -4883,6 +4923,10 @@ snapshots:
       resolve: 1.22.12
       semver: 7.7.4
       strip-ansi: 6.0.1
+
+  tsd-lite@0.7.0(@tsd/typescript@5.9.3):
+    dependencies:
+      '@tsd/typescript': 5.9.3
 
   tslib@2.8.1:
     optional: true
