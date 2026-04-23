@@ -11,7 +11,6 @@
  * const overlay: TRGBA = [0, 0, 0, 0.5];
  * ```
  */
-
 export type TRGB = readonly [r: number, g: number, b: number];
 
 export type TRGBTuple = [number, number, number];

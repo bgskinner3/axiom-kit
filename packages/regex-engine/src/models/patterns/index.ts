@@ -1,11 +1,11 @@
-import { REGEX_DATE_PATTERNS } from './date';
-import { REGEX_COLOR_PATTERNS } from './color';
+// import { REGEX_DATE_PATTERNS } from './date';
+// import { REGEX_COLOR_PATTERNS } from './color';
 
 
-const PATTERN_SOURCE = {
-  ...REGEX_COLOR_PATTERNS,
-  ...REGEX_DATE_PATTERNS,
-} as const;
+// const PATTERN_SOURCE = {
+//   ...REGEX_COLOR_PATTERNS,
+//   ...REGEX_DATE_PATTERNS,
+// } as const;
 
 // export const REGEX_PRE_REGISTRY = createRegexRegistry(PATTERN_SOURCE);
 // export type TPreRegistry = typeof REGEX_PRE_REGISTRY;

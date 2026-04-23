@@ -49,30 +49,7 @@ export class ObjectUtils {
   >(entries: [K, V][]): Record<K, V> {
     return Object.fromEntries(entries) as Record<K, V>;
   }
-  // static fromEntries<K extends PropertyKey, V>(
-  //   entries: Iterable<readonly [K, V]>,
-  // ): Record<K, V>;
 
-  // static fromEntries<T extends readonly (readonly [PropertyKey, any])[]>(
-  //   entries: T,
-  // ): {
-  //   [K in T[number] as K[0]]: K[1]
-  // };
-
-  // static fromEntries(entries: Iterable<readonly [PropertyKey, any]>) {
-  //   const result: any = {};
-
-  //   for (const [key, value] of entries) {
-  //     result[key] = value;
-  //   }
-
-  //   return result;
-  // }
-  // static fromEntries<K extends PropertyKey, V>(
-  //   entries: Iterable<readonly [K, V]>,
-  // ): Record<K, V> {
-  //   return Object.fromEntries(entries) as Record<K, V>;
-  // }
   /**
    * @utilType util
    * @name values
