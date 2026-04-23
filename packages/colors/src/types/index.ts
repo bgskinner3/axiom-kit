@@ -28,4 +28,3 @@ export type TCssHSL = `hsl(${number}, ${number}%, ${number}%)`;
 export type THex = `#${string}`;
 
 export type TColorInput = THex | TRGB | TRGBA | TCssRGB | TCssRGBA;
-

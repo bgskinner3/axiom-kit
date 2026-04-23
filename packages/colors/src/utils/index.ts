@@ -1,4 +1,4 @@
-import type { TRGB, TCssRGB } from '../models';
+import type { TRGB, TCssRGB } from '../types';
 import { assertIsRGBTuple } from '../guards';
 /**
  * @utilType util
