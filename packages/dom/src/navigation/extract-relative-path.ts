@@ -1,4 +1,4 @@
-import { isInternalUrl } from '@axiom/guards';
+import { isInternalUrl } from '@bgskinner2/axiom-kit-guards';
 /**
  * @utilType util
  * @name extractRelativePath

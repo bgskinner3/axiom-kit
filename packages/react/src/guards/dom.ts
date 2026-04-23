@@ -5,8 +5,8 @@ import type {
   TValidDOMProp,
   TTypeGuard,
 } from '../models';
-import { memoize, ObjectUtils } from '@axiom/core';
-import { isString } from '@axiom/guards';
+import { memoize, ObjectUtils } from '@bgskinner2/axiom-kit-core';
+import { isString } from '@bgskinner2/axiom-kit-guards';
 const PROP_SET = new Set<TValidDOMProp>(ObjectUtils.keys(VALID_DOM_PROPS));
 
 /**

@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/core",
+  "name": "@bgskinner2/axiom-kit-core",
   "version": "1.0.0",
   "description": "Foundational logic, shared constants, and resilience utilities for the Axiom kit.",
   "author": "Brennan Skinner",

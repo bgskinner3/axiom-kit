@@ -3,8 +3,8 @@ import {
   isDefinedObject,
   isArray,
   isKeyInObject,
-} from '@axiom/guards';
-import { ObjectUtils } from '@axiom/core';
+} from '@bgskinner2/axiom-kit-guards';
+import { ObjectUtils } from '@bgskinner2/axiom-kit-core';
 /**
  * @utilType util
  * @name areDeepEqual

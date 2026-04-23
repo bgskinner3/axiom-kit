@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/regex-engine",
+  "name": "@bgskinner2/regex-engine",
   "version": "1.0.0",
   "description": "High-performance centralized regular expression patterns and logic.",
   "type": "module",
@@ -25,8 +25,8 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@axiom/core": "workspace:*",
-    "@axiom/utility-types": "workspace:*"
+    "@bgskinner2/axiom-kit-core": "workspace:*",
+    "@bgskinner2/axiom-kit-utility-types": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

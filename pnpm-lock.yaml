@@ -77,7 +77,7 @@ importers:
 
   packages/colors:
     dependencies:
-      '@axiom/guards':
+      '@bgskinner2/axiom-kit-guards':
         specifier: workspace:*
         version: link:../guards
     devDependencies:
@@ -111,19 +111,19 @@ importers:
 
   packages/debug:
     dependencies:
-      '@axiom/core':
+      '@bgskinner2/axiom-kit-core':
         specifier: workspace:*
         version: link:../core
-      '@axiom/utility-types':
+      '@bgskinner2/axiom-kit-utility-types':
         specifier: workspace:*
         version: link:../utility-types
 
   packages/deep-operations:
     dependencies:
-      '@axiom/guards':
+      '@bgskinner2/axiom-kit-guards':
         specifier: workspace:*
         version: link:../guards
-      '@axiom/utility-types':
+      '@bgskinner2/axiom-kit-utility-types':
         specifier: workspace:*
         version: link:../utility-types
     devDependencies:
@@ -142,10 +142,10 @@ importers:
 
   packages/dom:
     dependencies:
-      '@axiom/guards':
+      '@bgskinner2/axiom-kit-guards':
         specifier: workspace:*
         version: link:../guards
-      '@axiom/utility-types':
+      '@bgskinner2/axiom-kit-utility-types':
         specifier: workspace:*
         version: link:../utility-types
     devDependencies:
@@ -165,21 +165,9 @@ importers:
         specifier: ^8.5.1
         version: 8.5.1(tsx@4.21.0)(typescript@6.0.3)
 
-  packages/engine:
-    dependencies:
-      '@axiom/core':
-        specifier: workspace:*
-        version: link:../core
-      '@axiom/guards':
-        specifier: workspace:*
-        version: link:../guards
-      '@axiom/utility-types':
-        specifier: workspace:*
-        version: link:../utility-types
-
   packages/guards:
     dependencies:
-      '@axiom/utility-types':
+      '@bgskinner2/axiom-kit-utility-types':
         specifier: workspace:*
         version: link:../utility-types
     devDependencies:
@@ -198,10 +186,10 @@ importers:
 
   packages/morph:
     dependencies:
-      '@axiom/core':
+      '@bgskinner2/axiom-kit-core':
         specifier: workspace:*
         version: link:../core
-      '@axiom/utility-types':
+      '@bgskinner2/axiom-kit-utility-types':
         specifier: workspace:*
         version: link:../utility-types
     devDependencies:
@@ -220,13 +208,13 @@ importers:
 
   packages/react:
     dependencies:
-      '@axiom/core':
+      '@bgskinner2/axiom-kit-core':
         specifier: workspace:*
         version: link:../core
-      '@axiom/guards':
+      '@bgskinner2/axiom-kit-guards':
         specifier: workspace:*
         version: link:../guards
-      '@axiom/utility-types':
+      '@bgskinner2/axiom-kit-utility-types':
         specifier: workspace:*
         version: link:../utility-types
       react:
@@ -263,10 +251,10 @@ importers:
 
   packages/regex-engine:
     dependencies:
-      '@axiom/core':
+      '@bgskinner2/axiom-kit-core':
         specifier: workspace:*
         version: link:../core
-      '@axiom/utility-types':
+      '@bgskinner2/axiom-kit-utility-types':
         specifier: workspace:*
         version: link:../utility-types
     devDependencies:

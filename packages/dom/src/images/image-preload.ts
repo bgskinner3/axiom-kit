@@ -1,4 +1,8 @@
-import { isArray, isKeyInObject, isFunction } from '@axiom/guards';
+import {
+  isArray,
+  isKeyInObject,
+  isFunction,
+} from '@bgskinner2/axiom-kit-guards';
 
 /**
  * Map preserves insertion order, making LRU logic O(1).

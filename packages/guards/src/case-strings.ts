@@ -1,5 +1,9 @@
 import type { TTypeGuard, THexByteString } from './types';
-import type { TCamelCase, TSnakeCase, TKebabCase } from '@axiom/utility-types';
+import type {
+  TCamelCase,
+  TSnakeCase,
+  TKebabCase,
+} from '@bgskinner2/axiom-kit-utility-types';
 import { isString, isNonEmptyString } from './primitives';
 /**
  * @utilType Guard

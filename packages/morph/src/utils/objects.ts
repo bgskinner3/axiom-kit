@@ -1,4 +1,4 @@
-import { ObjectUtils, ArrayUtils } from '@axiom/core';
+import { ObjectUtils, ArrayUtils } from '@bgskinner2/axiom-kit-core';
 import { capitalizeString } from './strings';
 /**
  * @utilType util

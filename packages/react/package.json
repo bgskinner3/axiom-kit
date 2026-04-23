@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/react",
+  "name": "@bgskinner2/axiom-kit-react",
   "version": "1.0.0",
   "description": "High-performance React utilities and type guards for the Axiom kit.",
   "author": "Brennan Skinner",
@@ -31,9 +31,9 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "@axiom/core": "workspace:*",
-    "@axiom/guards": "workspace:*",
-    "@axiom/utility-types": "workspace:*"
+    "@bgskinner2/axiom-kit-core": "workspace:*",
+    "@bgskinner2/axiom-kit-guards": "workspace:*",
+    "@bgskinner2/axiom-kit-utility-types": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

@@ -1,5 +1,5 @@
 import type { TRegexRegistry } from '../models';
-import { ObjectUtils } from '@axiom/core';
+import { ObjectUtils } from '@bgskinner2/axiom-kit-core';
 import type { TBranded, TBrandEntry } from '../models';
 import { __brand } from '../models';
 class RegexRegistry {

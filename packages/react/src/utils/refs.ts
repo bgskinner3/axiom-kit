@@ -1,7 +1,7 @@
-import { isFunction } from '@axiom/guards';
+import { isFunction } from '@bgskinner2/axiom-kit-guards';
 import { isRefObject, isRef } from '../guards';
 import type { RefCallback, Ref } from 'react';
-import { yieldFiltered } from '@axiom/core';
+import { yieldFiltered } from '@bgskinner2/axiom-kit-core'
 
 /**
  * @utilType util

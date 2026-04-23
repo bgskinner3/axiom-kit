@@ -1,5 +1,9 @@
-import { isFunction, isKeyOfArray, isString } from '@axiom/guards';
-import { ObjectUtils, yieldEntries } from '@axiom/core';
+import {
+  isFunction,
+  isKeyOfArray,
+  isString,
+} from '@bgskinner2/axiom-kit-guards';
+import { ObjectUtils, yieldEntries } from '@bgskinner2/axiom-kit-core';
 import type { ElementType, ComponentPropsWithoutRef } from 'react';
 import { isDOMPropKey } from '../guards';
 

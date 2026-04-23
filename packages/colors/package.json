@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/colors",
+  "name": "@bgskinner2/axiom-kit-colors",
   "version": "1.0.0",
   "description": "High-performance color space mathematics and accessibility utilities.",
   "author": "Brennan Skinner",
@@ -32,7 +32,7 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "@axiom/guards": "workspace:*"
+    "@bgskinner2/axiom-kit-guards": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

@@ -5,7 +5,7 @@ import {
   isPrimitive,
   isObject,
   isKeyInObject,
-} from '@axiom/guards';
+} from '@bgskinner2/axiom-kit-guards';
 import { isReactElement } from './elements';
 import type { TPropType, TTypeGuard } from '../models';
 import type {

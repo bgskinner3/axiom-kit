@@ -7,7 +7,11 @@ module.exports = {
   rootDir: '.',
 
   moduleNameMapper: {
-    '^@axiom/utility-types$': '<rootDir>/src/index.ts',
+    // 1. Matches @bgskinner2/axiom-kit-guards -> ../guards/src
+    '^@bgskinner2/axiom-kit-(.*)$': '<rootDir>/../$1/src',
+
+    // 2. Matches @bgskinner2/guards -> ../guards/src
+    '^@bgskinner2/(?!axiom-kit$)(.*)$': '<rootDir>/../$1/src',
   },
   testPathIgnorePatterns: [
     '/node_modules/',

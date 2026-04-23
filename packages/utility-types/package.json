@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/utility-types",
+  "name": "@bgskinner2/axiom-kit-utility-types",
   "version": "1.0.0",
   "description": "Wizard-level TypeScript type utilities for the Axiom kit.",
   "author": "Brennan Skinner",

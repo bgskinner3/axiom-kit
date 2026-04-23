@@ -29,34 +29,34 @@
     "stripInternal": true,
     "verbatimModuleSyntax": true,
     "paths": {
-      "@axiom/utility-types": [
+      "@bgskinner2/axiom-kit-utility-types": [
         "./packages/utility-types"
       ],
-      "@axiom/guards": [
+      "@bgskinner2/axiom-kit-guards": [
         "./packages/guards"
       ],
-      "@axiom/core": [
+      "@bgskinner2/axiom-kit-core": [
         "./packages/core"
       ],
-      "@axiom/colors": [
+      "@bgskinner2/axiom-kit-colors": [
         "./packages/colors"
       ],
-      "@axiom/morph": [
+      "@bgskinner2/axiom-kit-morph": [
         "./packages/morph"
       ],
-      "@axiom/dom": [
+      "@bgskinner2/axiom-kit-dom": [
         "./packages/dom"
       ],
-      "@axiom/deep-operations": [
+      "@bgskinner2/axiom-kit-deep-operations": [
         "./packages/deep-operations"
       ],
-      "@axiom/react": [
+      "@bgskinner2/axiom-kit-react": [
         "./packages/react"
       ],
-      "@axiom/debug": [
+      "@bgskinner2/debug": [
         "./packages/debug"
       ],
-      "@axiom/regex-engine": [
+      "@bgskinner2/regex-engine": [
         "./packages/regex-engine"
       ]
     }

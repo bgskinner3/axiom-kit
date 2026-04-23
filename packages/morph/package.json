@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/morph",
+  "name": "@bgskinner2/axiom-kit-morph",
   "version": "1.0.0",
   "description": "High-performance data transformation, key mapping, and casing engines.",
   "author": "Brennan Skinner",
@@ -31,8 +31,8 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "@axiom/core": "workspace:*",
-    "@axiom/utility-types": "workspace:*"
+    "@bgskinner2/axiom-kit-core": "workspace:*",
+    "@bgskinner2/axiom-kit-utility-types": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

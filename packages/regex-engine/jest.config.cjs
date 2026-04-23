@@ -5,9 +5,13 @@ module.exports = {
   testEnvironment: 'node',
   // Use absolute path for reliability
   rootDir: path.resolve(__dirname),
-  
+
   moduleNameMapper: {
-    '^@axiom/(.*)$': '<rootDir>/../$1/src',
+    // 1. Matches @bgskinner2/axiom-kit-guards -> ../guards/src
+    '^@bgskinner2/axiom-kit-(.*)$': '<rootDir>/../$1/src',
+
+    // 2. Matches @bgskinner2/guards -> ../guards/src
+    '^@bgskinner2/(?!axiom-kit$)(.*)$': '<rootDir>/../$1/src',
   },
 
   transform: {

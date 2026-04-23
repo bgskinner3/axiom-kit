@@ -1,5 +1,8 @@
 import { VALID_PROP_PREFIXES, VALID_DOM_PROPS } from './constants';
-import type { TPrettify, TPrefixUnion } from '@axiom/utility-types';
+import type {
+  TPrettify,
+  TPrefixUnion,
+} from '@bgskinner2/axiom-kit-utility-types';
 import type {
   ComponentType,
   ComponentProps,

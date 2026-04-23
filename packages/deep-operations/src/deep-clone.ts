@@ -1,5 +1,5 @@
-import { isObject } from '@axiom/guards';
-import { ObjectUtils } from '@axiom/core';
+import { isObject } from '@bgskinner2/axiom-kit-guards';
+import { ObjectUtils } from '@bgskinner2/axiom-kit-core';
 
 type TAnyObject = Record<PropertyKey, unknown>;
 function cloneDeepHelper<T>(val: T, seen: Map<unknown, unknown>): T;

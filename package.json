@@ -1,5 +1,5 @@
 {
-  "name": "axiom-kit",
+  "name": "@bgskinner2/axiom-kit",
   "private": true,
   "description": "High-performance TypeScript utility monorepo",
   "author": "Brennan Skinner",

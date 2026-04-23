@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/guards",
+  "name": "@bgskinner2/axiom-kit-guards",
   "description": "High-performance TypeScript type guards and runtime validators for the Axiom kit.",
   "version": "1.0.0",
   "author": "Brennan Skinner",
@@ -32,7 +32,7 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "@axiom/utility-types": "workspace:*"
+    "@bgskinner2/axiom-kit-utility-types": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

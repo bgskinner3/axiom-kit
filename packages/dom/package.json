@@ -1,5 +1,5 @@
 {
-  "name": "@axiom/dom",
+  "name": "@bgskinner2/axiom-kit-dom",
   "version": "1.0.0",
   "description": "High-performance Web API orchestrators and browser-only utilities.",
   "author": "Brennan Skinner",
@@ -32,8 +32,8 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "@axiom/guards": "workspace:*",
-    "@axiom/utility-types": "workspace:*"
+    "@bgskinner2/axiom-kit-guards": "workspace:*",
+    "@bgskinner2/axiom-kit-utility-types": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

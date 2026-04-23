@@ -5,7 +5,7 @@ import {
   isArrayOf,
   isObject,
   isKeyInObject,
-} from '@axiom/guards';
+} from '@bgskinner2/axiom-kit-guards';
 import { isValidElement, Fragment } from 'react';
 import type { ReactElement, ReactNode, ReactPortal } from 'react';
 /**

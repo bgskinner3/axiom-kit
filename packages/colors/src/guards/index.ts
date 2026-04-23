@@ -4,7 +4,7 @@ import {
   isArray,
   isNumber,
   makeAssert,
-} from '@axiom/guards';
+} from '@bgskinner2/axiom-kit-guards';
 import type { TRGB, THex, TRGBTuple, TTypeGuard, TAssert } from '../types';
 
 /**

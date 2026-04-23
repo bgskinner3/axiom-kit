@@ -1,4 +1,9 @@
-import { isDefined, isFunction, isObject, isKeyInObject } from '@axiom/guards';
+import {
+  isDefined,
+  isFunction,
+  isObject,
+  isKeyInObject,
+} from '@bgskinner2/axiom-kit-guards';
 import type { Ref, RefObject } from 'react';
 /**
  * @utilType Guard

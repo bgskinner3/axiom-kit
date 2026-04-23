@@ -1,4 +1,4 @@
-import { isString, isKeyInObject, isObject } from '@axiom/guards';
+import { isString, isKeyInObject, isObject } from '@bgskinner2/axiom-kit-guards';
 type TBaseImageObject = {
   src: string;
   [key: string]: unknown;

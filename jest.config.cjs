@@ -33,7 +33,11 @@ module.exports = {
 
   // Module resolution for Axiom workspaces
   moduleNameMapper: {
-    '^@axiom/(.*)$': '<rootDir>/../$1/src',
+    // 1. Matches @bgskinner2/axiom-kit-guards -> ../guards/src
+    '^@bgskinner2/axiom-kit-(.*)$': '<rootDir>/../$1/src',
+
+    // 2. Matches @bgskinner2/guards -> ../guards/src
+    '^@bgskinner2/(?!axiom-kit$)(.*)$': '<rootDir>/../$1/src',
   },
 
   transform: {

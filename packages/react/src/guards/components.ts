@@ -3,7 +3,7 @@ import {
   isFunction,
   isObject,
   isKeyInObject,
-} from '@axiom/guards';
+} from '@bgskinner2/axiom-kit-guards';
 import type { ComponentType, ForwardRefExoticComponent } from 'react';
 import type { TNamedComponent, TTypeGuard } from '../models';
 /**

@@ -1,6 +1,11 @@
-import type { TTupleToIntersection } from '@axiom/utility-types';
-import { isObject, isArray, isRecord, hasOwnProperty } from '@axiom/guards';
-import { ObjectUtils } from '@axiom/core';
+import type { TTupleToIntersection } from '@bgskinner2/axiom-kit-utility-types';
+import {
+  isObject,
+  isArray,
+  isRecord,
+  hasOwnProperty,
+} from '@bgskinner2/axiom-kit-guards';
+import { ObjectUtils } from '@bgskinner2/axiom-kit-core';
 
 function shallowCopyForMerge<T>(value: T, pastCopies: unknown[]): T {
   if (isObject(value) && !pastCopies.includes(value)) {

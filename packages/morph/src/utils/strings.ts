@@ -1,4 +1,8 @@
-import type { TCamelCase, TSnakeCase, TKebabCase } from '@axiom/utility-types';
+import type {
+  TCamelCase,
+  TSnakeCase,
+  TKebabCase,
+} from '@bgskinner2/axiom-kit-utility-types';
 const toWords = (value: string): string[] => {
   if (!value) return [];
 

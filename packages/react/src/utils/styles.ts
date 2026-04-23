@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { ObjectUtils } from '@axiom/core';
+import { ObjectUtils } from '@bgskinner2/axiom-kit-core'
 /**
  * @utilType util
  * @name mergeCssVars
