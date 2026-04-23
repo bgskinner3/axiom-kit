@@ -21,7 +21,7 @@ export function mergeCssVars<
 >(vars: T, style?: CSSProperties): CSSProperties {
   const filteredVars: Record<string, string> = ObjectUtils.fromEntries(
     ObjectUtils.entries(vars)
-      .filter(([_, value]) => value !== undefined && value !== '')
+      .filter(([_, value]) => value != null && value !== '')
       .map(([key, value]) => [key, value!.toString()]),
   );
 

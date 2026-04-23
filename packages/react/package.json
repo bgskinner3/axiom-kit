@@ -18,7 +18,9 @@
   ],
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup"
+    "build": "tsup",
+    "test": "jest --config jest.config.cjs",
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "@axiom/core": "workspace:*",
@@ -34,5 +36,15 @@
     "react",
     "guards",
     "axiom"
-  ]
+  ],
+  "devDependencies": {
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "jest-environment-jsdom": "^29.7.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsup": "^8.5.1"
+  }
 }

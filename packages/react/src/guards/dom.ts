@@ -2,7 +2,7 @@ import { VALID_DOM_PROPS, VALID_PROP_PREFIXES } from '../models';
 import type { TValidPrefix, TAllValidDOMProps, TValidDOMProp } from '../models';
 import { memoize, ObjectUtils } from '@axiom/core';
 import type { TTypeGuard } from '@axiom/utility-types';
-import { isString, isInSet } from '@axiom/guards';
+import { isString } from '@axiom/guards';
 const PROP_SET = new Set<TValidDOMProp>(ObjectUtils.keys(VALID_DOM_PROPS));
 
 /**
@@ -21,13 +21,7 @@ export const isDynamicProp: TTypeGuard<TValidPrefix> = (
 
   // Manually checking the codes is faster than Set.has for < 10 items
   // d (100), a (97), x (120), - (45), o (111)
-  if (
-    first !== 100 &&
-    first !== 97 &&
-    first !== 120 &&
-    first !== 45 &&
-    first !== 111
-  ) {
+  if (first !== 100 && first !== 97 && first !== 120 && first !== 45) {
     return false;
   }
 
@@ -42,17 +36,17 @@ export const isDynamicProp: TTypeGuard<TValidPrefix> = (
  */
 export const isPropValid = memoize(
   (prop: unknown): prop is TAllValidDOMProps => {
-    if (!isString(prop) || !isInSet<TValidDOMProp>(PROP_SET)(prop))
-      return false;
+    if (!isString(prop)) return false;
 
-    if (PROP_SET.has(prop)) return true;
+    if (PROP_SET.has(prop as TValidDOMProp)) return true;
 
     // 2. Event Handlers (onXxx) - Your charCode optimization is excellent
     if (
       prop.length > 2 &&
-      prop.charCodeAt(0) === 111 && // o
-      prop.charCodeAt(1) === 110 && // n
-      prop.charCodeAt(2) < 91 // A-Z
+      prop.charCodeAt(0) === 111 && // 'o'
+      prop.charCodeAt(1) === 110 && // 'n'
+      prop.charCodeAt(2) >= 65 &&
+      prop.charCodeAt(2) <= 90 // 'A-Z'
     )
       return true;
 

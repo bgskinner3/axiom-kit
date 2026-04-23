@@ -8,4 +8,5 @@ export const VALID_PROP_PREFIXES = [
   'x-', // Custom / Alpine
   '--', // CSS Variables
   'on', // React 19 / Native Events
+  '-', // prefixes like -webkit
 ] as const;

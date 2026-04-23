@@ -3,9 +3,17 @@
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
+    "jsx": "react-jsx",
     "composite": false,
-    "incremental": false,
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      "node",
+      "jest",
+      "@testing-library/jest-dom"
+    ]
   },
-  "include": ["src/**/*", "__test__/**/*"]
+  "include": [
+    "src/**/*",
+    "__test__/**/*"
+  ]
 }

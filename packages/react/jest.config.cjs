@@ -2,22 +2,36 @@ const path = require('path');
 
 module.exports = {
   preset: 'ts-jest',
-  testEnvironment: 'node',
-  // Use absolute path for reliability
+  // 🌐 CRITICAL: Browsers have a DOM; Node does not.
+  testEnvironment: 'jsdom',
   rootDir: path.resolve(__dirname),
-  
+
+  // 🔗 Setup file for custom matchers like .toBeInTheDocument()
+  setupFilesAfterEnv: ['<rootDir>/__test__/setup.ts'],
+
   moduleNameMapper: {
     '^@axiom/(.*)$': '<rootDir>/../$1/src',
   },
-
+  coverageReporters: ['text', 'text-summary'],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        // 🚀 THE KEY: Use the separate test config
         tsconfig: 'tsconfig.test.json',
         isolatedModules: false,
+        diagnostics: { warnOnly: false },
+        compilerOptions: {
+          rootDir: './',
+          // ⚛️ Ensures React is handled correctly in tests
+          jsx: 'react-jsx',
+        },
       },
     ],
   },
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '\\.test-d\\.ts$'],
+  testMatch: [
+    // 🚀 THE FIX: Broaden the search to catch all spec/test files
+    '<rootDir>/__test__/**/*.{spec,test}.{ts,tsx}',
+    '<rootDir>/src/**/*.spec.{ts,tsx}', // Optional: if you keep tests next to source
+  ],
 };

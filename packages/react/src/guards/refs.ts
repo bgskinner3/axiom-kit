@@ -1,10 +1,4 @@
-import {
-  isDefined,
-  isFunction,
-  isNull,
-  isObject,
-  isKeyInObject,
-} from '@axiom/guards';
+import { isDefined, isFunction, isObject, isKeyInObject } from '@axiom/guards';
 import type { Ref, RefObject } from 'react';
 /**
  * @utilType Guard
@@ -40,9 +34,8 @@ export const isRef = <T>(value: unknown): value is Ref<T> =>
  * }
  * ```
  */
-export const isRefObject = <T>(ref: Ref<T>): ref is RefObject<T | null> =>
-  !isNull(ref) && isObject(ref) && 'current' in ref;
-
+export const isRefObject = <T>(ref: unknown): ref is RefObject<T> =>
+  typeof ref === 'object' && ref !== null && 'current' in ref;
 
 /**
  * @utilType Guard
