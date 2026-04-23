@@ -2,6 +2,8 @@
   "name": "@axiom/deep-operations",
   "version": "1.0.0",
   "description": "High-performance recursive tree manipulation and deep object surgery.",
+  "author": "Brennan Skinner",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

@@ -9,28 +9,33 @@ import { assertIsRGBTuple } from '../guards';
  *
  */
 export const hexToRGB = (hex: string): TRGB => {
-  // 1. Remove hash and validate length in one go
   const raw = hex.startsWith('#') ? hex.slice(1) : hex;
-  const { length } = raw;
+  const len = raw.length;
 
-  if (length !== 3 && length !== 6) {
-    throw new Error(`Invalid hex color: "${hex}"`);
+  // 1. Length check
+  if (len !== 3 && len !== 6) {
+    throw new Error(`Invalid hex length: "${hex}"`);
+  }
+
+  // 2. Character validation check
+  // Since this is a utility, a quick regex test here is the most reliable way
+  // to ensure parseInt doesn't return garbage or NaN.
+  if (!/^[0-9a-fA-F]+$/.test(raw)) {
+    throw new Error(`Invalid hex characters: "${hex}"`);
   }
 
   const num = parseInt(raw, 16);
 
-  if (length === 3) {
-    // Expand shorthand (f00 -> ff0000) using bit-shifting
+  if (len === 3) {
     return [
       (num >> 8) * 17, // R
-      ((num >> 4) & 0xf) * 17,
-      (num & 0xf) * 17, // B
+      ((num >> 4) & 0x0f) * 17, // G
+      (num & 0x0f) * 17, // B
     ];
   }
 
-  // Standard 6-digit expansion
   return [
-    num >> 16, // R
+    (num >> 16) & 0xff, // R
     (num >> 8) & 0xff, // G
     num & 0xff, // B
   ];

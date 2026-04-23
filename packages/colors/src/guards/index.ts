@@ -17,31 +17,30 @@ import type { TRGB, THex, TRGBTuple, TTypeGuard, TAssert } from '../types';
 export const isRGBString: TTypeGuard<TRGB> = (
   value: unknown,
 ): value is TRGB => {
-  if (!isString(value)) return false;
+  if (typeof value !== 'string') return false;
 
   const str = value.trim().toLowerCase();
 
-  // 1. Basic format check
-  if (!str.startsWith('rgb') || !str.endsWith(')')) return false;
+  // 1. Strict prefix/suffix check
+  if (!str.startsWith('rgb(') || !str.endsWith(')')) return false;
 
-  // 2. Extract content between parentheses
-  const startIdx = str.indexOf('(');
-  const content = str.substring(startIdx + 1, str.length - 1);
+  // 2. Extract content and split STRICTLY by commas
+  const content = str.slice(4, -1);
+  const parts = content.split(',');
 
-  const parts = content.split(/,|\s+/).filter(Boolean);
+  // Must have exactly 3 parts (r, g, b)
+  if (parts.length !== 3) return false;
 
-  if (parts.length < 3 || parts.length > 4) return false;
+  // 3. Validate parts
+  for (let i = 0; i < 3; i++) {
+    const part = parts[i].trim();
+    // Fail on empty parts or non-numeric strings
+    if (part === '' || isNaN(Number(part))) return false;
 
-  const [r, g, b] = parts.map(Number);
-  const hasValidChannels = [r, g, b].every(
-    (v) => !isNaN(v) && v >= 0 && v <= 255 && Number.isInteger(v),
-  );
+    const n = Number(part);
 
-  if (!hasValidChannels) return false;
-
-  if (parts.length === 4) {
-    const a = Number(parts[3]);
-    if (isNaN(a) || a < 0 || a > 1) return false;
+    // Standard RGB range 0-255
+    if (n < 0 || n > 255 || !Number.isInteger(n)) return false;
   }
 
   return true;

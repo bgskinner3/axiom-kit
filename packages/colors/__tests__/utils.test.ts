@@ -6,6 +6,9 @@ import {
   hexToNormalizedRGB,
   validateRGB,
   getLuminance,
+  isLumLessThan,
+  isLumGreaterThan,
+  contrastTextColor,
 } from '../src/utils';
 
 describe('Color Utilities', () => {
@@ -211,6 +214,70 @@ describe('Color Utilities', () => {
 
     it('accepts hex input', () => {
       expect(getLuminance('#ffffff')).toBeCloseTo(1, 5);
+    });
+  });
+});
+
+describe('Color Luminance Utilities', () => {
+  const BLACK = '#000000';
+  const WHITE = '#ffffff';
+  const MID_GRAY = [128, 128, 128] as const;
+
+  describe('isLumLessThan', () => {
+    it('returns true when luminance is below threshold', () => {
+      expect(isLumLessThan(BLACK, 0.5)).toBe(true);
+    });
+
+    it('returns false when luminance is above threshold', () => {
+      expect(isLumLessThan(WHITE, 0.5)).toBe(false);
+    });
+
+    it('works with RGB arrays', () => {
+      expect(isLumLessThan([0, 0, 0], 0.1)).toBe(true);
+    });
+  });
+
+  describe('isLumGreaterThan', () => {
+    it('returns true when luminance is above threshold', () => {
+      expect(isLumGreaterThan(WHITE, 0.5)).toBe(true);
+    });
+
+    it('returns false when luminance is below threshold', () => {
+      expect(isLumGreaterThan(BLACK, 0.5)).toBe(false);
+    });
+  });
+
+  describe('contrastTextColor', () => {
+    it('returns light text for dark backgrounds (defaults)', () => {
+      // Black background -> White text
+      expect(contrastTextColor('#000000')).toBe('#ffffff');
+    });
+
+    it('returns dark text for light backgrounds (defaults)', () => {
+      // White background -> Black text
+      expect(contrastTextColor('#ffffff')).toBe('#000000');
+    });
+
+    it('uses custom light/dark return values', () => {
+      const options = { light: 'text-ghost', dark: 'text-charcoal' };
+      expect(contrastTextColor('#000000', options)).toBe('text-ghost');
+      expect(contrastTextColor('#ffffff', options)).toBe('text-charcoal');
+    });
+
+    it('respects a custom threshold', () => {
+      // Mid-gray lum is ~0.21.
+      // If threshold is 0.1, gray is "light" -> returns dark color
+      expect(
+        contrastTextColor(MID_GRAY, { threshold: 0.1, dark: 'black' }),
+      ).toBe('black');
+      // If threshold is 0.3, gray is "dark" -> returns light color
+      expect(
+        contrastTextColor(MID_GRAY, { threshold: 0.3, light: 'white' }),
+      ).toBe('white');
+    });
+
+    it('handles invalid colors by throwing (via validateRGB)', () => {
+      expect(() => contrastTextColor('not-a-color')).toThrow();
     });
   });
 });

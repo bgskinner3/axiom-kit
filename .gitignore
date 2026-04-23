@@ -1,6 +1,13 @@
 /node_modules
 node_modules/
 .DS_Store
+node_modules/
+
+dist/
+.DS_Store
+.turbo/
+.next/
+*.log
 
 # local env files
 .env.local
