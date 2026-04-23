@@ -3,7 +3,7 @@
   "private": true,
   "description": "High-performance TypeScript utility monorepo",
   "author": "Brennan Skinner",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -16,7 +16,8 @@
     "lint:fix": "eslint \"packages/**/src/**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"packages/**/src/**/*.{ts,tsx,js,json,md}\"",
     "clean": "rimraf packages/*/dist && rimraf packages/*/node_modules",
-    "inspect:linter": "npx @eslint/config-inspector"
+    "inspect:linter": "npx @eslint/config-inspector",
+    "sync:license": "cpy LICENSE packages/*"
   },
   "devDependencies": {
     "@eslint/config-inspector": "^2.0.0",

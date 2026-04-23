@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "composite": true, // 👈 MUST be true for the workspace link to work
+    "composite": true, 
     "incremental": true,
     "types": [
       "node",

@@ -8,10 +8,13 @@ export default defineConfig({
     resolve: true,
   },
   // We keep Core as external for now unless you want to bundle it
-  external: [], 
+  external: [],
   clean: true,
   minify: true,
+  sourcemap: true,
+
   splitting: true,
   treeshake: true,
-   tsconfig: 'tsconfig.build.json',
+  tsconfig: 'tsconfig.build.json',
+  shims: true,
 });

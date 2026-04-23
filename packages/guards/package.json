@@ -1,7 +1,11 @@
 {
   "name": "@axiom/guards",
+  "description": "High-performance TypeScript type guards and runtime validators for the Axiom kit.",
   "version": "1.0.0",
+  "author": "Brennan Skinner",
+  "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,7 +17,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "dev": "tsup --watch",
@@ -27,5 +32,24 @@
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "tsup": "^8.5.1"
+  },
+  "keywords": [
+    "typescript",
+    "guards",
+    "validation",
+    "type-safety",
+    "axiom"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgskinner3/axiom-kit",
+    "directory": "packages/guards"
+  },
+  "bugs": {
+    "url": "https://github.com/bgskinner3/axiom-kit"
+  },
+  "homepage": "https://github.com/bgskinner3/axiom-kit",
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

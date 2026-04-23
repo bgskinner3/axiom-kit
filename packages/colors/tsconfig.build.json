@@ -3,5 +3,13 @@
   "compilerOptions": {
     "composite": false,
     "incremental": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "tests",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }

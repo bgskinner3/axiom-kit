@@ -5,8 +5,8 @@ import {
   isNumber,
   makeAssert,
 } from '@axiom/guards';
-import type { TRGB, THex, TRGBTuple } from '../types';
-import type { TTypeGuard, TAssert } from '@axiom/utility-types';
+import type { TRGB, THex, TRGBTuple, TTypeGuard, TAssert } from '../types';
+
 /**
  * @utilType Guard
  * @name isRGBString

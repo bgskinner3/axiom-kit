@@ -11,9 +11,6 @@
   },
   "references": [
     {
-      "path": "../utility-types"
-    },
-    {
       "path": "../guards"
     }
   ],
