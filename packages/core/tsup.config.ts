@@ -5,7 +5,7 @@ export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
   dts: {
-    resolve: true, 
+    resolve: true,
   },
   clean: true,
   minify: true,
@@ -13,5 +13,4 @@ export default defineConfig({
   treeshake: true,
   splitting: true,
   tsconfig: 'tsconfig.build.json',
-  external: ['react', 'react-dom'],
 });

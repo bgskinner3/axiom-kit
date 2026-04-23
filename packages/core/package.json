@@ -18,10 +18,10 @@
   ],
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup"
-  },
-  "dependencies": {
-    "@axiom/utility-types": "workspace:*"
+    "build": "tsup",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "keywords": [
     "typescript",

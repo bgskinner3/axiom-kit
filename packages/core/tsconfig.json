@@ -14,10 +14,10 @@
   "exclude": [
     "dist",
     "**/__tests__/*"
-  ],
-  "references": [
-    {
-      "path": "../utility-types"
-    },
-  ],
+  ]
+  // "references": [
+  //   {
+  //     "path": "../utility-types"
+  //   },
+  // ],
 }

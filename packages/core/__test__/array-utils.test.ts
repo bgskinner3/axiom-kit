@@ -39,18 +39,18 @@ describe('ArrayUtils', () => {
     });
   });
 
-  describe('createFixedLengthArray', () => {
-    it('returns array when correct length', () => {
-      const arr = [1, 2, 3];
-      expect(ArrayUtils.createFixedLengthArray(arr, 3)).toEqual([1, 2, 3]);
-    });
+  // describe('createFixedLengthArray', () => {
+  //   it('returns array when correct length', () => {
+  //     const arr = [1, 2, 3];
+  //     expect(ArrayUtils.createFixedLengthArray(arr, 3)).toEqual([1, 2, 3]);
+  //   });
 
-    it('throws when array length mismatch', () => {
-      expect(() => ArrayUtils.createFixedLengthArray([1, 2], 3)).toThrow(
-        /must have exactly 3 elements/,
-      );
-    });
-  });
+  //   it('throws when array length mismatch', () => {
+  //     expect(() => ArrayUtils.createFixedLengthArray([1, 2], 3)).toThrow(
+  //       /must have exactly 3 elements/,
+  //     );
+  //   });
+  // });
 
   describe('readAllItems', () => {
     it('returns a shallow copy of the array', () => {

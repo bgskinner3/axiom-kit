@@ -1,4 +1,4 @@
-import type { TFixedLengthArray } from '@axiom/utility-types';
+// import type { TFixedLengthArray } from '@axiom/utility-types';
 
 export class ArrayUtils {
   /**
@@ -19,15 +19,15 @@ export class ArrayUtils {
    * @description Validates and returns an array with a fixed numeric length at the type level.
    * @link #createfixedlengtharray
    */
-  static createFixedLengthArray<T>(
-    items: T[],
-    length: number,
-  ): TFixedLengthArray<T[]> {
-    if (items.length !== length) {
-      throw new Error(`Array must have exactly ${length} elements`);
-    }
-    return items satisfies TFixedLengthArray<T[]>;
-  }
+  // static createFixedLengthArray<T>(
+  //   items: T[],
+  //   length: number,
+  // ): TFixedLengthArray<T[]> {
+  //   if (items.length !== length) {
+  //     throw new Error(`Array must have exactly ${length} elements`);
+  //   }
+  //   return items satisfies TFixedLengthArray<T[]>;
+  // }
 
   /**
    * @utilType util
