@@ -1,6 +1,6 @@
-import { isCamelCase, isSnakeCase, isKebabCase } from '../src';
+import { isCamelCase, isSnakeCase, isKebabCase, isHexByteString } from '../src';
 
-describe('Morph Type Guards', () => {
+describe('Case String Type Guards', () => {
   describe('isCamelCase', () => {
     it('returns true for valid camelCase strings', () => {
       expect(isCamelCase('fooBar')).toBe(true);
@@ -35,6 +35,31 @@ describe('Morph Type Guards', () => {
       expect(isKebabCase('fooBar')).toBe(false);
       expect(isKebabCase('foo_bar')).toBe(false);
       expect(isKebabCase('')).toBe(false);
+    });
+  });
+  describe('isHexByteString', () => {
+    it('returns true for valid hex byte strings', () => {
+      const guard = isHexByteString(); // no expected length
+      expect(guard('0a1b')).toBe(true);
+      expect(guard('ff')).toBe(true);
+      expect(guard('0A0B0C')).toBe(true);
+    });
+
+    it('returns false for invalid strings', () => {
+      const guard = isHexByteString();
+      expect(guard('0g')).toBe(false);
+      expect(guard('123')).toBe(false); // odd length
+      expect(guard('')).toBe(false);
+    });
+
+    it('respects expectedLength', () => {
+      const guard4 = isHexByteString(4);
+      expect(guard4('0a1b')).toBe(true);
+      expect(guard4('0a1b0c')).toBe(false);
+
+      const guard2 = isHexByteString(2);
+      expect(guard2('0a')).toBe(true);
+      expect(guard2('0a1b')).toBe(false);
     });
   });
 });

@@ -181,12 +181,6 @@ export const hexToNormalizedRGB = (hex: string): [number, number, number] => {
 };
 
 /**
- *
- *
- *
- */
-
-/**
  * @utilType util
  * @name isLumLessThan
  * @category Color
@@ -200,10 +194,10 @@ export const hexToNormalizedRGB = (hex: string): [number, number, number] => {
  * isLumLessThan([255,255,255], 0.2); // false
  * ```
  */
-// export const isLumLessThan = (
-//   color: TRGB | string,
-//   threshold: number,
-// ): boolean => getLuminance(validateRGB(color)) < threshold;
+export const isLumLessThan = (
+  color: TRGB | string,
+  threshold: number,
+): boolean => getLuminance(validateRGB(color)) < threshold;
 
 /**
  * @utilType util
@@ -219,8 +213,8 @@ export const hexToNormalizedRGB = (hex: string): [number, number, number] => {
  * isLumLessThan([255,255,255], 0.2); // false
  * ```
  */
-// export const isDarkColor = (color: TRGB | string): boolean =>
-//   isLumLessThan(color, 0.179);
+export const isDarkColor = (color: TRGB | string): boolean =>
+  isLumLessThan(color, 0.179);
 
 /**
  * @utilType util
@@ -236,10 +230,10 @@ export const hexToNormalizedRGB = (hex: string): [number, number, number] => {
  * isLumLessThan([255,255,255], 0.2); // false
  * ```
  */
-// export const isLumGreaterThan = (
-//   color: TRGB | string,
-//   threshold: number,
-// ): boolean => getLuminance(validateRGB(color)) > threshold;
+export const isLumGreaterThan = (
+  color: TRGB | string,
+  threshold: number,
+): boolean => getLuminance(validateRGB(color)) > threshold;
 
 /**
  * @utilType util
@@ -281,20 +275,20 @@ export const hexToNormalizedRGB = (hex: string): [number, number, number] => {
  * // → 'text-white'
  * ```
  */
-// export const contrastTextColor = (
-//   color: TRGB | string,
-//   options?: {
-//     mode?: 'tailwind' | 'css';
-//     threshold?: number;
-//   },
-// ): string => {
-//   const { mode = 'tailwind', threshold = 0.179 } = options ?? {};
-//   const isLight = isLumGreaterThan(color, threshold);
+export const contrastTextColor = (
+  color: TRGB | string,
+  options?: {
+    mode?: 'tailwind' | 'css';
+    threshold?: number;
+  },
+): string => {
+  const { mode = 'tailwind', threshold = 0.179 } = options ?? {};
+  const isLight = isLumGreaterThan(color, threshold);
 
-//   if (mode === 'css') {
-//     return isLight ? '#000000' : '#ffffff';
-//   }
+  if (mode === 'css') {
+    return isLight ? '#000000' : '#ffffff';
+  }
 
-//   // Default: Tailwind-compatible class names
-//   return isLight ? 'text-black' : 'text-white';
-// };
+  // Default: Tailwind-compatible class names
+  return isLight ? 'text-black' : 'text-white';
+};

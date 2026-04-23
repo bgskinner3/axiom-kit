@@ -2,13 +2,18 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "composite": true, 
+    "composite": true,
     "incremental": true,
     "types": [
       "node",
       "jest"
     ]
   },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ],
   "include": [
     "src/**/*",
     "__tests__/**/*"

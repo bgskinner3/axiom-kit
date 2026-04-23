@@ -18,3 +18,5 @@ export type TStream = TBranded<_TStreamSignature, 'Stream'>;
 export type TAbsoluteURL = TBranded<URL, 'TAbsoluteURL'>;
 
 export type TInternalUrl = TBranded<string, 'TInternalUrl'>;
+
+export type THexByteString = TBranded<string, 'THexByteString'>;

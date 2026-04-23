@@ -4,7 +4,6 @@ import {
   toKebabCase,
   toSnakeCase,
 } from '../src';
-import { isCamelCase, isSnakeCase, isKebabCase } from '../src';
 
 type TestCase = readonly [string, string, string, string];
 
@@ -31,9 +30,9 @@ const cases: TestCase[] = [
 ];
 
 const guards = {
-  isCamelCase: isCamelCase,
-  isKebabCase: isKebabCase,
-  isSnakeCase: isSnakeCase,
+  isCamelCase: (value: string) => /^[a-z]+(?:[A-Z][a-z0-9]*)*$/.test(value),
+  isKebabCase: (value: string) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value),
+  isSnakeCase: (value: string) => /^[a-z0-9]+(?:_[a-z0-9]+)*$/.test(value),
 } as const;
 
 describe.each(cases)(
@@ -83,7 +82,7 @@ describe.each(cases)(
           'UPPERCASE',
         ];
         invalidValues.forEach((val) => {
-          expect(guard(val as unknown)).toBe(false);
+          expect(guard(val as string)).toBe(false);
         });
       });
     });
