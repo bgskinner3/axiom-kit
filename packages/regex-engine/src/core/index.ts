@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { REGEX_CENTRAL_PATTERN_SOURCE } from '../models';
 import type { TBranded, TRegexRegistryInstance } from '../models';
 import type { TRegexPatternKeys } from '../models';
 import { regexStore } from './regex-registry';
+
 export interface RegexEngine extends TRegexRegistryInstance {}
 export class RegexEngine {
   private readonly REGISTRY_KEY = '__REGEX_ENGINE_REGISTRY__';
@@ -39,7 +42,7 @@ export class RegexEngine {
     const pattern: string = this[key];
     return regexStore.get(pattern).test(val);
   }
-  
+
   public list(): string[] {
     return Array.from(globalThis[this.REGISTRY_KEY].keys());
   }

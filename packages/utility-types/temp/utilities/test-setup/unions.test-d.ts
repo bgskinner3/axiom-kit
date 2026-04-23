@@ -1,13 +1,6 @@
 import { expectType } from 'jest-tsd';
-import type {
-  TEqual,
-  TExpect,
-  TNormalizeTypeValue,
-} from '../../test-utils';
-import type {
-  TXOR,
-  TTupleToIntersection,
-} from '../../../src';
+import type { TEqual, TExpect, TNormalizeTypeValue } from '../../test-utils';
+import type { TXOR, TTupleToIntersection } from '../../../src';
 import { forceType } from '../../test-utils';
 
 /**

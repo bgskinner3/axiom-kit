@@ -1,11 +1,4 @@
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import prettier from 'eslint-plugin-prettier';
-import globals from 'globals';
-
-/** @type {import("eslint").Linter.Config[]} */
-/** @type {import("eslint").Linter.Config[]} */
-import js from '@eslint/js';
 import tseslint from 'typescript-eslint'; 
 import prettier from 'eslint-plugin-prettier';
 import globals from 'globals';

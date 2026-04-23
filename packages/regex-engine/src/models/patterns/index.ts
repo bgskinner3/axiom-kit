@@ -1,7 +1,6 @@
 // import { REGEX_DATE_PATTERNS } from './date';
 // import { REGEX_COLOR_PATTERNS } from './color';
 
-
 // const PATTERN_SOURCE = {
 //   ...REGEX_COLOR_PATTERNS,
 //   ...REGEX_DATE_PATTERNS,

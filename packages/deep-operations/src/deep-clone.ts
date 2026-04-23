@@ -3,7 +3,6 @@ import { ObjectUtils } from '@axiom/core';
 import type { TAnyObject } from '@axiom/utility-types';
 
 function cloneDeepHelper<T>(val: T, seen: Map<unknown, unknown>): T;
-// eslint-disable-next-line no-redeclare
 function cloneDeepHelper(val: unknown, seen: Map<unknown, unknown>): unknown {
   // 1. Primitive / Null / Function check
   if (val === null || typeof val !== 'object') {

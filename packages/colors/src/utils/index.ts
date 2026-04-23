@@ -154,8 +154,8 @@ export function hexToHSL(hex: string): { h: number; s: number; l: number } {
     min = Math.min(r, g, b);
   const l = (max + min) / 2;
   let h = 0,
-    s = 0,
-    d = max - min;
+    s = 0;
+  const d = max - min;
 
   if (d !== 0) {
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
