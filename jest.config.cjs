@@ -6,7 +6,12 @@ module.exports = {
   verbose: true,
 
   // Ignore build artifacts and type-only tests
-  testPathIgnorePatterns: ['/node_modules/', '/dist/', '\\.test-d\\.ts$'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+    '\\.test-d\\.ts$',
+    '/__tests__/utils/',
+  ],
 
   // Define executable test locations
   testMatch: [

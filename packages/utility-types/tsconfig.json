@@ -1,10 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "./dist",
     "composite": true,
     "incremental": true,
-    "baseUrl": ".",
     "types": [
       "node",
       "jest"
@@ -12,9 +13,10 @@
   },
   "include": [
     "src/**/*",
-    "__tests__/**/*"
+    "__tests__/**/*",
+    "**/__tests__/utils/**/*"
   ],
   "exclude": [
-    "dist"
+    "dist",
   ]
 }
