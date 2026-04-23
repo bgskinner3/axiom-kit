@@ -27,25 +27,3 @@ describe('RegexEngine Core', () => {
   //   expect(engine.list()).toContain('LegacyId');
   // });
 });
-// import { beforeAll, beforeEach } from '@jest/globals';
-
-// /**
-//  * 🏗️ The Foundation
-//  * This runs once before all tests in a file.
-//  * It ensures the global store is ready so the engine doesn't throw "undefined" errors.
-//  */
-// beforeAll(() => {
-//   if (!globalThis.__REGEX_ENGINE_REGISTRY__) {
-//     globalThis.__REGEX_ENGINE_REGISTRY__ = new Map<string, string>();
-//   }
-// });
-
-// /**
-//  * 🧼 The Reset
-//  * This runs before every single 'it' or 'test' block.
-//  * It clears the registry so that custom patterns from one test
-//  * don't leak into another test.
-//  */
-// beforeEach(() => {
-//   globalThis.__REGEX_ENGINE_REGISTRY__.clear();
-// });

@@ -1,5 +1,5 @@
-// import type { TTypeGuard } from '@axiom/core';
-// import {isNonEmptyString, isString} from './primitives'
+import type { TTypeGuard } from '@axiom/utility-types';
+import {isNonEmptyString, isString} from './primitives'
 
 // /**
 //  * @utilType Guard

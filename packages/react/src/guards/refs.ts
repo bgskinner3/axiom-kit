@@ -42,5 +42,21 @@ export const isRef = <T>(value: unknown): value is Ref<T> =>
  */
 export const isRefObject = <T>(ref: Ref<T>): ref is RefObject<T | null> =>
   !isNull(ref) && isObject(ref) && 'current' in ref;
+
+
+/**
+ * @utilType Guard
+ * @name isPromise
+ * @category Guards React
+ * @description Checks if a value is a Promise or a "Thenable" by validating the existence of a .then() method.
+ * @link #ispromise
+ *
+ * ### 📘 Example Usage
+ * ```ts
+ * if (isPromise(data)) {
+ *   data.then((res) => console.log(res));
+ * }
+ * ```
+ */
 export const isPromise = <T>(value: unknown): value is Promise<T> =>
   !!value && isKeyInObject('then')(value) && isFunction(value.then);

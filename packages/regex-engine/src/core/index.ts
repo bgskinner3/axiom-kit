@@ -1,8 +1,8 @@
 import { REGEX_CENTRAL_PATTERN_SOURCE } from '../models';
-import type { TBranded } from '../models';
+import type { TBranded, TRegexRegistryInstance } from '../models';
 import type { TRegexPatternKeys } from '../models';
 import { regexStore } from './regex-registry';
-
+export interface RegexEngine extends TRegexRegistryInstance {}
 export class RegexEngine {
   private readonly REGISTRY_KEY = '__REGEX_ENGINE_REGISTRY__';
   constructor() {
@@ -32,13 +32,14 @@ export class RegexEngine {
     Object.defineProperty(this, propKey, descriptor);
   }
   public is<K extends TRegexPatternKeys>(
+    this: RegexEngine,
     key: K,
     val: string,
   ): val is TBranded<string, K> {
-    // Access the branded string directly from 'this'
-    const pattern = (this as any)[key];
-    return pattern ? regexStore.get(pattern).test(val) : false;
+    const pattern: string = this[key];
+    return regexStore.get(pattern).test(val);
   }
+  
   public list(): string[] {
     return Array.from(globalThis[this.REGISTRY_KEY].keys());
   }

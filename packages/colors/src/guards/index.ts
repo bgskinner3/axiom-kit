@@ -14,18 +14,32 @@ export const isRGBString: TTypeGuard<TRGB> = (
 ): value is TRGB => {
   if (!isString(value)) return false;
 
-  // Updated regex: 'a' is optional, and the 4th alpha value is optional
-  const rgbRegex =
-    /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*[\d.]+)?\s*\)$/i;
+  const str = value.trim().toLowerCase();
 
-  const match = value.match(rgbRegex);
-  if (!match) return false;
+  // 1. Basic format check
+  if (!str.startsWith('rgb') || !str.endsWith(')')) return false;
 
-  const r = Number(match[1]);
-  const g = Number(match[2]);
-  const b = Number(match[3]);
+  // 2. Extract content between parentheses
+  const startIdx = str.indexOf('(');
+  const content = str.substring(startIdx + 1, str.length - 1);
 
-  return [r, g, b].every((v) => v >= 0 && v <= 255);
+  const parts = content.split(/,|\s+/).filter(Boolean);
+
+  if (parts.length < 3 || parts.length > 4) return false;
+
+  const [r, g, b] = parts.map(Number);
+  const hasValidChannels = [r, g, b].every(
+    (v) => !isNaN(v) && v >= 0 && v <= 255 && Number.isInteger(v),
+  );
+
+  if (!hasValidChannels) return false;
+
+  if (parts.length === 4) {
+    const a = Number(parts[3]);
+    if (isNaN(a) || a < 0 || a > 1) return false;
+  }
+
+  return true;
 };
 
 // /**
@@ -36,7 +50,10 @@ export const isRGBString: TTypeGuard<TRGB> = (
 //  * @link #ishexcolor
 //  */
 export const isHexColor: TTypeGuard<THex> = (value: unknown): value is THex => {
-  return isString(value) && /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(value);
+  return (
+    isString(value) &&
+    /^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/.test(value)
+  );
 };
 
 /**
@@ -65,14 +82,6 @@ export const isTuple3: TTypeGuard<TRGBTuple> = (
  * isRGBTuple([128, 128]);      // false (Wrong length)
  * ```
  */
-// export const isRGBTuple: TTypeGuard<TRGB> = (input: unknown): input is TRGB => {
-//   return (
-//     isArray(input) &&
-//     input.length === 3 &&
-//     input.every((n) => isNumber(n) && n >= 0 && n <= 255)
-//   );
-// };
-// NEW
 export const isRGBTuple: TTypeGuard<TRGB> = (input: unknown): input is TRGB =>
   isArray(input) &&
   input.length === 3 &&

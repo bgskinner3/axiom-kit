@@ -21,7 +21,7 @@ export const isValidReactNode: TTypeGuard<ReactNode> = (
   isNil(value) ||
   isPrimitive(value) ||
   isValidElement(value) ||
-  isReactPortal(value) || // Added portal support
+  isReactPortal(value) ||
   isArrayOf(isValidReactNode, value);
 
 /**

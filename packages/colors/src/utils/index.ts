@@ -1,5 +1,5 @@
 import type { TRGB, TCssRGB } from '../models';
-import { isString } from '@axiom/guards';
+// import { isString } from '@axiom/guards';
 // /**
 //  * @utilType util
 //  * @name hexToRGB
@@ -8,19 +8,34 @@ import { isString } from '@axiom/guards';
 //  * @link #hexToRGB
 //  *
 //  */
-// export const hexToRGB = (hex: string): TRGB => {
-//   const normalized = hex.startsWith('#') ? hex.slice(1) : hex;
+export const hexToRGB = (hex: string): TRGB => {
+  // 1. Remove hash and validate length in one go
+  const raw = hex.startsWith('#') ? hex.slice(1) : hex;
+  const { length } = raw;
 
-//   if (!REGEX_CONSTANTS.hexColor.test(normalized)) {
-//     throw new Error(`Invalid hex color: "${hex}"`);
-//   }
+  if (length !== 3 && length !== 6) {
+    throw new Error(`Invalid hex color: "${hex}"`);
+  }
 
-//   const r = parseInt(normalized.slice(0, 2), 16);
-//   const g = parseInt(normalized.slice(2, 4), 16);
-//   const b = parseInt(normalized.slice(4, 6), 16);
+  const num = parseInt(raw, 16);
 
-//   return [r, g, b];
-// };
+  if (length === 3) {
+    // Expand shorthand (f00 -> ff0000) using bit-shifting
+    return [
+      (num >> 8) * 17, // R
+      ((num >> 4) & 0xf) * 17, 
+      (num & 0xf) * 17, // B
+    ];
+  }
+
+  // Standard 6-digit expansion
+  return [
+    num >> 16, // R
+    (num >> 8) & 0xff, // G
+    num & 0xff, // B
+  ];
+};
+
 /**
  * @utilType util
  * @name validateRGB
