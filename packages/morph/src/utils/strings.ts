@@ -30,9 +30,14 @@ const toWords = (value: string): string[] => {
  * capitalizeString('userName'); // "UserName"
  * ```
  */
-export const capitalizeString = <S extends string>(str: S): Capitalize<S> => {
-  return (str[0].toUpperCase() + str.slice(1)) as Capitalize<S>;
-};
+export function capitalizeString<S extends string>(str: S): Capitalize<S>;
+export function capitalizeString(str: string): string {
+  if (str.length === 0) return str;
+  const firstChar = str.charAt(0).toUpperCase();
+  const rest = str.slice(1);
+
+  return firstChar + rest;
+}
 
 /**
  * @utilType util
