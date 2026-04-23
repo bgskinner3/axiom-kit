@@ -40,13 +40,13 @@
     "axiom"
   ],
   "devDependencies": {
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "jest": "^30.3.0",
-    "ts-jest": "^29.4.9",
     "jest-environment-jsdom": "^29.7.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "ts-jest": "^29.4.9",
     "tsup": "^8.5.1"
   }
 }

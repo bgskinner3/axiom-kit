@@ -2,8 +2,8 @@ import type {
   TKeyboardConfig,
   TShortcutDefinition,
   TKeyboardActionResult,
-} from './types';
-import { DEFAULT_KEYBOARD_CONFIG } from './constants';
+} from '../models';
+import { DEFAULT_KEYBOARD_CONFIG } from '../models';
 /**
  * @utilType util
  * @name getKeyboardAction

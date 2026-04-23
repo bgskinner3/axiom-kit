@@ -1,4 +1,4 @@
-import { normalizeUrl } from '../src';
+import { normalizeUrl } from '../../src';
 
 describe('normalizeUrl', () => {
   it('handles strings and URL instances', () => {

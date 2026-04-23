@@ -1,4 +1,4 @@
-import { getKeyboardAction } from '../src';
+import { getKeyboardAction } from '../../src';
 
 describe('getKeyboardAction', () => {
   // Helper to create mock events quickly

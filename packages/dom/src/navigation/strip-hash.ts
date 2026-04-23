@@ -14,26 +14,35 @@
  */
 export const stripHash = (url?: string): string => {
   if (!url) return '';
-
-  // Simple string split is faster and SSR-safe for 90% of cases
   if (!url.includes('#')) return url;
 
   try {
-    // If window exists, we can use the URL constructor for more accuracy
-    const base =
-      typeof window !== 'undefined'
-        ? window.location.origin
-        : 'http://localhost';
+    const isRelative = !url.includes('://') && !url.startsWith('//');
+    const base = 'http://temp.com';
     const parsed = new URL(url, base);
 
-    // Return path + search (and origin if it's external)
-    const isInternal =
-      typeof window !== 'undefined' && parsed.origin === window.location.origin;
-    return isInternal
-      ? `${parsed.pathname}${parsed.search}`
-      : `${parsed.origin}${parsed.pathname}${parsed.search}`;
+    // Reconstruct without the hash
+    const pathAndQuery = `${parsed.pathname}${parsed.search}`;
+
+    if (isRelative) {
+      // Logic: Ensure we don't add a leading slash if the original didn't have one
+      return url.startsWith('/')
+        ? pathAndQuery
+        : pathAndQuery.replace(/^\//, '');
+    }
+
+    // Logic: Remove the trailing slash added by the URL constructor
+    // ONLY if the original URL didn't have one before the hash.
+    const originAndPath = `${parsed.origin}${pathAndQuery}`;
+    const originalNoHash = url.split('#')[0];
+
+    if (!originalNoHash.endsWith('/') && originAndPath.endsWith('/')) {
+      return originAndPath.slice(0, -1);
+    }
+
+    return originAndPath;
   } catch {
-    // Fallback for malformed URLs
+    // Ultimate fallback for mangled strings
     return url.split('#')[0];
   }
 };

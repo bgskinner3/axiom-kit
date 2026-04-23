@@ -5,7 +5,8 @@
     "composite": false,
     "declaration": true,
     "declarationMap": true,
-    "incremental": false
+    "incremental": false,
+    "noEmit": false
   },
   "include": [
     "src/**/*"

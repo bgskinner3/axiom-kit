@@ -19,21 +19,15 @@ export function normalizeImageSrc<T extends TBaseImageObject>(
   src: string | T | { default: T } | null | undefined,
 ): string {
   if (!src) return '';
-
-  // 1. Handle string URLs
   if (isString(src)) return src;
-  isKeyInObject('default')(src);
-  // 2. Handle CommonJS/Bundler default exports
-  if (
-    isKeyInObject('default')(src) &&
-    src.default &&
-    isObject(src.default) &&
-    isKeyInObject('src')(src.default)
-  ) {
-    return (src.default as T).src;
+
+  if (isObject(src) && isKeyInObject('default')(src)) {
+    const def = src.default;
+    if (isObject(def) && isKeyInObject('src')(def) && isString(def.src)) {
+      return def.src;
+    }
   }
 
-  // 3. Handle standard objects (Next.js StaticImageData, Vite, etc.)
   if (isObject(src) && isKeyInObject('src')(src) && isString(src.src)) {
     return src.src;
   }

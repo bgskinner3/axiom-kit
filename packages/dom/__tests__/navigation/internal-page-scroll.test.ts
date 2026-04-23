@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { handleInternalHashScroll } from '../src';
+import { handleInternalHashScroll } from '../../src';
 
 describe('handleInternalHashScroll', () => {
   // 1. Setup global mocks

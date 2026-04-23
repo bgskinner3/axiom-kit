@@ -1,4 +1,4 @@
-import { isInternalUrl, isAbsoluteUrl } from '@axiom/guards';
+import { isInternalUrl } from '@axiom/guards';
 /**
  * @utilType util
  * @name extractRelativePath
@@ -15,17 +15,22 @@ import { isInternalUrl, isAbsoluteUrl } from '@axiom/guards';
  * @returns A string representing the relative path, always starting with `/`.
  */
 export const extractRelativePath = (url?: unknown): string => {
-  if (!isInternalUrl(url)) return '/';
+  if (typeof url !== 'string' || !url.trim()) return '/';
+  const trimmed = url.trim();
 
-  const trimmedUrl = url.trim();
-  if (!trimmedUrl) return '/';
+  try {
+    const parsed = new URL(trimmed);
+    const path = parsed.pathname;
 
-  if (trimmedUrl.startsWith('/')) return trimmedUrl;
+    const isAbsolute = trimmed.includes('://');
 
-  if (isAbsoluteUrl(trimmedUrl)) {
-    const parsed = new URL(trimmedUrl);
-    return parsed.pathname || '/';
+    if (isAbsolute && !isInternalUrl(trimmed)) {
+      return '/';
+    }
+
+    return path;
+  } catch {
+    const clean = trimmed.split('?')[0].split('#')[0];
+    return clean.startsWith('/') ? clean : `/${clean}`;
   }
-
-  return `/${trimmedUrl}`;
 };

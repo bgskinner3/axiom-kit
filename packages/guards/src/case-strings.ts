@@ -41,6 +41,7 @@ export const isKebabCase: TTypeGuard<TKebabCase<string>> = (
  * @name isHexByteString
  * @category Guards Core
  * @description Creates a type guard to validate if a value is a Hexadecimal Byte String.
+ * @link #ishexbytestring
  * High-performance implementation using character-code checks instead of RegEx.
  *
  * Logic:

@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { preloadImages } from '../src';
+import { preloadImages } from '../../src';
 
 describe('preloadImages', () => {
   let imageInstances: HTMLImageElement[] = [];

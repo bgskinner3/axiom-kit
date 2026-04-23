@@ -6,11 +6,13 @@ export default defineConfig({
   dts: {
     resolve: true,
   },
+  external: [],
   clean: true,
   minify: true,
-  // 🚀 THE FIX: Point to the build-only config
-  tsconfig: 'tsconfig.build.json', 
+  sourcemap: true,
+
   splitting: true,
   treeshake: true,
-  
+  tsconfig: 'tsconfig.build.json',
+  shims: true,
 });

@@ -1,4 +1,4 @@
-import type { TKeyboardConfig } from './types';
+import type { TKeyboardConfig } from '../types';
 
 export const DEFAULT_KEYBOARD_CONFIG: Required<TKeyboardConfig> = {
   allowedKeys: [
