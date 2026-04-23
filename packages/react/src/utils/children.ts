@@ -23,21 +23,3 @@ export function filterChildrenByDisplayName<T extends ReactNode>(
     return child.type?.displayName === displayName;
   });
 }
-// export function filterChildrenByDisplayName<T extends ReactNode>(
-//   children: T,
-//   displayName: string,
-// ): ReactElement[] {
-//   return Children.toArray(children).filter((child): child is ReactElement => {
-//     // 1. Must be a valid React element
-//     if (!isValidElement(child)) return false;
-
-//     // 2. Use your new 'hasNameMetadata' guard to check safely
-//     const type = child.type;
-
-//     // Check standard components or ForwardRefs
-//     return (
-//       (typeof type === 'function' && type.displayName === displayName) ||
-//       (typeof type === 'object' && type !== null && (type as any).displayName === displayName)
-//     );
-//   });
-// }
