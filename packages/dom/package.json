@@ -2,6 +2,8 @@
   "name": "@axiom/dom",
   "version": "1.0.0",
   "description": "High-performance Web API orchestrators and browser-only utilities.",
+  "author": "Brennan Skinner",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

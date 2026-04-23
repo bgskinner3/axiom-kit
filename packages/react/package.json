@@ -2,6 +2,8 @@
   "name": "@axiom/react",
   "version": "1.0.0",
   "description": "High-performance React utilities and type guards for the Axiom kit.",
+  "author": "Brennan Skinner",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

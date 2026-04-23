@@ -2,6 +2,8 @@
   "name": "@axiom/colors",
   "version": "1.0.0",
   "description": "High-performance color space mathematics and accessibility utilities.",
+  "author": "Brennan Skinner",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
