@@ -1,13 +1,25 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src", // 👈 Move it here
+    "rootDir": "src",
     "composite": false,
-    "incremental": false
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": false,
+    "noEmit": false,
+    "tsBuildInfoFile": null,
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
-    "__test__/**/*",
+    "node_modules",
+    "dist",
+    "coverage",
+    "__tests__",
+    "__test__",
+    "**/*.test.ts",
     "**/*.spec.ts",
-    "dist"
+    "**/*.test-d.ts"
   ]
 }

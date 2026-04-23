@@ -23,5 +23,6 @@
   "dependencies": {
     "@axiom/core": "workspace:*",
     "@axiom/utility-types": "workspace:*"
-  }
+  },
+  "private": true
 }

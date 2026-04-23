@@ -6,7 +6,8 @@
     "declaration": true,
     "declarationMap": true,
     "incremental": false,
-    "noEmit": false
+    "noEmit": false,
+    "tsBuildInfoFile": null,
   },
   "include": [
     "src/**/*"

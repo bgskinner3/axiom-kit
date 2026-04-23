@@ -50,9 +50,6 @@
       "@axiom/deep-operations": [
         "./packages/deep-operations"
       ],
-      "@axiom/engine": [
-        "./packages/engine"
-      ],
       "@axiom/react": [
         "./packages/react"
       ],

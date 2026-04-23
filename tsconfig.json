@@ -26,9 +26,6 @@
       "path": "./packages/deep-operations"
     },
     {
-      "path": "./packages/engine"
-    },
-    {
       "path": "./packages/react"
     },
     {

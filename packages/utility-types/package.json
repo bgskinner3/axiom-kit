@@ -2,12 +2,20 @@
   "name": "@axiom/utility-types",
   "version": "1.0.0",
   "description": "Wizard-level TypeScript type utilities for the Axiom kit.",
+  "author": "Brennan Skinner",
+  "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -27,5 +35,17 @@
     "ts-jest": "^29.4.9",
     "tsup": "^8.5.1",
     "@types/node": "^25.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com",
+    "directory": "packages/utility-types"
+  },
+  "bugs": {
+    "url": "https://github.com"
+  },
+  "homepage": "https://github.com",
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

@@ -2,7 +2,10 @@
   "name": "@axiom/core",
   "version": "1.0.0",
   "description": "Foundational logic, shared constants, and resilience utilities for the Axiom kit.",
+  "author": "Brennan Skinner",
+  "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,8 +17,13 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
@@ -34,5 +42,17 @@
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "tsup": "^8.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com"
+  },
+  "homepage": "https://github.com",
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

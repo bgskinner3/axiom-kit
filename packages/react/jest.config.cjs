@@ -5,10 +5,7 @@ module.exports = {
   // 🌐 CRITICAL: Browsers have a DOM; Node does not.
   testEnvironment: 'jsdom',
   rootDir: path.resolve(__dirname),
-
-  // 🔗 Setup file for custom matchers like .toBeInTheDocument()
-  // setupFilesAfterEnv: ['<rootDir>/__test__/setup.ts'],
-
+  verbose: true,
   moduleNameMapper: {
     '^@axiom/(.*)$': '<rootDir>/../$1/src',
   },

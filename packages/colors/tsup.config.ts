@@ -15,4 +15,6 @@ export default defineConfig({
   treeshake: true,
   tsconfig: 'tsconfig.build.json',
   shims: true,
+  minifyWhitespace: true,
+  target: 'esnext',
 });
