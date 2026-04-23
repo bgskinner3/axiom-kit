@@ -8,6 +8,10 @@
     "baseUrl": null, // 👈 THE FIX: Fixes TS5101
     "ignoreDeprecations": "6.0"
   },
+  "types": [
+    "node",
+    "jest"
+  ],
   "include": [
     "src/**/*"
   ],

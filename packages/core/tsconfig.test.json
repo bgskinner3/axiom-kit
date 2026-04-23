@@ -7,5 +7,12 @@
     "incremental": false,
     "noEmit": true
   },
-  "include": ["src/**/*", "__tests__/**/*"]
+  "types": [
+    "node",
+    "jest"
+  ],
+  "include": [
+    "src/**/*",
+    "__tests__/**/*"
+  ]
 }

@@ -1,70 +1,78 @@
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint'; 
-import prettier from 'eslint-plugin-prettier';
+import tseslint from 'typescript-eslint';
+import prettierPlugin from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 import globals from 'globals';
 
+/** @type {import("eslint").Linter.Config[]} */
 export default tseslint.config(
   {
-    // 1. GLOBAL IGNORES (Necessary for Monorepo performance)
-    ignores: ['**/node_modules/**', '**/dist/**', '**/coverage/**', 'skeleton/**'],
+    // 1. GLOBAL IGNORES
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/coverage/**',
+      'skeleton/**',
+      'eslint.config.js',
+      '**/jest.config.*',
+      '**/tsup.config.ts',
+    ],
   },
   // 2. BASE CONFIGS
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    // 3. CORE LOGIC & PARSER (The Merged Engine)
+    // 3. CORE LOGIC & PARSER
     files: ['**/*.ts', '**/*.tsx', '**/*.js'],
     languageOptions: {
       parserOptions: {
-        // Fix: Allows ESLint to see into every sub-package
+        // 🚀 THE FIX: Use a more resilient glob for monorepo tsconfigs
         project: ['./tsconfig.json', './packages/*/tsconfig.json'],
         tsconfigRootDir: import.meta.dirname,
-        ecmaVersion: 'latest',
-        sourceType: 'module',
       },
       globals: {
         ...globals.browser,
         ...globals.node,
         ...globals.jest,
-        // Your custom explicit globals from the original
-        window: 'readonly',
-        document: 'readonly',
-        fetch: 'readonly',
-        process: 'readonly',
       },
     },
     plugins: {
-      prettier,
+      // 🚀 THE FIX: Use the specific plugin object
+      prettier: prettierPlugin,
     },
     rules: {
+      // 🚀 THE FIX: Combine Prettier plugin + Prettier config
+      ...prettierConfig.rules,
       'prettier/prettier': 'error',
+
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
+
       // YOUR ORIGINAL UNUSED-VARS LOGIC
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { 
-          argsIgnorePattern: '^_', 
+        {
+          argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_'
+          destructuredArrayIgnorePattern: '^_',
         },
       ],
     },
   },
   {
-    // 4. TEST OVERRIDES (From your original)
-    files: ['**/*.test.ts', '**/*.spec.ts'],
+    // 4. TEST OVERRIDES
+    files: ['**/*.{test,spec}.ts', '**/__tests__/**/*.ts'],
     languageOptions: {
-      globals: { ...globals.jest },
+      globals: {
+        ...globals.jest,
+      },
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      'object-curly-spacing': ['error', 'always', { objectsInObjects: true }],
     },
-  }
+  },
 );
-
 
 // export default tseslint.config(
 //   {

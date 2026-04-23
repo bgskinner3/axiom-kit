@@ -162,7 +162,9 @@ describe('ObjectUtils', () => {
     });
 
     it('supports direct property access via overload', () => {
-      expect(ObjectUtils.get(obj, 'user')).toEqual({ profile: { name: 'Alice' } });
+      expect(ObjectUtils.get(obj, 'user')).toEqual({
+        profile: { name: 'Alice' },
+      });
     });
 
     it('supports symbol keys', () => {

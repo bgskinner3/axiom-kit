@@ -1,7 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": false,
-    "incremental": false
-  }
+    "rootDir": "src", // 🎯 Restrict back to src ONLY for production builds
+    "composite": false
+  },
+  "exclude": [
+    "__tests__/**/*",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }
