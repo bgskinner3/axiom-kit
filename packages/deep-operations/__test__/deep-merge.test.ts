@@ -52,7 +52,6 @@ describe('Deep Merge Utilities', () => {
       const result = mergeDeep(obj1, obj2);
       expect(result.b).toBe(2);
 
-      console.log(result, '\n\n\n\nn\n');
       expect(result.self).toBe(result);
     });
 

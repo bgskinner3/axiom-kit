@@ -57,16 +57,16 @@ export function getRefCurrent<T>(ref: Ref<T> | undefined | null): T | null {
   // Callback refs (functions) don't have a 'current' property we can synchronously pull
   return null;
 }
-/**
- * @category DeepOperations
- * @description Lazily crawls a tree structure. Memory usage stays flat
- * regardless of tree depth.
- */
-export function* walkTree<T extends { children?: T[] }>(tree: T): Generator<T> {
-  yield tree;
-  if (tree.children) {
-    for (const child of tree.children) {
-      yield* walkTree(child); // 'yield*' delegates to the next generator
-    }
-  }
-}
+// /**
+//  * @category DeepOperations
+//  * @description Lazily crawls a tree structure. Memory usage stays flat
+//  * regardless of tree depth.
+//  */
+// export function* walkTree<T extends { children?: T[] }>(tree: T): Generator<T> {
+//   yield tree;
+//   if (tree.children) {
+//     for (const child of tree.children) {
+//       yield* walkTree(child); // 'yield*' delegates to the next generator
+//     }
+//   }
+// }

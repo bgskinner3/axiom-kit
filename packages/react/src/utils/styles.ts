@@ -22,7 +22,7 @@ export function mergeCssVars<
   const filteredVars: Record<string, string> = ObjectUtils.fromEntries(
     ObjectUtils.entries(vars)
       .filter(([_, value]) => value !== undefined && value !== '')
-      .map(([key, value]) => [key, value!.toString()]), // ensure number -> string
+      .map(([key, value]) => [key, value!.toString()]),
   );
 
   return {
