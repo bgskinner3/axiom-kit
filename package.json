@@ -17,7 +17,7 @@
     "format": "prettier --write \"packages/**/src/**/*.{ts,tsx,js,json,md}\"",
     "clean": "rimraf packages/*/dist && rimraf packages/*/node_modules",
     "inspect:linter": "npx @eslint/config-inspector",
-    "sync:license": "cpy LICENSE packages/*"
+    "sync:license": "tsx tools/scripts/sync-license.ts"
   },
   "devDependencies": {
     "@eslint/config-inspector": "^2.0.0",

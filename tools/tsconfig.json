@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist/tools",
+    "rootDir": ".",
+    "composite": false, // Disable composite for scripts to avoid build lock
+    "types": [
+      "node"
+    ] // 👈 This tells TS where 'fs' and 'path' come from
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}

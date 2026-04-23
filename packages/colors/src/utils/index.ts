@@ -201,23 +201,6 @@ export const isLumLessThan = (
 
 /**
  * @utilType util
- * @name isDarkColor
- * @category Color
- * @description Determines whether a color is "dark" based on a standard WCAG-inspired luminance threshold (0.179). Works with both HEX and RGB formats.
- * @link #isDarkColor
- *
- *
- * @example
- * ```ts
- * isLumLessThan('#000000', 0.2); // true
- * isLumLessThan([255,255,255], 0.2); // false
- * ```
- */
-export const isDarkColor = (color: TRGB | string): boolean =>
-  isLumLessThan(color, 0.179);
-
-/**
- * @utilType util
  * @name isLumGreaterThan
  * @category Color
  * @description Determines whether the luminance of a color is above the given threshold.
@@ -277,18 +260,17 @@ export const isLumGreaterThan = (
  */
 export const contrastTextColor = (
   color: TRGB | string,
-  options?: {
-    mode?: 'tailwind' | 'css';
+  options: {
+    light?: string; // Value to return if background is dark (needs light text)
+    dark?: string; // Value to return if background is light (needs dark text)
     threshold?: number;
-  },
+  } = {},
 ): string => {
-  const { mode = 'tailwind', threshold = 0.179 } = options ?? {};
-  const isLight = isLumGreaterThan(color, threshold);
+  const { light = '#ffffff', dark = '#000000', threshold = 0.179 } = options;
 
-  if (mode === 'css') {
-    return isLight ? '#000000' : '#ffffff';
-  }
+  // Single calculation pass
+  const isLight = getLuminance(validateRGB(color)) > threshold;
 
-  // Default: Tailwind-compatible class names
-  return isLight ? 'text-black' : 'text-white';
+  // If the background is light, return dark text. Otherwise, return light text.
+  return isLight ? dark : light;
 };

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext", 
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "lib": [
       "ESNext",
@@ -21,13 +21,13 @@
     "composite": true,
     "incremental": true,
     "skipLibCheck": true,
-    "ignoreDeprecations": "6.0", 
+    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "esModuleInterop": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "stripInternal": true, 
-    "verbatimModuleSyntax": true, 
+    "stripInternal": true,
+    "verbatimModuleSyntax": true,
     "paths": {
       "@axiom/utility-types": [
         "./packages/utility-types"
@@ -63,5 +63,14 @@
         "./packages/regex-engine"
       ]
     }
-  }
+  },
+  "include": [
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "tools/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/dist"
+  ]
 }

@@ -23,11 +23,15 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     // 3. CORE LOGIC & PARSER
-    files: ['**/*.ts', '**/*.tsx', '**/*.js'],
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', 'tools/**/*.ts'],
     languageOptions: {
       parserOptions: {
         // 🚀 THE FIX: Use a more resilient glob for monorepo tsconfigs
-        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+        project: [
+          './tsconfig.json',
+          './packages/*/tsconfig.json',
+          './tools/tsconfig.json',
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
       globals: {

@@ -1,6 +1,6 @@
 import type { TTypeGuard, THexByteString } from './types';
 import type { TCamelCase, TSnakeCase, TKebabCase } from '@axiom/utility-types';
-import { isString, isNonEmptyString, isUndefined } from './primitives';
+import { isString, isNonEmptyString } from './primitives';
 /**
  * @utilType Guard
  * @name isCamelCase
@@ -40,25 +40,56 @@ export const isKebabCase: TTypeGuard<TKebabCase<string>> = (
  * @utilType Guard
  * @name isHexByteString
  * @category Guards Core
- * @description Factory that creates a guard to validate if a string is a valid hex byte string, optionally enforcing length.
- * @link #ishexbytestring
- * Example usage:
+ * @description Creates a type guard to validate if a value is a Hexadecimal Byte String.
+ * High-performance implementation using character-code checks instead of RegEx.
+ *
+ * Logic:
+ * - Must be a non-empty string.
+ * - Must have an even length (byte-aligned).
+ * - Characters must be 0-9, a-f, or A-F.
+ * - Optionally matches a specific required length.
+ *
+ * @param {number} [expectedLength] - Optional strict length requirement.
+ * @returns {TTypeGuard<THexByteString>} A type guard function.
+ *
+ * @example
  * ```ts
- * isHexString("0a1b2c"); // true
- * isHexString("0a1b2z"); // false (invalid character 'z')
- * isHexString("0a1b2c", 6); // true
- * isHexString("0a1b2c", 8); // false (length mismatch)
+ * const is6CharHex = isHexByteString(6);
+ *
+ * is6CharHex("0a1b2c");      // true
+ * is6CharHex("0a1b2z");      // false (invalid 'z')
+ * is6CharHex("0a1b");        // false (length mismatch)
+ *
+ * const isAnyHex = isHexByteString();
+ * isAnyHex("abcdef00");      // true
  * ```
  */
 export const isHexByteString = (
   expectedLength?: number,
 ): TTypeGuard<THexByteString> => {
   return (value: unknown): value is THexByteString => {
+    // 1. Basic type & non-empty check
     if (!isNonEmptyString(value)) return false;
-    if (value.length % 2 !== 0) return false;
-    if (!/^[0-9a-fA-F]+$/.test(value)) return false;
-    if (!isUndefined(expectedLength) && value.length !== expectedLength)
-      return false;
+
+    const len = value.length;
+
+    // 2. Length parity check (Hex bytes must be pairs)
+    if (len % 2 !== 0) return false;
+
+    // 3. Strict length requirement (early exit)
+    if (expectedLength !== undefined && len !== expectedLength) return false;
+
+    for (let i = 0; i < len; i++) {
+      const code = value.charCodeAt(i);
+      if (
+        !(code >= 48 && code <= 57) &&
+        !(code >= 65 && code <= 70) &&
+        !(code >= 97 && code <= 102)
+      ) {
+        return false;
+      }
+    }
+
     return true;
   };
 };
