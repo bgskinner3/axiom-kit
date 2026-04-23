@@ -2,11 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
-    "composite": false, // 👈 MUST be false
-    "incremental": false, // 👈 MUST be false
-    "tsBuildInfoFile": null, // 👈 Ensures no stale cache files
+    "composite": false,
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "incremental": false,
+    "noEmit": false,
+    "tsBuildInfoFile": null,
   },
   "include": [
     "src/**/*"
@@ -14,7 +15,11 @@
   "exclude": [
     "node_modules",
     "dist",
-    "**/__tests__",
-    "**/*.test.ts"
+    "coverage",
+    "__tests__",
+    "__test__",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.test-d.ts"
   ]
 }

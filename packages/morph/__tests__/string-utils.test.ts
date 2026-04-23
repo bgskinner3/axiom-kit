@@ -30,9 +30,20 @@ const cases: TestCase[] = [
 ];
 
 const guards = {
-  isCamelCase: (value: string) => /^[a-z]+(?:[A-Z][a-z0-9]*)*$/.test(value),
-  isKebabCase: (value: string) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value),
-  isSnakeCase: (value: string) => /^[a-z0-9]+(?:_[a-z0-9]+)*$/.test(value),
+  isCamelCase: (value: unknown) =>
+    typeof value === 'string' &&
+    value.length > 0 &&
+    /^[a-z][a-z0-9]*(?:[A-Z][a-z0-9]*)*$/.test(value),
+
+  isKebabCase: (value: unknown) =>
+    typeof value === 'string' &&
+    value.length > 0 &&
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value),
+
+  isSnakeCase: (value: unknown) =>
+    typeof value === 'string' &&
+    value.length > 0 &&
+    /^[a-z0-9]+(?:_[a-z0-9]+)*$/.test(value),
 } as const;
 
 describe.each(cases)(

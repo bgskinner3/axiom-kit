@@ -2,15 +2,26 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "composite": true,
     "incremental": true,
-    "types": ["node"] 
+    "types": [
+      "node",
+      "jest"
+    ]
   },
   "references": [
-    { "path": "../utility-types" },
-    { "path": "../core" }
+    {
+      "path": "../utility-types"
+    },
+    {
+      "path": "../core"
+    }
   ],
-  "include": ["src/**/*"],
-  "exclude": ["dist", "**/__tests__/*"]
+  "include": [
+    "src/**/*",
+    "**/__tests__/*"
+  ],
+  "exclude": [
+    "dist"
+  ]
 }

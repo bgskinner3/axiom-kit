@@ -50,30 +50,83 @@ type TGetCallerLocationOptions = {
  * ```
  */
 export const getCallerLocation = (
-  options: TGetCallerLocationOptions,
+  options: TGetCallerLocationOptions = {},
 ): string => {
   const {
     preferredIndex = 3,
     fallbackIndex = 2,
     topParent = false,
-    stripPathPrefix = process.cwd(),
+    stripPathPrefix,
   } = options;
 
-  const stack = new Error().stack;
+  // 1. Capture stack without throwing
+  const err = { stack: '' };
+  Error.captureStackTrace?.(err, getCallerLocation); // V8 optimization
+  const stack = err.stack || new Error().stack;
+
   if (!stack) return 'unknown';
 
-  const lines = stack
-    .split('\n')
-    .slice(1)
-    .map((line) => line.replace(/^\s*at\s+/, '').trim())
-    .filter(Boolean);
+  // 2. Use a more efficient extraction logic
+  const lines = stack.split('\n');
+  let targetLine: string | undefined;
 
-  const line = topParent
-    ? ([...lines].reverse().find((l) => !l.includes('node_modules')) ??
-      lines.at(-1))
-    : (lines[preferredIndex] ?? lines[fallbackIndex] ?? lines.at(-1));
+  if (topParent) {
+    // Search backwards for the first non-node_modules line
+    for (let i = lines.length - 1; i >= 1; i--) {
+      if (!lines[i].includes('node_modules')) {
+        targetLine = lines[i];
+        break;
+      }
+    }
+  } else {
+    // Direct access with fallback
+    // +1 to skip the "Error" header line
+    targetLine =
+      lines[preferredIndex + 1] ?? lines[fallbackIndex + 1] ?? lines.at(-1);
+  }
 
-  return stripPathPrefix
-    ? (line?.replace(stripPathPrefix, '') ?? 'unknown')
-    : (line ?? 'unknown');
+  if (!targetLine) return 'unknown';
+
+  // 3. Clean up formatting and strip paths
+  const cleanLine = targetLine.replace(/^\s*at\s+/, '').trim();
+
+  if (stripPathPrefix) {
+    return cleanLine.replace(stripPathPrefix, '');
+  }
+  const defaultStrip = new RegExp(
+    (typeof process !== 'undefined' ? process.cwd() : '').replace(
+      /[.*+?^${}()|[\]\\]/g,
+      '\\$&',
+    ),
+    'g',
+  );
+  return cleanLine.replace(defaultStrip, '');
 };
+// export const getCallerLocation = (
+//   options: TGetCallerLocationOptions,
+// ): string => {
+//   const {
+//     preferredIndex = 3,
+//     fallbackIndex = 2,
+//     topParent = false,
+//     stripPathPrefix = process.cwd(),
+//   } = options;
+
+//   const stack = new Error().stack;
+//   if (!stack) return 'unknown';
+
+//   const lines = stack
+//     .split('\n')
+//     .slice(1)
+//     .map((line) => line.replace(/^\s*at\s+/, '').trim())
+//     .filter(Boolean);
+
+//   const line = topParent
+//     ? ([...lines].reverse().find((l) => !l.includes('node_modules')) ??
+//       lines.at(-1))
+//     : (lines[preferredIndex] ?? lines[fallbackIndex] ?? lines.at(-1));
+
+//   return stripPathPrefix
+//     ? (line?.replace(stripPathPrefix, '') ?? 'unknown')
+//     : (line ?? 'unknown');
+// };

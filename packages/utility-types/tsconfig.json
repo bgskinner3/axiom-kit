@@ -3,18 +3,18 @@
   "compilerOptions": {
     "outDir": "./dist",
     "composite": true,
+    "incremental": true,
     "baseUrl": ".",
     "types": [
       "node",
       "jest"
-    ],
-    "skipLibCheck": true
+    ]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "__tests__/**/*"
   ],
   "exclude": [
-    "dist",
-    "node_modules"
+    "dist"
   ]
 }

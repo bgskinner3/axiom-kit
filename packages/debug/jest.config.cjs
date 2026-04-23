@@ -1,13 +1,10 @@
 const path = require('path');
-
+/** @type {import('jest').Config} */
 module.exports = {
   preset: 'ts-jest',
-  // 🌐 CRITICAL: Browsers have a DOM; Node does not.
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
+  // Use absolute path for reliability
   rootDir: path.resolve(__dirname),
-
-  // 🔗 Setup file for custom matchers like .toBeInTheDocument()
-  // setupFilesAfterEnv: ['<rootDir>/__test__/setup.ts'],
 
   moduleNameMapper: {
     '^@axiom/(.*)$': '<rootDir>/../$1/src',
@@ -19,10 +16,6 @@ module.exports = {
       {
         tsconfig: 'tsconfig.test.json',
         isolatedModules: false,
-        diagnostics: { warnOnly: false },
-        compilerOptions: {
-          jsx: 'react-jsx',
-        },
       },
     ],
   },
