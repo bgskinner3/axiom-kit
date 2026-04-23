@@ -20,6 +20,9 @@
     "dev": "tsup --watch",
     "build": "tsup"
   },
+  "dependencies": {
+    "@axiom/utility-types": "workspace:*"
+  },
   "keywords": [
     "typescript",
     "core",

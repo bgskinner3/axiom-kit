@@ -16,11 +16,6 @@ export class ObjectUtils {
    * @description Returns an array of an object's own enumerable string-keyed [key, value] pairs with preserved inference.
    * @link #entries
    */
-  // static entries<T extends Record<string, unknown>>(
-  //   obj: T,
-  // ): [string, unknown][] {
-  //   return obj ? Object.entries(obj) : [];
-  // }
   static entries<T extends Record<string, unknown>>(
     obj: T | null | undefined,
   ): [keyof T, T[keyof T]][] {
@@ -29,13 +24,6 @@ export class ObjectUtils {
     // to override the default lib.dom string-only return.
     return Object.entries(obj) as [keyof T, T[keyof T]][];
   }
-  // static entries<T extends Record<string, unknown>>(
-  //   obj: T,
-  // ): [keyof T, T[keyof T]][];
-  // static entries(obj: Record<string, unknown>): [string, unknown][];
-  // static entries(obj: any): [any, any][] {
-  //   return obj ? Object.entries(obj) : [];
-  // }
   /**
    * @utilType util
    * @name fromEntries

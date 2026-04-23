@@ -14,7 +14,6 @@ module.exports = {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        // 🚀 THE KEY: Use the separate test config
         tsconfig: 'tsconfig.test.json',
         isolatedModules: false,
       },

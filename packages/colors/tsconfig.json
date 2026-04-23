@@ -7,6 +7,9 @@
     "incremental": true,
     "types": [] 
   },
+  "references": [
+    { "path": "../utility-types" },
+  ],
   "include": ["src/**/*"],
   "exclude": ["dist", "**/__tests__/*"]
 }

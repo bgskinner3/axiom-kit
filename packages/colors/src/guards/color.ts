@@ -1,6 +1,6 @@
 import { isString, isArrayOf, isArray, isNumber, makeAssert } from './support';
-import type { TRGB, THex, TRGBTuple, TTypeGuard, TAssert } from '../models';
-
+import type { TRGB, THex, TRGBTuple } from '../models';
+import type { TTypeGuard, TAssert } from '@axiom/utility-types';
 /**
  * @utilType Guard
  * @name isRGBString

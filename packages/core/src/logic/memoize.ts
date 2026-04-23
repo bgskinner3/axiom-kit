@@ -3,10 +3,10 @@ export const memoize = <T>(fn: (arg: string) => T) => {
 
   return (arg: string): T => {
     if (arg in cache) {
-      return cache[arg]; // Return the "remembered" result
+      return cache[arg];
     }
-    const result = fn(arg); // Run the actual logic
-    cache[arg] = result; // Save it for next time
+    const result = fn(arg);
+    cache[arg] = result;
     return result;
   };
 };
