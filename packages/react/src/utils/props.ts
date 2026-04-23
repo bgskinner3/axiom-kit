@@ -118,5 +118,7 @@ export function extractDOMProps<
   TElement extends ElementType,
   TFullProps extends ComponentPropsWithoutRef<TElement>,
 >(props: TFullProps): Partial<ComponentPropsWithoutRef<TElement>> {
-  return Object.fromEntries(yieldEntries(props, isDOMPropKey));
+  return Object.fromEntries(
+    yieldEntries(props, isDOMPropKey),
+  ) as ComponentPropsWithoutRef<TElement>;
 }

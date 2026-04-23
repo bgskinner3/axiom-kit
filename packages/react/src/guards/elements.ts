@@ -1,4 +1,4 @@
-import type { TTypeGuard } from '@axiom/utility-types';
+import type { TTypeGuard } from '../models';
 import {
   isNil,
   isPrimitive,

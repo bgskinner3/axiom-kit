@@ -1,7 +1,7 @@
 import { isObject } from '@axiom/guards';
 import { ObjectUtils } from '@axiom/core';
-import type { TAnyObject } from '@axiom/utility-types';
 
+type TAnyObject = Record<PropertyKey, unknown>;
 function cloneDeepHelper<T>(val: T, seen: Map<unknown, unknown>): T;
 function cloneDeepHelper(val: unknown, seen: Map<unknown, unknown>): unknown {
   // 1. Primitive / Null / Function check

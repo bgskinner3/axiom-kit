@@ -127,3 +127,5 @@ export type TElementProp<
   T extends ElementType,
   K extends keyof ComponentPropsWithoutRef<T>,
 > = ComponentPropsWithoutRef<T>[K];
+
+export type TTypeGuard<T> = (value: unknown) => value is T;

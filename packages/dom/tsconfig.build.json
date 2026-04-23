@@ -1,7 +1,20 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": false,
-    "incremental": false
-  }
+    "rootDir": "src",
+    "composite": false, // 👈 MUST be false
+    "incremental": false, // 👈 MUST be false
+    "tsBuildInfoFile": null, // 👈 Ensures no stale cache files
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/__tests__",
+    "**/*.test.ts"
+  ]
 }

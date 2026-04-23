@@ -1,7 +1,11 @@
 import { VALID_DOM_PROPS, VALID_PROP_PREFIXES } from '../models';
-import type { TValidPrefix, TAllValidDOMProps, TValidDOMProp } from '../models';
+import type {
+  TValidPrefix,
+  TAllValidDOMProps,
+  TValidDOMProp,
+  TTypeGuard,
+} from '../models';
 import { memoize, ObjectUtils } from '@axiom/core';
-import type { TTypeGuard } from '@axiom/utility-types';
 import { isString } from '@axiom/guards';
 const PROP_SET = new Set<TValidDOMProp>(ObjectUtils.keys(VALID_DOM_PROPS));
 
