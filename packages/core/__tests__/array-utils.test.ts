@@ -64,7 +64,10 @@ describe('ArrayUtils', () => {
   describe('map', () => {
     it('maps items correctly', () => {
       expect(ArrayUtils.map([1, 2, 3], (n) => n * 2)).toEqual([2, 4, 6]);
-      expect(ArrayUtils.map(['a', 'b'], (s) => s.toUpperCase())).toEqual(['A', 'B']);
+      expect(ArrayUtils.map(['a', 'b'], (s) => s.toUpperCase())).toEqual([
+        'A',
+        'B',
+      ]);
     });
   });
 
@@ -140,7 +143,9 @@ describe('ArrayUtils', () => {
       const arr: (number | null)[] = [1, null, 3];
       const nonNull = ArrayUtils.filter(arr, (x): x is number => x !== null);
       expect(nonNull).toEqual([1, 3]);
-      expect(ArrayUtils.filter(arr, (x): x is number => x !== null)).toEqual([1, 3]);
+      expect(ArrayUtils.filter(arr, (x): x is number => x !== null)).toEqual([
+        1, 3,
+      ]);
     });
   });
 

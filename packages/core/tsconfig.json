@@ -2,21 +2,19 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
-    "composite": true, // 👈 THE FIX: Disable for tsup run
-    "incremental": true, // 👈 THE FIX: Fixes TS5074
-    "baseUrl": null, // 👈 THE FIX: Fixes TS5101
-    "ignoreDeprecations": "6.0"
+    "composite": true,
+    "incremental": true,
+    "baseUrl": ".",
+    "types": [
+      "node",
+      "jest"
+    ]
   },
-  "types": [
-    "node",
-    "jest"
-  ],
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "**/__tests__/*"
   ],
   "exclude": [
-    "dist",
-    "**/__tests__/*"
+    "dist"
   ]
 }

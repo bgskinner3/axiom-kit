@@ -1,35 +1,5 @@
 // /**
 //  * @utilType util
-//  * @name extractRelativePath
-//  * @category Link
-//  * @description Safely extracts the pathname from absolute or relative internal URLs, ensuring a leading slash.
-//  * @link #extractrelativepath
-//  *
-//  * ## 🧩 extractRelativePath — Internal Path Extractor
-//  *
-//  * Extracts the relative path from an internal or absolute URL.
-//  * External URLs or invalid inputs are safely resolved to `/`.
-//  *
-//  * @param url - The input URL string or unknown value.
-//  * @returns A string representing the relative path, always starting with `/`.
-//  */
-// export const extractRelativePath = (url?: unknown): string => {
-//   if (!isInternalUrl(url)) return '/';
-
-//   const trimmedUrl = url.trim();
-//   if (!trimmedUrl) return '/';
-
-//   if (trimmedUrl.startsWith('/')) return trimmedUrl;
-
-//   if (isAbsoluteUrl(trimmedUrl)) {
-//     const parsed = new URL(trimmedUrl);
-//     return parsed.pathname || '/';
-//   }
-
-//   return `/${trimmedUrl}`;
-// };
-// /**
-//  * @utilType util
 //  * @name stripHash
 //  * @category Link
 //  * @description Removes the hash fragment (#) from a URL while preserving the path and query parameters.

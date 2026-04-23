@@ -33,7 +33,7 @@ describe('memoize', () => {
 
   it('should handle falsy return values correctly (0, "", false)', () => {
     let callCount = 0;
-    const fn = (s: string) => {
+    const fn = (_s: string) => {
       callCount++;
       return 0;
     };

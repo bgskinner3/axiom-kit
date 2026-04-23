@@ -91,7 +91,7 @@ describe('Iterator Utils', () => {
     // });
 
     it('should return an empty generator if no keys pass the guard', () => {
-      const guard = (key: any, value: any): key is never => false;
+      const guard = (_key: any, _value: any): _key is never => false;
       const result = Array.from(yieldEntries(data, guard));
       expect(result).toEqual([]);
     });
