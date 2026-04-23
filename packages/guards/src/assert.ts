@@ -1,4 +1,4 @@
-import type { TAssert, TTypeGuard } from './models';
+import type { TAssert, TTypeGuard } from './types';
 
 /**
  * @utilType util

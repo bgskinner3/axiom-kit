@@ -1,4 +1,4 @@
-import type { TTypeGuard, TBufferLikeObject, TStream } from './models';
+import type { TTypeGuard, TBufferLikeObject, TStream } from './types';
 import { isObject } from './structures';
 import { isArrayOf } from './logical';
 import { isNumber } from './primitives';
@@ -34,10 +34,9 @@ export const isBufferLikeObject: TTypeGuard<TBufferLikeObject> = (
   return hasTypeBuffer && hasNumberArrayData;
 };
 
-
-
-
-export const isStream: TTypeGuard<TStream> = (value: unknown): value is TStream => {
+export const isStream: TTypeGuard<TStream> = (
+  value: unknown,
+): value is TStream => {
   // 1. Basic object check
   if (value === null || typeof value !== 'object') return false;
 

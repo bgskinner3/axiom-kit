@@ -1,8 +1,4 @@
-import type {
-  TTypeGuard,
-  TAnyFunction,
-  TAnyObject,
-} from './models';
+import type { TTypeGuard, TAnyFunction, TAnyObject } from './types';
 import { isNull } from './primitives';
 /**
  * @utilType Guard

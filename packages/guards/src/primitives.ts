@@ -1,4 +1,4 @@
-import type { TTypeGuard } from './models';
+import type { TTypeGuard } from './types';
 /**
  * @utilType Guard
  * @name isNumber

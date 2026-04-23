@@ -1,5 +1,4 @@
-import type { TTypeGuard } from './models';
-import { ObjectUtils } from '@axiom/core';
+import type { TTypeGuard } from './types';
 import { isString, isNumber, isSymbol, isDefined } from './primitives';
 import { isObject } from './structures';
 /**
@@ -146,7 +145,7 @@ export const isRecordOf = <V>(
   value: unknown,
   typeGuard: TTypeGuard<V>,
 ): value is Record<string, V> =>
-  isObject(value) && ObjectUtils.values(value).every(typeGuard);
+  isObject(value) && Object.values(value).every(typeGuard);
 /**
  * @utilType Guard
  * @name hasDefinedKeys
