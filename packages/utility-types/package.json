@@ -19,10 +19,11 @@
     "axiom"
   ],
   "devDependencies": {
-    "jest-tsd": "^0.2.2",
     "@types/jest": "^30.0.0",
     "jest": "^30.3.0",
+    "jest-tsd": "^0.2.2",
     "ts-jest": "^29.4.9",
-    "tsup": "^8.5.1"
+    "tsup": "^8.5.1",
+    "@types/node": "^25.6.0"
   }
 }

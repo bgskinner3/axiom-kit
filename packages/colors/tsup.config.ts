@@ -11,5 +11,6 @@ export default defineConfig({
   // 🚀 THE FIX: Point to the build-only config
   tsconfig: 'tsconfig.build.json', 
   splitting: true,
-  treeshake: true
+  treeshake: true,
+  
 });

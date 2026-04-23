@@ -77,9 +77,6 @@ importers:
 
   packages/colors:
     dependencies:
-      '@axiom/guards':
-        specifier: workspace:*
-        version: link:../guards
       '@axiom/utility-types':
         specifier: workspace:*
         version: link:../utility-types
@@ -230,9 +227,9 @@ importers:
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
-      '@types/react':
-        specifier: '>=16.8.0'
-        version: 19.2.14
+      '@types/node':
+        specifier: ^25.6.0
+        version: 25.6.0
       jest:
         specifier: ^30.3.0
         version: 30.3.0(@types/node@25.6.0)

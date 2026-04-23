@@ -2,17 +2,20 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "composite": true,
     "incremental": true,
-    "baseUrl": null,
-    "emitDeclarationOnly": true,
-    "ignoreDeprecations": "6.0"
+    "baseUrl": ".",
+    "types": [
+      "node",
+      "jest"
+    ]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "temp/**/*",
   ],
   "exclude": [
-    "dist"
+    "dist",
+    "node_modules"
   ]
 }
