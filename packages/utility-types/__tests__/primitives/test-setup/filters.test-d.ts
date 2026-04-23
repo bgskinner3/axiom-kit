@@ -1,9 +1,16 @@
 import { expectType } from 'jest-tsd';
-import type { TEqual, TExpect } from '../../test-utils';
-import type {
-  TFilterKeysByValue,
-  TStripType,
-} from '../../../src/primitives/filters';
+import type { TFilterKeysByValue, TStripType } from '../../../src';
+
+type TEqual<T, U> =
+  (<V>() => V extends T ? 1 : 2) extends <V>() => V extends U ? 1 : 2
+    ? true
+    : false;
+
+/**
+ * TExpect: Compile-time Assertion
+ * Use this to throw a compiler error if a test fails.
+ */
+type TExpect<T extends true> = T;
 
 type TComplexUser = {
   readonly id: number;

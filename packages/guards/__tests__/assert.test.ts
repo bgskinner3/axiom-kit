@@ -1,6 +1,5 @@
 import { makeAssert, assertValue } from '../src';
-// import type { TAssert } from '../src';
-// type TAssert<T> = (value: unknown) => asserts value is T;
+
 describe('Assertion Utilities', () => {
   const isString = (v: unknown): v is string => typeof v === 'string';
   const isNumber = (v: unknown): v is number => typeof v === 'number';
@@ -24,7 +23,7 @@ describe('Assertion Utilities', () => {
 
     it('should handle anonymous guards gracefully in error messages', () => {
       // Anonymous guard has no .name property
-      expect(() => assertValue({}, (v): v is any => false)).toThrow(
+      expect(() => assertValue({}, (_v: unknown): _v is any => false)).toThrow(
         /does not satisfy type guard/,
       );
     });

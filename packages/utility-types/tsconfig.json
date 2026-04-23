@@ -12,7 +12,7 @@
   },
   "include": [
     "src/**/*",
-    "temp/**/*",
+    "__tests__/**/*"
   ],
   "exclude": [
     "dist",

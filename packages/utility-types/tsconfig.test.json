@@ -8,9 +8,7 @@
     "noEmit": true
   },
   "include": [
-    "src",
-    "test-utils",
-    "__test__",
-    "__tests__"
+    "src/**/*",
+    "__test__/**/*"
   ]
 }

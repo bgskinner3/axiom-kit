@@ -77,6 +77,9 @@ importers:
 
   packages/colors:
     dependencies:
+      '@axiom/guards':
+        specifier: workspace:*
+        version: link:../guards
       '@axiom/utility-types':
         specifier: workspace:*
         version: link:../utility-types
