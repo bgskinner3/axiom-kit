@@ -1,4 +1,4 @@
-import type { TTypeGuard, TPropType } from '@axiom/utility-types';
+import type { TTypeGuard } from '@axiom/utility-types';
 import {
   isDefined,
   isFunction,
@@ -8,6 +8,7 @@ import {
   isKeyInObject,
 } from '@axiom/guards';
 import { isReactElement } from './elements';
+import type { TPropType } from '../models';
 import type {
   ComponentType,
   ReactNode,

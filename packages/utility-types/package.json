@@ -19,7 +19,6 @@
     "axiom"
   ],
   "devDependencies": {
-    "@types/react": ">=16.8.0",
     "jest-tsd": "^0.2.2",
     "@types/jest": "^30.0.0",
     "jest": "^30.3.0",
