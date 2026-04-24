@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "composite": true,
+    "incremental": true,
+    "types": [
+      "node",
+      "jest"
+    ]
+  },
+  "include": [
+    "src/**/*",
+    "transformer/**/*",
+    "__tests__/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}
