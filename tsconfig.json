@@ -33,6 +33,9 @@
     },
     {
       "path": "./packages/regex-engine"
+    },
+    {
+      "path": "./packages/is-solid"
     }
   ]
 }

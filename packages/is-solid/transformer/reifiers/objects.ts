@@ -1,5 +1,5 @@
 import type { Type, TypeChecker } from 'typescript';
-import { isObjectType, isTypeReference } from '../utils/guards';
+import { isObjectType } from '../utils/guards';
 import type { TSolidShape } from '../types';
 import { reifyType } from './index';
 

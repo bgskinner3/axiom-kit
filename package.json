@@ -53,5 +53,11 @@
   "homepage": "https://github.com/bgskinner3/axiom-kit",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "glob": "^11.0.0",
+      "inflight": "npm:lru-cache@^10.0.0"
+    }
   }
 }
