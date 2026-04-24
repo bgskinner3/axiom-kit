@@ -63,7 +63,6 @@ export function reifyUnion(type: ts.Type): TSolidShape {
   return {
     kind: 'union',
     values: values.map((v) => {
-      // Map each literal to a TSolidShape literal
       return { kind: 'literal', value: v };
     }),
   };

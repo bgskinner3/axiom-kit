@@ -2,14 +2,20 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": ".",
     "composite": true,
     "incremental": true,
     "types": [
       "node",
       "jest"
-    ]
+    ],
   },
+  "ignoreDiagnostics": [
+    5023,
+    5024,
+    5039,
+    5072,
+    5103
+  ],
   "include": [
     "src/**/*",
     "transformer/**/*",

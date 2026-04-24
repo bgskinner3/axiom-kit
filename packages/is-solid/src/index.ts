@@ -28,26 +28,6 @@ export function isSolid<K extends string, T>(
   // 3. Run the Engine
   return validate(data, shape, createInitialContext());
 }
-// export function isSolid<K extends string, T>(
-//   data: unknown,
-//   injected?: TSolidMetadata,
-// ): data is TSolid<K, T> {
-//   // 1. Capture and Register
-//   // If the transformer ran, it passed the metadata here.
-//   if (injected) {
-//     Registry.register(injected);
-//   }
-
-//   // 2. Lookup Fallback
-//   // If 'injected' is missing (e.g., dynamic call), check the Vault for the shape.
-//   // Note: We'll need a way to pass the 'Key' if injected is missing,
-//   // but for the standard build-time flow, 'injected' is always there.
-
-//   // 3. Validation Logic
-//   // For the MVP, if we have metadata and the data isn't null, we "trust" it.
-//   // We will build the full Validation Engine in the next pillar.
-//   return data !== undefined && data !== null && !!injected;
-// }
 
 /**
  * Public Query API
