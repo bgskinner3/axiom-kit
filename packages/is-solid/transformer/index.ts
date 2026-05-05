@@ -13,7 +13,6 @@ export default function (program: ts.Program) {
   }
   return (context: ts.TransformationContext) => {
     return (sourceFile: ts.SourceFile) => {
-      // 1. Mine the file for Solid types
       const visitor = createVisitor(
         program,
         context,

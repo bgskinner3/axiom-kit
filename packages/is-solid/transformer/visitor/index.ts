@@ -3,65 +3,59 @@ import { identifySolidCall } from './detector';
 import { reifyType } from '../reifiers';
 import { solidVisitorProcessor } from './processor';
 import { isSolidCall } from '../../models/guards/transformer';
-import {
-  addSyntheticLeadingComment,
-  visitEachChild,
-  SyntaxKind,
-} from 'typescript';
+import { visitEachChild } from 'typescript';
 import type {
   Program,
   TransformationContext,
   SourceFile,
   Visitor,
-  TypeChecker,
   Node,
 } from 'typescript';
+import { updateRegistry, markAsPure } from './actions';
+
+/**
+ * The Miner (Build-Time Extraction)
+ *
+ * The createVisitor function orchestrates the transformation process. It scans
+ * the Abstract Syntax Tree (AST), identifies `isSolid` calls, and bridges
+ * the gap between static TypeScript types and runtime JavaScript metadata.
+ *
+ * Workflow:
+ * 1. SCAN: Traverses the file node by node.
+ * 2. IDENTIFY: Uses `isSolidCall` to find the target function.
+ * 3. ANALYZE: Queries the TypeChecker to resolve the generic <Key, Type>.
+ * 4. REGISTRY: Logs the Key and its origin file to the Global Vault Index.
+ * 5. REIFY: Recursively converts the TS Type into a JSON-friendly "Solid Shape".
+ * 6. PROCESS: Replaces the original call with optimized runtime registration logic.
+ */
 export function createVisitor(
   program: Program,
   context: TransformationContext,
   sourceFile: SourceFile,
   globalRegistry: Map<string, string>,
 ): Visitor {
-  const checker: TypeChecker = program.getTypeChecker();
+  const checker = program.getTypeChecker();
   const { factory } = context;
 
   const visitor: Visitor = (node: Node): Node => {
-    // ONE: identify valid isSolid calls using node guards
-    if (isSolidCall(node)) {
-      // TWO: extract type information for the key and the shape
-      const { keyType, shapeType } = identifySolidCall({ node, checker });
-      if (keyType.isStringLiteral()) {
-        const key = keyType.value;
-        const filePath = sourceFile.fileName;
-        // FILE PATHS??
-        const typeNode = node.typeArguments?.[1];
-        const type = typeNode
-          ? checker.getTypeFromTypeNode(typeNode)
-          : shapeType;
-        const typeName = checker.typeToString(type);
+    if (!isSolidCall(node)) {
+      return visitEachChild(node, visitor, context);
+    }
 
-        // THREE: enforce global key uniqueness and track source file for the ambient emitter
-        const existing = globalRegistry.get(key);
-        if (existing && existing !== filePath)
-          throw new Error(`[is-solid] Collision: ${key}`);
+    const { keyType, shapeType } = identifySolidCall({ node, checker });
 
-        globalRegistry.set(key, `${filePath}|${typeName}`);
+    if (keyType.isStringLiteral()) {
+      const key = keyType.value;
+      const typeName = checker.typeToString(shapeType);
 
-        // 4: reify the typescript type into a solidified json shape
-        // TODO note!: fresh set passed to prevent cross-call recursion leaks
-        /* prettier-ignore */ const shape = reifyType(shapeType, checker, new Set());
+      // Modularized Registry Update
+      /* prettier-ignore */ updateRegistry(globalRegistry, key, sourceFile.fileName, typeName);
 
-        // FIVE: transform the call by injecting metadata as the second argument
-        /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node });
+      // Reify & Process
+      /* prettier-ignore */ const shape = reifyType(shapeType, checker, new Set());
+      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node });
 
-        // 6: append purity annotation to assist downstream minifiers
-        return addSyntheticLeadingComment(
-          updatedCall,
-          SyntaxKind.MultiLineCommentTrivia,
-          '* @__PURE__ ',
-          true,
-        );
-      }
+      return markAsPure(updatedCall);
     }
 
     return visitEachChild(node, visitor, context);
@@ -73,8 +67,81 @@ export function createVisitor(
 /**
  *
  *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  * TODO: DELETE
  */
+// export function createVisitor(
+//   program: Program,
+//   context: TransformationContext,
+//   sourceFile: SourceFile,
+//   globalRegistry: Map<string, string>,
+// ): Visitor {
+//   const checker: TypeChecker = program.getTypeChecker();
+//   const { factory } = context;
+
+//   const visitor: Visitor = (node: Node): Node => {
+//     // ONE: identify valid isSolid calls using node guards
+//     if (isSolidCall(node)) {
+//       // TWO: extract type information for the key and the shape
+//       const { keyType, shapeType } = identifySolidCall({ node, checker });
+//       if (keyType.isStringLiteral()) {
+//         const key = keyType.value;
+//         const filePath = sourceFile.fileName;
+//         // FILE PATHS??
+//         const typeNode = node.typeArguments?.[1];
+//         const type = typeNode
+//           ? checker.getTypeFromTypeNode(typeNode)
+//           : shapeType;
+//         const typeName = checker.typeToString(type);
+
+//         // THREE: enforce global key uniqueness and track source file for the ambient emitter
+//         const existing = globalRegistry.get(key);
+//         if (existing && existing !== filePath)
+//           throw new Error(`[is-solid] Collision: ${key}`);
+
+//         globalRegistry.set(key, `${filePath}|${typeName}`);
+
+//         // 4: reify the typescript type into a solidified json shape
+//         // TODO note!: fresh set passed to prevent cross-call recursion leaks
+//         /* prettier-ignore */ const shape = reifyType(shapeType, checker, new Set());
+
+//         // FIVE: transform the call by injecting metadata as the second argument
+//         /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node });
+
+//         // 6: append purity annotation to assist downstream minifiers
+//         return addSyntheticLeadingComment(
+//           updatedCall,
+//           SyntaxKind.MultiLineCommentTrivia,
+//           '* @__PURE__ ',
+//           true,
+//         );
+//       }
+//     }
+
+//     return visitEachChild(node, visitor, context);
+//   };
+
+//   return visitor;
+// }
 
 // // transformer/visitor.ts
 // import ts from 'typescript';

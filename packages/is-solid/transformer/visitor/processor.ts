@@ -1,20 +1,12 @@
 // transformer/visitor/processor.ts
-import type {
-  NodeFactory,
-  ObjectLiteralExpression,
-  CallExpression,
-  SourceFile,
-} from 'typescript';
+import type { ObjectLiteralExpression } from 'typescript';
 import { generateShapeAST } from '../reifiers';
-import type { TSolidShape } from '../../models/types';
 import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
+import type {
+  TCreateSolidMetadata,
+  TSolidVisitorProcessor,
+} from '../../models/types';
 
-type TCreateSolidMetadata = {
-  shape: TSolidShape;
-  factory: NodeFactory;
-  key: string;
-  areaString: string;
-};
 function createSolidMetadata({
   factory,
   areaString,
@@ -28,13 +20,7 @@ function createSolidMetadata({
     /* prettier-ignore */ factory.createPropertyAssignment('shape', generateShapeAST(factory, shape)),
   ]);
 }
-type TSolidVisitorProcessor = {
-  node: CallExpression;
-  shape: TSolidShape;
-  sourceFile: SourceFile;
-  factory: NodeFactory;
-  key: string;
-};
+
 export function solidVisitorProcessor({
   node,
   shape,
@@ -59,15 +45,3 @@ export function solidVisitorProcessor({
     finalArgs,
   );
 }
-// function createSolidMetadata(
-//   f: NodeFactory,
-//   key: string,
-//   area: string,
-//   shapeAST: Expression,
-// ): ObjectLiteralExpression {
-//   return factory.createObjectLiteralExpression([
-//     f.createPropertyAssignment('key', f.createStringLiteral(key)),
-//     f.createPropertyAssignment('area', f.createStringLiteral(area)),
-//     f.createPropertyAssignment('shape', shapeAST),
-//   ]);
-// }

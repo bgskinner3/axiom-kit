@@ -63,6 +63,22 @@ export function emitAmbientTypes(
     fs.writeFileSync(envFile, dts);
   }
 }
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 // export function emitAmbientTypesD(
 //   rootDir: string,
 //   registry: Map<string, string>,
