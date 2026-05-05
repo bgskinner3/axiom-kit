@@ -7,6 +7,12 @@ import { IS_SOLID_SHAPE_KINDS_CONFIG } from '../../constants';
  */
 export type TSolidShapeKinds = keyof typeof IS_SOLID_SHAPE_KINDS_CONFIG;
 
+export type TSolidObjectShape = {
+  shape: TSolidShape;
+  optional: boolean;
+  name: string; // Helpful for Pillar 4 deterministic mocking
+};
+
 /**
  * BLUEPRINT (TSolidShape)
  *
@@ -22,7 +28,7 @@ export type TSolidShape =
   | /* prettier-ignore */ { kind: 'union'; values: TSolidShape[] }
   | /* prettier-ignore */ { kind: 'intersection'; parts: TSolidShape[] }
   | /* prettier-ignore */ { kind: 'branded'; name: string; base: TSolidShape }
-  | /* prettier-ignore */ { kind: 'object'; properties: Record<string, TSolidShape> }
+  | /* prettier-ignore */ { kind: 'object'; properties: Record<string, TSolidObjectShape> }
   | /* prettier-ignore */ { kind: 'array'; items: TSolidShape }
   | /* prettier-ignore */ { kind: 'reference'; name: string };
 

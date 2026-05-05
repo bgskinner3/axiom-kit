@@ -1,8 +1,8 @@
 // transformer/reifiers/registry/objects.ts
 import { isObjectType } from '../../utils/guards';
 import { registerReifier } from './core';
-import type { TSolidShape } from '../../../models/types';
-
+import type { TSolidObjectShape } from '../../../models/types';
+import { SymbolFlags } from 'typescript';
 /**
  * STRUCTURAL REIFIER (OBJECTS & INTERFACES)
  *
@@ -23,23 +23,24 @@ registerReifier((type, checker, next, seen) => {
   const name = symbol ? symbol.getName() : 'Anonymous';
 
   // THIS IS THE REFERENCE LOGIC
-  if (seen.has(type)) {
-    return { kind: 'reference', name };
-  }
-
+  if (seen.has(type)) return { kind: 'reference', name };
   seen.add(type);
 
-  const shapeProperties: Record<string, TSolidShape> = {};
+  const shapeProperties: Record<string, TSolidObjectShape> = {};
   const properties = checker.getPropertiesOfType(type);
 
   for (const prop of properties) {
     const declaration = prop.valueDeclaration;
     if (declaration) {
       const propType = checker.getTypeOfSymbolAtLocation(prop, declaration);
+      const isOptional = !!(prop.flags & SymbolFlags.Optional);
+      const propName = prop.getName(); // Get the key name
 
-      // 3. Use 'next' instead of 'reifyType'
-      // This keeps the module decoupled and clean.
-      shapeProperties[prop.getName()] = next(propType);
+      shapeProperties[propName] = {
+        shape: next(propType),
+        optional: isOptional,
+        name: propName, // ✨ Satisfies the model requirement
+      };
     }
   }
 

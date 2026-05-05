@@ -72,10 +72,17 @@ export function generateShapeAST(
   }
 
   if (isObjectShape(shape)) {
-    const propNodes = Object.entries(shape.properties).map(([key, val]) => {
+    const propNodes = Object.entries(shape.properties).map(([key, meta]) => {
       return f.createPropertyAssignment(
         f.createStringLiteral(key),
-        generateShapeAST(f, val),
+        f.createObjectLiteralExpression([
+          f.createPropertyAssignment('shape', generateShapeAST(f, meta.shape)),
+          f.createPropertyAssignment(
+            'optional',
+            meta.optional ? f.createTrue() : f.createFalse(),
+          ),
+          f.createPropertyAssignment('name', f.createStringLiteral(meta.name)), // ✨ Added
+        ]),
       );
     });
     return f.createObjectLiteralExpression([
