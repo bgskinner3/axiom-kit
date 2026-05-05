@@ -2,7 +2,7 @@
 import { validate } from './index';
 import type { TSolidArrayShape, TValidationContext } from '../../models/types';
 import { reportError } from './errors';
-import { isArray } from '../utils/guards';
+import { isArray } from '../../models/guards';
 
 export function validateArray(
   data: unknown,

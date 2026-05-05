@@ -1,6 +1,6 @@
 // transformer/reifiers/registry/intersections.ts
 import { registerReifier } from './core';
-import { isIntersectionType } from '../../utils/guards';
+import { isIntersectionType } from '../../../models/guards/transformer';
 
 registerReifier((type, _checker, next) => {
   if (!isIntersectionType(type)) return undefined;

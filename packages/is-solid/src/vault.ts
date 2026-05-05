@@ -1,6 +1,10 @@
 // src/vault.ts
 import { IS_SOLID_CONFIG_ITEMS } from '../models';
-import { getGlobalVault, ensureGlobalVault, getCallerLocation } from './utils';
+import {
+  getGlobalVault,
+  ensureGlobalVault,
+  getCallerLocation,
+} from '../models';
 import type { TSolidMetadata, TSolidError } from '../models';
 
 export class Registry {

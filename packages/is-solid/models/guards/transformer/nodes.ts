@@ -1,4 +1,4 @@
-// transformer/utils/guards/nodes.ts
+// models/guards/transformer/nodes.ts
 import ts from 'typescript';
 
 /**

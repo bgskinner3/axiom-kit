@@ -1,4 +1,4 @@
-import type { TSolidShape } from '../../../models';
+import type { TSolidShape } from '../../types';
 
 /* prettier-ignore */ export const isPrimitiveShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'primitive' }> => s.kind === 'primitive';
 /* prettier-ignore */ export const isLiteralShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'literal' }> => s.kind === 'literal';

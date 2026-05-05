@@ -1,6 +1,6 @@
-// src/utils/global
-import { IS_SOLID_CONFIG_ITEMS } from '../../../models';
-import type { TSolidVaultMap } from '../../../models';
+// models/utils/global/index.ts
+import { IS_SOLID_CONFIG_ITEMS } from '../../constants';
+import type { TSolidVaultMap } from '../../types';
 
 /**
  * Helper to safely access the global vault without 'any'.

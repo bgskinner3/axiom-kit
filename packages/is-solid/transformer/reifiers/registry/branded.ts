@@ -3,7 +3,7 @@ import {
   isIntersectionType,
   isObjectType,
   isStringLiteralType,
-} from '../../utils/guards';
+} from '../../../models/guards/transformer';
 import { registerReifier } from './core';
 
 /**

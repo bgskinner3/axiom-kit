@@ -4,7 +4,7 @@ import {
   isStringLiteralType,
   isNumberLiteralType,
   isUnionType,
-} from '../../utils';
+} from '../../../models/guards/transformer';
 import { registerReifier } from './core';
 /**
  * Extracts literal values without using 'any' or 'as'.

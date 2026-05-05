@@ -2,7 +2,7 @@
 import { identifySolidCall } from './detector';
 import { reifyType } from '../reifiers';
 import { solidVisitorProcessor } from './processor';
-import { isSolidCall } from '../utils/guards';
+import { isSolidCall } from '../../models/guards/transformer';
 import {
   addSyntheticLeadingComment,
   visitEachChild,

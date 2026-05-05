@@ -1,5 +1,5 @@
-import { isBigInt, isString, isUndefined } from '../../guards';
-import type { TGetCallerLocationOptions } from '../../../../models/types';
+import { isBigInt, isString, isUndefined } from '../../../guards';
+import type { TGetCallerLocationOptions } from '../../../types';
 /**
  * @utilType util
  * @name serialize

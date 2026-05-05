@@ -1,4 +1,4 @@
-// transformer/utils/guards/types.ts
+// models/guards/transformer/types.ts
 import type {
   Type,
   StringLiteralType,
@@ -37,11 +37,9 @@ export function isObjectType(type: Type): type is ObjectType {
  * Checks if a type is a Reference (like Array<T> or a specific Branded Type)
  */
 export function isTypeReference(type: Type): type is TypeReference {
-  // 1. Check if it's an object first
   if (type.getFlags() & ts.TypeFlags.Object) {
     if (!isObjectType(type)) return false;
     const objectType = type;
-    // 3. Check for Reference bit directly
     return (objectType.objectFlags & ts.ObjectFlags.Reference) !== 0;
   }
   return false;

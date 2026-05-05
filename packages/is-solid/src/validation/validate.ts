@@ -21,7 +21,7 @@ import {
   isUnionShape,
   isReferenceShape,
 } from '../../models/guards';
-import { isObject, isNull, isPrimitive } from '../utils/guards';
+import { isObject, isNull, isPrimitive } from '../../models/guards';
 
 const VALIDATORS: TValidatorMapper = {
   primitive: (data, shape, ctx) => {
