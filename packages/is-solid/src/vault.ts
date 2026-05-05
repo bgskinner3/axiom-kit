@@ -1,12 +1,12 @@
 // src/vault.ts
-import { IS_SOLID_CONFIG_ITEMS } from '../models';
+import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
 import {
   getGlobalVault,
   ensureGlobalVault,
   getCallerLocation,
-} from '../models';
+} from '../models/utils';
 import type { TSolidMetadata, TSolidError } from '../models';
-
+import { produceDefault } from './generation';
 export class Registry {
   /**
    * Registers metadata into the Global Vault's items map.
@@ -66,17 +66,12 @@ export class Registry {
     const vault = ensureGlobalVault();
     vault.errors.set(key, errors);
   }
-}
+  public static getDefault<T>(key: string): T {
+    const metadata = this.get(key);
+    if (!metadata) throw new Error(`[is-solid] Key "${key}" not found.`);
 
-/**
- public static register(metadata: SolidMetadata): void {
-  if (metadata.version !== SOLID_VERSION) {
-    console.warn(
-      `[is-solid] Version mismatch! Expected ${SOLID_VERSION}, got ${metadata.version}. ` +
-      `Please rebuild your project.`
-    );
-    return;
+    // We return the unknown result.
+    // The <T> from the function signature handles the call-site typing.
+    return produceDefault(metadata.shape) as T;
   }
-  // ... proceed to register
 }
- */

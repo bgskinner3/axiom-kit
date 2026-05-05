@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable no-undef */
 const path = require('path');
-
-// 1. Resolve paths
 const transformerPath = path.resolve(__dirname, '../dist/transformer.cjs');
 const pkgPath = path.resolve(__dirname, '../package.json');
 
-// 2. Load the bundled transformer and package version
+// Load the bundled transformer and package version
 const mod = require(transformerPath);
 const pkg = require(pkgPath);
 
 const transformer = mod.default || mod;
 
 /**
- * JEST TRANSFORMER BRIDGE
+ * JEST TRANSFORMER BRIDGE!!!!
  *
  * This file allows ts-jest to communicate with your custom Miner.
  * It handles the extraction of the TypeScript Program and
@@ -41,6 +39,7 @@ module.exports = {
         '[is-solid] Jest Miner Warning: No TypeScript Program found. Transformation skipped.',
       );
       // Return a no-op transformer so the test doesn't crash
+      // mock this !
       return () => (node) => node;
     }
 

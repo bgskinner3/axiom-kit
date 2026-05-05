@@ -20,3 +20,11 @@ export const IS_SOLID_SHAPE_KINDS_CONFIG = Object.freeze({
   array: 'array',
   reference: 'reference',
 } as const);
+
+export const PRIMITIVE_DEFAULTS = {
+  string: '',
+  number: 0,
+  boolean: false,
+  bigint: BigInt(0),
+  unknown: undefined,
+} as const;
