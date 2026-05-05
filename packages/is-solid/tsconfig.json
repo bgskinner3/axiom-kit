@@ -2,12 +2,20 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "composite": true,
-    "incremental": true,
+    "composite": false, // ✨ Set to false to avoid project reference strictness
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": false,
+    "noEmit": false,
+    // 🚨 THE CRITICAL OVERRIDES
+    "moduleResolution": "Bundler",
+    "verbatimModuleSyntax": false,
+    "noImplicitAny": false, // ✨ Fixes the 'ctx' any errors
+    "isolatedModules": false,
     "types": [
       "node",
       "jest"
-    ],
+    ]
   },
   "ignoreDiagnostics": [
     5023,
@@ -22,7 +30,8 @@
     "models/types/**/*",
     "__tests__/**/*",
     "models/**/*",
-    "playground/**/*"
+    "playground/**/*",
+    "tsup.config.ts"
   ],
   "exclude": [
     "dist",

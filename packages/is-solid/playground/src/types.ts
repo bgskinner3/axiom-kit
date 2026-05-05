@@ -15,3 +15,10 @@ export interface IProfile {
  * and allow 'api.ts' to use it without an interface import.
  */
 isSolid<'PROFILE', IProfile>();
+export type User = {
+  id: string;
+  age: number;
+};
+
+// // 💎 Seed the Vault
+// isSolid<'USER', User>();

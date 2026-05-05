@@ -1,16 +1,20 @@
-import './types'; // Seeds the Vault
-import { processResponse } from './api';
+import './types';
+import { validateUser } from './logic';
 
-const mockPayload = {
-  username: 'solid_dev',
-  tags: ['typescript', 'miner'],
-  settings: {
-    theme: 'blue', // 🚨 ❌ Error: Not 'light' or 'dark'
-    notifications: true,
-  },
-};
+validateUser({ id: 'u1', age: '25' });
+// import './types'; // Seeds the Vault
+// import { processResponse } from './api';
 
-processResponse(mockPayload);
+// const mockPayload = {
+//   username: 'solid_dev',
+//   tags: ['typescript', 'miner'],
+//   settings: {
+//     theme: 'blue', // 🚨 ❌ Error: Not 'light' or 'dark'
+//     notifications: true,
+//   },
+// };
+
+// processResponse(mockPayload);
 // import { isSolid, getSolid } from 'is-solid';
 
 // interface Category {
@@ -29,3 +33,30 @@ processResponse(mockPayload);
 
 // console.log('Validating CAT:', isSolid<'CAT', any>(data));
 // console.log('Vault Metadata:', getSolid('CAT')?.area);
+// import './types'; // 1. Seed the database
+// import { processResponse } from './api';
+// import { getSolid } from 'is-solid';
+
+// console.log('💎 SOLID PLAYGROUND: TEST RUN');
+// console.log('----------------------------');
+
+// // 2. Log Metadata - Verify the "Miner" worked
+// const meta = getSolid('PROFILE');
+// console.log('📂 Metadata Found:', !!meta);
+// if (meta) {
+//   console.log('📍 Mined Area:', meta.area);
+//   console.log('🧩 Shape Kind:', meta.shape.kind);
+// }
+
+// console.log('\n🚀 Testing Valid Data:');
+// processResponse({
+//   username: 'solid_dev',
+//   tags: ['ts'],
+//   settings: { theme: 'dark', notifications: true },
+// });
+
+// console.log('\n🚨 Testing Corrupt Data:');
+// processResponse({
+//   username: 123, // Wrong type
+//   settings: { theme: 'blue' }, // Wrong literal & missing notification
+// });

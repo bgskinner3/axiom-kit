@@ -1,12 +1,19 @@
 import { isSolid, getSolidErrors } from 'is-solid';
 
 export function processResponse(data: unknown) {
-  // ✨ Intellisense should work here for 'PROFILE' thanks to the Ghost layer
-  if (isSolid<'PROFILE', any>(data)) {
-    console.log('✅ API: Valid profile received for:', data.username);
+  if (isSolid<'PROFILE_API', any>(data)) {
+    console.log('✅ Success: Profile is Solid');
     return true;
   }
 
-  console.error('❌ API: Invalid data structure:', getSolidErrors('PROFILE'));
+  const errors = getSolidErrors('PROFILE');
+  console.log(`❌ Validation Failed (${errors.length} errors):`);
+
+  errors.forEach((err, i) => {
+    console.log(`  [${i + 1}] PATH: ${err.path}`);
+    console.log(`      ISSUE: ${err.message}`);
+    console.log(`      DATA:  ${err.received}`);
+  });
+
   return false;
 }

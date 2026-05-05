@@ -3,14 +3,16 @@
   "private": true,
   "scripts": {
     "dev": "ts-node index.ts",
-    "build": "ts-patch build"
+    "build": "ts-patch build",
+    "test": "tspc && node dist/src/main.js"
   },
   "dependencies": {
     "is-solid": "file:.."
   },
   "devDependencies": {
     "ts-node": "^10.9.0",
-    "typescript": "^5.0.0",
-    "ts-patch": "^3.0.0"
+    "ts-patch": "^3.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0"
   }
 }

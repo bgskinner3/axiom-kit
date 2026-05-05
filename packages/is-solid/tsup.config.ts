@@ -1,4 +1,6 @@
 import { defineConfig } from 'tsup';
+import fs from 'fs';
+import path from 'path';
 
 export default defineConfig({
   entry: {
@@ -24,4 +26,20 @@ export default defineConfig({
 
   // 5. Use your specific build config
   tsconfig: 'tsconfig.build.json',
+  onSuccess: async () => {
+    const transDir = path.join(process.cwd(), 'dist/transformer');
+    if (!fs.existsSync(transDir)) fs.mkdirSync(transDir, { recursive: true });
+
+    // This forces Node to treat the transformer as CJS
+    fs.writeFileSync(
+      path.join(transDir, 'package.json'),
+      JSON.stringify({ type: 'commonjs' }, null, 2),
+    );
+
+    // Copy the built transformer into this isolated folder
+    fs.copyFileSync(
+      path.join(process.cwd(), 'dist/transformer.cjs'),
+      path.join(transDir, 'index.cjs'),
+    );
+  },
 });

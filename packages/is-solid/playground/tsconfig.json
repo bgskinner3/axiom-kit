@@ -1,25 +1,29 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "noEmit": true,
-    "rootDir": "..",
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": false,
+    "ignoreDeprecations": "5.0",
     "paths": {
       "is-solid": [
-        "../src/index.ts"
+        "../dist/index.d.ts"
       ]
     },
     "plugins": [
       {
-        "transform": "../transformer/index.ts",
+        "transform": "../dist/transformer/index.cjs",
         "type": "program"
       }
     ]
   },
   "include": [
-    "index.ts",
-    "../models/**/*",
-    "../src/**/*.ts"
+    "src/**/*",
+    "../models/solid-env.d.ts"
   ]
 }
