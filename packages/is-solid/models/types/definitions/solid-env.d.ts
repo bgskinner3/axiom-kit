@@ -1,4 +1,5 @@
 // models/types/definitions/solid-env.d.ts
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { TSolid } from '../processor';
 /**
  * SOLIDIFIED TYPE DATABASE (AUTO-GENERATED)
@@ -12,7 +13,9 @@ import type { TSolid } from '../processor';
  * Changes will be overwritten during the next build/sync.
  */
 declare module 'is-solid' {
-  export function isSolid(data: unknown): data is TSolid<'KEY-1', TTYPE_1>;
-
-  export function isSolid(data: unknown): data is TSolid<'KEY-2', TTYPE_2>;
+  // Overloads will be injected here by the Miner during compilation.
 }
+// declare module 'is-solid' {
+//   // export function isSolid(data: unknown): data is TSolid<'KEY-1', TTYPE_1>;
+//   // export function isSolid(data: unknown): data is TSolid<'KEY-2', TTYPE_2>;
+// }

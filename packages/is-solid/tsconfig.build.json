@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // We remove "rootDir": "src" so both folders are included
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": false,
+    "noEmit": false,
+    "tsBuildInfoFile": null,
+    "ignoreDeprecations": "5.0"
+  },
+  "include": [
+    "src/**/*",
+    "transformer/**/*",
+    "models/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "__tests__",
+    "playground",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
+}

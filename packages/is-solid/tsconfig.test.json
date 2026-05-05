@@ -4,10 +4,15 @@
     "composite": false,
     "incremental": false,
     "noEmit": true,
+    "skipLibCheck": false,
+    "isolatedModules": false,
+    "verbatimModuleSyntax": false, // 🚨 Set this to false for tests
+    "module": "ESNext", // 💎 Ensure ESNext is used for better interop
+    "moduleResolution": "Bundler",
     "types": [
       "node",
       "jest"
-    ],
+    ]
   },
   "include": [
     "src/**/*",

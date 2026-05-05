@@ -8,6 +8,9 @@ import { emitAmbientTypes } from './emitter';
 const globalKeyRegistry = new Map<string, string>();
 
 export default function (program: ts.Program) {
+  if (!program || typeof program.getTypeChecker !== 'function') {
+    return (_context: ts.TransformationContext) => (node: ts.Node) => node;
+  }
   return (context: ts.TransformationContext) => {
     return (sourceFile: ts.SourceFile) => {
       // 1. Mine the file for Solid types

@@ -8,7 +8,7 @@ import type {
   ObjectType,
   TypeReference,
 } from 'typescript';
-import { TypeFlags, ObjectFlags } from 'typescript';
+import ts from 'typescript';
 
 export function isStringLiteralType(type: Type): type is StringLiteralType {
   return type.isStringLiteral();
@@ -30,7 +30,7 @@ export function isIntersectionType(type: Type): type is IntersectionType {
  * Guard for Object types (Interface, Class, Literal)
  */
 export function isObjectType(type: Type): type is ObjectType {
-  return !!(type.getFlags() & TypeFlags.Object);
+  return !!(type.getFlags() & ts.TypeFlags.Object);
 }
 
 /**
@@ -38,11 +38,11 @@ export function isObjectType(type: Type): type is ObjectType {
  */
 export function isTypeReference(type: Type): type is TypeReference {
   // 1. Check if it's an object first
-  if (type.getFlags() & TypeFlags.Object) {
+  if (type.getFlags() & ts.TypeFlags.Object) {
     if (!isObjectType(type)) return false;
     const objectType = type;
     // 3. Check for Reference bit directly
-    return (objectType.objectFlags & ObjectFlags.Reference) !== 0;
+    return (objectType.objectFlags & ts.ObjectFlags.Reference) !== 0;
   }
   return false;
 }

@@ -10,6 +10,7 @@ import { validateUnion } from './unions';
 import { validateIntersection } from './intersections';
 import { validateReference } from './reference';
 import { validateArray } from './arrays';
+import { reportError } from './errors';
 import {
   isPrimitiveShape,
   isLiteralShape,
@@ -23,10 +24,12 @@ import {
 import { isObject, isNull, isPrimitive } from '../utils/guards';
 
 const VALIDATORS: TValidatorMapper = {
-  primitive: (data, shape) => {
+  primitive: (data, shape, ctx) => {
     if (!isPrimitiveShape(shape)) return false;
     if (shape.type === 'unknown') return true;
-    return typeof data === shape.type && isPrimitive(data);
+    const isValid = typeof data === shape.type && isPrimitive(data);
+    // return typeof data === shape.type && isPrimitive(data);
+    return isValid ? true : reportError(ctx, shape.type, data);
   },
   literal: (data, shape) => {
     if (!isLiteralShape(shape)) return false;

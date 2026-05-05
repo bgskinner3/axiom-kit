@@ -7,6 +7,8 @@ import type {
 } from 'typescript';
 import { generateShapeAST } from '../reifiers';
 import type { TSolidShape } from '../../models/types';
+import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
+
 type TCreateSolidMetadata = {
   shape: TSolidShape;
   factory: NodeFactory;
@@ -22,6 +24,7 @@ function createSolidMetadata({
   return factory.createObjectLiteralExpression([
     /* prettier-ignore */ factory.createPropertyAssignment('key', factory.createStringLiteral(key)),
     /* prettier-ignore */ factory.createPropertyAssignment('area',factory.createStringLiteral(areaString)),
+    /* prettier-ignore */ factory.createPropertyAssignment('version', factory.createStringLiteral(IS_SOLID_CONFIG_ITEMS.solidVersion)),
     /* prettier-ignore */ factory.createPropertyAssignment('shape', generateShapeAST(factory, shape)),
   ]);
 }

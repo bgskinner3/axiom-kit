@@ -5,14 +5,17 @@ module.exports = {
   testEnvironment: 'node',
   // Absolute path to the package root
   rootDir: path.resolve(__dirname),
-
+  // is-solid
   moduleNameMapper: {
-    // Your standard monorepo mapping
-    '^@bgskinner2/axiom-kit-(.*)$': '<rootDir>/../$1/src',
-    '^@bgskinner2/(?!axiom-kit$)(.*)$': '<rootDir>/../$1/src',
+    '^@bgskinner2/is-solid(.*)$': '<rootDir>/src/$1', // Fixed mapping
+    '^@bgskinner2/(.*)$': '<rootDir>/../$1/src',
   },
-
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+    '/playground/',
+    'setup.ts',
+  ],
   coverageReporters: ['text', 'text-summary'],
 
   transform: {
@@ -25,13 +28,16 @@ module.exports = {
           ignoreCodes: [5103, 5023, 5024],
         },
         // ✨ ADD THIS: Link Jest to your local Miner
+        // astTransformers: {
+        //   before: [path.resolve(__dirname, 'dist/transformer.cjs')],
+        // },
         astTransformers: {
-          before: [path.resolve(__dirname, 'transformer/index.ts')],
+          before: [path.resolve(__dirname, 'tools/jest-transformer.cjs')],
         },
       },
     ],
   },
-
+  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
   // Ensures we reset the global vault between every test file
   // setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
 };
