@@ -1,3 +1,4 @@
+// src/index.ts
 import { Registry } from './vault';
 import type { TSolid, TSolidMetadata } from '../models';
 import { createInitialContext } from './validation/context';
@@ -6,17 +7,32 @@ import { validate } from './validation';
 /* prettier-ignore */ export function isSolid<_K extends string, _T>(data?: undefined,injected?: TSolidMetadata ): true;
 /* prettier-ignore */ export function isSolid<K extends string, T>(data: unknown,injected?: TSolidMetadata): data is TSolid<K, T>;
 export function isSolid(data?: unknown, injected?: TSolidMetadata): boolean {
-  if (injected) Registry.register(injected);
-
-  // If no data provided, we just registered the type (Passive Mode)
-  if (arguments.length === 0 || (arguments.length === 1 && data === undefined))
-    return true;
+  /* prettier-ignore */ if (injected) Registry.register(injected);
+  /* prettier-ignore */ if (arguments.length === 0 || (arguments.length === 1 && data === undefined)) return true;
 
   // Active Validation: Lookup shape if it wasn't injected in this specific call
+  const key = injected?.key ?? '';
   const shape = injected?.shape || Registry.get(injected?.key ?? '')?.shape;
-  if (!shape) return false;
+  if (!shape) {
+    console.warn(
+      `[is-solid] Validation skipped: No shape found for key "${key || 'unknown'}". ` +
+        `Ensure the type has been registered or the transformer is active.`,
+    );
+    return false;
+  }
+  const ctx = createInitialContext();
+  ctx.currentKey = injected?.key;
 
-  return validate(data, shape, createInitialContext());
+  const isValid = validate(data, shape, ctx);
+
+  // 3. Commit to Vault (Pillar 2)
+  if (!isValid && ctx.currentKey) {
+    Registry.setErrors(ctx.currentKey, ctx.errors);
+  } else if (isValid && ctx.currentKey) {
+    Registry.setErrors(ctx.currentKey, []); // Clear old errors on success
+  }
+
+  return isValid;
 }
 
 // /**

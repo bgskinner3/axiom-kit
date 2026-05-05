@@ -1,3 +1,4 @@
+// src/validation/validate.ts
 import type {
   TValidationContext,
   TValidatorMapper,
@@ -8,6 +9,7 @@ import { validateObject } from './objects';
 import { validateUnion } from './unions';
 import { validateIntersection } from './intersections';
 import { validateReference } from './reference';
+import { validateArray } from './arrays';
 import {
   isPrimitiveShape,
   isLiteralShape,
@@ -18,7 +20,7 @@ import {
   isUnionShape,
   isReferenceShape,
 } from '../../models/guards';
-import { isObject, isNull, isPrimitive, isArray } from '../utils/guards';
+import { isObject, isNull, isPrimitive } from '../utils/guards';
 
 const VALIDATORS: TValidatorMapper = {
   primitive: (data, shape) => {
@@ -45,9 +47,7 @@ const VALIDATORS: TValidatorMapper = {
   },
   array: (data, shape, ctx) => {
     if (!isArrayShape(shape)) return false;
-    return (
-      isArray(data) && data.every((item) => validate(item, shape.items, ctx))
-    );
+    return validateArray(data, shape, ctx); // ✨ Use modular function
   },
   intersection: (data, shape, ctx) => {
     if (!isIntersectionShape(shape)) return false;
@@ -57,14 +57,6 @@ const VALIDATORS: TValidatorMapper = {
   reference: (data, shape, ctx) => {
     if (!isReferenceShape(shape)) return false;
     return validateReference(data, shape, ctx);
-    // const vault = getGlobalVault();
-    // if (!vault) return false;
-    // const metadata = vault.items.get(shape.name);
-    // if (!metadata) return false;
-
-    // // 3. Validate the data against the blueprint we just found
-    // // This stays in the same context (seen, path, etc.)
-    // return validate(data, metadata.shape, ctx);
   },
 } satisfies TValidatorMapper;
 

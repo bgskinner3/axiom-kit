@@ -1,3 +1,4 @@
+// src/utils/global
 import { IS_SOLID_CONFIG_ITEMS } from '../../../models';
 import type { TSolidVaultMap } from '../../../models';
 

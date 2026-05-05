@@ -1,5 +1,6 @@
+// src/vault.ts
 import { IS_SOLID_CONFIG_ITEMS } from '../models';
-import { getGlobalVault, ensureGlobalVault } from './utils/global';
+import { getGlobalVault, ensureGlobalVault, getCallerLocation } from './utils';
 import type { TSolidMetadata, TSolidError } from '../models';
 
 export class Registry {
@@ -7,15 +8,28 @@ export class Registry {
    * Registers metadata into the Global Vault's items map.
    */
   public static register(metadata: TSolidMetadata): void {
+    const vault = ensureGlobalVault();
     if (metadata.version !== IS_SOLID_CONFIG_ITEMS.solidVersion) {
-      console.error(
-        `[is-solid] Version mismatch for key "${metadata.key}". ` +
-          `Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, but received ${metadata.version}.`,
-      );
+      const errorMessage = `Version mismatch for key "${metadata.key}". Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, received ${metadata.version}.`;
+
+      console.error(`[is-solid] ${errorMessage}`);
+
+      vault.errors.set(metadata.key, [
+        {
+          key: metadata.key,
+          path: '$',
+          message: errorMessage,
+          expected: IS_SOLID_CONFIG_ITEMS.solidVersion,
+          received: metadata.version,
+          area: metadata.area,
+        },
+      ]);
+
       return;
     }
-
-    const vault = ensureGlobalVault();
+    if (!metadata.area || metadata.area === 'unknown') {
+      metadata.area = getCallerLocation({ preferredIndex: 2 });
+    }
     vault.items.set(metadata.key, metadata);
   }
 

@@ -58,3 +58,12 @@ export type TValidatorFn = (
 ) => boolean;
 
 export type TValidatorMapper = { [K in TSolidShape['kind']]: TValidatorFn };
+export type TGetCallerLocationOptions = {
+  preferredIndex?: number;
+  /** Fallback index if preferredIndex is not available (default: 2) */
+  fallbackIndex?: number;
+  /** Whether to get the top-level parent function instead of preferredIndex (default: false) */
+  topParent?: boolean;
+  /** Path prefix to strip from the returned line (default: process.cwd()) */
+  stripPathPrefix?: string;
+};

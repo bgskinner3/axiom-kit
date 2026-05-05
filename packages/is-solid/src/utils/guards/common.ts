@@ -37,10 +37,24 @@ export const isNumber: TTypeGuard<number> = (value: unknown): value is number =>
 export const isBoolean: TTypeGuard<boolean> = (
   value: unknown,
 ): value is boolean => typeof value === 'boolean';
-
+/**
+ * @utilType Guard
+ * @name isBigInt
+ * @category Guards Core
+ * @description Validates that a value is a BigInt.
+ * @link #isbigint
+ */
 export const isBigInt: TTypeGuard<bigint> = (value: unknown): value is bigint =>
   typeof value === 'bigint';
-
+/**
+ * @utilType Guard
+ * @name isUndefined
+ * @category Guards Primitive
+ * @description Validates that a value is undefined.
+ * @link #isundefined
+ */
+export const isUndefined: TTypeGuard<undefined> = (value): value is undefined =>
+  typeof value === 'undefined';
 ////
 
 export const isObject: TTypeGuard<object> = <T extends object, U>(
