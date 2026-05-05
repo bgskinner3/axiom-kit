@@ -1,13 +1,9 @@
 // transformer/visitor/processor.ts
 import type {
   NodeFactory,
-  Expression,
   ObjectLiteralExpression,
   CallExpression,
-  Type,
-  TypeChecker,
   SourceFile,
-  StringLiteralType,
 } from 'typescript';
 import { generateShapeAST } from '../reifiers';
 import type { TSolidShape } from '../../models/types';
