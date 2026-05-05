@@ -47,3 +47,11 @@ export type TSolidError = {
   /** The file:line:char where this type was defined processor */
   area?: string;
 };
+
+export type TValidatorFn = (
+  data: unknown,
+  shape: TSolidShape,
+  ctx: TValidationContext,
+) => boolean;
+
+export type TValidatorMapper = { [K in TSolidShape['kind']]: TValidatorFn };

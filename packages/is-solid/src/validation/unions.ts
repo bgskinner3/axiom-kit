@@ -10,6 +10,5 @@ export function validateUnion(
   shape: { values: TSolidShape[] },
   ctx: TValidationContext,
 ): boolean {
-  // We use .some() to return true as soon as one match is found
   return shape.values.some((subShape) => validate(data, subShape, ctx));
 }

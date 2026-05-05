@@ -1,5 +1,13 @@
 import type { Type } from 'typescript';
-
+export type TSolidShapeKinds =
+  | 'primitive'
+  | 'literal'
+  | 'union'
+  | 'intersection'
+  | 'branded'
+  | 'object'
+  | 'array'
+  | 'reference';
 /**
  * The strict discriminated union for all reified type shapes.
  * This is the "Blueprint" for your Type Database.
