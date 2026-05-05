@@ -15,7 +15,12 @@ export function ensureGlobalVault(): TSolidVaultMap {
 
   if (current) return current;
 
-  const vault: TSolidVaultMap = new Map();
+  // Initialize the two "Drawers" of the Database
+  const vault: TSolidVaultMap = {
+    items: new Map(),
+    errors: new Map(),
+  };
+
   globalThis.__SOLID_VAULT__ = vault;
 
   return vault;

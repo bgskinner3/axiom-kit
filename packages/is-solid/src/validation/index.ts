@@ -26,6 +26,7 @@ export function validate(
   }
 
   // 2. Route by Shape Kind
+  // TODO: REMOVE SWITCH
   switch (shape.kind) {
     case 'primitive':
       return typeof data === shape.type;

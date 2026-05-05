@@ -19,6 +19,7 @@
   "include": [
     "src/**/*",
     "transformer/**/*",
+    "types/**/*",
     "__tests__/**/*"
   ],
   "exclude": [

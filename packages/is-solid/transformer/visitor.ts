@@ -64,6 +64,10 @@ export function createVisitor(
                   'area',
                   f.createStringLiteral(areaString),
                 ),
+                // f.createPropertyAssignment(
+                //   'version',
+                //   f.createStringLiteral(SOLID_CONFIG.version),
+                // ),
                 f.createPropertyAssignment('shape', generateShapeAST(f, shape)),
               ]),
             ],

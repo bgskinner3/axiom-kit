@@ -12,7 +12,12 @@ export type TSolidMetadata = {
 /**
  * The type-safe interface for our Global Registry.
  */
-export type TSolidVaultMap = Map<string, TSolidMetadata>;
+export type TSolidVaultMap = {
+  /** The actual Type Database */
+  items: Map<string, TSolidMetadata>;
+  /** The Error Cache */
+  errors: Map<string, TSolidError[]>;
+};
 
 /**
  * Branding type for the 'isSolid' guard.
@@ -27,4 +32,18 @@ export type TValidationContext = {
   seen: Map<unknown, Set<TSolidShape>>;
   // Path for error reporting (e.g., "user.profile.id")
   path: string;
+};
+
+export type TSolidError = {
+  key: string;
+  /** The breadcrumb path to the failure (e.g., "settings.theme") */
+  path: string;
+  /** The human-readable issue */
+  message: string;
+  /** What the blueprint required */
+  expected: string | TSolidShape;
+  /** What the data actually contained */
+  received: unknown;
+  /** The file:line:char where this type was defined */
+  area?: string;
 };

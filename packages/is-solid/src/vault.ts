@@ -1,44 +1,52 @@
 import { IS_SOLID_CONFIG_ITEMS } from './models';
 import { getGlobalVault, ensureGlobalVault } from './utils/global';
-import type { TSolidMetadata } from './models';
+import type { TSolidMetadata, TSolidError } from './models';
 
 export class Registry {
   /**
-   * Registers metadata into the Global Vault.
-   * Injected by the transformer during build/HMR.
+   * Registers metadata into the Global Vault's items map.
    */
   public static register(metadata: TSolidMetadata): void {
-    // 1. Strict Version Check
     if (metadata.version !== IS_SOLID_CONFIG_ITEMS.solidVersion) {
       console.error(
         `[is-solid] Version mismatch for key "${metadata.key}". ` +
-          `Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, but received ${metadata.version}. ` +
-          `Please clear your cache and rebuild.`,
+          `Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, but received ${metadata.version}.`,
       );
       return;
     }
 
-    // 2. Access/Initialize the Vault
     const vault = ensureGlobalVault();
-
-    // 3. Check-in the Metadata
-    // In Dev Mode, this allows "Hot Swapping" on save.
-    vault.set(metadata.key, metadata);
+    vault.items.set(metadata.key, metadata);
   }
 
   /**
-   * Retrieves a shape by its unique key.
+   * Retrieves a shape by its unique key from the items map.
    */
   public static get(key: string): TSolidMetadata | undefined {
-    return getGlobalVault()?.get(key);
+    return getGlobalVault()?.items.get(key);
   }
 
   /**
-   * Returns all registered keys (useful for debugging or exports).
+   * Returns all registered blueprint keys.
    */
   public static keys(): string[] {
     const vault = getGlobalVault();
-    return vault ? Array.from(vault.keys()) : [];
+    return vault ? Array.from(vault.items.keys()) : [];
+  }
+
+  /**
+   * Retrieves the last validation error(s) for a specific key.
+   */
+  public static getErrors(key: string): TSolidError[] {
+    return getGlobalVault()?.errors.get(key) ?? [];
+  }
+
+  /**
+   * Internal: Sets the errors for a specific key in the errors map.
+   */
+  public static setErrors(key: string, errors: TSolidError[]): void {
+    const vault = ensureGlobalVault();
+    vault.errors.set(key, errors);
   }
 }
 
