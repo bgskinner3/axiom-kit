@@ -11,17 +11,13 @@ export function getGlobalVault(): TSolidVaultMap | undefined {
  * Helper to initialize the global vault safely.
  */
 export function ensureGlobalVault(): TSolidVaultMap {
-  const current = globalThis.__SOLID_VAULT__;
+  if (globalThis.__SOLID_VAULT__) return globalThis.__SOLID_VAULT__;
 
-  if (current) return current;
-
-  // Initialize the two "Drawers" of the Database
   const vault: TSolidVaultMap = {
     items: new Map(),
     errors: new Map(),
-  };
+  } satisfies TSolidVaultMap;
 
   globalThis.__SOLID_VAULT__ = vault;
-
   return vault;
 }

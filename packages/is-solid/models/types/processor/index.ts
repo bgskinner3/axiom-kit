@@ -1,4 +1,4 @@
-import type { TSolidShape } from '../../../transformer/types';
+import type { TSolidShape } from '../transformer';
 /**
  * The runtime representation of a Solidified Type.
  */

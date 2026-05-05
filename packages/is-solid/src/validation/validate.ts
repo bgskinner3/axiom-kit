@@ -1,13 +1,12 @@
-import type { TSolidShape } from '../../transformer/types';
 import type {
   TValidationContext,
-  TValidatorFn,
   TValidatorMapper,
-} from '../../models';
+  TSolidShape,
+} from '../../models/types';
 import { createInitialContext } from './context';
 import { validateObject } from './objects';
 import { validateUnion } from './unions';
-import { isObject, isNull, isPrimitive, isArray } from '../utils';
+// import { isObject, isNull, isPrimitive, isArray } from '../utils';
 import {
   isPrimitiveShape,
   isLiteralShape,
@@ -17,7 +16,12 @@ import {
   isIntersectionShape,
   isUnionShape,
   isReferenceShape,
+  isObject,
+  isNull,
+  isPrimitive,
+  isArray,
 } from '../utils/guards';
+import { getGlobalVault } from '../utils/global';
 /**
  const VALIDATORS: { [K in TSolidShape['kind']]: TValidatorFn } = {
   primitive: (data, shape) => {
@@ -57,7 +61,7 @@ import {
   },
 };
  */
-// Define the registry using the kinds from TSolidShape
+
 const VALIDATORS: TValidatorMapper = {
   primitive: (data, shape) => {
     if (!isPrimitiveShape(shape)) return false;
@@ -91,10 +95,18 @@ const VALIDATORS: TValidatorMapper = {
     if (!isIntersectionShape(shape)) return false;
     return shape.parts.every((part) => validate(data, part, ctx));
   },
-  // reference: (_data, shape, _ctx) => isValidatorKind(shape, 'reference') ? '',
-  reference: (_data, shape, _ctx) => {
+
+  reference: (data, shape, ctx) => {
     if (!isReferenceShape(shape)) return false;
-    return true;
+
+    const vault = getGlobalVault();
+    if (!vault) return false;
+    const metadata = vault.items.get(shape.name);
+    if (!metadata) return false;
+
+    // 3. Validate the data against the blueprint we just found
+    // This stays in the same context (seen, path, etc.)
+    return validate(data, metadata.shape, ctx);
   },
 } satisfies TValidatorMapper;
 

@@ -1,5 +1,4 @@
-import type { TSolidShape } from '../../transformer/types';
-import type { TValidationContext } from '../../models';
+import type { TValidationContext, TSolidShape } from '../../models';
 import { isObject, isNull, isRecord, ObjectUtils } from '../utils';
 import { validate } from './index';
 
