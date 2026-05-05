@@ -24,12 +24,11 @@ export function getBrandName(
           brandProp.valueDeclaration,
         );
 
-        // 4. Narrow to the literal value
         if (isStringLiteralType(propType)) {
           return propType.value;
         }
       }
     }
   }
-  return undefined;
+  return;
 }

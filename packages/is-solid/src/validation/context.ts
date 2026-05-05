@@ -1,4 +1,4 @@
-import type { TValidationContext } from '../models';
+import type { TValidationContext } from '../../models';
 
 export function createInitialContext(): TValidationContext {
   return {

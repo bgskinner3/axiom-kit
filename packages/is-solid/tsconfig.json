@@ -19,8 +19,9 @@
   "include": [
     "src/**/*",
     "transformer/**/*",
-    "types/**/*",
-    "__tests__/**/*"
+    "models/types/**/*",
+    "__tests__/**/*",
+     "models/**/*",
   ],
   "exclude": [
     "dist",

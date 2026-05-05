@@ -1,5 +1,5 @@
-import { IS_SOLID_CONFIG_ITEMS } from '../models';
-import type { TSolidVaultMap } from '../models';
+import { IS_SOLID_CONFIG_ITEMS } from '../../../models';
+import type { TSolidVaultMap } from '../../../models';
 
 /**
  * Helper to safely access the global vault without 'any'.

@@ -1,6 +1,6 @@
-import { IS_SOLID_CONFIG_ITEMS } from './models';
+import { IS_SOLID_CONFIG_ITEMS } from '../models';
 import { getGlobalVault, ensureGlobalVault } from './utils/global';
-import type { TSolidMetadata, TSolidError } from './models';
+import type { TSolidMetadata, TSolidError } from '../models';
 
 export class Registry {
   /**
