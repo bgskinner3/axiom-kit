@@ -1,4 +1,5 @@
 // transformer/index.ts
+import './reifiers/registry';
 import ts from 'typescript';
 import { createVisitor } from './visitor';
 

@@ -1,5 +1,5 @@
 // transformer/reifiers/generator.ts
-import ts from 'typescript';
+import type { NodeFactory, Expression } from 'typescript';
 import type { TSolidShape } from '../../models/types';
 import {
   isPrimitiveShape,
@@ -13,9 +13,9 @@ import {
 } from '../../models/guards';
 
 export function generateShapeAST(
-  f: ts.NodeFactory,
+  f: NodeFactory,
   shape: TSolidShape,
-): ts.Expression {
+): Expression {
   const _exhaustive: TSolidShape = shape;
   if (isPrimitiveShape(shape)) {
     return f.createObjectLiteralExpression([
@@ -32,7 +32,7 @@ export function generateShapeAST(
 
   // 2. Handle Literals
   if (isLiteralShape(shape)) {
-    let valueNode: ts.Expression;
+    let valueNode: Expression;
     /* prettier-ignore */ if (typeof shape.value === 'string') valueNode = f.createStringLiteral(shape.value);
     else if (typeof shape.value === 'number') valueNode = f.createNumericLiteral(String(shape.value));
     else valueNode = shape.value ? f.createTrue() : f.createFalse();
