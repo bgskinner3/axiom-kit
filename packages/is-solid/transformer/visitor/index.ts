@@ -33,12 +33,19 @@ export function createVisitor(
       if (keyType.isStringLiteral()) {
         const key = keyType.value;
         const filePath = sourceFile.fileName;
+        // FILE PATHS??
+        const typeNode = node.typeArguments?.[1];
+        const type = typeNode
+          ? checker.getTypeFromTypeNode(typeNode)
+          : shapeType;
+        const typeName = checker.typeToString(type);
+
         // THREE: enforce global key uniqueness and track source file for the ambient emitter
         const existing = globalRegistry.get(key);
         if (existing && existing !== filePath)
           throw new Error(`[is-solid] Collision: ${key}`);
 
-        globalRegistry.set(key, filePath);
+        globalRegistry.set(key, `${filePath}|${typeName}`);
 
         // 4: reify the typescript type into a solidified json shape
         // TODO note!: fresh set passed to prevent cross-call recursion leaks

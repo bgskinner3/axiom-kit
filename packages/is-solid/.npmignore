@@ -1,0 +1,10 @@
+__tests__/
+playground/
+tools/
+docs/
+node_modules/
+jest.config.cjs
+tsconfig.json
+tsconfig.build.json
+tsconfig.test.json
+tsup.config.ts

@@ -12,18 +12,17 @@
     "ignoreDeprecations": "5.0",
     "paths": {
       "is-solid": [
-        "../dist/index.d.ts"
+        "../packages/is-solid/dist/index.d.ts"
       ]
     },
     "plugins": [
       {
-        "transform": "../dist/transformer/index.cjs",
+        "transform": "../packages/is-solid/dist/transformer/index.cjs",
         "type": "program"
       }
     ]
   },
   "include": [
     "src/**/*",
-    "../models/solid-env.d.ts"
   ]
 }

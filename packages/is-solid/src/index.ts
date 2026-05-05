@@ -1,12 +1,17 @@
 // src/index.ts
 import { Registry } from './vault';
-import type { TSolid, TSolidMetadata, TSolidError } from '../models';
+import type {
+  TSolid,
+  TSolidMetadata,
+  TSolidError,
+  ISolidRegistry,
+} from '../models';
 import { createInitialContext } from './validation/context';
 import { validate } from './validation';
 
 /* prettier-ignore */ export function isSolid<_K extends string, _T>(data?: undefined, injected?: TSolidMetadata): true;
 /* prettier-ignore */ export function isSolid<K extends string, T>(data: unknown,injected?: TSolidMetadata): data is TSolid<K, T>;
-/* prettier-ignore */ export function isSolid<K extends string, T = unknown>(data: unknown): data is TSolid<K, T>;
+/* prettier-ignore */ export function isSolid<K extends keyof ISolidRegistry>(data: unknown): data is TSolid<K, ISolidRegistry[K]>;
 export function isSolid(data?: unknown, injected?: TSolidMetadata): boolean {
   /* prettier-ignore */ if (injected) Registry.register(injected);
   /* prettier-ignore */ if (arguments.length === 0 || (arguments.length === 1 && data === undefined)) return true;
