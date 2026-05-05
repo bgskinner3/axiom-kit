@@ -1,3 +1,4 @@
+// models/types/transformer
 import type { Type } from 'typescript';
 export type TSolidShapeKinds =
   | 'primitive'

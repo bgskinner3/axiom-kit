@@ -1,3 +1,4 @@
+// src/validation/objects.ts
 import type { TValidationContext, TSolidShape } from '../../models';
 import { isObject, isNull, isRecord, ObjectUtils } from '../utils';
 import { validate } from './index';

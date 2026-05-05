@@ -1,5 +1,7 @@
+// transformer/reifiers/reify-type.ts
 import type { Type, TypeChecker } from 'typescript';
-import type { TSolidShape } from '../types';
+import type { TSolidShape } from '../../models/types';
+import ts from 'typescript';
 import { isUnionType, isIntersectionType, isObjectType } from '../utils/guards';
 import { reifyPrimitive } from './primitives';
 import { reifyUnion } from './unions';
@@ -10,10 +12,16 @@ export function reifyType(
   checker: TypeChecker,
   seen: Set<Type> = new Set<Type>(),
 ): TSolidShape {
-  // 1. Handle Unions ('A' | 'B')
-  if (isUnionType(type)) {
-    return reifyUnion(type);
+  if (checker.isArrayType(type)) {
+    const typeRef = type as ts.TypeReference;
+    const itemType = typeRef.typeArguments?.[0] ?? checker.getAnyType();
+    return {
+      kind: 'array',
+      items: reifyType(itemType, checker, seen),
+    };
   }
+  // 1. Handle Unions ('A' | 'B')
+  if (isUnionType(type)) return reifyUnion(type);
 
   // 2. Handle Intersections & Brands (string & { __brand: 'ID' })
   if (isIntersectionType(type)) {
@@ -35,9 +43,7 @@ export function reifyType(
   }
 
   // 3. Handle Objects (Interfaces, Literals, Recursive types)
-  if (isObjectType(type)) {
-    return reifyObject(type, checker, seen);
-  }
+  if (isObjectType(type)) return reifyObject(type, checker, seen);
 
   // 4. Default to Primitives (string, number, boolean)
   return reifyPrimitive(type);

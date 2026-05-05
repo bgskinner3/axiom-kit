@@ -1,10 +1,11 @@
+// transformer/reifiers/unions.ts
 import ts from 'typescript';
 import {
   isStringLiteralType,
   isNumberLiteralType,
   isUnionType,
 } from '../utils';
-import type { TSolidShape } from '../types';
+import type { TSolidShape } from '../../models/types';
 /**
  * Extracts literal values without using 'any' or 'as'.
  */

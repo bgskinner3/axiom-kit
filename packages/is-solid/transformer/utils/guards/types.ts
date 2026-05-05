@@ -1,3 +1,4 @@
+// transformer/utils/guards/types.ts
 import type {
   Type,
   StringLiteralType,

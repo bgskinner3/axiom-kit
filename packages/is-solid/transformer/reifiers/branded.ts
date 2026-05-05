@@ -1,3 +1,4 @@
+// transformer/reifiers/branded.ts
 import type { Type, TypeChecker } from 'typescript';
 import {
   isIntersectionType,

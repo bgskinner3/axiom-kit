@@ -1,65 +1,21 @@
 import { Registry } from './vault';
-import type { TSolid, TSolidMetadata } from './models';
+import type { TSolid, TSolidMetadata } from '../models';
 import { createInitialContext } from './validation/context';
 import { validate } from './validation';
-// ======+> Abstract Syntax Tree (AST)."
 
+/* prettier-ignore */ export function isSolid<_K extends string, _T>(data?: undefined,injected?: TSolidMetadata ): true;
+/* prettier-ignore */ export function isSolid<K extends string, T>(data: unknown,injected?: TSolidMetadata): data is TSolid<K, T>;
+export function isSolid(data?: unknown, injected?: TSolidMetadata): boolean {
+  if (injected) Registry.register(injected);
 
+  // If no data provided, we just registered the type (Passive Mode)
+  if (arguments.length === 0 || (arguments.length === 1 && data === undefined))
+    return true;
 
+  // Active Validation: Lookup shape if it wasn't injected in this specific call
+  const shape = injected?.shape || Registry.get(injected?.key ?? '')?.shape;
+  if (!shape) return false;
 
-// export function isSolid<_K extends string, _T>(
-//   data?: undefined,
-//   injected?: TSolidMetadata,
-// ): true;
-// export function isSolid<K extends string, T>(
-//   data: unknown,
-//   injected?: TSolidMetadata,
-// ): data is TSolid<K, T>;
-// export function isSolid(data?: unknown, injected?: TSolidMetadata): boolean {
-//   if (injected) {
-//     Registry.register(injected);
-//   }
-
-//   // If no data, we are in "Seeder" mode
-//   if (
-//     arguments.length === 0 ||
-//     (arguments.length === 1 && data === undefined)
-//   ) {
-//     return true;
-//   }
-
-//   // If data exists, we are in "Guard" mode
-//   const shape =
-//     injected?.shape || (injected && Registry.get(injected?.key)?.shape);
-//   if (!shape) return false;
-
-//   return validate(data, shape);
-// }
-// TNormalizeValue<T>
-/**
- * The 'isSolid' runtime implementation.
- * @param data - The value to validate.
- * @param injected - The metadata automatically injected by the Transformer.
- */
-export function isSolid<K extends string, T>(
-  data: unknown,
-  injected?: TSolidMetadata,
-): data is TSolid<K, T> {
-  // 1. If transformer injected metadata, register it
-  if (injected) {
-    Registry.register(injected);
-  }
-
-  // 2. Determine the shape to check against
-  // Priority: Injected metadata > Vault lookup
-  const shape = injected?.shape;
-
-  if (!shape) {
-    // If no shape found, we cannot validate
-    return false;
-  }
-
-  // 3. Run the Engine
   return validate(data, shape, createInitialContext());
 }
 

@@ -1,4 +1,5 @@
-import type { TSolidVaultMap } from './index'; // Adjust path as needed
+// models/types/definitions/solid-vault.d.ts
+import type { TSolidVaultMap } from '../processor';
 
 declare global {
   /**

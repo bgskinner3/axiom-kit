@@ -1,6 +1,7 @@
+// transformer/reifiers/primitives.ts
 import ts from 'typescript';
 import { isStringLiteralType, isNumberLiteralType } from '../utils';
-import type { TSolidShape } from '../types';
+import type { TSolidShape } from '../../models/types';
 
 export function reifyPrimitive(type: ts.Type): TSolidShape {
   const flags = type.getFlags();

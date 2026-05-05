@@ -6,7 +6,8 @@ import type {
 import { createInitialContext } from './context';
 import { validateObject } from './objects';
 import { validateUnion } from './unions';
-// import { isObject, isNull, isPrimitive, isArray } from '../utils';
+import { validateIntersection } from './intersections';
+import { validateReference } from './reference';
 import {
   isPrimitiveShape,
   isLiteralShape,
@@ -16,51 +17,8 @@ import {
   isIntersectionShape,
   isUnionShape,
   isReferenceShape,
-  isObject,
-  isNull,
-  isPrimitive,
-  isArray,
-} from '../utils/guards';
-import { getGlobalVault } from '../utils/global';
-/**
- const VALIDATORS: { [K in TSolidShape['kind']]: TValidatorFn } = {
-  primitive: (data, shape) => {
-    // Narrowing shape to the 'primitive' variant
-    if (shape.kind !== 'primitive') return false; 
-    if (shape.type === 'unknown') return true;
-    return typeof data === shape.type;
-  },
-  literal: (data, shape) => {
-    if (shape.kind !== 'literal') return false;
-    return data === shape.value;
-  },
-  union: (data, shape, ctx) => {
-    if (shape.kind !== 'union') return false;
-    return validateUnion(data, shape, ctx);
-  },
-  object: (data, shape, ctx) => {
-    if (shape.kind !== 'object') return false;
-    return validateObject(data, shape, ctx);
-  },
-  branded: (data, shape, ctx) => {
-    if (shape.kind !== 'branded') return false;
-    return validate(data, shape.base, ctx);
-  },
-  array: (data, shape, ctx) => {
-    if (shape.kind !== 'array') return false;
-    return Array.isArray(data) && data.every(item => validate(item, shape.items, ctx));
-  },
-  intersection: (data, shape, ctx) => {
-    if (shape.kind !== 'intersection') return false;
-    return shape.parts.every(part => validate(data, part, ctx));
-  },
-  reference: (data, shape, ctx) => {
-    if (shape.kind !== 'reference') return false;
-    // Logic for looking up the 'name' in your TSolidVaultMap would go here
-    return true; 
-  },
-};
- */
+} from '../../models/guards';
+import { isObject, isNull, isPrimitive, isArray } from '../utils/guards';
 
 const VALIDATORS: TValidatorMapper = {
   primitive: (data, shape) => {
@@ -93,20 +51,20 @@ const VALIDATORS: TValidatorMapper = {
   },
   intersection: (data, shape, ctx) => {
     if (!isIntersectionShape(shape)) return false;
-    return shape.parts.every((part) => validate(data, part, ctx));
+    return validateIntersection(data, shape, ctx);
   },
 
   reference: (data, shape, ctx) => {
     if (!isReferenceShape(shape)) return false;
+    return validateReference(data, shape, ctx);
+    // const vault = getGlobalVault();
+    // if (!vault) return false;
+    // const metadata = vault.items.get(shape.name);
+    // if (!metadata) return false;
 
-    const vault = getGlobalVault();
-    if (!vault) return false;
-    const metadata = vault.items.get(shape.name);
-    if (!metadata) return false;
-
-    // 3. Validate the data against the blueprint we just found
-    // This stays in the same context (seen, path, etc.)
-    return validate(data, metadata.shape, ctx);
+    // // 3. Validate the data against the blueprint we just found
+    // // This stays in the same context (seen, path, etc.)
+    // return validate(data, metadata.shape, ctx);
   },
 } satisfies TValidatorMapper;
 
@@ -132,31 +90,4 @@ export function validate(
   }
   const validator = VALIDATORS[shape.kind];
   return validator(data, shape, ctx);
-  // 2. Route by Shape Kind
-  // TODO: REMOVE SWITCH
-  // switch (shape.kind) {
-  //   case 'primitive':
-  //     // return typeof data === shape.type;
-  //     return isPrimitive(data);
-
-  //   case 'literal':
-  //     return data === shape.value;
-
-  //   case 'union':
-  //     return validateUnion(data, shape, ctx);
-
-  //   case 'object':
-  //     return validateObject(data, shape, ctx);
-
-  //   case 'branded':
-  //     // Validate the base (e.g., string) first
-  //     return validate(data, shape.base, ctx);
-
-  //   case 'reference':
-  //     // Lookups for named recursion would go here
-  //     return true;
-
-  //   default:
-  //     return false;
-  // }
 }

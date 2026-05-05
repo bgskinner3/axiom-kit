@@ -1,6 +1,7 @@
+// transformer/reifiers/objects.ts
 import type { Type, TypeChecker } from 'typescript';
 import { isObjectType } from '../utils/guards';
-import type { TSolidShape } from '../types';
+import type { TSolidShape } from '../../models/types';
 import { reifyType } from './index';
 
 export function reifyObject(
