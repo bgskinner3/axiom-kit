@@ -3,6 +3,12 @@ import type { TValidationContext } from '../../models';
 import { createInitialContext } from './context';
 import { validateObject } from './objects';
 import { validateUnion } from './unions';
+import { isObject, isNull, isRecord, isPrimitive } from '../utils';
+
+const isType = (data: unknown, type: string): boolean => {
+  if (type === 'object') return isRecord(data); // Reuses your isRecord
+  return typeof data === type;
+};
 
 /**
  * Validates raw data against a Solid Shape.
@@ -14,7 +20,7 @@ export function validate(
   ctx: TValidationContext = createInitialContext(),
 ): boolean {
   // 1. Handle Recursion Protection
-  if (typeof data === 'object' && data !== null) {
+  if (isObject(data) && !isNull(data)) {
     const validatedShapes = ctx.seen.get(data);
     if (validatedShapes?.has(shape)) return true;
 
@@ -29,7 +35,8 @@ export function validate(
   // TODO: REMOVE SWITCH
   switch (shape.kind) {
     case 'primitive':
-      return typeof data === shape.type;
+      // return typeof data === shape.type;
+      return isPrimitive(data);
 
     case 'literal':
       return data === shape.value;
