@@ -1,6 +1,6 @@
 // src/index.ts
 import { Registry } from './vault';
-import type { TSolid, TSolidMetadata } from '../models';
+import type { TSolid, TSolidMetadata, TSolidError } from '../models';
 import { createInitialContext } from './validation/context';
 import { validate } from './validation';
 
@@ -42,6 +42,15 @@ export function isSolid(data?: unknown, injected?: TSolidMetadata): boolean {
 export function getSolid(key: string): TSolidMetadata | undefined {
   return Registry.get(key);
 }
+/**
+ * 🔍 GET SOLID ERRORS
+ * Retrieves the breadcrumb failure report for a specific key.
+ * Used after isSolid() returns false.
+ */
+export function getSolidErrors(key: string): TSolidError[] {
+  return Registry.getErrors(key);
+}
+
 /**
  export function isSolid<K extends string, T>(
   data?: unknown, // Now optional

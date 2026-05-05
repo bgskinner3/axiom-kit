@@ -1,9 +1,10 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "noEmit": true,
-    "rootDir": "..", // ✨ Tells TS the "Root" is the package folder, not just the playground
-    "baseUrl": ".",
+    "rootDir": "..",
     "paths": {
       "is-solid": [
         "../src/index.ts"
