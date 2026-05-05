@@ -5,11 +5,7 @@
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
     "rootDir": "./",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
     "noEmit": false,
-    "ignoreDeprecations": "5.0",
     "paths": {
       "is-solid": [
         "../packages/is-solid/dist/index.d.ts"
@@ -24,5 +20,6 @@
   },
   "include": [
     "src/**/*",
+    "../packages/is-solid/node_modules/@bgskinner2/is-solid/dist/solid-env.d.ts"
   ]
 }

@@ -1,3 +1,4 @@
+// packages/is-solid/tsup.config.ts
 import { defineConfig } from 'tsup';
 import fs from 'fs';
 import path from 'path';
@@ -5,14 +6,15 @@ import path from 'path';
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
-    transformer: 'transformer/index.ts',
+    // 💎 FIX: Use 'transformer/index' as the key to nest it automatically
+    'transformer/index': 'transformer/index.ts',
   },
   format: ['cjs', 'esm'],
   dts: { resolve: true },
   platform: 'node',
   clean: true, // Keep this to ensure fresh builds
   minify: true,
-  splitting: false,
+  splitting: true,
   treeshake: true,
   sourcemap: true,
   external: ['typescript'],

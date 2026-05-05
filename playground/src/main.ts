@@ -2,6 +2,7 @@ import './types';
 import { validateUser } from './logic';
 
 validateUser({ id: 'u1', age: '25' });
+console.log('Playground active: Types registered.');
 // import './types'; // Seeds the Vault
 // import { processResponse } from './api';
 

@@ -1,5 +1,5 @@
 // transformer/index.ts
-import './reifiers/registry';
+import './reifiers/registry/index';
 import ts from 'typescript';
 import { createVisitor } from './visitor';
 import { emitAmbientTypes } from './emitter';

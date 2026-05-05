@@ -67,7 +67,8 @@
   "include": [
     "packages/**/*.ts",
     "packages/**/*.tsx",
-    "tools/**/*.ts"
+    "tools/**/*.ts",
+    "playground/src/**/*.ts"
   ],
   "exclude": [
     "node_modules",

@@ -2,8 +2,6 @@
   "name": "is-solid-playground",
   "private": true,
   "scripts": {
-    "dev": "ts-node index.ts",
-    "build": "ts-patch build",
     "test": "tspc && node dist/src/main.js"
   },
   "dependencies": {
