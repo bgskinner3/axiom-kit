@@ -1,5 +1,11 @@
 import type { TSolidShape } from '../../types';
-
+/**
+ * FOCUSED SHAPE GUARDS
+ *
+ * These utilities provide type-safe narrowing for the TSolidShape union.
+ * Essential for the recursive validation engine and AST generation to
+ * resolve specific blueprint properties without type casting.
+ */
 /* prettier-ignore */ export const isPrimitiveShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'primitive' }> => s.kind === 'primitive';
 /* prettier-ignore */ export const isLiteralShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'literal' }> => s.kind === 'literal';
 /* prettier-ignore */ export const isUnionShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'union' }> => s.kind === 'union';

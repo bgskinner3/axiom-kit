@@ -27,10 +27,6 @@ module.exports = {
         diagnostics: {
           ignoreCodes: [5103, 5023, 5024],
         },
-        // ✨ ADD THIS: Link Jest to your local Miner
-        // astTransformers: {
-        //   before: [path.resolve(__dirname, 'dist/transformer.cjs')],
-        // },
         astTransformers: {
           before: [path.resolve(__dirname, 'tools/jest-transformer.cjs')],
         },
@@ -38,6 +34,4 @@ module.exports = {
     ],
   },
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
-  // Ensures we reset the global vault between every test file
-  // setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
 };

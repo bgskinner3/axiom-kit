@@ -16,15 +16,3 @@ export function validateReference(
 
   return validate(data, metadata.shape, ctx);
 }
-// export function validateReference(
-//   data: unknown,
-//   shape: { name: string },
-//   ctx: TValidationContext,
-// ): boolean {
-//   const metadata = Registry.get(shape.name);
-//   if (!metadata) {
-//     // Optionally log: `Reference ${shape.name} not found in Vault`
-//     return false;
-//   }
-//   return validate(data, metadata.shape, ctx);
-// }

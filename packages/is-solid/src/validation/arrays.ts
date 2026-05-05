@@ -13,14 +13,11 @@ export function validateArray(
 
   const originalPath = ctx.path;
 
-  // Use .every to stop at the first failure, or .forEach to collect all errors
   return data.every((item, index) => {
-    // ✨ Update path: $.items -> $.items.0
     ctx.path = `${originalPath}.${index}`;
 
     const isValid = validate(item, shape.items, ctx);
 
-    // Reset path for the next sibling
     ctx.path = originalPath;
     return isValid;
   });

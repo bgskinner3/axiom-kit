@@ -2,7 +2,10 @@
 import ts from 'typescript';
 
 /**
- * Checks if a node is the 'isSolid' function call.
+ * # IS SOLID CALL #####
+ * Identifies the 'isSolid' function call within the AST.
+ * This is the primary "Trigger" for the Miner; when this is found,
+ * the transformer begins the reification process for the attached types.
  */
 export function isSolidCall(node: ts.Node): node is ts.CallExpression {
   return (
@@ -13,7 +16,9 @@ export function isSolidCall(node: ts.Node): node is ts.CallExpression {
 }
 
 /**
- * Checks if a node is a specific identifier.
+ * IS IDENTIFIER
+ * Validates if a node is a TypeScript Identifier with a specific name.
+ * Used to target internal keywords or specific brand names during AST walking.
  */
 export function isIdentifier(
   node: ts.Node,

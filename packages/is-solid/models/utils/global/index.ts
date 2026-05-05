@@ -1,16 +1,33 @@
 // models/utils/global/index.ts
 import { IS_SOLID_CONFIG_ITEMS } from '../../constants';
 import type { TSolidVaultMap } from '../../types';
-
+// ====================================================================
 /**
- * Helper to safely access the global vault without 'any'.
+ * GLOBAL VAULT ACCESSORS
+ *
+ * These utilities manage the library's "Live Memory." By attaching the Vault
+ * to 'globalThis', we ensure that metadata and error states persist across
+ * different modules, bundles, and execution contexts (like HMR or Jest).
+ */
+
+// ====================================================================
+/**
+ * GET GLOBAL VAULT
+ * Safely attempts to retrieve the existing Vault singleton.
+ * Returns 'undefined' if no types have been solidified yet, preventing
+ * unnecessary memory allocation during passive lookups.
  */
 export function getGlobalVault(): TSolidVaultMap | undefined {
   return globalThis[IS_SOLID_CONFIG_ITEMS.solidVaultKey];
 }
 /**
- * Helper to initialize the global vault safely.
+ * ENSURE GLOBAL VAULT
+ * Guarantees the existence of the Vault singleton.
+ * If the Vault doesn't exist, it initializes the 'items' and 'errors' maps
+ * and attaches them to the global scope. This is the primary "Bootloader"
+ * for Pillar 2 (The Vault).
  */
+
 export function ensureGlobalVault(): TSolidVaultMap {
   if (globalThis.__SOLID_VAULT__) return globalThis.__SOLID_VAULT__;
 

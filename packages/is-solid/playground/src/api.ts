@@ -1,7 +1,7 @@
 import { isSolid, getSolidErrors } from 'is-solid';
 
 export function processResponse(data: unknown) {
-  if (isSolid<'PROFILE_API', any>(data)) {
+  if (isSolid<'PROFILE'>(data)) {
     console.log('✅ Success: Profile is Solid');
     return true;
   }
