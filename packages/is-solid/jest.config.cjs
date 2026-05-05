@@ -24,6 +24,10 @@ module.exports = {
         diagnostics: {
           ignoreCodes: [5103, 5023, 5024],
         },
+        // ✨ ADD THIS: Link Jest to your local Miner
+        astTransformers: {
+          before: [path.resolve(__dirname, 'transformer/index.ts')],
+        },
       },
     ],
   },

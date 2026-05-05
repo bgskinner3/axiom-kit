@@ -1,0 +1,16 @@
+{
+  "name": "is-solid-playground",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node index.ts",
+    "build": "ts-patch build"
+  },
+  "dependencies": {
+    "is-solid": "file:.."
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0",
+    "ts-patch": "^3.0.0"
+  }
+}

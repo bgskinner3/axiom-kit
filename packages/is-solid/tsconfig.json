@@ -22,6 +22,7 @@
     "models/types/**/*",
     "__tests__/**/*",
     "models/**/*",
+    "playground/**/*"
   ],
   "exclude": [
     "dist",

@@ -12,6 +12,7 @@
   "include": [
     "src/**/*",
     "transformer/**/*",
-    "__tests__/**/*"
+    "__tests__/**/*",
+    "models/**/*",
   ]
 }

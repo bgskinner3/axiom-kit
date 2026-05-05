@@ -1,0 +1,24 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "..", // ✨ Tells TS the "Root" is the package folder, not just the playground
+    "baseUrl": ".",
+    "paths": {
+      "is-solid": [
+        "../src/index.ts"
+      ]
+    },
+    "plugins": [
+      {
+        "transform": "../transformer/index.ts",
+        "type": "program"
+      }
+    ]
+  },
+  "include": [
+    "index.ts",
+    "../models/**/*",
+    "../src/**/*.ts"
+  ]
+}
