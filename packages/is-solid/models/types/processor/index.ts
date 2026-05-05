@@ -32,6 +32,9 @@ export type TValidationContext = {
   seen: Map<unknown, Set<TSolidShape>>;
   // Path for error reporting (e.g., "user.profile.id")
   path: string;
+  errors: TSolidError[];
+  // ✨ Keep track of the current Key for error indexing
+  currentKey?: string;
 };
 
 export type TSolidError = {

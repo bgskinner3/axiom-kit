@@ -1,5 +1,5 @@
 // src/validation/unions.ts
-import type { TValidationContext, TSolidShape } from '../../models/types';
+import type { TValidationContext, TSolidUnionShape } from '../../models/types';
 import { validate } from './index';
 
 /**
@@ -7,7 +7,7 @@ import { validate } from './index';
  */
 export function validateUnion(
   data: unknown,
-  shape: { values: TSolidShape[] },
+  shape: TSolidUnionShape,
   ctx: TValidationContext,
 ): boolean {
   return shape.values.some((subShape) => validate(data, subShape, ctx));

@@ -1,11 +1,11 @@
 // src/validation/objects.ts
-import type { TValidationContext, TSolidObjectShape } from '../../models';
+import type { TValidationContext, TSolidObjectRawShape } from '../../models';
 import { isObject, isNull, isRecord, ObjectUtils } from '../utils';
 import { validate } from './index';
 
 export function validateObject(
   data: unknown,
-  shape: { properties: Record<string, TSolidObjectShape> },
+  shape: { properties: Record<string, TSolidObjectRawShape> },
   ctx: TValidationContext,
 ): boolean {
   if (!isObject(data) || isNull(data) || !isRecord(data)) return false;

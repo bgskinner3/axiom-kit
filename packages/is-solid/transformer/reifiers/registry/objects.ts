@@ -1,7 +1,7 @@
 // transformer/reifiers/registry/objects.ts
 import { isObjectType } from '../../utils/guards';
 import { registerReifier } from './core';
-import type { TSolidObjectShape } from '../../../models/types';
+import type { TSolidObjectRawShape } from '../../../models/types';
 import { SymbolFlags } from 'typescript';
 /**
  * STRUCTURAL REIFIER (OBJECTS & INTERFACES)
@@ -26,7 +26,7 @@ registerReifier((type, checker, next, seen) => {
   if (seen.has(type)) return { kind: 'reference', name };
   seen.add(type);
 
-  const shapeProperties: Record<string, TSolidObjectShape> = {};
+  const shapeProperties: Record<string, TSolidObjectRawShape> = {};
   const properties = checker.getPropertiesOfType(type);
 
   for (const prop of properties) {
