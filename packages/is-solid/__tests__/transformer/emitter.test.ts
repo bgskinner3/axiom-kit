@@ -1,3 +1,4 @@
+// __tests__/transformer/emitter.test.ts
 import * as fs from 'fs';
 import { emitAmbientTypes } from '../../transformer/emitter';
 // Mock the filesystem to prevent actual writes
@@ -59,7 +60,11 @@ describe('Ambient Emitter (The Scribe)', () => {
     });
   });
 
+  // ===========================================================================
+  // ===========================================================================
   // EDGE CASES
+  // ===========================================================================
+  // ===========================================================================
   /**
    * Monorepo paths
    * !!! Verify that the Emitter doesn't double-up slashes or fail on absolute paths.
