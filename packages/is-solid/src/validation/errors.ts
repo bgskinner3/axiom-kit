@@ -1,5 +1,5 @@
 // src/validation/errors.ts
-import type { TValidationContext, TSolidShape } from '../../models/types';
+import type { TValidationContext } from '../../models/types';
 import { serialize, getCallerLocation } from '../../models';
 /**
  * Records a validation failure into the current context.

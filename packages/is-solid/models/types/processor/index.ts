@@ -1,24 +1,3 @@
-import type { TSolidShape } from '../transformer';
-/**
- * The runtime representation of a Solidified Type.
- */
-export type TSolidMetadata = {
-  key: string;
-  area: string;
-  version: string;
-  shape: TSolidShape;
-};
-
-/**
- * The type-safe interface for our Global Registry.
- */
-export type TSolidVaultMap = {
-  /** The actual Type Database */
-  items: Map<string, TSolidMetadata>;
-  /** The Error Cache */
-  errors: Map<string, TSolidError[]>;
-};
-
 export type TValidationContext = {
   // Map of data objects to the shape they were validated against
   seen: Map<unknown, Set<TSolidShape>>;
@@ -27,20 +6,6 @@ export type TValidationContext = {
   errors: TSolidError[];
   // ✨ Keep track of the current Key for error indexing
   currentKey?: string;
-};
-
-export type TSolidError = {
-  key: string;
-  /** The breadcrumb path to the failure (e.g., "settings.theme") */
-  path: string;
-  /** The human-readable issue */
-  message: string;
-  /** What the blueprint required */
-  expected: string | TSolidShape;
-  /** What the data actually contained */
-  received: unknown;
-  /** The file:line:char where this type was defined processor */
-  area?: string;
 };
 
 export type TValidatorFn = (
@@ -59,3 +24,37 @@ export type TGetCallerLocationOptions = {
   /** Path prefix to strip from the returned line (default: process.cwd()) */
   stripPathPrefix?: string;
 };
+// import type { TSolidShape } from '../transformer';
+// /**
+//  * The runtime representation of a Solidified Type.
+//  */
+// export type TSolidMetadata = {
+//   key: string;
+//   area: string;
+//   version: string;
+//   shape: TSolidShape;
+// };
+
+// /**
+//  * The type-safe interface for our Global Registry.
+//  */
+// export type TSolidVaultMap = {
+//   /** The actual Type Database */
+//   items: Map<string, TSolidMetadata>;
+//   /** The Error Cache */
+//   errors: Map<string, TSolidError[]>;
+// };
+
+// export type TSolidError = {
+//   key: string;
+//   /** The breadcrumb path to the failure (e.g., "settings.theme") */
+//   path: string;
+//   /** The human-readable issue */
+//   message: string;
+//   /** What the blueprint required */
+//   expected: string | TSolidShape;
+//   /** What the data actually contained */
+//   received: unknown;
+//   /** The file:line:char where this type was defined processor */
+//   area?: string;
+// };

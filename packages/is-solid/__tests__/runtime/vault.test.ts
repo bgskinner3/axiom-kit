@@ -208,6 +208,34 @@ describe('Engine: The Vault (Registry)', () => {
 // ====================================================================================================
 // ====================================================================================================
 describe('EDGE CASES: The Vault (Registry)', () => {
+  // beforeEach(() => {
+  //   const globalVault = (globalThis as any).__SOLID_VAULT__;
+
+  //   // 💎 THE FIX: Only clear if they are actually Maps
+  //   // This prevents "Cannot read property 'clear' of null"
+  //   if (globalVault) {
+  //     if (globalVault.items instanceof Map) {
+  //       globalVault.items.clear();
+  //     }
+  //     if (globalVault.errors instanceof Map) {
+  //       globalVault.errors.clear();
+  //     }
+  //   }
+
+  //   jest.clearAllMocks();
+  // });
+  beforeEach(() => {
+    const g = globalThis as any;
+    const vault = g.__SOLID_VAULT__;
+
+    // 💎 THE FIX: Only clear if they are actually valid Maps
+    if (vault) {
+      if (vault.items instanceof Map) vault.items.clear();
+      if (vault.errors instanceof Map) vault.errors.clear();
+    }
+
+    jest.clearAllMocks();
+  });
   // !!! EDGE CASE:Registry.register()
   describe('Registry.register() - Edge Cases', () => {
     it('should recover gracefully if the global vault structure is corrupted (Resiliency)', () => {

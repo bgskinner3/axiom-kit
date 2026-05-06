@@ -1,5 +1,4 @@
 // src/generation/defaults.ts
-import type { TSolidShape } from '../../models/types';
 import {
   isPrimitiveShape,
   isObjectShape,

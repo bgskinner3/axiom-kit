@@ -32,3 +32,7 @@
 13. Status
 14. Contributing
 15. License
+
+// NOTES:
+-- A zero-schema runtime validator powered by TypeScript types
+-- isSolid validates runtime data using your existing TypeScript types—no schemas, no duplication.

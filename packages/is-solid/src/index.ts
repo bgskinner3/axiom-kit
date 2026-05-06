@@ -1,6 +1,6 @@
 // src/index.ts
 import { Registry } from './vault';
-import type { TSolidMetadata, TSolidError, ISolidRegistry } from '../models';
+import type { ISolidRegistry } from '../models';
 import { createInitialContext } from './validation/context';
 import { validate } from './validation';
 

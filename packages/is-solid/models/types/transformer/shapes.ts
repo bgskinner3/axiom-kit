@@ -1,4 +1,3 @@
-import type { TSolidShape } from './core';
 // These allow you to type-gate your sub-validator functions
 /* prettier-ignore */ export type TSolidPrimitiveShape = Extract<TSolidShape, { kind: 'primitive' }>;
 /* prettier-ignore */ export type TSolidLiteralShape   = Extract<TSolidShape, { kind: 'literal' }>;

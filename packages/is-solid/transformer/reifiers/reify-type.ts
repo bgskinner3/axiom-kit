@@ -1,6 +1,5 @@
 // transformer/reifiers/reify-type.ts
 import type { Type, TypeChecker } from 'typescript';
-import type { TSolidShape } from '../../models/types';
 import { REIFIERS } from './registry/index';
 
 /**

@@ -94,10 +94,18 @@ export const getCallerLocation = (
   let targetLine: string | undefined;
 
   if (topParent) {
-    // Search backwards for the first non-node_modules line
     for (let i = lines.length - 1; i >= 1; i--) {
-      if (!lines[i].includes('node_modules')) {
-        targetLine = lines[i];
+      const line = lines[i];
+
+      // TODO: EXTEND TO PASS OPTIONALLIBS ?
+      const isLibrary =
+        line.includes('node_modules') ||
+        line.includes('node:internal') ||
+        line.includes('jest-'); // Catches jest-circus, jest-runner, etc.
+
+      // 🏛️ If it's not a library and looks like a source file, grab it
+      if (!isLibrary && (line.includes('.ts') || line.includes('.js'))) {
+        targetLine = line;
         break;
       }
     }

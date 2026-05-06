@@ -1,6 +1,5 @@
 // transformer/reifiers/generator.ts
 import type { NodeFactory, Expression } from 'typescript';
-import type { TSolidShape } from '../../models/types';
 import {
   isPrimitiveShape,
   isLiteralShape,

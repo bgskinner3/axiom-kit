@@ -5,7 +5,7 @@ import {
   ensureGlobalVault,
   getCallerLocation,
 } from '../models/utils';
-import type { TSolidMetadata, TSolidError } from '../models';
+// import type { TSolidMetadata, TSolidError } from '../models';
 import { produceDefault } from './generation';
 export class Registry {
   /**
@@ -32,7 +32,8 @@ export class Registry {
       return;
     }
     if (!metadata.area || metadata.area === 'unknown') {
-      metadata.area = getCallerLocation({ preferredIndex: 2 });
+      // metadata.area = getCallerLocation({ preferredIndex: 2 });
+      metadata.area = getCallerLocation({ topParent: true });
     }
     vault.items.set(metadata.key, metadata);
   }

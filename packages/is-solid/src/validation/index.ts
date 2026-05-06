@@ -1,9 +1,5 @@
 // src/validation/index.ts
-import type {
-  TValidationContext,
-  TValidatorMapper,
-  TSolidShape,
-} from '../../models/types';
+import type { TValidationContext, TValidatorMapper } from '../../models/types';
 import { createInitialContext } from './context';
 import { validateObject } from './objects';
 import { validateUnion } from './unions';

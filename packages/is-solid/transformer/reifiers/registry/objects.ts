@@ -1,7 +1,6 @@
 // transformer/reifiers/registry/objects.ts
 import { isObjectType } from '../../../models/guards/transformer';
 import { registerReifier } from './core';
-import type { TSolidObjectRawShape } from '../../../models/types';
 import { SymbolFlags } from 'typescript';
 /**
  * STRUCTURAL REIFIER (OBJECTS & INTERFACES)
