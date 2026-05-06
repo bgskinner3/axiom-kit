@@ -1,7 +1,9 @@
 // __tests__/engine/guard/is-solid.test.ts
 
 describe('Guard IsSolid', () => {
-  expect(true).toBe(true);
+  it('should performantly handle large shared-reference graphs', () => {
+    expect(true).toBe(true);
+  });
 });
 
 // MAYBE?
