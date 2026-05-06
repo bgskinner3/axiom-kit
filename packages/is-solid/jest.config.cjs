@@ -15,6 +15,7 @@ module.exports = {
     '/dist/',
     '/playground/',
     'setup.ts',
+    'test-utils.ts',
   ],
   coverageReporters: ['text', 'text-summary'],
 

@@ -1,6 +1,6 @@
 // __tests__/vault.test.ts
 import { Registry } from '../src/vault';
-import { ensureGlobalVault } from '../src/utils/global';
+import { ensureGlobalVault } from '../models/utils/global';
 
 describe('Solid Vault', () => {
   it('should maintain a global singleton on globalThis', () => {

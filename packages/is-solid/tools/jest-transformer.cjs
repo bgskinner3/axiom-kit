@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable no-undef */
 const path = require('path');
-const transformerPath = path.resolve(__dirname, '../dist/transformer.cjs');
+const transformerPath = path.resolve(__dirname, '../dist/transformer/index.cjs');
 const pkgPath = path.resolve(__dirname, '../package.json');
 
 // Load the bundled transformer and package version
