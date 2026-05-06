@@ -1,3 +1,4 @@
+import type { TSolidShape } from '../../types';
 /**
  * FOCUSED SHAPE GUARDS
  *

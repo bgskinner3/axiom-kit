@@ -19,7 +19,9 @@ export default defineConfig({
   sourcemap: true,
   external: ['typescript'],
   tsconfig: 'tsconfig.build.json',
-
+  // esbuildOptions(options) {
+  //   options.preserveSymlinks = true;
+  // },
   onSuccess: async () => {
     const root = process.cwd();
     const distDir = path.join(root, 'dist');

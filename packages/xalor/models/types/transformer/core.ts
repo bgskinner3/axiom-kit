@@ -1,6 +1,7 @@
 // models/types/transformer/core.ts
 import type { Type, TypeChecker } from 'typescript';
 import { IS_SOLID_SHAPE_KINDS_CONFIG } from '../../constants';
+import type { TSolidShape } from '../shared';
 /**
  * SHAPE KINDS
  * The exhaustive list of supported type categories in the Solid system.

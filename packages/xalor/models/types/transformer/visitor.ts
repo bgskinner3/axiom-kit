@@ -4,7 +4,7 @@ import type {
   NodeFactory,
   SourceFile,
 } from 'typescript';
-
+import type { TSolidShape } from '../shared';
 /**
  * TYPE: TIdentifySolidCall
  *

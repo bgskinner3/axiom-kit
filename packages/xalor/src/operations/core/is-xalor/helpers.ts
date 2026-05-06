@@ -7,7 +7,7 @@ import {
   isString,
 } from '../../../../models/guards';
 import { Registry } from '../../../../src/vault';
-import type { ISolidRegistry } from '../../../../models/types';
+import type { ISolidRegistry, TSolidMetadata } from '../../../../models/types';
 import { createInitialContext } from '../../../../src/validation/context';
 import { validate } from '../../../../src/validation';
 

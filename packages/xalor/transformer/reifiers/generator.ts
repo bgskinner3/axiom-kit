@@ -10,6 +10,7 @@ import {
   isUnionShape,
   isReferenceShape,
 } from '../../models/guards';
+import type { TSolidShape } from '../../models/types';
 /**
  *  The AST Generator (Build-Time Emission)
  *

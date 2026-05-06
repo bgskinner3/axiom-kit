@@ -8,7 +8,7 @@ import {
 } from './helpers';
 import { Registry } from '../../../vault';
 import { isUndefined, isString } from '../../../../models';
-import type { ISolidRegistry } from '../../../../models';
+import type { ISolidRegistry, TSolidMetadata } from '../../../../models';
 
 const isAssertionIntent = (arg2: unknown, arg3: unknown): boolean =>
   arg2 === true || arg3 === true;

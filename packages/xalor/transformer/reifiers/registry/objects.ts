@@ -2,6 +2,7 @@
 import { isObjectType } from '../../../models/guards/transformer';
 import { registerReifier } from './core';
 import { SymbolFlags } from 'typescript';
+import type { TSolidObjectRawShape } from '../../../models/types';
 /**
  * STRUCTURAL REIFIER (OBJECTS & INTERFACES)
  *

@@ -1,5 +1,6 @@
 import { isXalor } from '../../../../src/operations/core';
 import { Registry } from '../../../../src/vault';
+import type { TSolidMetadata } from '../../../../models/types';
 
 describe('isXalor Polymorphic Entry Point', () => {
   const mockMetadata: TSolidMetadata = {

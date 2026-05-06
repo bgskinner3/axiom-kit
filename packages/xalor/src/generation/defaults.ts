@@ -9,6 +9,7 @@ import {
 } from '../../models/guards';
 import { ObjectUtils } from '../../models/utils/common';
 import { PRIMITIVE_DEFAULTS } from '../../models/constants';
+import type { TSolidShape } from '../../models/types';
 /**
  * 🎨 PRODUCE DEFAULT
  * Recursively generates a "Zero-Value" template from a Solid Shape.

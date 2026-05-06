@@ -1,6 +1,6 @@
 // models/utils/global/index.ts
 import { IS_SOLID_CONFIG_ITEMS } from '../../constants';
-// import type { TSolidVaultMap } from '../../types';
+import type { TSolidVaultMap } from '../../types';
 // ====================================================================
 /**
  * GLOBAL VAULT ACCESSORS

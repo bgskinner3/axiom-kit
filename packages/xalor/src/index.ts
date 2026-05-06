@@ -1,9 +1,14 @@
 // src/index.ts
 import { Registry } from './vault';
-import type { ISolidRegistry } from '../models';
+import type {
+  ISolidRegistry,
+  TSolid,
+  TSolidMetadata,
+  TSolidError,
+} from '../models';
 import { createInitialContext } from './validation/context';
 import { validate } from './validation';
-import { isXalor } from './operations/core/is-xalor';
+// import { isXalor } from './operations/core/is-xalor';
 
 /* prettier-ignore */ export function isSolid<_K extends string, _T>(data?: undefined, injected?: TSolidMetadata): true;
 /* prettier-ignore */ export function isSolid<K extends string, T>(data: unknown,injected?: TSolidMetadata): data is TSolid<K, T>;
@@ -105,4 +110,3 @@ export function getSolidDefault<T>(key: string): T {
  * VIII. matchSolid<K>(data, handlers)
  *  - The Pattern Matcher: A functional "Switch" statement that executes different code paths based on which Solid Type the data matches.
  */
-export { isXalor };

@@ -6,6 +6,7 @@ import {
   getCallerLocation,
 } from '../models/utils';
 import { produceDefault } from './generation';
+import type { TSolidMetadata, TSolidError } from '../models/types';
 export class Registry {
   /**
    * Registers metadata into the Global Vault's items map.
