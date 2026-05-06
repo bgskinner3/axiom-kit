@@ -3,17 +3,6 @@ import type { TValidationContext, TSolidUnionShape } from '../../models/types';
 import { validate } from './index';
 import { reportError } from './errors';
 
-/**
- * Checks if data satisfies at least one part of the union.
- */
-// export function validateUnion(
-//   data: unknown,
-//   shape: TSolidUnionShape,
-//   ctx: TValidationContext,
-// ): boolean {
-//   return shape.values.some((subShape) => validate(data, subShape, ctx));
-// }
-
 export function validateUnion(
   data: unknown,
   shape: TSolidUnionShape,
@@ -25,7 +14,7 @@ export function validateUnion(
     const branchIsValid = validate(data, subShape, ctx);
 
     if (branchIsValid) {
-      ctx.errors.splice(snapshotCount); // Clean up sub-errors
+      ctx.errors.splice(snapshotCount);
       return true;
     }
     return false;

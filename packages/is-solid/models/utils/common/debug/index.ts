@@ -18,7 +18,8 @@ import type { TGetCallerLocationOptions } from '../../../types';
 export const serialize = (data: unknown): string => {
   if (isUndefined(data)) return 'undefined';
   if (isString(data)) return `"${data}"`;
-
+  if (typeof data === 'bigint') return `${data.toString()}n`;
+  if (typeof data === 'symbol') return data.toString();
   try {
     return JSON.stringify(
       data,
@@ -29,6 +30,7 @@ export const serialize = (data: unknown): string => {
     return String(data);
   }
 };
+
 /**
  * @utilType util
  * @name getCallerLocation
