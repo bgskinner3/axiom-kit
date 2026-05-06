@@ -1,4 +1,10 @@
 // __tests__/engine/vault.test.ts
+// import { Registry } from '../../src/vault';
+
+/**
+ * BREAK DOWN
+ * --------
+ */
 describe('Engine Vault', () => {
   expect(true).toBe(true);
 });

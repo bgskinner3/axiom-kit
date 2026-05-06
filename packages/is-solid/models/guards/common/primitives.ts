@@ -1,5 +1,5 @@
 // models/guards/common/primitives.ts
-import type { TTypeGuard, TPrimitive } from '../../types';
+import type { TTypeGuard, TPrimitive, TAnyFunction } from '../../types';
 /**
  * @utilType Guard
  * @name isNull
@@ -67,3 +67,13 @@ export const isPrimitive: TTypeGuard<TPrimitive> = (
   value: unknown,
 ): value is TPrimitive =>
   isString(value) || isNumber(value) || isBoolean(value) || isBigInt(value);
+/**
+ * @utilType Guard
+ * @name isFunction
+ * @category Guards Core
+ * @description Validates that a value is a callable function.
+ * @link #isfunction
+ */
+export const isFunction: TTypeGuard<TAnyFunction> = (
+  value: unknown,
+): value is TAnyFunction => typeof value === 'function';
