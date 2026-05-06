@@ -5,7 +5,6 @@ import {
   ensureGlobalVault,
   getCallerLocation,
 } from '../models/utils';
-// import type { TSolidMetadata, TSolidError } from '../models';
 import { produceDefault } from './generation';
 export class Registry {
   /**
@@ -32,7 +31,6 @@ export class Registry {
       return;
     }
     if (!metadata.area || metadata.area === 'unknown') {
-      // metadata.area = getCallerLocation({ preferredIndex: 2 });
       metadata.area = getCallerLocation({ topParent: true });
     }
     vault.items.set(metadata.key, metadata);
@@ -44,7 +42,9 @@ export class Registry {
   public static get(key: string): TSolidMetadata | undefined {
     return getGlobalVault()?.items.get(key);
   }
-
+  public static has(key: string): boolean {
+    return getGlobalVault()?.items.has(key) ?? false;
+  }
   /**
    * Returns all registered blueprint keys.
    */
@@ -54,6 +54,7 @@ export class Registry {
   }
 
   /**
+   *
    * Retrieves the last validation error(s) for a specific key.
    */
   public static getErrors(key: string): TSolidError[] {

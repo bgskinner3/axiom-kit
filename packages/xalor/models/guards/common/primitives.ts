@@ -77,3 +77,22 @@ export const isPrimitive: TTypeGuard<TPrimitive> = (
 export const isFunction: TTypeGuard<TAnyFunction> = (
   value: unknown,
 ): value is TAnyFunction => typeof value === 'function';
+/**
+ * @utilType Guard
+ * @name isSymbol
+ * @category Guards Core
+ * @description Validates that a value is a unique JavaScript symbol.
+ * @link #issymbol
+ */
+export const isSymbol: TTypeGuard<symbol> = (value): value is symbol =>
+  typeof value === 'symbol';
+/**
+ * @utilType Guard
+ * @name isDefined
+ * @category Guards Primitive
+ * @description Ensures a value is neither null nor undefined.
+ * @link #isdefined
+ */
+export const isDefined: TTypeGuard<unknown> = (
+  value,
+): value is NonNullable<unknown> => value !== null && value !== undefined;
