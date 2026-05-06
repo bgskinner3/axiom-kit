@@ -38,10 +38,12 @@ export function createVisitor(
   const { factory } = context;
 
   const visitor: Visitor = (node: Node): Node => {
-    if (!isSolidCall(node)) {
+    if (!isSolidCall(node, checker)) {
       return visitEachChild(node, visitor, context);
     }
-
+    if (!node.typeArguments || node.typeArguments.length < 2) {
+      return node; // Return original node without transformation
+    }
     const { keyType, shapeType } = identifySolidCall({ node, checker });
 
     if (keyType.isStringLiteral()) {

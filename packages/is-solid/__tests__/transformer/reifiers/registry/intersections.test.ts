@@ -83,4 +83,24 @@ describe('Intersection Reifier (Integrated)', () => {
     expect(union.values[0].parts[0].kind).toBe('object');
     expect(union.values[0].parts[1].kind).toBe('literal');
   });
+
+  /**
+   * ALIAS CASE
+   * !!! TESTING  if a user defines a base type and extends it via an alias, the Miner won't go blind
+   */
+  it('should reify intersections involving named type aliases (Alias Resolution)', () => {
+    const { type, checker } = createTestType(`
+      type Base = { id: number };
+      type Extended = Base & { name: string };
+    `);
+    const result = reifyType(type, checker);
+
+    // This proves the reifier used 'aliasSymbol' to find the underlying intersection
+    expect(result.kind).toBe('intersection');
+    const intersection = result as any;
+
+    expect(intersection.parts[0].kind).toBe('object');
+    expect(intersection.parts[1].kind).toBe('object');
+    expect(intersection.parts[0].properties.id).toBeDefined();
+  });
 });

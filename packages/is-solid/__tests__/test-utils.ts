@@ -1,4 +1,5 @@
 import ts from 'typescript';
+import { createVisitor } from '../transformer/visitor';
 /**
  * TEST UTILITY: Virtual Compiler Host
  *
@@ -68,41 +69,161 @@ export function createTestType(sourceCode: string) {
 
   return { type, checker };
 }
-// export function createTestType(sourceCode: string) {
+/**
+ * 🛠️ TEST HELPER: Virtual Transformer
+ * Runs the createVisitor logic against a string of code.
+ */
+export function transform(
+  code: string,
+  globalRegistry = new Map<string, string>(),
+) {
+  const filename = 'test.ts';
+  const target = ts.ScriptTarget.Latest;
+
+  // 1. Create a stable source file object first
+  const sourceFileRef = ts.createSourceFile(filename, code, target, true);
+
+  const defaultHost = ts.createCompilerHost({ target });
+  const customHost: ts.CompilerHost = {
+    ...defaultHost,
+    getSourceFile: (name, version, ...args) =>
+      name === filename
+        ? sourceFileRef
+        : defaultHost.getSourceFile(name, version, ...args),
+    readFile: (name) => (name === filename ? code : defaultHost.readFile(name)),
+    fileExists: (name) => name === filename || defaultHost.fileExists(name),
+  };
+
+  const program = ts.createProgram(
+    [filename],
+    {
+      target,
+      module: ts.ModuleKind.CommonJS,
+      lib: ['lib.esnext.d.ts'],
+    },
+    customHost,
+  );
+
+  // 💎 CRITICAL: This primes the TypeChecker and forces symbol binding
+  program.getSemanticDiagnostics(sourceFileRef);
+
+  const transformationContext: ts.TransformationContext = {
+    getCompilerOptions: () => ({}),
+    factory: ts.factory,
+    startLexicalEnvironment: () => {},
+    suspendLexicalEnvironment: () => {},
+    resumeLexicalEnvironment: () => {},
+    endLexicalEnvironment: () => [],
+    setLexicalEnvironmentFlags: () => {},
+    getLexicalEnvironmentFlags: () => 0,
+    hoistFunctionDeclaration: () => {},
+    hoistVariableDeclaration: () => {},
+    readEmitHelpers: () => undefined,
+    requestEmitHelper: () => {},
+    onSubstituteNode: (_hint, node) => node,
+    onEmitNode: (_hint, node, emitCallback) => emitCallback(_hint, node),
+  } as any;
+
+  // 3. Run Visitor on the BOUND source file
+  const visitor = createVisitor(
+    program,
+    transformationContext,
+    sourceFileRef,
+    globalRegistry,
+  );
+  const result = ts.visitNode(sourceFileRef, visitor) as ts.SourceFile;
+
+  const printer = ts.createPrinter({ removeComments: false });
+  return printer.printFile(result);
+}
+// export function transform(
+//   code: string,
+//   globalRegistry = new Map<string, string>(),
+// ) {
 //   const filename = 'test.ts';
 //   const target = ts.ScriptTarget.Latest;
-
-//   const sourceFile = ts.createSourceFile(filename, sourceCode, target, true);
+//   const sourceFile = ts.createSourceFile(filename, code, target, true);
 
 //   const defaultHost = ts.createCompilerHost({ target });
+//   // const customHost: ts.CompilerHost = {
+//   //   ...defaultHost,
+//   //   getSourceFile: (name, version, ...args) =>
+//   //     name === filename
+//   //       ? sourceFile
+//   //       : defaultHost.getSourceFile(name, version, ...args),
+//   //   readFile: (name) => (name === filename ? code : defaultHost.readFile(name)),
+//   //   fileExists: (name) => name === filename || defaultHost.fileExists(name),
+//   // };
 //   const customHost: ts.CompilerHost = {
 //     ...defaultHost,
-//     // 💎 FIX: Accept and pass the version/options arguments
-//     getSourceFile: (name, version) =>
-//       name === filename ? sourceFile : defaultHost.getSourceFile(name, version),
-//     writeFile: () => {},
-//     fileExists: (name) => name === filename,
-//     readFile: (name) => (name === filename ? sourceCode : undefined),
+//     getSourceFile: (name, version, onError) => {
+//       // If it's our virtual file, return our sourceFile object
+//       if (name === filename) return sourceFile;
+//       // OTHERWISE: Let the real host find 'lib.esnext.d.ts' so 'number' is real
+//       return defaultHost.getSourceFile(name, version, onError);
+//     },
+//     writeFile: () => {}, // Don't write to disk
+//     fileExists: (name) => name === filename || defaultHost.fileExists(name),
+//     readFile: (name) => (name === filename ? code : defaultHost.readFile(name)),
 //   };
-
-//   const program = ts.createProgram([filename], { target }, customHost);
-//   const checker = program.getTypeChecker();
-
-//   // Find the first type-like statement in the file
-//   const statement = sourceFile.statements.find(
-//     (s): s is ts.TypeAliasDeclaration | ts.InterfaceDeclaration =>
-//       ts.isTypeAliasDeclaration(s) || ts.isInterfaceDeclaration(s),
+//   // const program = ts.createProgram(
+//   //   [filename],
+//   //   { target: ts.ScriptTarget.Latest },
+//   //   {
+//   //     ...defaultHost,
+//   //     // 💎 FIX: Accept and pass the version/options arguments
+//   //     getSourceFile: (name, version, onError, shouldCreateNewSourceFile) =>
+//   //       name === filename
+//   //         ? sourceFile
+//   //         : defaultHost.getSourceFile(
+//   //             name,
+//   //             version,
+//   //             onError,
+//   //             shouldCreateNewSourceFile,
+//   //           ),
+//   //     readFile: (name) =>
+//   //       name === filename ? code : defaultHost.readFile(name),
+//   //     fileExists: (name) => name === filename || defaultHost.fileExists(name),
+//   //   },
+//   // );
+//   const program = ts.createProgram(
+//     [filename],
+//     {
+//       target,
+//       module: ts.ModuleKind.CommonJS,
+//       lib: ['lib.esnext.d.ts', 'lib.dom.d.ts'],
+//     },
+//     customHost,
 //   );
 
-//   if (!statement) {
-//     throw new Error(
-//       'Test source must contain a type or interface declaration.',
-//     );
-//   }
+//   // 2. Mock Transformation Context (Required for the Factory)
+//   const transformationContext: ts.TransformationContext = {
+//     getCompilerOptions: () => ({}),
+//     factory: ts.factory,
+//     startLexicalEnvironment: () => {},
+//     suspendLexicalEnvironment: () => {},
+//     resumeLexicalEnvironment: () => {},
+//     endLexicalEnvironment: () => [],
+//     setLexicalEnvironmentFlags: () => {},
+//     getLexicalEnvironmentFlags: () => 0,
+//     hoistFunctionDeclaration: () => {},
+//     hoistVariableDeclaration: () => {},
+//     readEmitHelpers: () => undefined,
+//     requestEmitHelper: () => {},
+//     onSubstituteNode: (_hint, node) => node,
+//     onEmitNode: (_hint, node, emitCallback) => emitCallback(_hint, node),
+//   } as any;
 
-//   const type = ts.isInterfaceDeclaration(statement)
-//     ? checker.getTypeAtLocation(statement.name)
-//     : checker.getTypeFromTypeNode(statement.type);
+//   // 3. Run the Visitor
+//   const visitor = createVisitor(
+//     program,
+//     transformationContext,
+//     sourceFile,
+//     globalRegistry,
+//   );
+//   const result = ts.visitNode(sourceFile, visitor) as ts.SourceFile;
 
-//   return { type, checker };
+//   // 4. Print the result back to a string for assertion
+//   const printer = ts.createPrinter({ removeComments: false });
+//   return printer.printFile(result);
 // }
