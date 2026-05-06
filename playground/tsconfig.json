@@ -7,19 +7,19 @@
     "rootDir": "./",
     "noEmit": false,
     "paths": {
-      "is-solid": [
-        "../packages/is-solid/dist/index.d.ts"
+      "xalor": [
+        "../packages/xalor/dist/index.d.ts"
       ]
     },
     "plugins": [
       {
-        "transform": "../packages/is-solid/dist/transformer/index.cjs",
+        "transform": "../packages/xalor/dist/transformer/index.cjs",
         "type": "program"
       }
     ]
   },
   "include": [
     "src/**/*",
-    "../packages/is-solid/node_modules/@bgskinner2/is-solid/dist/solid-env.d.ts"
+    "../packages/xalor/node_modules/@bgskinner2/xalor/dist/solid-env.d.ts"
   ]
 }

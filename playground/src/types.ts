@@ -1,4 +1,4 @@
-import { isSolid } from 'is-solid';
+import { isSolid } from 'xalor';
 
 export interface IProfile {
   username: string;

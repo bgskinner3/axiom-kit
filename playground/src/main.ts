@@ -16,7 +16,7 @@ console.log('Playground active: Types registered.');
 // };
 
 // processResponse(mockPayload);
-// import { isSolid, getSolid } from 'is-solid';
+// import { isSolid, getSolid } from 'xalor';
 
 // interface Category {
 //   name: string;
@@ -36,7 +36,7 @@ console.log('Playground active: Types registered.');
 // console.log('Vault Metadata:', getSolid('CAT')?.area);
 // import './types'; // 1. Seed the database
 // import { processResponse } from './api';
-// import { getSolid } from 'is-solid';
+// import { getSolid } from 'xalor';
 
 // console.log('💎 SOLID PLAYGROUND: TEST RUN');
 // console.log('----------------------------');

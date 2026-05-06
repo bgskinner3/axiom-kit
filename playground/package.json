@@ -5,7 +5,7 @@
     "test": "tspc && node dist/src/main.js"
   },
   "dependencies": {
-    "@bgskinner2/is-solid": "file:../packages/is-solid"
+    "@bgskinner2/xalor": "file:../packages/xalor"
   },
   "devDependencies": {
     "ts-node": "^10.9.0",

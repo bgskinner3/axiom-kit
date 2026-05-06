@@ -1,4 +1,4 @@
-import { isSolid, getSolidErrors } from 'is-solid';
+import { isSolid, getSolidErrors } from 'xalor';
 import type { User } from './types';
 export function validateUser(data: unknown) {
   if (isSolid<'USER', User>(data)) {

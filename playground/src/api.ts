@@ -1,4 +1,4 @@
-import { isSolid, getSolidErrors } from 'is-solid';
+import { isSolid, getSolidErrors } from 'xalor';
 
 export function processResponse(data: unknown) {
   if (isSolid<'PROFILE', unknown>(data)) {

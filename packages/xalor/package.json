@@ -1,0 +1,49 @@
+{
+  "name": "@bgskinner2/xalor",
+  "description": "Ambient runtime type database for TypeScript. Solidifies ghost types into a global vault.",
+  "version": "1.0.0",
+  "author": "Brennan Skinner",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./transformer/reifiers/registry/*.ts"
+  ],
+  "private": true,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./transformer": {
+      "types": "./dist/transformer.d.ts",
+      "import": "./dist/transformer.js",
+      "require": "./dist/transformer.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "test": "npm run build && jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.0.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "tsup": "^8.5.1",
+    "typescript": "^5.0.0",
+    "ts-patch": "^3.0.0",
+    "tslib": "^2.6.2"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  }
+}

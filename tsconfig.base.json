@@ -59,8 +59,8 @@
       "@bgskinner2/regex-engine": [
         "./packages/regex-engine"
       ],
-      "@bgskinner2/is-solid": [
-        "./packages/is-solid"
+      "@bgskinner2/xalor": [
+        "./packages/xalor"
       ]
     }
   },
