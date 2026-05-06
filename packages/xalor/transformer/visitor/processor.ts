@@ -41,8 +41,8 @@ export function solidVisitorProcessor({
   return factory.updateCallExpression(
     node,
     node.expression,
-    // node.typeArguments,
-    undefined,
+    node.typeArguments,
+    // undefined,
     finalArgs,
   );
 }

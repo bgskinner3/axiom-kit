@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "./dist",
-    "rootDir": "./",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true, // 💎 MUST BE TRUE: Stops checking linked library files
     "noEmit": false,
     "paths": {
-      "xalor": [
-        "../packages/xalor/dist/index.d.ts"
+      "@bgskinner2/xalor": [
+        "../packages/xalor/src/index.ts"
       ]
     },
     "plugins": [
@@ -19,7 +18,10 @@
     ]
   },
   "include": [
-    "src/**/*",
-    "../packages/xalor/node_modules/@bgskinner2/xalor/dist/solid-env.d.ts"
-  ]
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "../packages/xalor/__tests__"
+  ] // 💎 IGNORE THE TESTS
 }

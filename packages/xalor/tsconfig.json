@@ -25,13 +25,7 @@
     5103
   ],
   "include": [
-    "src/**/*",
-    "transformer/**/*",
-    "models/types/**/*",
-    "__tests__/**/*",
-    "models/**/*",
-    "playground/**/*",
-    "tsup.config.ts"
+    "src/**/*"
   ],
   "exclude": [
     "dist",

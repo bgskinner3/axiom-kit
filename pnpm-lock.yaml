@@ -323,6 +323,12 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  playground:
+    dependencies:
+      '@bgskinner2/xalor':
+        specifier: workspace:*
+        version: link:../packages/xalor
+
 packages:
 
   '@adobe/css-tools@4.4.4':

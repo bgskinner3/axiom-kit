@@ -1,16 +1,13 @@
 {
   "name": "is-solid-playground",
   "private": true,
+  "type": "module",
   "scripts": {
-    "test": "tspc && node dist/src/main.js"
+    "build:lib": "pnpm --filter @bgskinner2/xalor build",
+    "dev": "tspc --watch",
+    "test": "node dist/is-solid-playground/src/main.js"
   },
   "dependencies": {
-    "@bgskinner2/xalor": "file:../packages/xalor"
-  },
-  "devDependencies": {
-    "ts-node": "^10.9.0",
-    "ts-patch": "^3.3.0",
-    "tsx": "^4.21.0",
-    "typescript": "^5.0.0"
+    "@bgskinner2/xalor": "workspace:*"
   }
 }

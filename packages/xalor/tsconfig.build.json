@@ -11,7 +11,8 @@
   "include": [
     "src/**/*",
     "transformer/**/*",
-    "models/**/*"
+    "models/**/*",
+    "playgrounds/solo-test.ts"
   ],
   "exclude": [
     "**/__tests__/**",
