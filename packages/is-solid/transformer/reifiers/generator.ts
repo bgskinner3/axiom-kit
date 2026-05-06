@@ -11,7 +11,29 @@ import {
   isUnionShape,
   isReferenceShape,
 } from '../../models/guards';
-
+/**
+ *  The AST Generator (Build-Time Emission)
+ *
+ * This module serves as the translation layer between the "Solid Shape"
+ * data structures and the TypeScript Compiler's AST (Abstract Syntax Tree).
+ *
+ * ROLE:
+ * It converts a recursive JSON-like blueprint (TSolidShape) into a
+ * physical JavaScript Object Literal Expression. This expression is
+ * what gets "baked" into the final compiled source code, allowing the
+ * Runtime Vault (Pillar 2) to exist without a dependency on the
+ * TypeScript Compiler.
+ *
+ * PROCESS:
+ * 1. RECURSION: Deeply traverses nested shapes (Objects, Arrays, Unions).
+ * 2. MAPPING: Uses the NodeFactory to create exact JS syntax for every type.
+ * 3. SAFETY: Implements an exhaustive check to ensure every new 'kind' added
+ *    to the system is handled, preventing silent failures during emission.
+ *
+ * @param f - The TypeScript NodeFactory used to create syntax nodes.
+ * @param shape - The solidified blueprint to be converted into JS code.
+ * @returns {Expression} A TypeScript AST Expression representing the shape.
+ */
 export function generateShapeAST(
   f: NodeFactory,
   shape: TSolidShape,
