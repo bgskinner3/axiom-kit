@@ -97,19 +97,3 @@ export function buildValidationTools<
 
   return { guard, assert };
 }
-// export const isValidationd = (arg1: unknown, arg2: unknown, arg3?: unknown): boolean => {
-//   // 1. We must have data in the first slot
-//   if (isUndefined(arg1)) return false;
-
-//   // 2. We must have a "Pointer" (The Key)
-//   // The key could be in arg2 (manual) or arg3 (injected by Miner)
-//   const potentialKey = isString(arg2) ? arg2 : (isString(arg3) ? arg3 : undefined);
-
-//   // 3. THE BOTTOM LINE: Does the pointer exist in our Registry?
-//   // We use isSolidKey here to perform the O(1) Map lookup
-//   return isSolidKey(potentialKey) || isMetaData(arg2);
-// };
-
-// function isValidationd(...args: unknown[]) {
-
-// }
