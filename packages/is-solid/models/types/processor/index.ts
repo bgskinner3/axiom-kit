@@ -19,14 +19,6 @@ export type TSolidVaultMap = {
   errors: Map<string, TSolidError[]>;
 };
 
-/**
- * Branding type for the 'isSolid' guard.
- */
-declare const SolidBrand: unique symbol;
-export type TSolid<K extends string, T> = T & {
-  readonly [SolidBrand]: K;
-};
-
 export type TValidationContext = {
   // Map of data objects to the shape they were validated against
   seen: Map<unknown, Set<TSolidShape>>;
