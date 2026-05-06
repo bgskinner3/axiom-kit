@@ -1,12 +1,12 @@
 // __tests__/unit/reifiers/intersections.test.ts
 import { reifyType } from '../../../../transformer/reifiers/reify-type';
-import { createTestType } from '../../../test-utils';
+import { reifyTypeContext } from '../../../utils';
 // NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
 import '../../../../transformer/reifiers/registry/index';
 
 describe('Intersection Reifier (Integrated)', () => {
   it('should reify a basic object intersection', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type Combined = { a: string } & { b: number };
     `);
     const result = reifyType(type, checker);
@@ -20,7 +20,7 @@ describe('Intersection Reifier (Integrated)', () => {
   });
 
   it('should handle multi-part intersections (3+ parts)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type Triple = { a: 1 } & { b: 2 } & { c: 3 };
     `);
     const result = reifyType(type, checker);
@@ -30,7 +30,7 @@ describe('Intersection Reifier (Integrated)', () => {
   });
 
   it('should reify deep nested intersections', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type Deep = { outer: { a: string } & { b: number } };
     `);
     const result = reifyType(type, checker);
@@ -46,7 +46,7 @@ describe('Intersection Reifier (Integrated)', () => {
     // This is the most important "Negative" test.
     // It proves that the Branded reifier (which is higher in index.ts)
     // intercepts the brand before the Intersection reifier sees it.
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type User = { id: number } & { __brand: "User" };
     `);
     const result = reifyType(type, checker);
@@ -56,7 +56,7 @@ describe('Intersection Reifier (Integrated)', () => {
   });
   it('should reify intersections of mixed primitives and objects', () => {
     // This happens in certain "Tagging" patterns
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type Tagged = string & { _tag: 'metadata' };
     `);
     const result = reifyType(type, checker);
@@ -70,7 +70,7 @@ describe('Intersection Reifier (Integrated)', () => {
   });
 
   it('should reify intersections containing unions (Distributed Logic)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
     type Complex = { id: number } & ("A" | "B");
   `);
     const result = reifyType(type, checker);
@@ -89,7 +89,7 @@ describe('Intersection Reifier (Integrated)', () => {
    * !!! TESTING  if a user defines a base type and extends it via an alias, the Miner won't go blind
    */
   it('should reify intersections involving named type aliases (Alias Resolution)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type Base = { id: number };
       type Extended = Base & { name: string };
     `);

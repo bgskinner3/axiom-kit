@@ -1,13 +1,13 @@
 // __tests__/unit/refiy-types.test.ts
 import { reifyType } from '../../../transformer/reifiers/reify-type';
-import { createTestType } from '../../test-utils';
+import { reifyTypeContext } from '../../utils';
 // NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
 import '../../../transformer/reifiers/registry/index';
 
 describe('ReifyType Orchestrator (The Dispatcher)', () => {
   it('should fall through to "unknown" when no reifiers match', () => {
     // 'any' is the ultimate wildcard that reifiers usually skip
-    const { type, checker } = createTestType('type T = any;');
+    const { type, checker } = reifyTypeContext('type T = any;');
     const result = reifyType(type, checker);
 
     expect(result).toEqual({ kind: 'primitive', type: 'unknown' });
@@ -16,7 +16,7 @@ describe('ReifyType Orchestrator (The Dispatcher)', () => {
   it('should correctly orchestrate the "next" recursion (Depth Check)', () => {
     // This tests if reifyType correctly passes the 'next' baton
     // from an Object to a Primitive.
-    const { type, checker } = createTestType('interface T { id: string }');
+    const { type, checker } = reifyTypeContext('interface T { id: string }');
     const result = reifyType(type, checker) as any;
 
     expect(result.kind).toBe('object');
@@ -29,7 +29,7 @@ describe('ReifyType Orchestrator (The Dispatcher)', () => {
 
   it('should maintain the "seen" set to prevent stack overflow', () => {
     // This is the CRITICAL safety test.
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       interface Node {
         val: number;
         child: Node;
@@ -47,7 +47,7 @@ describe('ReifyType Orchestrator (The Dispatcher)', () => {
 
   it('should respect reifier priority (The Intersection/Branded Conflict)', () => {
     // Proves that 'branded' reifier (if registered first) wins over 'intersection'
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type Brand = string & { __brand: "ID" };
     `);
     const result = reifyType(type, checker);
@@ -56,7 +56,9 @@ describe('ReifyType Orchestrator (The Dispatcher)', () => {
   });
 
   it('should handle deeply nested arrays and objects combined', () => {
-    const { type, checker } = createTestType('type T = { items: string[] }[];');
+    const { type, checker } = reifyTypeContext(
+      'type T = { items: string[] }[];',
+    );
     const result = reifyType(type, checker) as any;
 
     expect(result.kind).toBe('array');

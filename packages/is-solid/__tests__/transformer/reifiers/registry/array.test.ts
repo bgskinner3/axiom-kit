@@ -1,12 +1,12 @@
 // __tests__/unit/reifiers/array.test.ts
 import { reifyType } from '../../../../transformer/reifiers/reify-type';
-import { createTestType } from '../../../test-utils';
+import { reifyTypeContext } from '../../../utils';
 // NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
 import '../../../../transformer/reifiers/registry/index';
 
 describe('Array Reifier (Integrated)', () => {
   it('should reify a simple primitive array', () => {
-    const { type, checker } = createTestType('type T = string[];');
+    const { type, checker } = reifyTypeContext('type T = string[];');
     const result = reifyType(type, checker);
 
     expect(result).toEqual({
@@ -16,7 +16,7 @@ describe('Array Reifier (Integrated)', () => {
   });
 
   it('should reify nested 2D arrays (Depth Check)', () => {
-    const { type, checker } = createTestType('type T = number[][];');
+    const { type, checker } = reifyTypeContext('type T = number[][];');
     const result = reifyType(type, checker);
 
     expect(result).toEqual({
@@ -29,7 +29,7 @@ describe('Array Reifier (Integrated)', () => {
   });
 
   it('should reify an array of complex objects (Integration Check)', () => {
-    const { type, checker } = createTestType('type T = { id: string }[];');
+    const { type, checker } = reifyTypeContext('type T = { id: string }[];');
     const result = reifyType(type, checker);
 
     expect(result.kind).toBe('array');
@@ -44,7 +44,9 @@ describe('Array Reifier (Integrated)', () => {
   });
 
   it('should reify an array containing unions', () => {
-    const { type, checker } = createTestType('type T = (string | boolean)[];');
+    const { type, checker } = reifyTypeContext(
+      'type T = (string | boolean)[];',
+    );
     const result = reifyType(type, checker);
 
     expect(result).toEqual({
@@ -62,7 +64,9 @@ describe('Array Reifier (Integrated)', () => {
   });
 
   it('should handle ReadonlyArray syntax', () => {
-    const { type, checker } = createTestType('type T = ReadonlyArray<number>;');
+    const { type, checker } = reifyTypeContext(
+      'type T = ReadonlyArray<number>;',
+    );
     const result = reifyType(type, checker);
 
     expect(result).toEqual({

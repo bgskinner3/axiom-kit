@@ -1,12 +1,12 @@
 // __tests__/unit/reifiers/unions.test.ts
 import { reifyType } from '../../../../transformer/reifiers/reify-type';
-import { createTestType } from '../../../test-utils';
+import { reifyTypeContext } from '../../../utils';
 // NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
 import '../../../../transformer/reifiers/registry/index';
 
 describe('Union Reifier (Integrated)', () => {
   it('should reify a simple string literal union (Enum-style)', () => {
-    const { type, checker } = createTestType(
+    const { type, checker } = reifyTypeContext(
       'type T = "success" | "error" | "pending";',
     );
     const result = reifyType(type, checker) as any;
@@ -17,7 +17,7 @@ describe('Union Reifier (Integrated)', () => {
   });
 
   it('should reify a numeric literal union', () => {
-    const { type, checker } = createTestType('type T = 1 | 2 | 3;');
+    const { type, checker } = reifyTypeContext('type T = 1 | 2 | 3;');
     const result = reifyType(type, checker) as any;
 
     expect(result.kind).toBe('union');
@@ -25,7 +25,7 @@ describe('Union Reifier (Integrated)', () => {
   });
 
   it('should handle the "Boolean Reality" (true | false)', () => {
-    const { type, checker } = createTestType('type T = boolean;');
+    const { type, checker } = reifyTypeContext('type T = boolean;');
     const result = reifyType(type, checker) as any;
 
     // TS treats boolean as true | false union
@@ -35,7 +35,7 @@ describe('Union Reifier (Integrated)', () => {
   });
 
   it('should reify complex mixed unions (Primitives + Objects)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       interface User { id: number }
       type T = User | string; 
     `);
@@ -50,7 +50,7 @@ describe('Union Reifier (Integrated)', () => {
   });
 
   it('should reify unions of intersections (The Nested Logic Check)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type T = ({ a: string } & { b: number }) | string;
     `);
     const result = reifyType(type, checker) as any;
@@ -65,7 +65,7 @@ describe('Union Reifier (Integrated)', () => {
 
   it('should handle "null" and "undefined" in unions', () => {
     // 💎 We use a literal union here to FORCE the compiler to keep them separate
-    const { type, checker } = createTestType('type T = "a" | "b" | "c";');
+    const { type, checker } = reifyTypeContext('type T = "a" | "b" | "c";');
     const result = reifyType(type, checker) as any;
 
     expect(result.kind).toBe('union');

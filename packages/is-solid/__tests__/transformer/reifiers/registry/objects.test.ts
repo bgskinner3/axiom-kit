@@ -1,12 +1,12 @@
 // __tests__/unit/reifiers/objects.test.ts
 import { reifyType } from '../../../../transformer/reifiers/reify-type';
-import { createTestType } from '../../../test-utils';
+import { reifyTypeContext } from '../../../utils';
 // NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
 import '../../../../transformer/reifiers/registry/index';
 
 describe('Object Reifier (Integrated)', () => {
   it('should reify a simple interface with primitive properties', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       interface IUser { 
         id: number; 
         name: string; 
@@ -27,7 +27,7 @@ describe('Object Reifier (Integrated)', () => {
   });
 
   // it('should correctly identify optional properties', () => {
-  //   const { type, checker } = createTestType(`
+  //   const { type, checker } = reifyTypeContext(`
   //     interface IConfig {
   //       timeout: number;
   //       retry?: boolean;
@@ -41,7 +41,7 @@ describe('Object Reifier (Integrated)', () => {
   //   expect(result.properties.retry.shape.kind).toBe('literal');
   // });
   it('should correctly identify optional properties', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       interface IConfig { 
         timeout: number;
         retry?: boolean; 
@@ -58,7 +58,7 @@ describe('Object Reifier (Integrated)', () => {
   });
 
   it('should handle circular references (Infinite Loop Protection)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       interface INode { 
         next: INode; 
       }
@@ -72,7 +72,7 @@ describe('Object Reifier (Integrated)', () => {
   });
 
   it('should reify deeply nested object structures', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type Deep = { a: { b: { c: string } } };
     `);
     const result = reifyType(type, checker) as any;
@@ -85,7 +85,7 @@ describe('Object Reifier (Integrated)', () => {
   });
 
   it('should reify inherited properties from extended interfaces', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       interface Base { id: string }
       interface Admin extends Base { role: 'admin' }
     `);
@@ -98,7 +98,7 @@ describe('Object Reifier (Integrated)', () => {
   });
 
   it('should handle anonymous type literals', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type T = { [key: string]: any; name: string };
     `);
     const result = reifyType(type, checker) as any;

@@ -16,6 +16,7 @@ module.exports = {
     '/playground/',
     'setup.ts',
     'test-utils.ts',
+    '__tests__/utils/',
   ],
   coverageReporters: ['text', 'text-summary'],
 

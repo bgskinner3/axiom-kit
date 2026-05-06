@@ -1,11 +1,11 @@
 // __tests__/unit/reifiers/branded.test.ts
 import { reifyType } from '../../../../transformer/reifiers/reify-type';
-import { createTestType } from '../../../test-utils';
+import { reifyTypeContext } from '../../../utils';
 // NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
 import '../../../../transformer/reifiers/registry/index';
 describe('Branded Reifier (Integrated)', () => {
   it('should identify a branded string literal intersection', () => {
-    const { type, checker } = createTestType(
+    const { type, checker } = reifyTypeContext(
       'type UserId = string & { __brand: "UserId" };',
     );
     const result = reifyType(type, checker);
@@ -18,7 +18,7 @@ describe('Branded Reifier (Integrated)', () => {
   });
 
   it('should identify a branded object (Flattened Interface)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       interface User { id: number }
       type SolidUser = User & { __brand: "SolidUser" };
     `);
@@ -37,7 +37,7 @@ describe('Branded Reifier (Integrated)', () => {
   });
 
   it('should identify a branded object (Pure Type Literal)', () => {
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type SolidProfile = { username: string } & { __brand: "Profile" };
     `);
 
@@ -52,7 +52,7 @@ describe('Branded Reifier (Integrated)', () => {
 
   it('should handle ambient global TSolid branding', () => {
     // This assumes your test-utils.ts now injects the TSolid global definition
-    const { type, checker } = createTestType(`
+    const { type, checker } = reifyTypeContext(`
       type AmbientUser = TSolid<"GlobalKey", { age: number }>;
     `);
 
@@ -66,7 +66,7 @@ describe('Branded Reifier (Integrated)', () => {
   });
 
   it('should fall through to generic intersection if no __brand is present', () => {
-    const { type, checker } = createTestType(
+    const { type, checker } = reifyTypeContext(
       'type Combined = { a: string } & { b: number };',
     );
     const result = reifyType(type, checker);

@@ -1,6 +1,6 @@
 // __tests__/unit/reifiers/primitives.test.ts
 import { reifyType } from '../../../../transformer/reifiers/reify-type';
-import { createTestType } from '../../../test-utils';
+import { reifyTypeContext } from '../../../utils';
 // NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
 import '../../../../transformer/reifiers/registry/index';
 
@@ -11,13 +11,13 @@ describe('Primitive Reifier (Integrated)', () => {
     const basicPrimitives = ['string', 'number', 'bigint'];
 
     basicPrimitives.forEach((t) => {
-      const { type, checker } = createTestType(`type T = ${t};`);
+      const { type, checker } = reifyTypeContext(`type T = ${t};`);
       const result = reifyType(type, checker);
       expect(result).toEqual({ kind: 'primitive', type: t });
     });
 
     // SPECIAL TESY CASE: Test boolean specifically as the union it truly is
-    const { type, checker } = createTestType(`type T = boolean;`);
+    const { type, checker } = reifyTypeContext(`type T = boolean;`);
     const result = reifyType(type, checker);
     expect(result).toEqual({
       kind: 'union',
@@ -29,19 +29,19 @@ describe('Primitive Reifier (Integrated)', () => {
   });
 
   it('should reify specific string literals', () => {
-    const { type, checker } = createTestType('type T = "admin";');
+    const { type, checker } = reifyTypeContext('type T = "admin";');
     const result = reifyType(type, checker);
     expect(result).toEqual({ kind: 'literal', value: 'admin' });
   });
 
   it('should reify specific numeric literals', () => {
-    const { type, checker } = createTestType('type T = 42;');
+    const { type, checker } = reifyTypeContext('type T = 42;');
     const result = reifyType(type, checker);
     expect(result).toEqual({ kind: 'literal', value: 42 });
   });
 
   it('should reify boolean literals (true / false)', () => {
-    const { type, checker } = createTestType('type T = true;');
+    const { type, checker } = reifyTypeContext('type T = true;');
     const result = reifyType(type, checker);
     expect(result).toEqual({ kind: 'literal', value: true });
   });
@@ -50,7 +50,7 @@ describe('Primitive Reifier (Integrated)', () => {
     const units = ['null', 'undefined'];
 
     units.forEach((u) => {
-      const { type, checker } = createTestType(`type T = ${u};`);
+      const { type, checker } = reifyTypeContext(`type T = ${u};`);
       const result = reifyType(type, checker);
       // Based on our previous fix, these map to unknown for the vault
       expect(result).toEqual({ kind: 'primitive', type: 'unknown' });
@@ -61,7 +61,7 @@ describe('Primitive Reifier (Integrated)', () => {
     const fallbacks = ['any', 'unknown'];
 
     fallbacks.forEach((f) => {
-      const { type, checker } = createTestType(`type T = ${f};`);
+      const { type, checker } = reifyTypeContext(`type T = ${f};`);
       const result = reifyType(type, checker);
       expect(result).toEqual({ kind: 'primitive', type: 'unknown' });
     });

@@ -1,12 +1,12 @@
-import { transform } from '../../test-utils';
+import { mineTransformation } from '../../utils';
 
 describe('Visitor Orchestrator (Aggressive Coverage)', () => {
-  it('should transform multiple calls in the same file', () => {
+  it('should mineTransformation multiple calls in the same file', () => {
     const code = `
       isSolid<'A', string>(a);
       isSolid<'B', number>(b);
     `;
-    const output = transform(code);
+    const output = mineTransformation(code);
 
     // Verify both are injected
     expect(output).toContain('key: "A"');
@@ -23,7 +23,7 @@ describe('Visitor Orchestrator (Aggressive Coverage)', () => {
         }
       }
     `;
-    const output = transform(code);
+    const output = mineTransformation(code);
 
     // Verify recursion (visitEachChild) actually reaches the inner call
     expect(output).toContain('key: "NESTED"');
@@ -35,7 +35,7 @@ describe('Visitor Orchestrator (Aggressive Coverage)', () => {
       const x = notIsSolid<'KEY', string>(data);
       const y = isSolidCustom();
     `;
-    const output = transform(code);
+    const output = mineTransformation(code);
 
     // Verify output remains unchanged for these calls
     expect(output).not.toContain('key: "KEY"');
@@ -46,7 +46,7 @@ describe('Visitor Orchestrator (Aggressive Coverage)', () => {
     const registry = new Map<string, string>();
     const code = `isSolid<'REG_TEST', { id: string }>(data);`;
 
-    transform(code, registry);
+    mineTransformation(code, registry);
 
     // Verify Pillar 1: Metadata Extraction into the registry
     const entry = registry.get('REG_TEST');
@@ -59,7 +59,7 @@ describe('Visitor Orchestrator (Aggressive Coverage)', () => {
       type Base = { id: number };
       isSolid<'COMPLEX', Base & { name: string }>(data);
     `;
-    const output = transform(code);
+    const output = mineTransformation(code);
 
     // Verify the processor and reifier worked together on the intersection
     expect(output).toContain('key: "COMPLEX"');
@@ -70,14 +70,14 @@ describe('Visitor Orchestrator (Aggressive Coverage)', () => {
    * "Shadowing" Case
    * !!! Ef a developer names a local function isSolid?
    * !!! Visitor must use the TypeChecker to ensure it only
-   * !!! transforms the real library function, not a fake one
+   * !!! mineTransformations the real library function, not a fake one
    */
-  it('should NOT transform a local function named isSolid', () => {
+  it('should NOT mineTransformation a local function named isSolid', () => {
     const code = `
     function isSolid(a) { return true; }
     isSolid<'FAKE', string>(data);
   `;
-    const output = transform(code);
+    const output = mineTransformation(code);
 
     // It should NOT contain the metadata object because it's the wrong function
     expect(output).not.toContain('key: "FAKE"');
@@ -89,7 +89,7 @@ describe('Visitor Orchestrator (Aggressive Coverage)', () => {
    */
   it('should gracefully skip calls with missing type arguments', () => {
     const code = `isSolid(data);`;
-    const output = transform(code);
+    const output = mineTransformation(code);
 
     // 💎 Use .trim() to ignore trailing newlines from the printer
     expect(output.trim()).toBe('isSolid(data);');
@@ -101,7 +101,7 @@ describe('Visitor Orchestrator (Aggressive Coverage)', () => {
    */
   it('should handle (or ignore) member access calls based on guard logic', () => {
     const code = `Solid.isSolid<'MEMBER', string>(data);`;
-    const output = transform(code);
+    const output = mineTransformation(code);
 
     expect(output).not.toContain('key: "MEMBER"');
   });
