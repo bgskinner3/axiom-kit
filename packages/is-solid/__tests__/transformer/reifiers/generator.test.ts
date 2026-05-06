@@ -1,4 +1,4 @@
-// __tests__/unit/generator.test.ts
+// __tests__/transformer/reifiers/generator.test.ts
 import ts from 'typescript';
 import { generateShapeAST } from '../../../transformer/reifiers/generator';
 import type { TSolidShape } from '../../../models/types';

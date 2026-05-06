@@ -31,9 +31,12 @@ const VALIDATORS: TValidatorMapper = {
     // return typeof data === shape.type && isPrimitive(data);
     return isValid ? true : reportError(ctx, shape.type, data);
   },
-  literal: (data, shape) => {
+  literal: (data, shape, ctx) => {
     if (!isLiteralShape(shape)) return false;
-    return data === shape.value;
+
+    const isValid = data === shape.value;
+
+    return isValid ? true : reportError(ctx, shape, data);
   },
   union: (data, shape, ctx) => {
     if (!isUnionShape(shape)) return false;
