@@ -16,7 +16,7 @@ import { SymbolFlags } from 'typescript';
  * types together via named pointers.
  */
 registerReifier((type, checker, next, seen) => {
-  // 1. Confirm it's an object BEFORE doing anything else
+  // Confirm it's an object BEFORE doing anything else
   if (!isObjectType(type)) return undefined;
 
   const symbol = type.getSymbol();
@@ -34,12 +34,12 @@ registerReifier((type, checker, next, seen) => {
     if (declaration) {
       const propType = checker.getTypeOfSymbolAtLocation(prop, declaration);
       const isOptional = !!(prop.flags & SymbolFlags.Optional);
-      const propName = prop.getName(); // Get the key name
+      const propName = prop.getName();
 
       shapeProperties[propName] = {
         shape: next(propType),
         optional: isOptional,
-        name: propName, // ✨ Satisfies the model requirement
+        name: propName,
       };
     }
   }

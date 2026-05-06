@@ -9,8 +9,8 @@ registerReifier((type, checker, next) => {
 
     return {
       kind: 'array',
-      items: next(itemType), // Use 'next' to continue the crawl
+      items: next(itemType),
     };
   }
-  return undefined; // Let the next reifier try
+  return undefined;
 });

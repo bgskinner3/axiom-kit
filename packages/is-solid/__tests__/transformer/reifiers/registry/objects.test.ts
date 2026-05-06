@@ -1,84 +1,109 @@
 // __tests__/unit/reifiers/objects.test.ts
-// import { REIFIERS } from '../../../transformer/reifiers/registry';
-// import { createTestType } from '../../test-utils';
-// import { TSolidShape } from '../../../models/types';
+import { reifyType } from '../../../../transformer/reifiers/reify-type';
+import { createTestType } from '../../../test-utils';
+// NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
+import '../../../../transformer/reifiers/registry/index';
 
-describe('Object Reifier', () => {
-  it('should show placeholder', () => {
-    expect(true).toEqual(true);
+describe('Object Reifier (Integrated)', () => {
+  it('should reify a simple interface with primitive properties', () => {
+    const { type, checker } = createTestType(`
+      interface IUser { 
+        id: number; 
+        name: string; 
+      }
+    `);
+    const result = reifyType(type, checker) as any;
+
+    expect(result.kind).toBe('object');
+    expect(result.properties.id.shape).toEqual({
+      kind: 'primitive',
+      type: 'number',
+    });
+    expect(result.properties.id.optional).toBe(false);
+    expect(result.properties.name.shape).toEqual({
+      kind: 'primitive',
+      type: 'string',
+    });
   });
-  // const objectReifier = REIFIERS.find((r) => r.name === 'objects');
 
-  // it('should reify a simple interface', () => {
-  //   if (!objectReifier) throw new Error('Object Reifier not found');
-
-  //   const { type, checker } = createTestType(`
-  //     interface IUser {
-  //       id: number;
-  //       name: string;
-  //     }
-  //   `);
-
-  //   // Mock next to return a simple primitive shape for properties
-  //   const mockNext = jest.fn((_t) => ({
-  //     kind: 'primitive' as const,
-  //     type: 'unknown' as const,
-  //   }));
-
-  //   const result = objectReifier(type, checker, mockNext, new Set());
-
-  //   expect(result?.kind).toBe('object');
-  //   const obj = result as Extract<TSolidShape, { kind: 'object' }>;
-
-  //   expect(obj.properties['id']).toBeDefined();
-  //   expect(obj.properties['name']).toBeDefined();
-  //   expect(mockNext).toHaveBeenCalledTimes(2);
-  // });
-
-  // it('should identify optional properties', () => {
-  //   if (!objectReifier) throw new Error('Object Reifier not found');
-
+  // it('should correctly identify optional properties', () => {
   //   const { type, checker } = createTestType(`
   //     interface IConfig {
+  //       timeout: number;
   //       retry?: boolean;
   //     }
   //   `);
+  //   const result = reifyType(type, checker) as any;
 
-  //   const result = objectReifier(
-  //     type,
-  //     checker,
-  //     jest.fn(() => ({ kind: 'primitive', type: 'boolean' })),
-  //     new Set(),
-  //   );
-  //   const obj = result as Extract<TSolidShape, { kind: 'object' }>;
-
-  //   expect(obj.properties['retry'].optional).toBe(true);
+  //   expect(result.properties.timeout.optional).toBe(false);
+  //   expect(result.properties.retry.optional).toBe(true);
+  //   // Verify nested shape inside the optional property
+  //   expect(result.properties.retry.shape.kind).toBe('literal');
   // });
+  it('should correctly identify optional properties', () => {
+    const { type, checker } = createTestType(`
+      interface IConfig { 
+        timeout: number;
+        retry?: boolean; 
+      }
+    `);
+    const result = reifyType(type, checker) as any;
 
-  // it('should handle circular references (The Vault Safety)', () => {
-  //   if (!objectReifier) throw new Error('Object Reifier not found');
+    expect(result.properties.timeout.optional).toBe(false);
+    expect(result.properties.retry.optional).toBe(true);
 
-  //   const { type, checker } = createTestType(`
-  //     interface INode {
-  //       next: INode;
-  //     }
-  //   `);
+    // 💎 FIX: TS sees boolean as false | true (a Union of Literals)
+    expect(result.properties.retry.shape.kind).toBe('union');
+    expect(result.properties.retry.shape.values[0].kind).toBe('literal');
+  });
 
-  //   const seen = new Set<any>();
-  //   // The first call happens manually
-  //   // The second call (recursive) is what we want to test
-  //   const result = objectReifier(
-  //     type,
-  //     checker,
-  //     (t) => objectReifier(t, checker, jest.fn(), seen)!,
-  //     seen,
-  //   );
+  it('should handle circular references (Infinite Loop Protection)', () => {
+    const { type, checker } = createTestType(`
+      interface INode { 
+        next: INode; 
+      }
+    `);
+    const result = reifyType(type, checker) as any;
 
-  //   expect(result?.kind).toBe('object');
-  //   const obj = result as any;
+    expect(result.kind).toBe('object');
+    // The recursive property MUST be a reference to prevent stack overflow
+    expect(result.properties.next.shape.kind).toBe('reference');
+    expect(result.properties.next.shape.name).toBe('INode');
+  });
 
-  //   // The 'next' property should be a 'reference' kind because INode was in 'seen'
-  //   expect(obj.properties['next'].shape.kind).toBe('reference');
-  //   expect(obj.properties['next'].shape.name).toBe('INode');
-  // });
+  it('should reify deeply nested object structures', () => {
+    const { type, checker } = createTestType(`
+      type Deep = { a: { b: { c: string } } };
+    `);
+    const result = reifyType(type, checker) as any;
+
+    const levelA = result.properties.a.shape;
+    const levelB = levelA.properties.b.shape;
+    const levelC = levelB.properties.c.shape;
+
+    expect(levelC).toEqual({ kind: 'primitive', type: 'string' });
+  });
+
+  it('should reify inherited properties from extended interfaces', () => {
+    const { type, checker } = createTestType(`
+      interface Base { id: string }
+      interface Admin extends Base { role: 'admin' }
+    `);
+    const result = reifyType(type, checker) as any;
+
+    // Proves checker.getPropertiesOfType() flattens the heritage tree
+    expect(result.properties.id).toBeDefined();
+    expect(result.properties.role).toBeDefined();
+    expect(result.properties.role.shape.value).toBe('admin');
+  });
+
+  it('should handle anonymous type literals', () => {
+    const { type, checker } = createTestType(`
+      type T = { [key: string]: any; name: string };
+    `);
+    const result = reifyType(type, checker) as any;
+
+    expect(result.kind).toBe('object');
+    expect(result.properties.name).toBeDefined();
+  });
 });

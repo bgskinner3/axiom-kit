@@ -1,30 +1,69 @@
 // __tests__/unit/reifiers/primitives.test.ts
-// import { REIFIERS } from '../../../transformer/reifiers/registry';
-// import { createTestType } from '../../test-utils';
+import { reifyType } from '../../../../transformer/reifiers/reify-type';
+import { createTestType } from '../../../test-utils';
+// NOTE: ** IMPORTANT** Wakes up the side-effect registry before testing
+import '../../../../transformer/reifiers/registry/index';
 
-describe('Primitive Reifier', () => {
-  it('should show placeholder', () => {
-    expect(true).toEqual(true);
+describe('Primitive Reifier (Integrated)', () => {
+  it('should reify all base primitives', () => {
+    // Split boolean out because it reifies as a Union
+    // TODO: NOTE boolean type is not a primitive; it is a shorthand for the union true | false!!
+    const basicPrimitives = ['string', 'number', 'bigint'];
+
+    basicPrimitives.forEach((t) => {
+      const { type, checker } = createTestType(`type T = ${t};`);
+      const result = reifyType(type, checker);
+      expect(result).toEqual({ kind: 'primitive', type: t });
+    });
+
+    // SPECIAL TESY CASE: Test boolean specifically as the union it truly is
+    const { type, checker } = createTestType(`type T = boolean;`);
+    const result = reifyType(type, checker);
+    expect(result).toEqual({
+      kind: 'union',
+      values: [
+        { kind: 'literal', value: false },
+        { kind: 'literal', value: true },
+      ],
+    });
   });
-  // const primitiveReifier = REIFIERS.find((r) => r.name === 'primitives'); // if named, or just import directly
 
-  // it('should reify a string type', () => {
-  //   const { type, checker } = createTestType('type T = string;');
-  //   if (!primitiveReifier) {
-  //     throw new Error('Primitive Reifier not found in registry');
-  //   }
-  //   const result = primitiveReifier(type, checker, jest.fn(), new Set());
+  it('should reify specific string literals', () => {
+    const { type, checker } = createTestType('type T = "admin";');
+    const result = reifyType(type, checker);
+    expect(result).toEqual({ kind: 'literal', value: 'admin' });
+  });
 
-  //   expect(result).toEqual({ kind: 'primitive', type: 'string' });
-  // });
+  it('should reify specific numeric literals', () => {
+    const { type, checker } = createTestType('type T = 42;');
+    const result = reifyType(type, checker);
+    expect(result).toEqual({ kind: 'literal', value: 42 });
+  });
 
-  // it('should reify a string literal', () => {
-  //   const { type, checker } = createTestType('type T = "admin";');
-  //   if (!primitiveReifier) {
-  //     throw new Error('Primitive Reifier not found in registry');
-  //   }
-  //   const result = primitiveReifier(type, checker, jest.fn(), new Set());
+  it('should reify boolean literals (true / false)', () => {
+    const { type, checker } = createTestType('type T = true;');
+    const result = reifyType(type, checker);
+    expect(result).toEqual({ kind: 'literal', value: true });
+  });
 
-  //   expect(result).toEqual({ kind: 'literal', value: 'admin' });
-  // });
+  it('should handle null and undefined as unknown primitives', () => {
+    const units = ['null', 'undefined'];
+
+    units.forEach((u) => {
+      const { type, checker } = createTestType(`type T = ${u};`);
+      const result = reifyType(type, checker);
+      // Based on our previous fix, these map to unknown for the vault
+      expect(result).toEqual({ kind: 'primitive', type: 'unknown' });
+    });
+  });
+
+  it('should fallback to unknown for "any" or "unknown"', () => {
+    const fallbacks = ['any', 'unknown'];
+
+    fallbacks.forEach((f) => {
+      const { type, checker } = createTestType(`type T = ${f};`);
+      const result = reifyType(type, checker);
+      expect(result).toEqual({ kind: 'primitive', type: 'unknown' });
+    });
+  });
 });

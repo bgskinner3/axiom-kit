@@ -6,7 +6,7 @@
  */
 declare global {
   type TSolid<K extends string, T> = T & {
-    readonly __solid_key: K;
+    readonly __brand: K;
   };
 }
 
