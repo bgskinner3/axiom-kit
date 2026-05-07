@@ -5,11 +5,13 @@ import type {
   TSolidShape,
 } from '../models/types';
 import { createInitialContext } from './context';
-import { validateObject } from './objects';
-import { validateUnion } from './unions';
-import { validateIntersection } from './intersections';
-import { validateReference } from './reference';
-import { validateArray } from './arrays';
+import {
+  validateArray,
+  validateReference,
+  validateIntersection,
+  validateUnion,
+  validateObject,
+} from './validators';
 import { reportError } from './errors';
 import {
   isPrimitiveShape,
@@ -28,18 +30,15 @@ import {
 
 const VALIDATORS: TValidatorMapper = {
   primitive: (data, shape, ctx) => {
-    if (!isPrimitiveShape(shape)) return false;
+    if (!isPrimitiveShape(shape)) return false; // Guard narrows 'shape'
     if (shape.type === 'unknown') return true;
-    const isValid = typeof data === shape.type && isPrimitive(data);
-    // return typeof data === shape.type && isPrimitive(data);
-    return isValid ? true : reportError(ctx, shape.type, data);
+    return typeof data === shape.type && isPrimitive(data)
+      ? true
+      : reportError(ctx, shape.type, data);
   },
   literal: (data, shape, ctx) => {
-    if (!isLiteralShape(shape)) return false;
-
-    const isValid = data === shape.value;
-
-    return isValid ? true : reportError(ctx, shape, data);
+    if (!isLiteralShape(shape)) return false; // Guard narrows 'shape'
+    return data === shape.value ? true : reportError(ctx, shape, data);
   },
   union: (data, shape, ctx) => {
     if (!isUnionShape(shape)) return false;
