@@ -48,9 +48,9 @@ export default function (
       if (isLastFile || (isTest && globalKeyRegistry.size >= 0)) {
         // ⚡ FORCE THE EMISSION
         hydrateIntellisenseBridge(rootDir, globalKeyRegistry);
-        console.log(
-          `[xalor] 🚀 FORCED SYNC: Generated ${globalKeyRegistry.size} types in test mode.`,
-        );
+        // console.log(
+        //   `[xalor] 🚀 FORCED SYNC: Generated ${globalKeyRegistry.size} types in test mode.`,
+        // );
       }
       // if (isLastFile || (isTest && globalKeyRegistry.size > 0)) {
       //   if (globalKeyRegistry.size > 0) {

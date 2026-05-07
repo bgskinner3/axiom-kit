@@ -12,7 +12,15 @@
     "types": [
       "node",
       "jest"
-    ]
+    ],
+    // "paths": {
+    //   "@bgskinner2/xalor": [
+    //     "./src/index.ts"
+    //   ],
+    //   "@bgskinner2/xalor/*": [
+    //     "./src/*"
+    //   ]
+    // }
   },
   "include": [
     "src/**/*",

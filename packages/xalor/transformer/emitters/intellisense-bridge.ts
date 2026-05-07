@@ -29,43 +29,9 @@ function temporalManifest(
   const identityLines: string[] = []; // 💎 For the Imports (Names)
   const registryLines: string[] = []; // 💎 For the Shapes (Structures)
 
-  // registry.forEach((value, key) => {
-  //   const [filePath, symbolName, rawStructure] = value.split('|');
-
-  //   // 1. IDENTITY: Build the relative import link
-  //   const relPath = path.relative(targetDir, filePath).replace(/\\/g, '/');
-  //   const importPath = `./${relPath}`.replace('.ts', ''); // Clean extension
-
-  //   // Logic: If symbolName is 'unknown', we can't import it, so we skip it here
-  //   if (symbolName !== 'unknown') {
-  //     identityLines.push(
-  //       `    '${key}': import('${importPath}').${symbolName};`,
-  //     );
-  //   }
-
-  //   // 2. REGISTRY: Build the raw structure backup
-  //   registryLines.push(`    '${key}': ${rawStructure};`);
-  // });
-  // registry.forEach((value, key) => {
-  //   const [filePath, symbolName, rawStructure] = value.split('|');
-
-  //   // Build the "Identity" (Import Link)
-  //   if (symbolName !== 'unknown') {
-  //     const relPath = path
-  //       .relative(targetDir, filePath)
-  //       .replace(/\\/g, '/')
-  //       .replace('.ts', '');
-  //     identityLines.push(`    '${key}': import('./${relPath}').${symbolName};`);
-  //   }
-
-  //   // Build the "Registry" (Structural Backup)
-  //   registryLines.push(`    '${key}': ${rawStructure};`);
-  // });
   registry.forEach((value, key) => {
     const [filePath, symbolName, rawStructure] = value.split('|');
 
-    // 💎 THE LOGIC: Only create an Identity link if we have a real name
-    // AND if that name doesn't look like a raw structure (starting with '{')
     const isNamed = symbolName !== 'unknown' && !symbolName.startsWith('{');
 
     if (isNamed) {
@@ -125,27 +91,6 @@ function temporalManifest(
  *    preventing unnecessary IDE re-indexes or build triggers.
  * 3. DIRECTORY SAFETY: Ensures the distribution path exists before writing.
  */
-// export function hydrateIntellisenseBridge(
-//   rootDir: string,
-//   registry: Map<string, string>,
-// ) {
-//   const { emitter } = IS_SOLID_CONFIG_ITEMS;
-//   const targetDir = path.join(rootDir, emitter.targetDir);
-//   const envFile = path.join(targetDir, emitter.fileName);
-
-//   const dts = temporalManifest(registry, targetDir, emitter);
-
-//   if (!fs.existsSync(targetDir)) {
-//     fs.mkdirSync(targetDir, { recursive: true });
-//   }
-
-//   const existing = fs.existsSync(envFile)
-//     ? fs.readFileSync(envFile, 'utf8')
-//     : '';
-//   if (dts !== existing) {
-//     fs.writeFileSync(envFile, dts);
-//   }
-// }
 export function hydrateIntellisenseBridge(
   rootDir: string,
   registry: Map<string, string>,
@@ -155,16 +100,16 @@ export function hydrateIntellisenseBridge(
   const envFile = path.join(targetDir, emitter.fileName);
 
   // 🚩 DEBUG LOGS
-  console.log(`[xalor-fs] Attempting to write to: ${envFile}`);
-  console.log(`[xalor-fs] Registry size: ${registry.size}`);
+  // console.log(`[xalor-fs] Attempting to write to: ${envFile}`);
+  // console.log(`[xalor-fs] Registry size: ${registry.size}`);
 
   const dts = temporalManifest(registry, targetDir, emitter);
 
   if (!fs.existsSync(targetDir)) {
-    console.log(`[xalor-fs] Creating missing directory: ${targetDir}`);
+    // console.log(`[xalor-fs] Creating missing directory: ${targetDir}`);
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
   fs.writeFileSync(envFile, dts); // 💎 FORCE WRITE (Remove the 'existing' check for now)
-  console.log(`[xalor-fs] ✅ File written successfully.`);
+  // console.log(`[xalor-fs] ✅ File written successfully.`);
 }

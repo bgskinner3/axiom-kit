@@ -1,6 +1,8 @@
 import { isXalor } from '../../../../src/operations/core';
 import { Registry } from '../../../../src/vault';
 import type { TSolidMetadata } from '../../../../src/models/types';
+// import { ISolidRegistry } from '@bgskinner2/xalor';
+
 declare module '../../../../src/' {
   interface ISolidRegistry {
     USER: any;
@@ -22,6 +24,16 @@ export interface BigTEst {
     };
   };
 }
+/**
+     "paths": {
+      "@bgskinner2/xalor": [
+        "src"
+      ],
+      "@bgskinner2/xalor/*": [
+        "src/*"
+      ]
+    }
+ */
 describe('isXalor Polymorphic Entry Point', () => {
   // 💎 MOCK 1: Standard User
   const userMetadata: TSolidMetadata = {
@@ -126,6 +138,7 @@ describe('isXalor Polymorphic Entry Point', () => {
     isXalor<'USER_NUMBER_TWO', User>(); // 💎 Use it!
 
     isXalor<'MY_BALLS', TFUCKKKKTT>();
+    isXalor<'BigTEst', BigTEst>();
     isXalor<'BigTEst', BigTEst>();
     console.log(globalThis.__SOLID_VAULT__);
   });

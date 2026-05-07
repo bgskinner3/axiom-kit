@@ -1,17 +1,7 @@
-import {
-  Type,
-  Node,
-  TypeChecker,
-  TypeFlags,
-  SymbolFlags,
-  TypeFormatFlags,
-} from 'typescript';
+import { TypeFlags, SymbolFlags, TypeFormatFlags } from 'typescript';
 import { isTypeReference } from '../utils';
-type TPrintGhostStructure = {
-  type: Type;
-  checker: TypeChecker;
-  node: Node;
-};
+import type { TPrintGhostStructure } from '../types';
+
 /**
  * 🛰️ GHOST PRINTER
  *

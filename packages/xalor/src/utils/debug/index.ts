@@ -1,5 +1,6 @@
 import { isBigInt, isString, isUndefined } from '../guards';
 import type { TGetCallerLocationOptions } from '../../models/types';
+
 /**
  * @utilType util
  * @name serialize

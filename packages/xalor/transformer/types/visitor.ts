@@ -4,6 +4,7 @@ import type {
   NodeFactory,
   SourceFile,
   Type,
+  Node,
 } from 'typescript';
 import type { TSolidShape } from '../../src/models/types/shared';
 /**
