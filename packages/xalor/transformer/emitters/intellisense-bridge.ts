@@ -2,8 +2,8 @@
 import {
   IS_SOLID_CONFIG_ITEMS,
   REGISTERED_INTELLIGENCE_FUNCTIONS,
-  ObjectUtils,
-} from '../../models';
+} from '../../src/models';
+import { ObjectUtils } from '../../src/utils';
 import * as fs from 'fs';
 import * as path from 'path';
 
