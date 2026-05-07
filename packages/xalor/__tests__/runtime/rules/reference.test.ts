@@ -1,5 +1,5 @@
 // __tests__/engine/rules/reference.test.ts
-import { validateReference } from '../../../src/validation/reference';
+import { validateReference } from '../../../src/validation/validators';
 import { createInitialContext } from '../../../src/validation/context';
 import { Registry } from '../../../src/vault';
 import { IS_SOLID_CONFIG_ITEMS } from '../../../src/models/constants';

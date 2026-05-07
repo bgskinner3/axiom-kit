@@ -1,5 +1,5 @@
 // __tests__/engine/rules/unions.test.ts
-import { validateUnion } from '../../../src/validation/unions';
+import { validateUnion } from '../../../src/validation/validators';
 import { createInitialContext } from '../../../src/validation/context';
 
 /**

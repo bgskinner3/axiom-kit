@@ -9,7 +9,7 @@ import {
 import { Registry } from '../../../../src/vault';
 import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';
 import { createInitialContext } from '../../../../src/validation/context';
-import { validate } from '../../../../src/validation';
+import { solidifyShape } from '../../../../src/validation';
 
 export const isMetaData: TTypeGuard<TSolidMetadata> = (
   val: unknown,
@@ -78,7 +78,7 @@ export function buildValidationTools<
 
     const ctx = createInitialContext();
     ctx.currentKey = key;
-    const isValid = validate(val, meta.shape, ctx);
+    const isValid = solidifyShape(val, meta.shape, ctx);
 
     Registry.setErrors(key, isValid ? [] : ctx.errors);
     return isValid;

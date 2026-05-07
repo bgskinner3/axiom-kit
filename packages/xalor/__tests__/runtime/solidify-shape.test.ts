@@ -1,5 +1,5 @@
 // __tests__/engine/validator.test.ts
-import { validate } from '../../src/validation';
+import { solidifyShape } from '../../src/validation';
 import { Registry } from '../../src/vault';
 import { createInitialContext } from '../../src/validation/context';
 /**
@@ -14,19 +14,19 @@ describe('Engine: Validator Orchestrator', () => {
   describe('The Dispatcher (Routing)', () => {
     it('should route primitive shapes to the primitive validator', () => {
       const shape = { kind: 'primitive' as const, type: 'string' as const };
-      expect(validate('hello', shape)).toBe(true);
-      expect(validate(123, shape)).toBe(false);
+      expect(solidifyShape('hello', shape)).toBe(true);
+      expect(solidifyShape(123, shape)).toBe(false);
     });
 
     it('should route unknown primitives as a total pass', () => {
       const shape = { kind: 'primitive' as const, type: 'unknown' as const };
-      expect(validate({ any: 'data' }, shape)).toBe(true);
+      expect(solidifyShape({ any: 'data' }, shape)).toBe(true);
     });
 
     it('should handle literal equality checks', () => {
       const shape = { kind: 'literal' as const, value: 'ADMIN' };
-      expect(validate('ADMIN', shape)).toBe(true);
-      expect(validate('USER', shape)).toBe(false);
+      expect(solidifyShape('ADMIN', shape)).toBe(true);
+      expect(solidifyShape('USER', shape)).toBe(false);
     });
   });
 
@@ -50,8 +50,8 @@ describe('Engine: Validator Orchestrator', () => {
       };
       shape.properties.self.shape = shape;
 
-      expect(() => validate(data, shape)).not.toThrow();
-      expect(validate(data, shape)).toBe(true);
+      expect(() => solidifyShape(data, shape)).not.toThrow();
+      expect(solidifyShape(data, shape)).toBe(true);
     });
 
     it('should handle the same data being validated against different shapes', () => {
@@ -80,8 +80,8 @@ describe('Engine: Validator Orchestrator', () => {
       const ctx = createInitialContext();
 
       // Should pass for A, fail for B
-      expect(validate(data, shapeA as any, ctx)).toBe(true);
-      expect(validate(data, shapeB as any, ctx)).toBe(false);
+      expect(solidifyShape(data, shapeA as any, ctx)).toBe(true);
+      expect(solidifyShape(data, shapeB as any, ctx)).toBe(false);
     });
   });
 
@@ -89,7 +89,7 @@ describe('Engine: Validator Orchestrator', () => {
     it('should initialize a fresh context if none is provided', () => {
       const shape = { kind: 'primitive' as const, type: 'number' as const };
 
-      expect(validate('not-a-number', shape)).toBe(false);
+      expect(solidifyShape('not-a-number', shape)).toBe(false);
     });
   });
 
@@ -109,8 +109,8 @@ describe('Engine: Validator Orchestrator', () => {
 
       const refShape = { kind: 'reference' as const, name: 'IS_VALID' };
 
-      expect(validate(true, refShape)).toBe(true);
-      expect(validate(123, refShape)).toBe(false);
+      expect(solidifyShape(true, refShape)).toBe(true);
+      expect(solidifyShape(123, refShape)).toBe(false);
     });
   });
 });
@@ -135,7 +135,7 @@ describe('EDGE CASES: Validator Orchestrator', () => {
     const shape = { kind: 'array' as const, items: sharedShape };
 
     const start = performance.now();
-    validate(data, shape, ctx);
+    solidifyShape(data, shape, ctx);
     const end = performance.now();
 
     expect(end - start).toBeLessThan(50);
@@ -170,9 +170,9 @@ describe('EDGE CASES: Validator Orchestrator', () => {
       },
     };
 
-    expect(validate(data, shapeA as any, ctx)).toBe(true);
+    expect(solidifyShape(data, shapeA as any, ctx)).toBe(true);
 
-    expect(validate(data, shapeB as any, ctx)).toBe(false);
+    expect(solidifyShape(data, shapeB as any, ctx)).toBe(false);
   });
   /**
    * POISONED PROTOTYPE!!!
@@ -182,7 +182,7 @@ describe('EDGE CASES: Validator Orchestrator', () => {
     const data = Object.create({ kind: 'primitive', type: 'number' });
     const shape = { kind: 'primitive' as const, type: 'string' as const };
 
-    expect(validate(data, shape)).toBe(false);
+    expect(solidifyShape(data, shape)).toBe(false);
   });
   /**
    * MISSING KIND RECOVERY
@@ -191,7 +191,7 @@ describe('EDGE CASES: Validator Orchestrator', () => {
   it('should throw a descriptive error if a shape kind is unsupported', () => {
     const corruptedShape = { kind: 'magic-type' } as any;
 
-    expect(() => validate({}, corruptedShape)).toThrow(
+    expect(() => solidifyShape({}, corruptedShape)).toThrow(
       /Unsupported shape kind/,
     );
   });
@@ -237,7 +237,7 @@ describe('EDGE CASES: Validator Orchestrator', () => {
       },
     };
 
-    validate(data, shape as any, ctx);
+    solidifyShape(data, shape as any, ctx);
 
     expect(ctx.errors[0].path).toBe('$.contact.email');
   });
@@ -261,6 +261,6 @@ describe('EDGE CASES: Validator Orchestrator', () => {
       },
     };
 
-    expect(validate(proxyData, shape as any)).toBe(true);
+    expect(solidifyShape(proxyData, shape as any)).toBe(true);
   });
 });

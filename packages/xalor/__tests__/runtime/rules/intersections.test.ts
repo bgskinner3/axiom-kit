@@ -1,5 +1,5 @@
 // __tests__/engine/rules/intersections.test.ts
-import { validateIntersection } from '../../../src/validation/intersections';
+import { validateIntersection } from '../../../src/validation/validators';
 import { createInitialContext } from '../../../src/validation/context';
 
 /**

@@ -1,5 +1,5 @@
 // __tests__/engine/rules/arrays.test.ts
-import { validateArray } from '../../../src/validation/arrays';
+import { validateArray } from '../../../src/validation/validators';
 import { createInitialContext } from '../../../src/validation/context';
 
 /**

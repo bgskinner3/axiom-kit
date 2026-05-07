@@ -1,5 +1,5 @@
 // __tests__/engine/rules/objects.test.ts
-import { validateObject } from '../../../src/validation/objects';
+import { validateObject } from '../../../src/validation/validators';
 import { createInitialContext } from '../../../src/validation/context';
 
 /**
