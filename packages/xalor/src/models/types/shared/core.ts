@@ -16,11 +16,24 @@ export type TSolidObjectRawShape = {
   name: string;
 };
 
-export type TSolidMetadata = {
-  key: string;
+// export type TSolidMetadata = {
+//   key: string;
+//   area: string;
+//   version: string;
+//   shape: TSolidShape;
+// };
+/**
+ * TSolidMetadata
+ *
+ * 💎 FIX: Added <K, T> generics to allow the Emitter
+ * to link the metadata to the specific Type in the IDE.
+ */
+export type TSolidMetadata<K extends string = string, T = unknown> = {
+  key: K; // 👈 Now uses the Generic K
   area: string;
   version: string;
   shape: TSolidShape;
+  readonly _ghost?: T;
 };
 
 export type TSolidError = {

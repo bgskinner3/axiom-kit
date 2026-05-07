@@ -11,13 +11,13 @@
   "include": [
     "src/**/*",
     "transformer/**/*",
-    "models/**/*"
+    "models/**/*",
+    "dist/solid-env.d.ts"
   ],
   "exclude": [
     "**/__tests__/**",
     "**/*.test.ts",
     "**/*.spec.ts",
-    "jest.config.cjs",
-    "dist/solid-env.d.ts"
+    "jest.config.cjs"
   ]
 }

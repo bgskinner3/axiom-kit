@@ -45,7 +45,12 @@ export function isIntersectionType(type: Type): type is IntersectionType {
  * Detects structural types like Interfaces, Classes, or Type Literals.
  * Narrows the type to an ObjectType to allow access to properties/symbols.
  */
-export function isObjectType(type: Type): type is ObjectType {
+export function isObjectType(type: Type): boolean {
+  // 💎 Bitwise check: This is the ONLY way to see 'id', 'name', etc.
+  return !!(type.getFlags() & ts.TypeFlags.Object);
+}
+
+export function isObjectTypeGuard(type: Type): type is ObjectType {
   return !!(type.getFlags() & ts.TypeFlags.Object);
 }
 
@@ -56,7 +61,7 @@ export function isObjectType(type: Type): type is ObjectType {
  */
 export function isTypeReference(type: Type): type is TypeReference {
   if (type.getFlags() & ts.TypeFlags.Object) {
-    if (!isObjectType(type)) return false;
+    if (!isObjectTypeGuard(type)) return false;
     const objectType = type;
     return (objectType.objectFlags & ts.ObjectFlags.Reference) !== 0;
   }

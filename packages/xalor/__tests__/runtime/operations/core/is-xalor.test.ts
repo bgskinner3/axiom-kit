@@ -1,6 +1,6 @@
 import { isXalor } from '../../../../src/operations/core';
 import { Registry } from '../../../../src/vault';
-import type { TSolidMetadata } from '../../../../models/types';
+import type { TSolidMetadata } from '../../../../src/models/types';
 declare module '../../../../src/' {
   interface ISolidRegistry {
     USER: any;
@@ -106,8 +106,17 @@ describe('isXalor Polymorphic Entry Point', () => {
     expect(isXalor(undefined, productMetadata)).toBe(true);
     // expect(Registry.has('USER')).toBe(true);
     expect(Registry.has('PRODUCT')).toBe(true);
-    isXalor<'USER_NUMBER_TWO', { id: number }>();
-    isXalor<'MY_BALLS', { id: number }>();
+    interface User {
+      id: number;
+    } // 💎 Define it!
+
+    isXalor<'USER_NUMBER_TWO', User>(); // 💎 Use it!
+
+    type TFUCKKKK = {
+      myLeftNut: number;
+      myRightNut: string;
+    };
+    isXalor<'MY_BALLS', TFUCKKKK>();
     console.log(globalThis.__SOLID_VAULT__);
   });
 

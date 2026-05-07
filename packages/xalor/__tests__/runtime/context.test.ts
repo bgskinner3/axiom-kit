@@ -1,7 +1,7 @@
 // __tests__/engine/validator.test.ts
 import { reportError } from '../../src/validation/errors';
 import { createInitialContext } from '../../src/validation/context';
-import { serialize, getCallerLocation } from '../../models/utils';
+import { serialize, getCallerLocation } from '../../src/utils';
 /**
  * BREAK DOWN
  * --------

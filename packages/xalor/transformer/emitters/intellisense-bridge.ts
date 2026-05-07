@@ -3,7 +3,6 @@ import {
   IS_SOLID_CONFIG_ITEMS,
   REGISTERED_INTELLIGENCE_FUNCTIONS,
 } from '../../src/models';
-import { ObjectUtils } from '../../src/utils';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -23,40 +22,31 @@ import * as path from 'path';
  */
 function temporalManifest(
   registry: Map<string, string>,
-  targetDir: string,
+  _targetDir: string,
   emitter: typeof IS_SOLID_CONFIG_ITEMS.emitter,
 ): string {
   const interfaceLines: string[] = [];
-  const functionLines: string[] = [];
 
+  // 1. Build the Database (The only part that repeats)
+  // registry.forEach((value, key) => {
+  //   const [absPath, typeName] = value.split('|');
+  //   const relativePath = path.relative(targetDir, absPath).replace(/\\/g, '/');
+  //   const typeImport = `import('./${relativePath}').${typeName}`;
+  //   interfaceLines.push(`    '${key}': ${typeImport};`);
+  // });
   registry.forEach((value, key) => {
-    const [absPath, typeName] = value.split('|');
-    const relativePath = path.relative(targetDir, absPath).replace(/\\/g, '/');
-    const typeImport = `import('./${relativePath}').${typeName}`;
+    // 💎 Discard the path (index 0), keep the structure (index 1)
+    const [_, typeStructure] = value.split('|');
 
-    interfaceLines.push(`    '${key}': ${typeImport};`);
-
-    ObjectUtils.values(REGISTERED_INTELLIGENCE_FUNCTIONS).forEach((config) => {
-      functionLines.push(`  ${config.signature({ key, typeImport })}`);
-    });
+    // Inject the raw structure directly into the mapping
+    interfaceLines.push(`    '${key}': ${typeStructure};`);
   });
 
-  // return [
-  //   emitter.banner,
-  //   `/* eslint-disable ${emitter.eslintDisabled.join(' ')} */`,
-  //   ...emitter.imports,
-  //   '',
-  //   `declare module '${emitter.moduleName}' {`,
-  //   `  interface ISolidRegistry {`,
-  //   ...interfaceLines,
-  //   `  }`,
-  //   '',
-  //   `  // --- TEMPORAL REGISTRATIONS ---`,
-  //   ...functionLines,
-  //   `}`,
-  // ]
-  //   .join('\n')
-  //   .trim();
+  // 2. Fetch the "Master" signatures from your config
+  const functionLines = Object.values(REGISTERED_INTELLIGENCE_FUNCTIONS).map(
+    (config) => config.signature({ key: 'K', typeImport: 'ISolidRegistry[K]' }),
+  );
+
   return [
     emitter.banner,
     `/* eslint-disable ${emitter.eslintDisabled.join(' ')} */`,
@@ -68,14 +58,7 @@ function temporalManifest(
     `  }`,
     '',
     `  // --- UNIFIED GHOST API ---`,
-    `  // 💎 These 5 lines handle INFINITE keys from the registry above`,
-    `  export function isXalor<K extends keyof ISolidRegistry>(data?: undefined, injected?: TSolidMetadata<K, ISolidRegistry[K]>): true;`,
-    `  export function isXalor<K extends keyof ISolidRegistry>(data?: undefined, injectedKey?: K): TSolidMetadata<K, ISolidRegistry[K]>;`,
-    `  export function isXalor<K extends keyof ISolidRegistry>(data: unknown, injectedKey?: K): data is ISolidRegistry[K];`,
-    `  export function isXalor<K extends keyof ISolidRegistry>(data: unknown, assert: true, injectedKey?: K): asserts data is ISolidRegistry[K];`,
-    '',
-    `  export function isSolid<K extends keyof ISolidRegistry>(data: unknown, key?: K): data is TSolid<K, ISolidRegistry[K]>;`,
-    `  export function isSolid(data?: undefined): true;`,
+    ...functionLines,
     `}`,
   ]
     .join('\n')

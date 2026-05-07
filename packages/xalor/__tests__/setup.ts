@@ -1,5 +1,5 @@
 // __tests__/setup.ts
-import { ensureGlobalVault } from '../models/utils/global';
+import { ensureGlobalVault } from '../src/utils/global';
 
 beforeEach(() => {
   const vault = ensureGlobalVault();

@@ -3,7 +3,12 @@ import { identifySolidCall } from './detector';
 import { reifyType } from '../reifiers';
 import { solidVisitorProcessor } from './processor';
 import { isSolidCall } from '../utils';
-import { visitEachChild } from 'typescript';
+import {
+  visitEachChild,
+  TypeFormatFlags,
+  SymbolFlags,
+  TypeFlags,
+} from 'typescript';
 import type {
   Program,
   TransformationContext,
@@ -100,9 +105,62 @@ export function createVisitor(
       const key = keyType.value;
       console.log(`[xalor-debug] 🎯 MINING SUCCESS: Key="${key}"`);
 
-      const typeName = checker.typeToString(shapeType);
-      updateRegistry(globalRegistry, key, sourceFile.fileName, typeName);
+      // const typeName = checker.typeToString(
+      //   shapeType,
+      //   node,
+      //   TypeFormatFlags.NoTruncation | TypeFormatFlags.InTypeAlias,
+      // );
 
+      // const typeName = checker.typeToString(
+      //   shapeType,
+      //   node,
+      //   // 💎 ADD THIS FLAG: UseStructuralFallback
+      //   TypeFormatFlags.NoTruncation |
+      //     TypeFormatFlags.InTypeAlias |
+      //     TypeFormatFlags.UseStructuralFallback,
+      // );
+
+      // // 💎 CHANGE: Pass ONLY the typeName. No pipes, no paths.
+      // updateRegistry({ registry: globalRegistry, key, typeName });
+      // const typeName = checker.typeToString(
+      //   shapeType,
+      //   node,
+      //   TypeFormatFlags.NoTruncation |
+      //     TypeFormatFlags.InTypeAlias |
+      //     TypeFormatFlags.UseStructuralFallback,
+      // );
+      // updateRegistry(globalRegistry, key, sourceFile.fileName, typeName);
+      const typeName = (() => {
+        // 1. If it's an object, we manually map its properties to a string
+        if (
+          shapeType.isClassOrInterface() ||
+          shapeType.getFlags() & TypeFlags.Object
+        ) {
+          const props = checker.getPropertiesOfType(shapeType);
+          const propStrings = props.map((p) => {
+            const propType = checker.getTypeOfSymbolAtLocation(p, node);
+            const propTypeString = checker.typeToString(propType);
+            const isOptional = p.getFlags() & SymbolFlags.Optional ? '?' : '';
+            return `${p.getName()}${isOptional}: ${propTypeString};`;
+          });
+          return `{ ${propStrings.join(' ')} }`;
+        }
+
+        // 2. Fallback for primitives (string, number, etc.)
+        return checker.typeToString(
+          shapeType,
+          node,
+          TypeFormatFlags.NoTruncation,
+        );
+      })();
+
+      // Now update the registry with the FORCED structure
+      updateRegistry({
+        registry: globalRegistry,
+        key,
+        filePath: sourceFile.fileName,
+        typeName,
+      });
       const shape = reifyType(shapeType, checker, new Set());
       const updatedCall = solidVisitorProcessor({
         shape,

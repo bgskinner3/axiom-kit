@@ -7,9 +7,9 @@ import {
   isLiteralShape,
   isBrandedShape,
 } from '../utils/guards';
-import { ObjectUtils } from '../../models/utils/common';
-import { PRIMITIVE_DEFAULTS } from '../../models/constants';
-import type { TSolidShape } from '../../models/types';
+import { ObjectUtils } from '../utils';
+import { PRIMITIVE_DEFAULTS } from '../models/constants';
+import type { TSolidShape } from '../models/types';
 /**
  * 🎨 GET SOLID DEFAULT
  * Generates a "Zero-Value" object template based on a registered key.

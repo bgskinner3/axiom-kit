@@ -10,7 +10,12 @@ describe('Visitor Actions', () => {
       const registry = new Map([['USER', 'file-a.ts|IUser']]);
 
       expect(() =>
-        updateRegistry(registry, 'USER', 'file-b.ts', 'NewUser'),
+        updateRegistry({
+          registry,
+          key: 'USER',
+          filePath: 'file-b.ts',
+          typeName: 'NewUser',
+        }),
       ).toThrow(
         '[xalor] Collision: Key "USER" is already defined in file-a.ts',
       );
@@ -19,7 +24,12 @@ describe('Visitor Actions', () => {
     it('should allow updates from the same file', () => {
       const registry = new Map([['USER', 'file-a.ts|IUser']]);
       expect(() =>
-        updateRegistry(registry, 'USER', 'file-a.ts', 'IUser'),
+        updateRegistry({
+          registry,
+          key: 'USER',
+          filePath: 'file-a.ts',
+          typeName: 'IUser',
+        }),
       ).not.toThrow();
     });
   });

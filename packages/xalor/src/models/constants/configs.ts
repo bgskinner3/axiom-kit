@@ -22,13 +22,16 @@ const SOLID_GLOBAL_KEYS = {
 const SOLID_EMITTER_KEYS = {
   targetDir: './dist',
   fileName: 'solid-env.d.ts',
-  moduleName: process.env.NODE_ENV === 'test' ? '.' : '@bgskinner2/xalor',
+  // TODO: PUT BACK
+  moduleName: process.env.NODE_ENV !== 'test' ? '.' : '@bgskinner2/xalor',
   banner: `/** 💎 SOLIDIFIED TYPE DATABASE (AUTO-GENERATED) */`,
   eslintDisabled: [
     '@typescript-eslint/no-unused-vars',
     '@typescript-eslint/no-explicit-any',
   ],
-  imports: ["import type { TSolid } from './index';"],
+  imports: [
+    "import type { TSolid, TSolidMetadata, ISolidRegistry } from './index';",
+  ],
 } as const;
 /**
  * 🌍 MASTER GLOBAL CONFIGURATION

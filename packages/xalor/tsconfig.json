@@ -15,7 +15,7 @@
     "types": [
       "node",
       "jest"
-    ]
+    ],
   },
   "ignoreDiagnostics": [
     5023,
