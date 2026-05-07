@@ -38,7 +38,7 @@ const SOLID_EMITTER_KEYS = {
  * immutable configuration object used by the Miner, the Emitter,
  * and the Runtime Engine.
  */
-export const GLOBAL_CONFIG_KEYS = {
+export const IS_SOLID_CONFIG_ITEMS = {
   ...SOLID_GLOBAL_KEYS,
   // EMITTER I>E DATAASE FILE BUILD
   emitter: {

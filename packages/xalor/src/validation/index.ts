@@ -3,7 +3,7 @@ import type {
   TValidationContext,
   TValidatorMapper,
   TSolidShape,
-} from '../../models/types';
+} from '../models/types';
 import { createInitialContext } from './context';
 import { validateObject } from './objects';
 import { validateUnion } from './unions';
@@ -24,7 +24,7 @@ import {
   isNull,
   isPrimitive,
   isFunction,
-} from '../../models/guards';
+} from '../utils/guards';
 
 const VALIDATORS: TValidatorMapper = {
   primitive: (data, shape, ctx) => {

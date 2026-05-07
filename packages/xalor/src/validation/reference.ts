@@ -1,9 +1,6 @@
 // src/validation/references.ts
 import { Registry } from '../vault';
-import type {
-  TValidationContext,
-  TSolidReferenceShape,
-} from '../../models/types';
+import type { TValidationContext, TSolidReferenceShape } from '../models/types';
 import { validate } from './index';
 import { reportError } from './errors';
 

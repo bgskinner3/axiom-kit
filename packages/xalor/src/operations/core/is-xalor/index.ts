@@ -7,8 +7,8 @@ import {
   buildValidationTools,
 } from './helpers';
 import { Registry } from '../../../vault';
-import { isUndefined, isString } from '../../../../models';
-import type { ISolidRegistry, TSolidMetadata } from '../../../../models';
+import { isUndefined, isString } from '../../../utils/guards';
+import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';
 
 const isAssertionIntent = (arg2: unknown, arg3: unknown): boolean =>
   arg2 === true || arg3 === true;

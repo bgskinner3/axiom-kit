@@ -1,8 +1,8 @@
 // src/validation/arrays.ts
 import { validate } from './index';
-import type { TSolidArrayShape, TValidationContext } from '../../models/types';
+import type { TSolidArrayShape, TValidationContext } from '../models/types';
 import { reportError } from './errors';
-import { isArray } from '../../models/guards';
+import { isArray } from '../utils/guards';
 
 export function validateArray(
   data: unknown,

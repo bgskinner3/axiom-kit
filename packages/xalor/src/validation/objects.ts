@@ -1,6 +1,6 @@
 // src/validation/objects.ts
-import type { TValidationContext, TSolidObjectRawShape } from '../../models';
-import { isObject, isNull, isRecord, ObjectUtils } from '../../models';
+import type { TValidationContext, TSolidObjectRawShape } from '../models/types';
+import { isObject, isNull, isRecord, ObjectUtils } from '../utils';
 import { validate } from './index';
 import { reportError } from './errors';
 

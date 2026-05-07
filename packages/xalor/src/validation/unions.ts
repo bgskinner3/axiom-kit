@@ -1,5 +1,5 @@
 // src/validation/unions.ts
-import type { TValidationContext, TSolidUnionShape } from '../../models/types';
+import type { TValidationContext, TSolidUnionShape } from '../models/types';
 import { validate } from './index';
 import { reportError } from './errors';
 

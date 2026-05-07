@@ -6,7 +6,7 @@ import { Registry } from './vault';
 //   TSolidMetadata,
 //   TSolidError,
 // } from '../models';
-import type { TSolidVaultMap } from '../models';
+import type { TSolidVaultMap } from './models/types';
 import { createInitialContext } from './validation/context';
 import { validate } from './validation';
 // import { isXalor } from './operations/core/is-xalor';

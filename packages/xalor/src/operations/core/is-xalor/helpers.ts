@@ -1,13 +1,13 @@
-import type { TTypeGuard, TAssert } from '../../../../models/types';
+import type { TTypeGuard, TAssert } from '../../../models/types';
 import {
   isNull,
   isObject,
   isKeyInObject,
   isUndefined,
   isString,
-} from '../../../../models/guards';
+} from '../../../utils/guards';
 import { Registry } from '../../../../src/vault';
-import type { ISolidRegistry, TSolidMetadata } from '../../../../models/types';
+import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';
 import { createInitialContext } from '../../../../src/validation/context';
 import { validate } from '../../../../src/validation';
 

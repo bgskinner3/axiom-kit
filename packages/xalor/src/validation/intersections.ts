@@ -2,7 +2,7 @@
 import type {
   TValidationContext,
   TSolidIntersectionShape,
-} from '../../models/types';
+} from '../models/types';
 import { validate } from './index';
 
 export function validateIntersection(

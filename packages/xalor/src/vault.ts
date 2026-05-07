@@ -1,12 +1,8 @@
 // src/vault.ts
-import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-import {
-  getGlobalVault,
-  ensureGlobalVault,
-  getCallerLocation,
-} from '../models/utils';
+import { IS_SOLID_CONFIG_ITEMS } from './models/constants';
+import { getGlobalVault, ensureGlobalVault, getCallerLocation } from './utils';
 import { produceDefault } from './generation';
-import type { TSolidMetadata, TSolidError } from '../models/types';
+import type { TSolidMetadata, TSolidError } from './models/types';
 export class Registry {
   /**
    * Registers metadata into the Global Vault's items map.
