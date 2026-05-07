@@ -42,7 +42,6 @@ export function solidVisitorProcessor({
     node,
     node.expression,
     node.typeArguments,
-    // undefined,
     finalArgs,
   );
 }

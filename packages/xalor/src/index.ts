@@ -39,6 +39,19 @@ export function isSolid(data?: unknown, injected?: TSolidMetadata): boolean {
 
   return isValid;
 }
+
+// interface User {
+//   id: number;
+//   name: string;
+//   settings: {
+//     theme: 'light' | 'dark';
+//     notifications: boolean;
+//   };
+// }
+
+// 2. Register it
+// const test = isSolid<'USER', User>();
+
 /**
  * CLEAN PUBLIC API
  * Notice: No mention of TSolidMetadata in the signatures.

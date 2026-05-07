@@ -1,5 +1,9 @@
 // transformer/emitters/intellisense-bridge.ts
-import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
+import {
+  IS_SOLID_CONFIG_ITEMS,
+  REGISTERED_INTELLIGENCE_FUNCTIONS,
+  ObjectUtils,
+} from '../../models';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -32,11 +36,9 @@ function temporalManifest(
 
     interfaceLines.push(`    '${key}': ${typeImport};`);
 
-    // In the future, you can dynamically swap 'isSolid' here!
-    functionLines.push(
-      `  export function isSolid(data?: undefined): true;`,
-      `  export function isSolid(data: unknown): data is TSolid<'${key}', ${typeImport}>;`,
-    );
+    ObjectUtils.values(REGISTERED_INTELLIGENCE_FUNCTIONS).forEach((config) => {
+      functionLines.push(`  ${config.signature({ key, typeImport })}`);
+    });
   });
 
   return [
