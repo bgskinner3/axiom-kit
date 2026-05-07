@@ -1,6 +1,6 @@
 // models/guards/transformer/nodes.ts
 import ts from 'typescript';
-
+import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
 /**
  * # IS SOLID CALL #####
  * Identifies the 'isSolid' function call within the AST.
@@ -14,95 +14,43 @@ import ts from 'typescript';
  * function with the same name (Shadowing), this guard will return 'false'
  * to prevent accidental transformation of non-library code.
  */
-// export function isSolidCall(
-//   node: ts.Node,
-//   checker?: ts.TypeChecker, // 💎 Make it optional to keep it flexible
-// ): node is ts.CallExpression {
-//   if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression)) {
-//     return false;
-//   }
-
-//   // 1. Basic Name Check
-//   if (node.expression.text !== 'isSolid') return false;
-
-//   // 2. Identity Check (Only if checker is provided)
-//   if (checker) {
-//     const symbol = checker.getSymbolAtLocation(node.expression);
-//     // If the symbol is defined in the SAME file as a function declaration,
-//     // it's a local "Shadow" function. We should ignore it.
-//     const declaration = symbol?.valueDeclaration;
-//     if (declaration && ts.isFunctionDeclaration(declaration)) {
-//       return false;
-//     }
-//   }
-
-//   return true;
-// }
-// export function isSolidCall(
-//   node: ts.Node,
-//   checker?: ts.TypeChecker,
-// ): node is ts.CallExpression {
-//   if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression)) {
-//     return false;
-//   }
-
-//   // 1. Basic Name Check
-//   if (node.expression.text !== 'isSolid') return false;
-
-//   // 2. Identity Check
-//   if (checker) {
-//     const symbol = checker.getSymbolAtLocation(node.expression);
-//     const declaration = symbol?.valueDeclaration;
-
-//     // 💎 FIX: During local testing, the declaration IS a FunctionDeclaration.
-//     // Instead of blocking all FunctionDeclarations, we check the FILE PATH.
-//     if (declaration && ts.isFunctionDeclaration(declaration)) {
-//       const filePath = declaration.getSourceFile().fileName;
-
-//       // If the function is defined in 'src/index.ts' but called in 'playground/test.ts',
-//       // it's OUR library function, not a local shadow.
-//       if (node.getSourceFile().fileName === filePath) {
-//         return false; // This is a shadow (defined and called in same file)
-//       }
-//     }
-//   }
-
-//   return true;
-// }
-// export function isSolidCall(
-//   node: ts.Node,
-//   _checker?: ts.TypeChecker,
-// ): node is ts.CallExpression {
-//   // Simple check: Is it a function call named 'isSolid'?
-//   return (
-//     ts.isCallExpression(node) &&
-//     ts.isIdentifier(node.expression) &&
-//     node.expression.text === 'isSolid'
-//   );
-// }
 export function isSolidCall(
   node: ts.Node,
-  _checker?: ts.TypeChecker,
+  checker?: ts.TypeChecker,
 ): node is ts.CallExpression {
-  // if (!ts.isCallExpression(node)) return false;
+  // 1. Structural Integrity Check
+  if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression))
+    return false;
+  // 2. Name-Based Sentry Check
+  const triggers: Readonly<string[]> = IS_SOLID_CONFIG_ITEMS.sentryTriggers;
+  const functionName = node.expression.text;
 
-  // const name = node.expression.getText();
-  // // console.log(`[xalor-debug] Checking call: ${name}`);
+  if (!triggers.includes(functionName)) return false;
 
-  // if (name.includes('isSolid')) {
-  //   console.log(`[xalor-debug] 🎯 MATCH FOUND: ${name}`);
-  //   return true;
-  // }
+  // 3. Identity Verification (The "Shadow" Shield)
+  if (checker) {
+    const symbol = checker.getSymbolAtLocation(node.expression);
+    const declaration = symbol?.valueDeclaration;
 
-  // return false;
-  // console.log(`[xalor-debug] 🎯 MATCH FOUND: ${node}`);
-  return (
-    ts.isCallExpression(node) &&
-    ts.isIdentifier(node.expression) &&
-    node.expression.text === 'isXalor'
-    // // 💎 CHECK: Does this match your polymorphic function name?
-    // (node.expression.text === 'isXalor' || node.expression.text === 'isSolid')
-  );
+    if (declaration && ts.isFunctionDeclaration(declaration)) {
+      const declFile = declaration.getSourceFile().fileName;
+      const callFile = node.getSourceFile().fileName;
+
+      /**
+       * 💎 LOGIC:
+       * If the function is declared in the SAME file where it's called,
+       * it is a "Fake" or "Shadow" function. We skip it.
+       *
+       * If they differ, it's an external import (our Library),
+       * so we trigger the Miner.
+       */
+      if (declFile === callFile) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
 
 /**

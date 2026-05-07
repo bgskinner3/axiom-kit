@@ -26,7 +26,7 @@
  * XIV.   Registry.match()       - The Pattern Matcher: Functional type-switching.
  */
 import { Registry } from '../../src/vault';
-import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
+import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
 
 /**
  * BREAK DOWN

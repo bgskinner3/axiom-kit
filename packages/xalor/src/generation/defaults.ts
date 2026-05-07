@@ -11,7 +11,7 @@ import { ObjectUtils } from '../utils';
 import { PRIMITIVE_DEFAULTS } from '../models/constants';
 import type { TSolidShape } from '../models/types';
 /**
- * 🎨 GET SOLID DEFAULT
+ * GET SOLID DEFAULT
  * Generates a "Zero-Value" object template based on a registered key.
  * Useful for initializing forms or state objects.
  */

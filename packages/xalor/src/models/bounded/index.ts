@@ -1,5 +1,4 @@
 import type { TAnyFunction } from '../types';
-import { isSolid } from '../../index';
 import { isXalor } from '../../operations/core/is-xalor';
 
 export type TREGISTRATION_BUILD_PARAMS = {
@@ -18,15 +17,6 @@ export type TINTELLISENSE_REGISTRATION = Record<
 >;
 
 export const REGISTERED_INTELLIGENCE_FUNCTIONS: TINTELLISENSE_REGISTRATION = {
-  'is-solid-reg': {
-    fn: isSolid,
-    signature: () => `  export function isSolid(data?: undefined): true;`,
-  },
-  'is-solid-resolution': {
-    fn: isSolid,
-    signature: () =>
-      `  export function isSolid<K extends keyof ISolidRegistry>(data: unknown, key?: K): data is TSolid<K, ISolidRegistry[K]>;`,
-  },
   'is-xalor-register': {
     fn: isXalor,
     signature: () =>

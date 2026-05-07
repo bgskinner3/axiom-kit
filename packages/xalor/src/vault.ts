@@ -27,6 +27,17 @@ export class Registry {
 
       return;
     }
+    if (vault.items.has(metadata.key)) {
+      // const existing = vault.items.get(metadata.key);
+
+      // 💡 Option A: Throw if you want to be strict
+      // throw new Error(`[xalor] Duplicate registration for key: ${metadata.key}`);
+
+      // 💡 Option B: Log a warning and track in the errors map
+      console.warn(
+        `[xalor] ⚠️ Collision detected for key "${metadata.key}". Overwriting existing entry.`,
+      );
+    }
     if (!metadata.area || metadata.area === 'unknown') {
       metadata.area = getCallerLocation({ topParent: true });
     }

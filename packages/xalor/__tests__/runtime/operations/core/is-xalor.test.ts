@@ -139,7 +139,7 @@ describe('isXalor Polymorphic Entry Point', () => {
 
     isXalor<'MY_BALLS', TFUCKKKKTT>();
     isXalor<'BigTEst', BigTEst>();
-    isXalor<'BigTEst', BigTEst>();
+    // isXalor<'BigTEst', BigTEst>();
     console.log(globalThis.__SOLID_VAULT__);
   });
 

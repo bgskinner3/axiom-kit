@@ -2,7 +2,7 @@
 import { validateReference } from '../../../src/validation/reference';
 import { createInitialContext } from '../../../src/validation/context';
 import { Registry } from '../../../src/vault';
-import { IS_SOLID_CONFIG_ITEMS } from '../../../models/constants/config';
+import { IS_SOLID_CONFIG_ITEMS } from '../../../src/models/constants';
 /**
  * BREAK DOWN
  * --------
