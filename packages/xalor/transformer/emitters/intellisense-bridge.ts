@@ -6,7 +6,7 @@ import {
 import { ObjectUtils } from '../../src/utils';
 import * as fs from 'fs';
 import * as path from 'path';
-
+import type { TVaultSyncPayload } from '../types';
 /**
  * temporalManifest
  *
@@ -22,15 +22,16 @@ import * as path from 'path';
  *    keys to their respective TypeScript interfaces for the IDE.
  */
 function temporalManifest(
-  registry: Map<string, string>,
+  registry: Map<string, TVaultSyncPayload>,
   targetDir: string,
   emitter: typeof IS_SOLID_CONFIG_ITEMS.emitter,
 ): string {
   const identityLines: string[] = []; // 💎 For the Imports (Names)
   const registryLines: string[] = []; // 💎 For the Shapes (Structures)
 
-  registry.forEach((value, key) => {
-    const [filePath, symbolName, rawStructure] = value.split('|');
+  registry.forEach((payload, key) => {
+    // 💎 NO MORE SPLIT: We access the structured "Gold" directly
+    const { filePath, symbolName, typeName } = payload;
 
     const isNamed = symbolName !== 'unknown' && !symbolName.startsWith('{');
 
@@ -38,12 +39,14 @@ function temporalManifest(
       const relPath = path
         .relative(targetDir, filePath)
         .replace(/\\/g, '/')
-        .replace('.ts', '');
+        .replace(/\.tsx?$/, ''); // 💎 Better regex: handles .ts and .tsx
+
       identityLines.push(`    '${key}': import('./${relPath}').${symbolName};`);
     }
 
-    // Always add the raw structure to the Registry
-    registryLines.push(`    '${key}': ${rawStructure};`);
+    // Always add the raw typeName (the Ghost Structure) to the Registry
+    // This uses the string we mined in printGhostStructure
+    registryLines.push(`    '${key}': ${typeName};`);
   });
 
   // 2. Fetch the "Master" signatures from your config
@@ -93,7 +96,7 @@ function temporalManifest(
  */
 export function hydrateIntellisenseBridge(
   rootDir: string,
-  registry: Map<string, string>,
+  registry: Map<string, TVaultSyncPayload>,
 ) {
   const { emitter } = IS_SOLID_CONFIG_ITEMS;
   const targetDir = path.join(rootDir, emitter.targetDir);

@@ -53,14 +53,14 @@ export function isSolidCall(
   return true;
 }
 
-/**
- * IS IDENTIFIER
- * Validates if a node is a TypeScript Identifier with a specific name.
- * Used to target internal keywords or specific brand names during AST walking.
- */
-export function isIdentifier(
-  node: ts.Node,
-  text: string,
-): node is ts.Identifier {
-  return ts.isIdentifier(node) && node.text === text;
-}
+// /**
+//  * IS IDENTIFIER
+//  * Validates if a node is a TypeScript Identifier with a specific name.
+//  * Used to target internal keywords or specific brand names during AST walking.
+//  */
+// export function isIdentifier(
+//   node: ts.Node,
+//   text: string,
+// ): node is ts.Identifier {
+//   return ts.isIdentifier(node) && node.text === text;
+// }

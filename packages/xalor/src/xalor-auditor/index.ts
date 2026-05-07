@@ -1,11 +1,76 @@
-// import { XALOR_MESSAGE_HANDLER } from './msg';
+import { XALOR_MESSAGE_HANDLER } from './msg';
+import { XalethorVault } from '../xalor-vault';
+import { ensureGlobalVault, getGlobalVault } from '../utils';
+import type { TSolidError, TSolidShape, TSolidVaultMap } from '../models/types';
+
 /**
+ * 🕵️‍♂️ XALETHOR AUDITOR
  *
- *
- *
- *
+ * The system's central inspector. It monitors the health of the
+ * Triple-KV Archive and records validation failures in the Vault.
  */
-// export class XalorAuditor {}
+export class XalorAuditor {
+  private static get errorVault(): TSolidVaultMap['errors'] {
+    return ensureGlobalVault().errors;
+  }
+
+  public static getErrors(key: string): TSolidError[] {
+    return this.errorVault.get(key) ?? [];
+  }
+  public static clearErrors(key?: string): void {
+    if (key) this.errorVault.delete(key);
+    if (!key) this.errorVault.clear();
+  }
+  /**
+   * Internal: Sets the errors for a specific key in the errors map.
+   */
+  public static setErrors(key: string, errors: TSolidError[]): void {
+    this.errorVault.set(key, errors);
+  }
+
+  public static record(error: TSolidError): void {
+    const currentErrors = this.getErrors(error.key);
+    currentErrors.push(error);
+    this.setErrors(error.key, currentErrors);
+  }
+
+  /**
+   * 📑 SCAN (Dev Tool)
+   * Diagnostic table showing the health of the Triple-KV Archive.
+   */
+  public static scan(): void {
+    const keys = XalethorVault.keys();
+
+    if (keys.length === 0) {
+      console.log('\n[xalor-audit] 📭 The Archive is empty.\n');
+      return;
+    }
+
+    const inventory = keys.map((key) => ({
+      /* prettier-ignore */ 'Key 🔑': key,
+      /* prettier-ignore */ 'Symbol 🆔': XalethorVault.vaultArchive('registry', key) || '⚠️ MISSING',
+      /* prettier-ignore */ 'Location 📍': XalethorVault.vaultArchive('manifest', key) || '⚠️ UNKNOWN',
+      /* prettier-ignore */ 'Kind 🏗️': XalethorVault.vaultArchive('blueprint', key)?.kind || '❌ BROKEN',
+    }));
+
+    console.log('\n--- 🏛️ XALETHOR ARCHIVE AUDIT ---');
+    console.table(inventory);
+  }
+
+  /**
+   * 🔍 DIAGNOSE (Dev Tool)
+   * Prints active runtime errors for a specific key.
+   */
+  public static diagnose(key: string): void {
+    const errors = this.getErrors(key);
+    if (errors.length === 0) {
+      console.log(`[xalor-audit] No active errors for key: ${key}`);
+      return;
+    }
+    console.warn(`\n--- 🕵️‍♂️ DISCREPANCY REPORT: ${key} ---`);
+    console.table(errors);
+  }
+}
 
 /**
  * 🕵️‍♂️ XALOR AUDITOR
@@ -81,4 +146,30 @@ export class XalorAuditor {
 //   });
 //   return false;
 // }
+
+/**
+ *
+ * Retrieves the last validation error(s) for a specific key.
+ */
+// public static getErrors(key: string): TSolidError[] {
+//   return getGlobalVault()?.errors.get(key) ?? [];
+// }
+
+// /**
+//  * Internal: Sets the errors for a specific key in the errors map.
+//  */
+// public static setErrors(key: string, errors: TSolidError[]): void {
+//   const vault = ensureGlobalVault();
+//   vault.errors.set(key, errors);
+// }
 // // XalorAuditor
+// TEMP
+export * from './msg';
+
+/**
+ I. registration phase 
+    - inilized via xalor<>() ... whcih the triggers the utulization of our transformaer ...
+     gathering the type, location , name, symbol and so on...
+     THOUGHT: our transformer shoudl have the TRUEshape of the individual types... 
+     -  
+ */

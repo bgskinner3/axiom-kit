@@ -132,3 +132,25 @@ export function extractSolidKey(
  * isXalor<'USER'>(data, true); // Throws if data is invalid
  * ```
  */
+/**
+ 
+so lets take it liek this ... user install our package and pulls the isXalor func to beign registring types
+
+given the overloaded build this function ahs many capabilites but cant leverage any unless they are registred (its the law)
+
+so the user begins. ==>  isXalor<_, _>() <=== taking this the use has read the docs and realizes the key goes in generically and so doe the built 
+type/interface (we handle both... and yes its live) ... form here the type is assgined a key and the type passed is saved ... and thats allt eh user knows
+
+free to sue any current avialble  runtime featurees ...
+
+so now this is where we come in ... we need to decide when that type is registered how we 
+
+A. store these 
+B. wehre we store these ==> for instace we are suing our DIST 
+C. whats avaioble to the user whats not.? 
+
+
+all in all we ar ehere and we have to make descions on hwo to buidlthis our to our advanatge 
+
+what are yur ideas?
+ */

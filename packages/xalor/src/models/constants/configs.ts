@@ -35,6 +35,27 @@ const SOLID_EMITTER_KEYS = {
     "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from './index';",
   ],
 } as const;
+
+/**
+ * 🗺️ XALOR PATHS
+ *
+ * Centralizes the physical locations for the Xalethor Engine.
+ * This ensures the Miner and the Archive are always synchronized.
+ */
+export const XALOR_PATHS = {
+  /** The "Genesis Bunker" for persistence across builds */
+  cacheDir: 'node_modules/.cache/xalor',
+
+  /** The serialized snapshot of the Triple-KV Vault */
+  vaultFile: 'vault-snapshot.json',
+
+  /** The IDE Bridge destination (The Ghost Layer) */
+  bridgeDir: 'src/.xalor',
+
+  /** The filename for the ambient declarations */
+  bridgeFile: 'solid-env.d.ts',
+} as const;
+
 /**
  * 🌍 MASTER GLOBAL CONFIGURATION
  *
@@ -48,5 +69,8 @@ export const IS_SOLID_CONFIG_ITEMS = {
   // EMITTER I>E DATAASE FILE BUILD
   emitter: {
     ...SOLID_EMITTER_KEYS,
+  },
+  lifeCyclePaths: {
+    ...XALOR_PATHS,
   },
 } as const;

@@ -74,7 +74,10 @@ export type TSolidVaultMap = {
    */
   errors: Map<string, TSolidError[]>;
 };
-
+/**
+ * BRANDING TYPES WAS PART OF OUR ORIGINAL idea
+ * helpw ith tracking and managing etc ....
+ */
 declare const SolidBrand: unique symbol;
 export type TSolid<K extends string, T> = T & {
   readonly [SolidBrand]: K;

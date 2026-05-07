@@ -102,31 +102,3 @@ export const getCallerLocation = (
   );
   return cleanLine.replace(defaultStrip, '');
 };
-// export const getCallerLocation = (
-//   options: TGetCallerLocationOptions,
-// ): string => {
-//   const {
-//     preferredIndex = 3,
-//     fallbackIndex = 2,
-//     topParent = false,
-//     stripPathPrefix = process.cwd(),
-//   } = options;
-
-//   const stack = new Error().stack;
-//   if (!stack) return 'unknown';
-
-//   const lines = stack
-//     .split('\n')
-//     .slice(1)
-//     .map((line) => line.replace(/^\s*at\s+/, '').trim())
-//     .filter(Boolean);
-
-//   const line = topParent
-//     ? ([...lines].reverse().find((l) => !l.includes('node_modules')) ??
-//       lines.at(-1))
-//     : (lines[preferredIndex] ?? lines[fallbackIndex] ?? lines.at(-1));
-
-//   return stripPathPrefix
-//     ? (line?.replace(stripPathPrefix, '') ?? 'unknown')
-//     : (line ?? 'unknown');
-// };

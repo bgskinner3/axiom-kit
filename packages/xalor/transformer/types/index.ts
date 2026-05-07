@@ -1,2 +1,2 @@
 export * from './reifier';
-export * from './visitor';
+export * from './the-miners';

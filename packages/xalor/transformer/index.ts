@@ -1,9 +1,10 @@
 // transformer/index.ts
 import './reifiers/registry/index';
 import ts from 'typescript';
-import { createVisitor } from './visitor';
+import { theMiner } from './the-miner';
 import { hydrateIntellisenseBridge } from './emitters';
-const globalKeyRegistry = new Map<string, string>();
+import type { TVaultSyncPayload } from './types';
+const globalKeyRegistry = new Map<string, TVaultSyncPayload>();
 export default function (
   program: ts.Program,
 ): ts.TransformerFactory<ts.SourceFile> {
@@ -30,12 +31,7 @@ export default function (
       // 🚩 DEBUG: File Entry
       // console.log(`[xalor] Processing: ${sourceFile.fileName}`);
 
-      const visitor = createVisitor(
-        program,
-        context,
-        sourceFile,
-        globalKeyRegistry,
-      );
+      const visitor = theMiner(program, context, sourceFile, globalKeyRegistry);
 
       const result = ts.visitNode(sourceFile, visitor) as ts.SourceFile;
 
@@ -46,6 +42,16 @@ export default function (
       const isTest = process.env.NODE_ENV === 'test';
 
       if (isLastFile || (isTest && globalKeyRegistry.size >= 0)) {
+        // =========================================================
+
+        // const archive = new XalethorVaultArchive();
+
+        // // ⚡ STAGE 4: THE FLUSH
+        // // We commit the Accumulator to the node_modules/.cache
+        // archive.persist(rootDir, globalKeyRegistry);
+
+        // =========================================================
+
         // ⚡ FORCE THE EMISSION
         hydrateIntellisenseBridge(rootDir, globalKeyRegistry);
         // console.log(

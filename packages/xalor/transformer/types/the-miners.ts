@@ -65,3 +65,32 @@ export type TPrintGhostStructure = {
   checker: TypeChecker;
   node: Node;
 };
+
+export type TSpatialIdentity = {
+  readonly area: string; // GPS: "src/user.ts:42:10" (Auditor)
+  readonly typeName: string; // Ghost: "import('...').User" (Bridge)
+  readonly symbolName: string; // Identity: "User" (Registry)
+  readonly filePath: string; // Absolute: "/project/src/user.ts" (File System)
+};
+
+export type TInterfaceOrType = {
+  sourceFile: SourceFile;
+  shapeType: Type;
+  checker: TypeChecker;
+  node: Node;
+};
+
+export type TVaultSyncPayload = {
+  readonly key: string;
+  readonly filePath: string; // Absolute Path
+  readonly area: string; // GPS: file:line:char
+  readonly symbolName: string; // TS Identity (User)
+  readonly typeName: string; // Ghost Structure (import path)
+  readonly shape: TSolidShape; // The Logic
+  readonly version: string; // Engine Version
+};
+
+export type TSyncVaultParams = {
+  registry: Map<string, TVaultSyncPayload>;
+  payload: TVaultSyncPayload;
+};

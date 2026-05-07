@@ -3,9 +3,18 @@ import { isTypeReference } from '../utils';
 import type { TPrintGhostStructure } from '../types';
 
 /**
+ * ROLE:
+ * - The "IntelliSense Engine." It converts complex TS Symbols into human-readable
+ *   structural strings for the .d.ts Bridge (ISolidIdentity).
  *
- * Recursively expands TypeScript types into structural strings.
- * Uses native TypeChecker guards to avoid 'any' casting.
+ * STRATEGY:
+ * - Recursively walks through Objects and Arrays to unwrap "Hidden" types.
+ * - Prevents the "any" trap by leveraging bitwise TypeFlags.
+ * - Handles the "Hydra Problem" (nested objects) by mapping properties to strings.
+ *
+ * WHY:
+ * - Without this, your IDE would show [object Object].
+ * - With this, your IDE shows the exact structural truth of the type.
  */
 export function printGhostStructure({
   type,

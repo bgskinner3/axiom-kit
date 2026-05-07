@@ -143,3 +143,37 @@ export class Registry {
     return produceDefault(metadata.shape) as T;
   }
 }
+
+/**
+ * HYDRATE VAULT
+ *
+ * Uses lazy iteration to move mined metadata into the Triple-KV Vault.
+ * Zero memory allocation for intermediate arrays.
+ */
+
+/**
+
+export function hydrateVault(
+  minedEntries: Iterable<[string, TRegistryEntry]>
+): void {
+  const vault = ensureGlobalVault();
+
+  for (const [key, metadata] of minedEntries) {
+    // 🛡️ THE COLLISION GUARD (Commandment I)
+    if (vault.blueprints.has(key)) {
+      throw new Error(XALOR_MESSAGE_HANDLER.ERROR.COLLISION({ 
+        key, 
+        msg: vault.manifest.get(key) 
+      }));
+    }
+
+    // 💎 BROADCAST TO TRIPLE-KV
+    vault.blueprints.set(key, metadata.shape);
+    vault.manifest.set(key, metadata.filePath);
+    vault.registry.set(key, metadata.symbolName);
+    
+    // Legacy support
+    vault.items.set(key, metadata as any); // (Exception: Bridge to legacy)
+  }
+}
+ */

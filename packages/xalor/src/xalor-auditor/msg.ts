@@ -11,20 +11,21 @@ import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
  */
 
 type TMessageHandlerParams = {
-  path: string;
+  path?: string;
   expected?: unknown;
   received?: unknown;
   key?: string;
   kind?: TSolidShapeKinds;
   version?: string;
   msg?: string;
+  location?: string;
 };
 type TMessageHandler = Record<string, (props: TMessageHandlerParams) => string>;
 type TMessageHandlerShape = {
   ERROR: TMessageHandler;
   WARNING: TMessageHandler;
 };
-export const XALOR_MESSAGE_HANDLER: TMessageHandlerShape = {
+export const XALOR_MESSAGE_HANDLER = {
   ERROR: {
     UNSUPPORTED_KIND: (props: TMessageHandlerParams) =>
       `[xalor] Unsupported shape kind: "${props.kind}". ` +
@@ -33,17 +34,25 @@ export const XALOR_MESSAGE_HANDLER: TMessageHandlerShape = {
       `[xalor] Version mismatch for "${props.key}". Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, got ${props.version}.`,
     COLLISION: (props: TMessageHandlerParams) =>
       `[xalor] 🚨 Collision! Key "${props.key}" is already registered. Check: ${props.msg}`,
-    MISSING_BLUEPRINT: (props) =>
-      `[xalor] Runtime Error: No blueprint found for key "${props.key}". ` +
-      `Ensure the file containing this type is being mined by the transformer.`,
-  },
+    // MISSING_BLUEPRINT: (props) =>
+    //   `[xalor] Runtime Error: No blueprint found for key "${props.key}". ` +
+    //   `Ensure the file containing this type is being mined by the transformer.`,
+    MISSING_VAULT_BLUEPRINT: (props) =>
+      `[xalor] Blueprint missing for "${props.key}", though manifest exists at ${props.location}.`,
+    MISSING_VAULT_KEY: (props) =>
+      `[xalor] Key "${props.key}" is completely unknown to the Vault.`,
+    BROKEN_PIPE_GENIES: (props) =>
+      `[xalor-persist] Failed to write Genesis Cache: ${props.error}`,
+    DEFINITION_COLLISION: (props: TMessageHandlerParams) =>
+      `[xalor] 🚨 Collision: Key "${props.key}" is defined in ${props.path} and ${props.path}.`,
+  } as const,
   WARNING: {
     COLLISION: (props: TMessageHandlerParams) =>
       `[xalor] ⚠️ Collision detected for key "${props.key}". Overwriting existing entry.`,
     DEPRECATED_ACCESS: (props) =>
       `[xalor] ⚠️ Accessing 'items' map is deprecated. Please use 'blueprints' or 'manifest' instead.`,
-  },
-} satisfies TMessageHandlerShape;
+  } as const,
+};
 
 // TYPE_MISMATCH: (path: string, exp: string, rec: any) =>
 //   `[isSolid] Type mismatch at '${path}': Expected ${exp}, received ${typeof rec}.`,
@@ -55,3 +64,4 @@ export const XALOR_MESSAGE_HANDLER: TMessageHandlerShape = {
 //   `[isSolid] Data at '${path}' failed to solidify against any allowed union branches.`,
 // VAULT_MISSING: (key: string) =>
 //   `[isSolid] Ambient lookup failed: '${key}' does not exist in the Registry.`,
+// `[xalor] Collision: Key "${props.key}" is already defined in ${existing.filePath}.`
