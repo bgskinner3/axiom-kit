@@ -29,7 +29,8 @@
     "transformer/**/*",
     "models/**/*",
     "tsup.config.ts",
-    "__tests__"
+    "__tests__",
+    "dist/solid-env.d.ts"
   ],
   "exclude": [
     "dist",

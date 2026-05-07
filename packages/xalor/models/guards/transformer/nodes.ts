@@ -95,11 +95,13 @@ export function isSolidCall(
   // }
 
   // return false;
-  // console.log(`[xalor-debug] 🎯 MATCH FOUND: ${name}`);
+  // console.log(`[xalor-debug] 🎯 MATCH FOUND: ${node}`);
   return (
     ts.isCallExpression(node) &&
     ts.isIdentifier(node.expression) &&
-    node.expression.text === 'isSolid'
+    node.expression.text === 'isXalor'
+    // // 💎 CHECK: Does this match your polymorphic function name?
+    // (node.expression.text === 'isXalor' || node.expression.text === 'isSolid')
   );
 }
 

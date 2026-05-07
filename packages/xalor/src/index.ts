@@ -1,11 +1,12 @@
 // src/index.ts
 import { Registry } from './vault';
-import type {
-  ISolidRegistry,
-  TSolid,
-  TSolidMetadata,
-  TSolidError,
-} from '../models';
+// import type {
+//   ISolidRegistry,
+//   TSolid,
+//   TSolidMetadata,
+//   TSolidError,
+// } from '../models';
+import type { TSolidVaultMap } from '../models';
 import { createInitialContext } from './validation/context';
 import { validate } from './validation';
 // import { isXalor } from './operations/core/is-xalor';
@@ -40,17 +41,30 @@ export function isSolid(data?: unknown, injected?: TSolidMetadata): boolean {
   return isValid;
 }
 
-// interface User {
-//   id: number;
-//   name: string;
-//   settings: {
-//     theme: 'light' | 'dark';
-//     notifications: boolean;
-//   };
-// }
+import type {
+  TSolidMetadata as _TSolidMetadata,
+  TSolid as _TSolid,
+  TSolidError as _TSolidError,
+} from '../models/types';
 
-// 2. Register it
-// const test = isSolid<'USER', User>();
+export type TSolidMetadata = _TSolidMetadata;
+export type TSolid<K extends string, T> = _TSolid<K, T>;
+export type TSolidError = _TSolidError;
+
+// Export your registry so the Bridge can find it
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ISolidRegistry {}
+/**
+ *  THE AMBIENT BLUEPRINTS
+ * These are the serialized structures stored in the Vault.
+ * They are global so they can be accessed by the Miner and the Engine.
+ */
+declare global {
+  /** The Singleton on globalThis */
+  var __SOLID_VAULT__: TSolidVaultMap | undefined;
+}
+export {};
+// solid-blueprints
 
 /**
  * CLEAN PUBLIC API

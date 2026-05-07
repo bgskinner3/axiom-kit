@@ -8,13 +8,14 @@ const SOLID_GLOBAL_KEYS = {
  */
 const SOLID_EMITTER_KEYS = {
   /** Relative path to the package distribution folder where types are injected. */
-  targetDir: 'node_modules/@bgskinner2/xalor/dist',
+  // targetDir: 'node_modules/@bgskinner2/xalor/dist',
+  targetDir: './dist',
 
   /** The specific declaration file name that powers IDE autocomplete. */
   fileName: 'solid-env.d.ts',
 
   /** The library name used in the 'declare module' wrapper. */
-  moduleName: 'xalor',
+  moduleName: process.env.NODE_ENV === 'test' ? '.' : '@bgskinner2/xalor',
 
   /** Warning header placed at the very top of the generated file. */
   banner: `/** 💎 SOLIDIFIED TYPE DATABASE (AUTO-GENERATED) */`,
@@ -26,7 +27,7 @@ const SOLID_EMITTER_KEYS = {
   ],
 
   /** Internal type imports required for the ambient declarations to resolve. */
-  imports: ["import type { ISolidRegistry, TSolid } from './index';"],
+  imports: ["import type { TSolid } from './index';"],
 } as const;
 
 export const IS_SOLID_CONFIG_ITEMS = {

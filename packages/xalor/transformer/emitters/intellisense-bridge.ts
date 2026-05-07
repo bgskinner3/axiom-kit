@@ -73,6 +73,27 @@ function temporalManifest(
  *    preventing unnecessary IDE re-indexes or build triggers.
  * 3. DIRECTORY SAFETY: Ensures the distribution path exists before writing.
  */
+// export function hydrateIntellisenseBridge(
+//   rootDir: string,
+//   registry: Map<string, string>,
+// ) {
+//   const { emitter } = IS_SOLID_CONFIG_ITEMS;
+//   const targetDir = path.join(rootDir, emitter.targetDir);
+//   const envFile = path.join(targetDir, emitter.fileName);
+
+//   const dts = temporalManifest(registry, targetDir, emitter);
+
+//   if (!fs.existsSync(targetDir)) {
+//     fs.mkdirSync(targetDir, { recursive: true });
+//   }
+
+//   const existing = fs.existsSync(envFile)
+//     ? fs.readFileSync(envFile, 'utf8')
+//     : '';
+//   if (dts !== existing) {
+//     fs.writeFileSync(envFile, dts);
+//   }
+// }
 export function hydrateIntellisenseBridge(
   rootDir: string,
   registry: Map<string, string>,
@@ -81,16 +102,17 @@ export function hydrateIntellisenseBridge(
   const targetDir = path.join(rootDir, emitter.targetDir);
   const envFile = path.join(targetDir, emitter.fileName);
 
+  // 🚩 DEBUG LOGS
+  console.log(`[xalor-fs] Attempting to write to: ${envFile}`);
+  console.log(`[xalor-fs] Registry size: ${registry.size}`);
+
   const dts = temporalManifest(registry, targetDir, emitter);
 
   if (!fs.existsSync(targetDir)) {
+    console.log(`[xalor-fs] Creating missing directory: ${targetDir}`);
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  const existing = fs.existsSync(envFile)
-    ? fs.readFileSync(envFile, 'utf8')
-    : '';
-  if (dts !== existing) {
-    fs.writeFileSync(envFile, dts);
-  }
+  fs.writeFileSync(envFile, dts); // 💎 FORCE WRITE (Remove the 'existing' check for now)
+  console.log(`[xalor-fs] ✅ File written successfully.`);
 }

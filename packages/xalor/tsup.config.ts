@@ -15,6 +15,8 @@ export default defineConfig({
   clean: true, // Keep this to ensure fresh builds
   minify: true,
   splitting: true,
+  // minify: false, // 💎 Recommendation: Don't minify the library itself if it's for dev use
+  // splitting: false,
   treeshake: true,
   sourcemap: true,
   external: ['typescript'],

@@ -28,6 +28,44 @@ import { updateRegistry, markAsPure } from './actions';
  * 5. REIFY: Recursively converts the TS Type into a JSON-friendly "Solid Shape".
  * 6. PROCESS: Replaces the original call with optimized runtime registration logic.
  */
+// export function createVisitor(
+//   program: Program,
+//   context: TransformationContext,
+//   sourceFile: SourceFile,
+//   globalRegistry: Map<string, string>,
+// ): Visitor {
+//   const checker = program.getTypeChecker();
+//   const { factory } = context;
+
+//   const visitor: Visitor = (node: Node): Node => {
+//     if (!isSolidCall(node, checker)) {
+//       return visitEachChild(node, visitor, context);
+//     }
+//     if (!node.typeArguments || node.typeArguments.length < 2) {
+//       return node; // Return original node without transformation
+//     }
+//     const { keyType, shapeType } = identifySolidCall({ node, checker });
+
+//     if (keyType.isStringLiteral()) {
+//       const key = keyType.value;
+//       const typeName = checker.typeToString(shapeType);
+
+//       // Modularized Registry Update
+//       /* prettier-ignore */ updateRegistry(globalRegistry, key, sourceFile.fileName, typeName);
+
+//       // Reify & Process
+//       /* prettier-ignore */ const shape = reifyType(shapeType, checker, new Set());
+//       /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node });
+
+//       return markAsPure(updatedCall);
+//     }
+
+//     return visitEachChild(node, visitor, context);
+//   };
+
+//   return visitor;
+// }
+
 export function createVisitor(
   program: Program,
   context: TransformationContext,
@@ -38,26 +76,46 @@ export function createVisitor(
   const { factory } = context;
 
   const visitor: Visitor = (node: Node): Node => {
+    // 🚩 CHECKPOINT 1: Is the Detector seeing the function name?
     if (!isSolidCall(node, checker)) {
       return visitEachChild(node, visitor, context);
     }
+    console.log(
+      `[xalor-debug] Found target function call in: ${sourceFile.fileName}`,
+    );
+
+    // 🚩 CHECKPOINT 2: Are the Generics missing?
+    // If you use isXalor<User>(data), length is 1. If <'KEY', User>, length is 2.
     if (!node.typeArguments || node.typeArguments.length < 2) {
-      return node; // Return original node without transformation
+      console.warn(
+        `[xalor-debug] Call skipped: Expected 2 generics, found ${node.typeArguments?.length || 0}`,
+      );
+      return node;
     }
+
     const { keyType, shapeType } = identifySolidCall({ node, checker });
 
+    // 🚩 CHECKPOINT 3: Is the Key actually a string literal?
     if (keyType.isStringLiteral()) {
       const key = keyType.value;
+      console.log(`[xalor-debug] 🎯 MINING SUCCESS: Key="${key}"`);
+
       const typeName = checker.typeToString(shapeType);
+      updateRegistry(globalRegistry, key, sourceFile.fileName, typeName);
 
-      // Modularized Registry Update
-      /* prettier-ignore */ updateRegistry(globalRegistry, key, sourceFile.fileName, typeName);
-
-      // Reify & Process
-      /* prettier-ignore */ const shape = reifyType(shapeType, checker, new Set());
-      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node });
-
+      const shape = reifyType(shapeType, checker, new Set());
+      const updatedCall = solidVisitorProcessor({
+        shape,
+        factory,
+        key,
+        sourceFile,
+        node,
+      });
       return markAsPure(updatedCall);
+    } else {
+      console.warn(
+        `[xalor-debug] Key is not a string literal. Type found: ${checker.typeToString(keyType)}`,
+      );
     }
 
     return visitEachChild(node, visitor, context);
@@ -65,7 +123,6 @@ export function createVisitor(
 
   return visitor;
 }
-
 /**
  *
  *

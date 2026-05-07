@@ -10,3 +10,4 @@ declare global {
   var __SOLID_VAULT__: TSolidVaultMap | undefined;
 }
 export {};
+// solid-blueprints

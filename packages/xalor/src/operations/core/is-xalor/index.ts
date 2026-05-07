@@ -35,12 +35,15 @@ export function extractSolidKey(
    const [data, arg2, arg3] = args;
   // 1. REGISTRATION & INJECTION
    if (isRegistration(data, arg2)) {
+
     const meta = isMetaData(arg2) ? arg2 : (isMetaData(data) ? data : null);
     if (meta) Registry.register(meta);
     return true; 
   }
 
   // 🔍 DOOR 2: RESOLUTION
+  // POSSIBEL INTERAGRATION FOR 
+  //  d Type Extraction or Ghost Inference. ?? we declare a type .. 
   if (isResolution(data) || (isUndefined(data) && isResolution(arg2))) {
     const key = String(isResolution(data) ? data : arg2)
     return Registry.get(key)!
@@ -54,7 +57,7 @@ export function extractSolidKey(
   }
     if (isValidation(...args)) {
     const key = extractSolidKey(...args);
- const shouldAssert = isAssertionIntent(arg2, arg3);
+    const shouldAssert = isAssertionIntent(arg2, arg3);
 
     if (!key) {
       if (shouldAssert) throw new Error("[xalor] No valid Solid key found.");
