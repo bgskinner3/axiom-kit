@@ -1,6 +1,6 @@
 // transformer/reifiers/registry/intersections.ts
 import { registerReifier } from './core';
-import { isIntersectionType } from '../../../models/guards/transformer';
+import { isIntersectionType } from '../../utils';
 import { TypeFlags } from 'typescript';
 
 // registerReifier((type, _checker, next) => {

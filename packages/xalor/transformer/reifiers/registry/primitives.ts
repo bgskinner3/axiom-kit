@@ -1,9 +1,6 @@
 // transformer/reifiers/registry/primitives.ts
 import { TypeFlags } from 'typescript';
-import {
-  isStringLiteralType,
-  isNumberLiteralType,
-} from '../../../models/guards/transformer';
+import { isStringLiteralType, isNumberLiteralType } from '../../utils';
 import { registerReifier } from './core';
 import type { Type } from 'typescript';
 /**
