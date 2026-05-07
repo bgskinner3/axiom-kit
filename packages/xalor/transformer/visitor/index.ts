@@ -2,7 +2,7 @@
 import { identifySolidCall } from './detector';
 import { reifyType } from '../reifiers';
 import { solidVisitorProcessor } from './processor';
-import { isSolidCall } from '../../models/guards/transformer';
+import { isSolidCall } from '../utils';
 import { visitEachChild } from 'typescript';
 import type {
   Program,

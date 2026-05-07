@@ -1,5 +1,5 @@
 // transformer/visitor/detector.ts
-import type { TIdentifySolidCall } from '../../models/types';
+import type { TIdentifySolidCall } from '../types';
 
 export function identifySolidCall({ node, checker }: TIdentifySolidCall) {
   const typeArgs = node.typeArguments;

@@ -41,6 +41,22 @@ function temporalManifest(
     });
   });
 
+  // return [
+  //   emitter.banner,
+  //   `/* eslint-disable ${emitter.eslintDisabled.join(' ')} */`,
+  //   ...emitter.imports,
+  //   '',
+  //   `declare module '${emitter.moduleName}' {`,
+  //   `  interface ISolidRegistry {`,
+  //   ...interfaceLines,
+  //   `  }`,
+  //   '',
+  //   `  // --- TEMPORAL REGISTRATIONS ---`,
+  //   ...functionLines,
+  //   `}`,
+  // ]
+  //   .join('\n')
+  //   .trim();
   return [
     emitter.banner,
     `/* eslint-disable ${emitter.eslintDisabled.join(' ')} */`,
@@ -51,8 +67,15 @@ function temporalManifest(
     ...interfaceLines,
     `  }`,
     '',
-    `  // --- TEMPORAL REGISTRATIONS ---`,
-    ...functionLines,
+    `  // --- UNIFIED GHOST API ---`,
+    `  // 💎 These 5 lines handle INFINITE keys from the registry above`,
+    `  export function isXalor<K extends keyof ISolidRegistry>(data?: undefined, injected?: TSolidMetadata<K, ISolidRegistry[K]>): true;`,
+    `  export function isXalor<K extends keyof ISolidRegistry>(data?: undefined, injectedKey?: K): TSolidMetadata<K, ISolidRegistry[K]>;`,
+    `  export function isXalor<K extends keyof ISolidRegistry>(data: unknown, injectedKey?: K): data is ISolidRegistry[K];`,
+    `  export function isXalor<K extends keyof ISolidRegistry>(data: unknown, assert: true, injectedKey?: K): asserts data is ISolidRegistry[K];`,
+    '',
+    `  export function isSolid<K extends keyof ISolidRegistry>(data: unknown, key?: K): data is TSolid<K, ISolidRegistry[K]>;`,
+    `  export function isSolid(data?: undefined): true;`,
     `}`,
   ]
     .join('\n')

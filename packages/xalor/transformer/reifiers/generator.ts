@@ -9,8 +9,8 @@ import {
   isIntersectionShape,
   isUnionShape,
   isReferenceShape,
-} from '../../models/guards';
-import type { TSolidShape } from '../../models/types';
+} from '../../src/utils';
+import type { TSolidShape } from '../../src/models/types';
 /**
  *  The AST Generator (Build-Time Emission)
  *

@@ -1,11 +1,8 @@
 // transformer/visitor/processor.ts
 import type { ObjectLiteralExpression } from 'typescript';
 import { generateShapeAST } from '../reifiers';
-import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
-import type {
-  TCreateSolidMetadata,
-  TSolidVisitorProcessor,
-} from '../../models/types';
+import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
+import type { TCreateSolidMetadata, TSolidVisitorProcessor } from '../types';
 
 function createSolidMetadata({
   factory,

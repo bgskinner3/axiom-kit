@@ -1,7 +1,7 @@
 import { isXalor } from '../../../../src/operations/core';
 import { Registry } from '../../../../src/vault';
 import type { TSolidMetadata } from '../../../../models/types';
-declare module '../../../../models' {
+declare module '../../../../src/' {
   interface ISolidRegistry {
     USER: any;
     PRODUCT: any;
