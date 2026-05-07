@@ -16,12 +16,6 @@ export type TSolidObjectRawShape = {
   name: string;
 };
 
-// export type TSolidMetadata = {
-//   key: string;
-//   area: string;
-//   version: string;
-//   shape: TSolidShape;
-// };
 /**
  * TSolidMetadata
  *
@@ -34,6 +28,7 @@ export type TSolidMetadata<K extends string = string, T = unknown> = {
   version: string;
   shape: TSolidShape;
   readonly _ghost?: T;
+  symbolName?: string;
 };
 
 export type TSolidError = {
@@ -51,9 +46,32 @@ export type TSolidError = {
 };
 
 export type TSolidVaultMap = {
-  /** The actual Type Database */
+  /**
+   * @deprecated
+   */
   items: Map<string, TSolidMetadata>;
-  /** The Error Cache */
+  /**
+   * 1. BLUEPRINTS (The Shape Map)
+   * The JSON-ified structure used for validation and defaults.
+   */
+  blueprints: Map<string, TSolidShape>;
+
+  /**
+   * 2. MANIFEST (The Area Map)
+   * Tracks 'file:line' for every key to satisfy Commandment VI (Traceability).
+   */
+  manifest: Map<string, string>;
+
+  /**
+   * 3. REGISTRY (The Symbol Map)
+   * Maps keys back to TS names (e.g., 'User') to power the IDE Bridge.
+   */
+  registry: Map<string, string>;
+
+  /**
+   * 4. ERROR CACHE
+   * Stores the breadcrumb failure reports from runtime checks.
+   */
   errors: Map<string, TSolidError[]>;
 };
 

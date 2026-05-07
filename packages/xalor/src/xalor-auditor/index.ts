@@ -6,39 +6,54 @@
  *
  */
 // export class XalorAuditor {}
+
+/**
+ * 🕵️‍♂️ XALOR AUDITOR
+ *
+ * A high-performance state machine that tracks validation failures
+ * across a type graph. It provides deterministic "Breadcrumb" paths
+ * to pinpoint exactly where data deviates from the Solid Blueprint.
+ */
 /**
  EXAMLPE 
 
 
- class SolidAudit {
+export class XalorAuditor {
   public readonly errors: TSolidError[] = [];
   public readonly startTime: number = Date.now();
 
   constructor(public readonly key: string) {}
 
-
+   * 🚩 RECORD
+   * Logs a specific deviation in the data. 
+   * Always returns 'false' to allow for: return auditor.record(...)
   public record(
-    path: string, 
-    expected: any, 
-    received: any
+    path: string,
+    expected: string | TSolidShape,
+    received: unknown
   ): false {
     this.errors.push({
       key: this.key,
-      path,
-      message: SOLID_MESSAGES.TYPE_MISMATCH(path, expected, received),
+      path: path || '$',
+      message: `Validation failed at ${path || 'root'}`,
       expected: serialize(expected),
       received: serialize(received),
+      // 💎 Traceability: Points to the file:line that triggered the audit
       area: getCallerLocation({ preferredIndex: 4 }),
     });
+
     return false;
   }
 
+   * 📦 DELIVER
+   * Finalizes the audit and returns the full failure manifest.
   public deliver() {
     return {
       valid: this.errors.length === 0,
       count: this.errors.length,
       details: this.errors,
-      duration: Date.now() - this.startTime
+      duration: `${Date.now() - this.startTime}ms`,
+      key: this.key,
     };
   }
 }

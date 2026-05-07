@@ -3,7 +3,65 @@ import { IS_SOLID_CONFIG_ITEMS } from './models/constants';
 import { getGlobalVault, ensureGlobalVault, getCallerLocation } from './utils';
 import { produceDefault } from './generation';
 import type { TSolidMetadata, TSolidError } from './models/types';
+
+// public static register(metadata: TSolidMetadata): void {
+//   const vault = ensureGlobalVault();
+
+//   // 🛡️ THE COLLISION GUARD
+//   if (vault.blueprints.has(metadata.key)) {
+//     throw new Error(`[xalor] 🚨 Collision! The key "${metadata.key}" is already registered in the vault.`);
+//   }
+
+//   // Populate the Triple-KV Lists
+//   vault.blueprints.set(metadata.key, metadata.shape);
+//   vault.manifest.set(metadata.key, metadata.area);
+//   // Using the generic-linked metadata symbolName
+//   vault.registry.set(metadata.key, (metadata as any).symbolName ?? 'unknown');
+// }
+
 export class Registry {
+  public static registerShape(metadata: TSolidMetadata): void {
+    const { version, key, shape } = metadata;
+    const vault = ensureGlobalVault();
+    // 1. VERSION CHECK
+    if (version !== IS_SOLID_CONFIG_ITEMS.solidVersion) {
+      const errorMsg = `Version mismatch for "${key}". Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, got ${version}.`;
+      console.error(`[xalor] ${errorMsg}`);
+      vault.errors.set(key, [
+        {
+          key: key,
+          path: '$',
+          message: errorMsg,
+          expected: IS_SOLID_CONFIG_ITEMS.solidVersion,
+          received: version,
+          area: metadata.area,
+        },
+      ]);
+      return;
+    }
+
+    // 2. THE COLLISION GUARD (The "Teeth")
+    if (vault.blueprints.has(key)) {
+      throw new Error(
+        `[xalor] 🚨 Collision! Key "${key}" is already registered. Check: ${vault.manifest.get(key)}`,
+      );
+    }
+
+    // 3. FALLBACK AREA (Source Location)
+    if (!metadata.area || metadata.area === 'unknown') {
+      metadata.area = getCallerLocation({ topParent: true });
+    }
+
+    // 4. POPULATE THE TRIPLE-KV LISTS
+    vault.blueprints.set(key, shape);
+    vault.manifest.set(key, metadata.area);
+    vault.registry.set(key, metadata.symbolName ?? 'unknown');
+
+    // 5. LEGACY SUPPORT (Keep existing IDE/Tests happy)
+    vault.items.set(key, metadata);
+  }
+
+  // OLDDD
   /**
    * Registers metadata into the Global Vault's items map.
    */

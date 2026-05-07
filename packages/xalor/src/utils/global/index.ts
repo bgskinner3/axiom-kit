@@ -28,29 +28,56 @@ export function getGlobalVault(): TSolidVaultMap | undefined {
  * for Pillar 2 (The Vault).
  */
 export function ensureGlobalVault(): TSolidVaultMap {
-  // 1. Initialize the root if it's missing
+  // 1. Initialize the root with the new Triple-KV structure
   if (!globalThis.__SOLID_VAULT__) {
     globalThis.__SOLID_VAULT__ = {
-      items: new Map(),
+      blueprints: new Map(),
+      manifest: new Map(),
+      registry: new Map(),
       errors: new Map(),
+      /** @deprecated */
+      items: new Map(),
     };
   }
 
   const vault = globalThis.__SOLID_VAULT__;
 
-  // 2. 💎 THE RESILIENCY FIX (Pillar 2)
-  // If an edge case (or external lib) set these to null/undefined,
-  // we repair them using standard instanceof checks.
-  if (!(vault.items instanceof Map)) {
-    vault.items = new Map(); // Note: Internal repair still needs one-time safety or @ts-ignore
-  }
+  // 2. 🛡️ THE RESILIENCY FIX
+  // We ensure every specific Map is healthy to prevent runtime crashes.
+  if (!(vault.blueprints instanceof Map)) vault.blueprints = new Map();
+  if (!(vault.manifest instanceof Map)) vault.manifest = new Map();
+  if (!(vault.registry instanceof Map)) vault.registry = new Map();
+  if (!(vault.errors instanceof Map)) vault.errors = new Map();
 
-  if (!(vault.errors instanceof Map)) {
-    vault.errors = new Map();
-  }
+  // Legacy repair
+  if (!(vault.items instanceof Map)) vault.items = new Map();
 
   return vault;
 }
+// export function ensureGlobalVault(): TSolidVaultMap {
+//   // 1. Initialize the root if it's missing
+//   if (!globalThis.__SOLID_VAULT__) {
+//     globalThis.__SOLID_VAULT__ = {
+//       items: new Map(),
+//       errors: new Map(),
+//     };
+//   }
+
+//   const vault = globalThis.__SOLID_VAULT__;
+
+//   // 2. 💎 THE RESILIENCY FIX (Pillar 2)
+//   // If an edge case (or external lib) set these to null/undefined,
+//   // we repair them using standard instanceof checks.
+//   if (!(vault.items instanceof Map)) {
+//     vault.items = new Map(); // Note: Internal repair still needs one-time safety or @ts-ignore
+//   }
+
+//   if (!(vault.errors instanceof Map)) {
+//     vault.errors = new Map();
+//   }
+
+//   return vault;
+// }
 // export function ensureGlobalVault(): TSolidVaultMap {
 //   const g = globalThis as any;
 //   if (!g.__SOLID_VAULT__) {
