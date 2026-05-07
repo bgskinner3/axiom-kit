@@ -1,3 +1,5 @@
+import { IS_SOLID_SHAPE_KINDS_CONFIG } from '../../constants';
+
 export type TSolidShape =
   | /* prettier-ignore */ { kind: 'primitive'; type: 'string' | 'number' | 'boolean' | 'bigint' | 'unknown'; }
   | /* prettier-ignore */ { kind: 'literal'; value: string | number | boolean }
@@ -46,3 +48,9 @@ declare const SolidBrand: unique symbol;
 export type TSolid<K extends string, T> = T & {
   readonly [SolidBrand]: K;
 };
+
+/**
+ * SHAPE KINDS
+ * The exhaustive list of supported type categories in the Solid system.
+ */
+export type TSolidShapeKinds = keyof typeof IS_SOLID_SHAPE_KINDS_CONFIG;
