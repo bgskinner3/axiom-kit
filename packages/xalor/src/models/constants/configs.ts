@@ -30,7 +30,7 @@ const SOLID_EMITTER_KEYS = {
     '@typescript-eslint/no-explicit-any',
   ],
   imports: [
-    "import type { TSolid, TSolidMetadata, ISolidRegistry } from './index';",
+    "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from './index';",
   ],
 } as const;
 /**

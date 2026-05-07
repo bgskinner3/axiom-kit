@@ -18,6 +18,7 @@
     "**/__tests__/**",
     "**/*.test.ts",
     "**/*.spec.ts",
-    "jest.config.cjs"
+    "jest.config.cjs",
+    "dist"
   ]
 }

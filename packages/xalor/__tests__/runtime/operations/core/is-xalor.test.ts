@@ -9,6 +9,19 @@ declare module '../../../../src/' {
     SESSION: any;
   }
 }
+export type TFUCKKKKTT = {
+  myLeftNut: number;
+  myRightNut: string;
+};
+export interface BigTEst {
+  yourTingWinner: string;
+  moreStuff: {
+    id: string;
+    moreItems: {
+      money: 0;
+    };
+  };
+}
 describe('isXalor Polymorphic Entry Point', () => {
   // 💎 MOCK 1: Standard User
   const userMetadata: TSolidMetadata = {
@@ -112,11 +125,8 @@ describe('isXalor Polymorphic Entry Point', () => {
 
     isXalor<'USER_NUMBER_TWO', User>(); // 💎 Use it!
 
-    type TFUCKKKK = {
-      myLeftNut: number;
-      myRightNut: string;
-    };
-    isXalor<'MY_BALLS', TFUCKKKK>();
+    isXalor<'MY_BALLS', TFUCKKKKTT>();
+    isXalor<'BigTEst', BigTEst>();
     console.log(globalThis.__SOLID_VAULT__);
   });
 

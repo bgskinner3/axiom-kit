@@ -3,6 +3,7 @@ import {
   IS_SOLID_CONFIG_ITEMS,
   REGISTERED_INTELLIGENCE_FUNCTIONS,
 } from '../../src/models';
+import { ObjectUtils } from '../../src/utils';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -22,29 +23,68 @@ import * as path from 'path';
  */
 function temporalManifest(
   registry: Map<string, string>,
-  _targetDir: string,
+  targetDir: string,
   emitter: typeof IS_SOLID_CONFIG_ITEMS.emitter,
 ): string {
-  const interfaceLines: string[] = [];
+  const identityLines: string[] = []; // 💎 For the Imports (Names)
+  const registryLines: string[] = []; // 💎 For the Shapes (Structures)
 
-  // 1. Build the Database (The only part that repeats)
   // registry.forEach((value, key) => {
-  //   const [absPath, typeName] = value.split('|');
-  //   const relativePath = path.relative(targetDir, absPath).replace(/\\/g, '/');
-  //   const typeImport = `import('./${relativePath}').${typeName}`;
-  //   interfaceLines.push(`    '${key}': ${typeImport};`);
+  //   const [filePath, symbolName, rawStructure] = value.split('|');
+
+  //   // 1. IDENTITY: Build the relative import link
+  //   const relPath = path.relative(targetDir, filePath).replace(/\\/g, '/');
+  //   const importPath = `./${relPath}`.replace('.ts', ''); // Clean extension
+
+  //   // Logic: If symbolName is 'unknown', we can't import it, so we skip it here
+  //   if (symbolName !== 'unknown') {
+  //     identityLines.push(
+  //       `    '${key}': import('${importPath}').${symbolName};`,
+  //     );
+  //   }
+
+  //   // 2. REGISTRY: Build the raw structure backup
+  //   registryLines.push(`    '${key}': ${rawStructure};`);
+  // });
+  // registry.forEach((value, key) => {
+  //   const [filePath, symbolName, rawStructure] = value.split('|');
+
+  //   // Build the "Identity" (Import Link)
+  //   if (symbolName !== 'unknown') {
+  //     const relPath = path
+  //       .relative(targetDir, filePath)
+  //       .replace(/\\/g, '/')
+  //       .replace('.ts', '');
+  //     identityLines.push(`    '${key}': import('./${relPath}').${symbolName};`);
+  //   }
+
+  //   // Build the "Registry" (Structural Backup)
+  //   registryLines.push(`    '${key}': ${rawStructure};`);
   // });
   registry.forEach((value, key) => {
-    // 💎 Discard the path (index 0), keep the structure (index 1)
-    const [_, typeStructure] = value.split('|');
+    const [filePath, symbolName, rawStructure] = value.split('|');
 
-    // Inject the raw structure directly into the mapping
-    interfaceLines.push(`    '${key}': ${typeStructure};`);
+    // 💎 THE LOGIC: Only create an Identity link if we have a real name
+    // AND if that name doesn't look like a raw structure (starting with '{')
+    const isNamed = symbolName !== 'unknown' && !symbolName.startsWith('{');
+
+    if (isNamed) {
+      const relPath = path
+        .relative(targetDir, filePath)
+        .replace(/\\/g, '/')
+        .replace('.ts', '');
+      identityLines.push(`    '${key}': import('./${relPath}').${symbolName};`);
+    }
+
+    // Always add the raw structure to the Registry
+    registryLines.push(`    '${key}': ${rawStructure};`);
   });
 
   // 2. Fetch the "Master" signatures from your config
-  const functionLines = Object.values(REGISTERED_INTELLIGENCE_FUNCTIONS).map(
-    (config) => config.signature({ key: 'K', typeImport: 'ISolidRegistry[K]' }),
+  const functionLines = ObjectUtils.values(
+    REGISTERED_INTELLIGENCE_FUNCTIONS,
+  ).map((config) =>
+    config.signature({ key: 'K', typeImport: 'ISolidRegistry[K]' }),
   );
 
   return [
@@ -53,8 +93,14 @@ function temporalManifest(
     ...emitter.imports,
     '',
     `declare module '${emitter.moduleName}' {`,
+    // --- VAULT 1: THE NAMES ---
+    `  interface ISolidIdentity {`,
+    ...identityLines,
+    `  }`,
+    '',
+    // --- VAULT 2: THE STRUCTURES ---
     `  interface ISolidRegistry {`,
-    ...interfaceLines,
+    ...registryLines,
     `  }`,
     '',
     `  // --- UNIFIED GHOST API ---`,

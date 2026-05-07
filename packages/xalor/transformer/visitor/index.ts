@@ -100,38 +100,28 @@ export function createVisitor(
 
     const { keyType, shapeType } = identifySolidCall({ node, checker });
 
-    // 🚩 CHECKPOINT 3: Is the Key actually a string literal?
     if (keyType.isStringLiteral()) {
       const key = keyType.value;
-      console.log(`[xalor-debug] 🎯 MINING SUCCESS: Key="${key}"`);
 
-      // const typeName = checker.typeToString(
-      //   shapeType,
-      //   node,
-      //   TypeFormatFlags.NoTruncation | TypeFormatFlags.InTypeAlias,
-      // );
+      /**
+       * !!! HERE we validate teh type of typed OBJECT ... sounds weird ...
+       *  we deteremine if it is either an INTERFACE or a type ...
+       * fyi interfaces are eaiser to pick up on
+       */
+      const symbol = shapeType.aliasSymbol || shapeType.getSymbol();
+      let symbolName = 'unknown';
 
-      // const typeName = checker.typeToString(
-      //   shapeType,
-      //   node,
-      //   // 💎 ADD THIS FLAG: UseStructuralFallback
-      //   TypeFormatFlags.NoTruncation |
-      //     TypeFormatFlags.InTypeAlias |
-      //     TypeFormatFlags.UseStructuralFallback,
-      // );
+      if (symbol) {
+        const name = symbol.getName();
 
-      // // 💎 CHANGE: Pass ONLY the typeName. No pipes, no paths.
-      // updateRegistry({ registry: globalRegistry, key, typeName });
-      // const typeName = checker.typeToString(
-      //   shapeType,
-      //   node,
-      //   TypeFormatFlags.NoTruncation |
-      //     TypeFormatFlags.InTypeAlias |
-      //     TypeFormatFlags.UseStructuralFallback,
-      // );
-      // updateRegistry(globalRegistry, key, sourceFile.fileName, typeName);
+        const sourceFileSymbol = checker.getSymbolAtLocation(sourceFile);
+
+        const isExported = !!sourceFileSymbol?.exports?.has(symbol.escapedName);
+
+        symbolName = isExported ? name : 'unknown';
+      }
+
       const typeName = (() => {
-        // 1. If it's an object, we manually map its properties to a string
         if (
           shapeType.isClassOrInterface() ||
           shapeType.getFlags() & TypeFlags.Object
@@ -145,30 +135,14 @@ export function createVisitor(
           });
           return `{ ${propStrings.join(' ')} }`;
         }
-
-        // 2. Fallback for primitives (string, number, etc.)
-        return checker.typeToString(
-          shapeType,
-          node,
-          TypeFormatFlags.NoTruncation,
-        );
+        /* prettier-ignore */ return checker.typeToString( shapeType, node, TypeFormatFlags.NoTruncation );
       })();
 
       // Now update the registry with the FORCED structure
-      updateRegistry({
-        registry: globalRegistry,
-        key,
-        filePath: sourceFile.fileName,
-        typeName,
-      });
+      /* prettier-ignore */ updateRegistry({ registry: globalRegistry, key, filePath: sourceFile.fileName, symbolName, typeName, });
       const shape = reifyType(shapeType, checker, new Set());
-      const updatedCall = solidVisitorProcessor({
-        shape,
-        factory,
-        key,
-        sourceFile,
-        node,
-      });
+
+      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
       return markAsPure(updatedCall);
     } else {
       console.warn(
@@ -183,8 +157,12 @@ export function createVisitor(
 }
 /**
  *
- *
- *
+ *const shapeType: ts.Type
+const checker: ts.TypeChecker
+
+ *(alias) enum SymbolFlags
+import SymbolFlags
+
  *
  *
  *
@@ -506,3 +484,28 @@ export function createVisitor(
 
 //   return visitor;
 // }
+/**
+ 🚀 Moving to Arrays 📦Now that your Identity Vault is catching both type and interface, let's upgrade the Miner to handle User[].1. The typeName Expansion (Ghost Layer)We need to update your manual structure builder to detect if a type is an array.Update transformer/visitor/index.ts:typescriptconst 
+ 
+ 
+ typeName = (() => {
+  // 💎 NEW: Detect Array Types
+  if (checker.isArrayType(shapeType)) {
+    const itemType = (shapeType as ts.TypeReference).typeArguments?.[0];
+    const itemString = itemType ? checker.typeToString(itemType) : 'any';
+    return `${itemString}[]`;
+  }
+
+  // ... (Your existing Object mapping logic here)
+})();
+
+
+2. The reifyType Logic (Solid Layer)Your runtime needs to know it's looking for an array so isXalor can validate every item.Update transformer/reifiers/index.ts:typescriptif (checker.isArrayType(type)) {
+  const itemType = (type as ts.TypeReference).typeArguments?.[0];
+  return {
+    kind: 'array',
+    // Recursively reify the inner item (e.g., the User inside User[])
+    items: itemType ? reifyType(itemType, checker, visited) : { kind: 'primitive', type: 'unknown' }
+  };
+}
+ */

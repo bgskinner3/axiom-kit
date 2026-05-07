@@ -3,6 +3,7 @@ import type {
   CallExpression,
   NodeFactory,
   SourceFile,
+  Type,
 } from 'typescript';
 import type { TSolidShape } from '../../src/models/types/shared';
 /**
@@ -36,4 +37,30 @@ export type TSolidVisitorProcessor = {
   sourceFile: SourceFile;
   factory: NodeFactory;
   key: string;
+};
+
+/**
+ * Encapsulates the context needed for the recursive structural expansion
+ * of TypeScript types. By bundling the Type, Checker, and the current
+ * AST Node, the printer can safely resolve symbols and types within
+ * their original lexical scope without 'any' casting.
+ */
+export type TUpdateRegistry = {
+  registry: Map<string, string>;
+  key: string;
+  filePath?: string;
+  symbolName: string;
+  typeName: string;
+};
+
+/**
+ * Encapsulates the context needed for the recursive structural expansion
+ * of TypeScript types. By bundling the Type, Checker, and the current
+ * AST Node, the printer can safely resolve symbols and types within
+ * their original lexical scope without 'any' casting.
+ */
+export type TPrintGhostStructure = {
+  type: Type;
+  checker: TypeChecker;
+  node: Node;
 };
