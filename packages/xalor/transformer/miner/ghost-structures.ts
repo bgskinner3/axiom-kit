@@ -1,4 +1,4 @@
-import { TypeFlags, SymbolFlags, TypeFormatFlags } from 'typescript';
+import ts from 'typescript';
 import { isTypeReference } from '../utils';
 import type { TPrintGhostStructure } from '../types';
 
@@ -35,11 +35,11 @@ export function printGhostStructure({
   }
 
   // 2. Objects / Interfaces (Structural Expansion)
-  /* prettier-ignore */ if (type.isClassOrInterface() || (type.getFlags() & TypeFlags.Object)) {
+  /* prettier-ignore */ if (type.isClassOrInterface() || (type.getFlags() & ts.TypeFlags.Object)) {
     const props = checker.getPropertiesOfType(type);
     const propStrings = props.map((p) => {
       const pType = checker.getTypeOfSymbolAtLocation(p, node);
-      const isOptional = p.getFlags() & SymbolFlags.Optional ? '?' : '';
+      const isOptional = p.getFlags() & ts.SymbolFlags.Optional ? '?' : '';
       // Recursion: Allows for deeply nested { a: { b: { c: string } } }
       const structure = pType 
         ? printGhostStructure({ type: pType, checker, node }) 
@@ -51,5 +51,5 @@ export function printGhostStructure({
   }
 
   // 3. Fallback for primitives
-  /* prettier-ignore */ return checker.typeToString(type, node, TypeFormatFlags.NoTruncation);
+  /* prettier-ignore */ return checker.typeToString(type, node, ts.TypeFormatFlags.NoTruncation);
 }

@@ -4,10 +4,10 @@ import type {
   TSpatialIdentity,
   TInterfaceOrType,
   TSyncVaultParams,
-  TVaultSyncPayload,
+  // TVaultSyncPayload,
 } from '../types';
 import { printGhostStructure } from './ghost-structures';
-import { XALOR_MESSAGE_HANDLER } from '../../src/xalor-auditor';
+
 /**
  * 💎 MARK AS PURE (Minification Shield)
  *
@@ -54,7 +54,10 @@ export function syncVault({ registry, payload }: TSyncVaultParams) {
   const existing = registry.get(payload.key);
 
   if (existing && existing.filePath !== payload.filePath) {
-    /* prettier-ignore */ throw new Error(XALOR_MESSAGE_HANDLER.ERROR.DEFINITION_COLLISION({key: payload.key, path: payload.filePath }));
+    throw new Error(
+      `[xalor] 🚨 Collision: Key "${payload.key}" is defined in ${payload.filePath} and ${payload.filePath}.`,
+    );
+    // /* prettier-ignore */ throw new Error(XALOR_MESSAGE_HANDLER.ERROR.DEFINITION_COLLISION({key: payload.key, path: payload.filePath }));
   }
 
   // 💎 PACKING EVERYTHING: No data left behind.

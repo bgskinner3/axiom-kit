@@ -4,12 +4,12 @@ import type {
   TSolidVaultMap,
   TSolidShape,
 } from '../models/types';
-import { XALOR_MESSAGE_HANDLER } from '../xalor-auditor';
-import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-import { serialize, yieldEntries } from '../utils';
+// import { XALOR_MESSAGE_HANDLER } from '../xalor-auditor';
+// import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
+// import { serialize, yieldEntries } from '../utils';
 import { produceDefault } from '../generation';
-import * as fs from 'fs';
-import * as path from 'path';
+// import * as fs from 'fs';
+// import * as path from 'path';
 
 // The Miner extracts the data.
 // The Emitter builds the Bridge.
@@ -21,8 +21,8 @@ import * as path from 'path';
  * IT SHOUDL ---> A> HYDRATE ...
  */
 export class XalethorVault {
-  private static errorMessageTemp = XALOR_MESSAGE_HANDLER.ERROR;
-  private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
+  // private static errorMessageTemp = XALOR_MESSAGE_HANDLER.ERROR;
+  // private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
 
   private static get vault(): TSolidVaultMap {
     return ensureGlobalVault();
@@ -35,9 +35,9 @@ export class XalethorVault {
   public static solidify(metadata: TSolidMetadata): void {
     const { key, shape, area, symbolName } = metadata;
     if (this.vault.blueprints.has(key)) {
-      const originalPath = this.vault.manifest.get(key) ?? 'unknown';
+      // const originalPath = this.vault.manifest.get(key) ?? 'unknown';
       throw new Error(
-        this.errorMessageTemp.COLLISION({ key, msg: originalPath }),
+        '  this.errorMessageTemp.COLLISION({ key, msg: originalPath }),',
       );
     }
     this.vault.blueprints.set(key, shape); // 1. Structure (The Blueprint)
@@ -104,8 +104,8 @@ export class XalethorVault {
       // 🚩 If missing, we use the Manifest to provide a better error message
       const location = this.vault.manifest.get(key);
       const errorMsg = location
-        ? this.errorMessageTemp.MISSING_VAULT_BLUEPRINT({ key, location })
-        : this.errorMessageTemp.MISSING_VAULT_KEY({ key });
+        ? 'this.errorMessageTemp.MISSING_VAULT_BLUEPRINT({ key, location })'
+        : 'this.errorMessageTemp.MISSING_VAULT_KEY({ key });';
 
       throw new Error(errorMsg);
     }

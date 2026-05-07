@@ -1,6 +1,7 @@
 import ts from 'typescript';
-import { createVisitor } from '../../transformer/visitor';
+import { theMiner } from '../../transformer/miner';
 import { UTIL_CONFIG_OPTIONS } from './constants';
+import type { TVaultSyncPayload } from '../../transformer/types';
 
 /**
  * mineTransformation
@@ -28,7 +29,7 @@ import { UTIL_CONFIG_OPTIONS } from './constants';
  */
 export function mineTransformation(
   code: string,
-  globalRegistry = new Map<string, string>(),
+  globalRegistry = new Map<string, TVaultSyncPayload>(),
 ) {
   const filename = UTIL_CONFIG_OPTIONS.fileName;
   const target = ts.ScriptTarget.Latest;
@@ -77,7 +78,7 @@ export function mineTransformation(
   } as any;
 
   //  Run Visitor on the BOUND source file
-  const visitor = createVisitor(
+  const visitor = theMiner(
     program,
     transformationContext,
     sourceFileRef,

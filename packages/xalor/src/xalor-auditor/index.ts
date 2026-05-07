@@ -1,7 +1,7 @@
-import { XALOR_MESSAGE_HANDLER } from './msg';
+// import { XALOR_MESSAGE_HANDLER } from './msg';
 import { XalethorVault } from '../xalor-vault';
-import { ensureGlobalVault, getGlobalVault } from '../utils';
-import type { TSolidError, TSolidShape, TSolidVaultMap } from '../models/types';
+import { ensureGlobalVault } from '../utils';
+import type { TSolidError, TSolidVaultMap } from '../models/types';
 
 /**
  * 🕵️‍♂️ XALETHOR AUDITOR
@@ -38,23 +38,56 @@ export class XalorAuditor {
    * 📑 SCAN (Dev Tool)
    * Diagnostic table showing the health of the Triple-KV Archive.
    */
+  // public static scan(): void {
+  //   const keys = XalethorVault.keys();
+
+  //   if (keys.length === 0) {
+  //     console.log('\n[xalor-audit] 📭 The Archive is empty.\n');
+  //     return;
+  //   }
+
+  //   const inventory = keys.map((key) => ({
+  //     /* prettier-ignore */ 'Key 🔑': key,
+  //     /* prettier-ignore */ 'Symbol 🆔': XalethorVault.vaultArchive('registry', key) || '⚠️ MISSING',
+  //     /* prettier-ignore */ 'Location 📍': XalethorVault.vaultArchive('manifest', key) || '⚠️ UNKNOWN',
+  //     /* prettier-ignore */ 'Kind 🏗️': XalethorVault.vaultArchive('blueprint', key)?.kind || '❌ BROKEN',
+  //   }));
+
+  //   console.log('\n--- 🏛️ XALETHOR ARCHIVE AUDIT ---');
+  //   console.table(inventory);
+  // }
+  /**
+   * 📑 SCAN (Diagnostic Tool)
+   *
+   * Performs a physical inspection of the Triple-KV Archive.
+   * Prints a high-definition table of all solidified types.
+   */
   public static scan(): void {
+    // 💎 We use our XalethorVault keys to get the truth
     const keys = XalethorVault.keys();
 
     if (keys.length === 0) {
-      console.log('\n[xalor-audit] 📭 The Archive is empty.\n');
+      console.log('\n[xalor-audit] 📭 The Archive is currently empty.\n');
       return;
     }
 
-    const inventory = keys.map((key) => ({
-      /* prettier-ignore */ 'Key 🔑': key,
-      /* prettier-ignore */ 'Symbol 🆔': XalethorVault.vaultArchive('registry', key) || '⚠️ MISSING',
-      /* prettier-ignore */ 'Location 📍': XalethorVault.vaultArchive('manifest', key) || '⚠️ UNKNOWN',
-      /* prettier-ignore */ 'Kind 🏗️': XalethorVault.vaultArchive('blueprint', key)?.kind || '❌ BROKEN',
-    }));
+    const inventory = keys.map((key) => {
+      // 📍 Using your resolve logic for the GPS Coordinates
+      const location = XalethorVault.vaultArchive('manifest', key);
+      const symbol = XalethorVault.vaultArchive('registry', key);
+      const blueprint = XalethorVault.vaultArchive('blueprint', key);
+
+      return {
+        'Key 🔑': key,
+        'Symbol 🆔': symbol || '⚠️ UNKNOWN',
+        'Location 📍': location || '⚠️ UNKNOWN',
+        'Kind 🏗️': blueprint?.kind || '❌ BROKEN',
+      };
+    });
 
     console.log('\n--- 🏛️ XALETHOR ARCHIVE AUDIT ---');
     console.table(inventory);
+    console.log(`Total Solidified: ${keys.length}\n`);
   }
 
   /**

@@ -20,11 +20,11 @@ type TMessageHandlerParams = {
   msg?: string;
   location?: string;
 };
-type TMessageHandler = Record<string, (props: TMessageHandlerParams) => string>;
-type TMessageHandlerShape = {
-  ERROR: TMessageHandler;
-  WARNING: TMessageHandler;
-};
+// type TMessageHandler = Record<string, (props: TMessageHandlerParams) => string>;
+// type TMessageHandlerShape = {
+//   ERROR: TMessageHandler;
+//   WARNING: TMessageHandler;
+// };
 export const XALOR_MESSAGE_HANDLER = {
   ERROR: {
     UNSUPPORTED_KIND: (props: TMessageHandlerParams) =>
@@ -49,7 +49,7 @@ export const XALOR_MESSAGE_HANDLER = {
   WARNING: {
     COLLISION: (props: TMessageHandlerParams) =>
       `[xalor] ⚠️ Collision detected for key "${props.key}". Overwriting existing entry.`,
-    DEPRECATED_ACCESS: (props) =>
+    DEPRECATED_ACCESS: () =>
       `[xalor] ⚠️ Accessing 'items' map is deprecated. Please use 'blueprints' or 'manifest' instead.`,
   } as const,
 };
