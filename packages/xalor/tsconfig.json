@@ -24,8 +24,11 @@
     5072,
     5103
   ],
-  "include": [
-    "src/**/*"
+  "include": [ // DO NOT REMOVE CAUSES ERROS
+    "src/**/*",
+    "transformer/**/*",
+    "models/**/*",
+    "tsup.config.ts"
   ],
   "exclude": [
     "dist",

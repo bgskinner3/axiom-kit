@@ -5,14 +5,14 @@
   "author": "Brennan Skinner",
   "license": "MIT",
   "type": "module",
-"typescript": {
-  "plugins": [
-    {
-      "transform": "./dist/transformer/index.cjs",
-      "type": "program"
-    }
-  ]
-},
+  "typescript": {
+    "plugins": [
+      {
+        "transform": "./dist/transformer/index.cjs",
+        "type": "program"
+      }
+    ]
+  },
   "sideEffects": [
     "./transformer/reifiers/registry/*.ts"
   ],

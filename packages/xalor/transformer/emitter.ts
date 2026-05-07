@@ -17,9 +17,6 @@ export function emitAmbientTypes(
   const targetDir = path.join(rootDir, emitter.targetDir);
   const envFile = path.join(targetDir, emitter.fileName);
 
-  const eslintHeader = `/* eslint-disable ${emitter.eslintDisabled.join(' ')} */`;
-  const importHeader = emitter.imports.join('\n');
-
   const interfaceLines: string[] = [];
   const functionLines: string[] = [];
 
@@ -41,24 +38,22 @@ export function emitAmbientTypes(
     );
   });
 
-  const dts = `
-${emitter.banner}
-${eslintHeader}
-${importHeader}
-
-declare module '${emitter.moduleName}' {
-  /**
-   * SOLIDIFIED TYPE DATABASE
-   * Maps string-based keys back to their original TypeScript interfaces.
-   */
-  interface ISolidRegistry {
-${interfaceLines.join('\n')}
-  }
-
-  // --- AMBIENT REGISTRATIONS ---
-${functionLines.join('\n')}
-}
-`.trim();
+  const dts = [
+    emitter.banner,
+    `/* eslint-disable ${emitter.eslintDisabled.join(' ')} */`,
+    ...emitter.imports,
+    '',
+    `declare module '${emitter.moduleName}' {`,
+    `  interface ISolidRegistry {`,
+    ...interfaceLines,
+    `  }`,
+    '',
+    `  // --- GHOST REGISTRATIONS ---`,
+    ...functionLines,
+    `}`,
+  ]
+    .join('\n')
+    .trim();
 
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
