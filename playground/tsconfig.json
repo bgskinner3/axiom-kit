@@ -3,11 +3,19 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "skipLibCheck": true, // 💎 MUST BE TRUE: Stops checking linked library files
+    "outDir": "./dist",
+    // 💎 FIX 1: Lock rootDir to the playground only. 
+    // This stops it from building your library files.
+    "rootDir": "./src",
+    "skipLibCheck": true,
     "noEmit": false,
+    "ignoreDeprecations": "6.0",
     "paths": {
+      // 💎 FIX 2: Point to the DIST folder, not the SRC folder.
+      // This ensures the playground "consumes" the built library.
       "@bgskinner2/xalor": [
-        "../packages/xalor/src/index.ts"
+        "../packages/xalor/dist/index.d.ts",
+        "../packages/xalor/dist/index.js"
       ]
     },
     "plugins": [
@@ -18,10 +26,6 @@
     ]
   },
   "include": [
-    "src/**/*"
+    "src/main.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "../packages/xalor/__tests__"
-  ] // 💎 IGNORE THE TESTS
 }

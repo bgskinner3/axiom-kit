@@ -4,10 +4,16 @@
   "type": "module",
   "scripts": {
     "build:lib": "pnpm --filter @bgskinner2/xalor build",
-    "dev": "tspc --watch",
-    "test": "node dist/is-solid-playground/src/main.js"
+    "compile": "tspc",
+    "start": "node dist/src/main.js",
+    "test": "npm run build:lib && npm run compile && npm run start",
+    "dev": "tspc --watch"
   },
   "dependencies": {
     "@bgskinner2/xalor": "workspace:*"
+  },
+  "devDependencies": {
+    "ts-patch": "^3.3.0",
+    "typescript": "^6.0.3"
   }
 }

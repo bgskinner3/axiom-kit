@@ -328,6 +328,13 @@ importers:
       '@bgskinner2/xalor':
         specifier: workspace:*
         version: link:../packages/xalor
+    devDependencies:
+      ts-patch:
+        specifier: ^3.3.0
+        version: 3.3.0
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
 packages:
 

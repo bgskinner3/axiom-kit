@@ -16,6 +16,7 @@ export default tseslint.config(
       'eslint.config.js',
       '**/jest.config.*',
       '**/tsup.config.ts',
+      '**/solid-env.d.ts',
     ],
   },
   // 2. BASE CONFIGS

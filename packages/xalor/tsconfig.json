@@ -28,7 +28,8 @@
     "src/**/*",
     "transformer/**/*",
     "models/**/*",
-    "tsup.config.ts"
+    "tsup.config.ts",
+    "__tests__"
   ],
   "exclude": [
     "dist",
