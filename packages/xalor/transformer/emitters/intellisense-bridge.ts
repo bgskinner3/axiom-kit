@@ -26,11 +26,10 @@ function temporalManifest(
   targetDir: string,
   emitter: typeof IS_SOLID_CONFIG_ITEMS.emitter,
 ): string {
-  const identityLines: string[] = []; // 💎 For the Imports (Names)
-  const registryLines: string[] = []; // 💎 For the Shapes (Structures)
+  const identityLines: string[] = []; // !!! For the Imports (Names)
+  const registryLines: string[] = []; // !!! For the Shapes (Structures)
 
   registry.forEach((payload, key) => {
-    // 💎 NO MORE SPLIT: We access the structured "Gold" directly
     const { filePath, symbolName, typeName } = payload;
 
     const isNamed = symbolName !== 'unknown' && !symbolName.startsWith('{');
@@ -39,17 +38,14 @@ function temporalManifest(
       const relPath = path
         .relative(targetDir, filePath)
         .replace(/\\/g, '/')
-        .replace(/\.tsx?$/, ''); // 💎 Better regex: handles .ts and .tsx
+        .replace(/\.tsx?$/, '');
 
       identityLines.push(`    '${key}': import('./${relPath}').${symbolName};`);
     }
 
-    // Always add the raw typeName (the Ghost Structure) to the Registry
-    // This uses the string we mined in printGhostStructure
     registryLines.push(`    '${key}': ${typeName};`);
   });
 
-  // 2. Fetch the "Master" signatures from your config
   const functionLines = ObjectUtils.values(
     REGISTERED_INTELLIGENCE_FUNCTIONS,
   ).map((config) =>
@@ -113,6 +109,6 @@ export function hydrateIntellisenseBridge(
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  fs.writeFileSync(envFile, dts); // 💎 FORCE WRITE (Remove the 'existing' check for now)
+  fs.writeFileSync(envFile, dts);
   // console.log(`[xalor-fs] ✅ File written successfully.`);
 }

@@ -50,13 +50,43 @@ export function theMiner(
     const { keyType, shapeType } = identifySolidCall({ node, checker });
     const shape = reifyType(shapeType, checker, new Set());
 
+    // if (keyType.isStringLiteral()) {
+    //   const key = keyType.value;
+    //   const identity = getSpatialIdentity({
+    //     node,
+    //     sourceFile,
+    //     shapeType,
+    //     checker,
+    //   });
+    //   const payload = {
+    // key,
+    // filePath: sourceFile.fileName,
+    // area: identity.area,
+    // symbolName: identity.symbolName,
+    // typeName: identity.typeName,
+    // shape,
+    // version: IS_SOLID_CONFIG_ITEMS.solidVersion,
+    //   };
+
+    //   /* prettier-ignore */ syncVault({ registry: globalRegistry, payload });
+    //   /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
+    //   return markAsPure(updatedCall);
+    // }
     if (keyType.isStringLiteral()) {
       const key = keyType.value;
+      console.log(`[xalor-miner] ⛏️ Mining Key: ${key}`);
+
       const identity = getSpatialIdentity({
         node,
         sourceFile,
         shapeType,
         checker,
+      });
+      console.log('\n\n\n\n\nn/n/n/n');
+      // 🚩 ADD THIS LOG
+      console.log(`[xalor-miner] 📦 Payload for ${key}:`, {
+        symbol: identity.symbolName,
+        area: identity.area,
       });
       const payload = {
         key,
@@ -67,10 +97,8 @@ export function theMiner(
         shape,
         version: IS_SOLID_CONFIG_ITEMS.solidVersion,
       };
-
-      /* prettier-ignore */ syncVault({ registry: globalRegistry, payload });
-      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
-      return markAsPure(updatedCall);
+      console.log({ payload }, '\n\n\n\n\n', 'PAYLOADDDD');
+      syncVault({ registry: globalRegistry, payload });
     }
 
     return visitEachChild(node, visitor, context);

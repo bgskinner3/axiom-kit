@@ -18,17 +18,38 @@ export type TSolidObjectRawShape = {
 
 /**
  * TSolidMetadata
+ * -----
+ * @KEY - unique identifier used as the UUID to locate this entity in Vault systems
+ * @example: "BigTEst"
  *
- * 💎 FIX: Added <K, T> generics to allow the Emitter
- * to link the metadata to the specific Type in the IDE.
+ * @FILEPATH - absolute path to the source file where this symbol was extracted
+ * @example: "/Users/.../is-xalor.test.ts"
+ *
+ * @AREA - precise source location (file:line:column) where this symbol was found
+ * @example: "/Users/.../is-xalor.test.ts:141:5"
+ *
+ * @SYMBOLNAME - original TypeScript symbol name from the source code
+ * @example: "BigTEst"
+ *
+ * @TYPENAME - raw TypeScript type string as written in code before parsing
+ * @example: "{ yourTingWinner: string; moreStuff: { id: string } }"
+ *
+ * @SHAPE - JSON-like structural blueprint of the TypeScript type after parsing
+ * @example: { kind: "object", properties: ... }
+ *
+ * @VERSION - version of the Solid/Vault extraction system that produced this metadata
+ * @example: "1.0.0"
  */
 export type TSolidMetadata<K extends string = string, T = unknown> = {
-  key: K; // 👈 Now uses the Generic K
+  key: K;
   area: string;
   version: string;
   shape: TSolidShape;
   readonly _ghost?: T;
   symbolName?: string;
+
+  filePath?: string;
+  typeName?: string;
 };
 
 export type TSolidError = {

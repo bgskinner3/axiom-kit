@@ -79,13 +79,23 @@ export type TInterfaceOrType = {
   checker: TypeChecker;
   node: Node;
 };
-
+/**
+ * TVaultSyncPayload
+ * -----
+ * Replica of TSolidMetadata used by the transformer pipeline for
+ * syncing and transporting metadata between systems.
+ *
+ * This format mirrors the core metadata structure but includes
+ * additional resolver fields (filePath, typeName) required for
+ * serialization, mapping, and vault synchronization.
+ */
 export type TVaultSyncPayload = {
-  readonly key: string;
   readonly filePath: string; // Absolute Path
+  readonly typeName: string; // Ghost Structure (import path)
+
+  readonly key: string;
   readonly area: string; // GPS: file:line:char
   readonly symbolName: string; // TS Identity (User)
-  readonly typeName: string; // Ghost Structure (import path)
   readonly shape: TSolidShape; // The Logic
   readonly version: string; // Engine Version
 };

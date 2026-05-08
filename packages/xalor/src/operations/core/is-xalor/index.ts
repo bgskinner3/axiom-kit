@@ -6,7 +6,8 @@ import {
   isSolidKey,
   buildValidationTools,
 } from './helpers';
-import { Registry } from '../../../vault';
+// import { Registry } from '../../../vault';
+import { XalethorVault } from '../../../xalor-vault';
 import { isUndefined, isString } from '../../../utils/guards';
 import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';
 
@@ -37,17 +38,20 @@ export function extractSolidKey(
    if (isRegistration(data, arg2)) {
 
     const meta = isMetaData(arg2) ? arg2 : (isMetaData(data) ? data : null);
-    if (meta) Registry.register(meta);
+    if (meta) XalethorVault.solidify(meta);  //Registry.register(meta);
     return true; 
   }
 
   // 🔍 DOOR 2: RESOLUTION
   // POSSIBEL INTERAGRATION FOR 
   //  d Type Extraction or Ghost Inference. ?? we declare a type .. 
-  if (isResolution(data) || (isUndefined(data) && isResolution(arg2))) {
-    const key = String(isResolution(data) ? data : arg2)
-    return Registry.get(key)!
-  }
+if (isResolution(data) || (isUndefined(data) && isResolution(arg2))) {
+  // const key = String(isResolution(data) ? data : arg2);
+  
+  // 💎 FIX: Use your polymorphic archive to return the full metadata
+  // This allows 'const meta = isXalor<"USER">()' to work again.
+  return false
+}
 
 
   // 3. REGISTRATION GHOST-CALL HAT
