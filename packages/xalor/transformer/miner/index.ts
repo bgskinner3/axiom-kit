@@ -67,6 +67,20 @@ export function theMiner(
         version: IS_SOLID_CONFIG_ITEMS.solidVersion,
       } satisfies TVaultSyncPayload;
 
+      if (key === 'BigTEst') {
+        // 👉 ADD THESE LINES HERE:
+        console.log(`\n--- 💎 SOLID BLUEPRINT: ${key} ---`);
+        try {
+          console.log(JSON.stringify(shape, null, 2));
+        } catch (e) {
+          console.log(
+            '⚠️ CIRCULAR DEP DETECTED: Deep nesting failed. Using inspect instead:',
+          );
+          console.dir(shape, { depth: null, colors: true });
+        }
+        console.log('---------------------------------\n');
+      }
+
       syncVault({ registry: globalRegistry, payload });
       /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
       return markAsPure(updatedCall);

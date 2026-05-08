@@ -6,7 +6,6 @@ import {
   isUndefined,
   isString,
 } from '../../../utils/guards';
-// import { Registry } from '../../../../src/vault';
 import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';
 import { createInitialContext } from '../../../../src/validation/context';
 import { solidifyShape } from '../../../../src/validation';

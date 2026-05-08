@@ -5,7 +5,7 @@ import {
   isNumberLiteralType,
   isUnionType,
 } from '../../utils';
-import { registerReifier } from './core';
+import { registerReifier, maxUnionVariants } from './core';
 /**
  * Extracts literal values without using 'any' or 'as'.
  */
@@ -57,20 +57,14 @@ export function createUnionCheck(
   );
 }
 
-registerReifier((type, _checker, next) => {
-  if (!isUnionType(type)) return undefined;
+registerReifier((type, _checker, next, ctx) => {
+  if (!type.isUnion()) return undefined;
 
-  const literals = getUnionValues(type);
-
-  if (literals.length > 0 && literals.length === type.types.length) {
-    return {
-      kind: 'union',
-      values: literals.map((v) => ({ kind: 'literal', value: v })),
-    };
-  }
+  // 📏 LIMIT: Max Variants
+  const variants = type.types.slice(0, maxUnionVariants);
 
   return {
     kind: 'union',
-    values: type.types.map((t) => next(t)),
+    values: variants.map((t) => next(t, ctx)),
   };
 });

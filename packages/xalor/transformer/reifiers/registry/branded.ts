@@ -10,7 +10,7 @@ import { registerReifier } from './core';
  * Extracts the brand name from an Intersection type safely.
  * Example: string & { __brand: "UserId" } -> "UserId"
  */
-registerReifier((type, checker, next) => {
+registerReifier((type, checker, next, ctx) => {
   if (!isIntersectionType(type)) return undefined;
 
   // Internal helper logic (migrated from your old branded.ts)
@@ -31,9 +31,12 @@ registerReifier((type, checker, next) => {
   if (!brandName) return undefined;
 
   const basePart = type.types.find((t) => !isObjectType(t)) ?? type.types[0];
+
   return {
     kind: 'branded',
     name: brandName,
-    base: next(basePart),
+    // 📏 PASS CONTEXT: Branded types don't usually add depth,
+    // but they must pass the bucket/seen maps.
+    base: next(basePart, ctx),
   };
 });

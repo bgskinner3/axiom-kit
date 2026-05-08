@@ -21,19 +21,17 @@ export interface BigTEst {
   moreStuff: {
     id: string;
     moreItems: {
-      money: 0;
+      money: {
+        id: string;
+        value: {
+          isThereMoney: boolean;
+        };
+      };
     };
   };
 }
 /**
-     "paths": {
-      "@bgskinner2/xalor": [
-        "src"
-      ],
-      "@bgskinner2/xalor/*": [
-        "src/*"
-      ]
-    }
+
  */
 describe('isXalor Polymorphic Entry Point', () => {
   // 💎 MOCK 1: Standard User

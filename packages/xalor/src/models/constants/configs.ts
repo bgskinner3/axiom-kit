@@ -57,6 +57,29 @@ export const XALOR_PATHS = {
 } as const;
 
 /**
+ * ⚖️ REIFY DEPTH & SIZE LIMITS
+ *
+ * PURPOSE:
+ * Implements the "Atomic Cut" strategy to prevent the "Pyramid of Doom."
+ * These constants act as the physical laws for the Build-Time Miner.
+ *
+ * ROLE:
+ * 1. PERSISTENCE: Ensures JSON blueprints remain small enough for rapid I/O.
+ * 2. PERFORMANCE: Caps recursion depth to protect the Runtime Engine's stack.
+ * 3. SECURITY: Mitigates "Billion Laughs" style memory exhaustion attacks.
+ *
+ * @law maxDepth - Forces a 'reference' chop once nesting exceeds this level.
+ * @law maxStringLength - Guards against "URL Shutdown" scenarios.
+ */
+const REIFY_DEPTH_LENGTH_SIZE_LIMITS = {
+  maxDepth: 3,
+  maxStringLength: 4096,
+  maxObjectProperties: 100,
+  maxUnionVariants: 25,
+  autoChop: true,
+} as const;
+
+/**
  * 🌍 MASTER GLOBAL CONFIGURATION
  *
  * The unified source of truth for the entire Xalor ecosystem.
@@ -72,5 +95,8 @@ export const IS_SOLID_CONFIG_ITEMS = {
   },
   lifeCyclePaths: {
     ...XALOR_PATHS,
+  },
+  reifyLimit: {
+    ...REIFY_DEPTH_LENGTH_SIZE_LIMITS,
   },
 } as const;

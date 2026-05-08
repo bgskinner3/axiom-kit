@@ -1,8 +1,9 @@
 // transformer/reifiers/registry/objects.ts
 import { isObjectType } from '../../utils';
-import { registerReifier } from './core';
+import { registerReifier, maxObjectProperties } from './core';
 import { SymbolFlags } from 'typescript';
 import type { TSolidObjectRawShape } from '../../../src/models/types';
+
 /**
  * STRUCTURAL REIFIER (OBJECTS & INTERFACES)
  *
@@ -15,34 +16,41 @@ import type { TSolidObjectRawShape } from '../../../src/models/types';
  * infinite crawls and enabling the "Ambient Database" to link
  * types together via named pointers.
  */
-registerReifier((type, checker, next, seen) => {
+registerReifier((type, checker, next, ctx) => {
   if (!isObjectType(type)) return undefined;
 
-  const symbol = type.getSymbol();
-  const typeName = symbol ? symbol.getName() : 'Anonymous';
-
-  if (seen.has(type)) {
-    return { kind: 'reference', name: typeName };
+  // 🔄 RECURSION CHECK (Using the context's seen set)
+  if (ctx.seen.has(type)) {
+    return {
+      kind: 'reference',
+      name: type.getSymbol()?.getName() || 'Circular',
+    };
   }
-
-  seen.add(type);
+  ctx.seen.add(type);
 
   const shapeProperties: Record<string, TSolidObjectRawShape> = {};
   const properties = checker.getPropertiesOfType(type);
 
-  for (const prop of properties) {
-    const declaration = prop.valueDeclaration;
-    if (declaration) {
-      const propType = checker.getTypeOfSymbolAtLocation(prop, declaration);
-      const isOptional = !!(prop.flags & SymbolFlags.Optional);
-      const propName = prop.getName();
+  // 📏 LIMIT: Max Properties check
+  const propsToProcess = properties.slice(0, maxObjectProperties);
 
-      shapeProperties[propName] = {
-        shape: next(propType),
-        optional: isOptional,
-        name: propName,
-      };
-    }
+  for (const prop of propsToProcess) {
+    const propType = checker.getTypeOfSymbolAtLocation(
+      prop,
+      prop.valueDeclaration!,
+    );
+    const propName = prop.getName();
+
+    shapeProperties[propName] = {
+      // 📏 DEPTH SYNC: Increment depth and update parentKey for the next level
+      shape: next(propType, {
+        ...ctx,
+        depth: ctx.depth + 1,
+        parentKey: `${ctx.parentKey}.${propName}`,
+      }),
+      optional: !!(prop.flags & SymbolFlags.Optional),
+      name: propName,
+    };
   }
 
   return { kind: 'object', properties: shapeProperties };

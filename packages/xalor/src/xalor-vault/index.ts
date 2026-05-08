@@ -33,6 +33,7 @@ export class XalethorVault {
    * Replaces 'Registry.registerShape'.
    */
   public static solidify(metadata: TSolidMetadata): void {
+    // console.log({ metadata });
     const { key, shape, area, symbolName } = metadata;
     if (this.vault.blueprints.has(key)) {
       // const originalPath = this.vault.manifest.get(key) ?? 'unknown';

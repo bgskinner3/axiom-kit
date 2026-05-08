@@ -24,6 +24,34 @@ export type TReifierContext = {
 export type TReifier = (
   type: Type,
   checker: TypeChecker,
-  next: (type: Type) => TSolidShape, // Recursive hook
-  seen: Set<Type>,
+  // 🛡️ FIX: next must accept the Type AND the Context
+  next: (type: Type, ctx: TReifyCTX) => TSolidShape,
+  ctx: TReifyCTX,
 ) => TSolidShape | undefined;
+
+/**
+ * 📏 TREIFYCTX (The Guardrail Context)
+ *
+ * PURPOSE:
+ * Manages the "Laws of Physics" for the Miner during recursive analysis.
+ * It tracks depth to trigger Atomic Cuts and manages the Fragment Bucket.
+ *
+ * @field depth - The current nesting level (0-indexed).
+ * @field maxDepth - The hard limit before a "Chop & Reference" occurs.
+ * @field fragments - A transient Map used to store "Chipped Off" blueprints.
+ * @field parentKey - The breadcrumb path used to name virtual fragments.
+ * @field seen - Prevents infinite recursion on circular TypeScript types.
+ */
+export type TReifyCTX = {
+  depth: number;
+  maxDepth: number; // 🛡️ From our Limits constant
+  fragments: Map<string, TSolidShape>; // 🪣 The "Chop" Bucket
+  parentKey: string; // 🔑 For naming fragments
+  seen: Set<Type>;
+};
+
+export type TReifyDispatcherBuild = {
+  type: Type;
+  checker: TypeChecker;
+  ctx: TReifyCTX;
+};

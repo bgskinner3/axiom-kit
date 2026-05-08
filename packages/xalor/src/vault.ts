@@ -24,42 +24,42 @@
 //   /**
 //    * Registers metadata into the Global Vault's items map.
 //    */
-//   public static register(metadata: TSolidMetadata): void {
-//     const vault = ensureGlobalVault();
-//     if (metadata.version !== IS_SOLID_CONFIG_ITEMS.solidVersion) {
-//       const errorMessage = `Version mismatch for key "${metadata.key}". Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, received ${metadata.version}.`;
+// public static register(metadata: TSolidMetadata): void {
+//   const vault = ensureGlobalVault();
+//   if (metadata.version !== IS_SOLID_CONFIG_ITEMS.solidVersion) {
+//     const errorMessage = `Version mismatch for key "${metadata.key}". Expected ${IS_SOLID_CONFIG_ITEMS.solidVersion}, received ${metadata.version}.`;
 
-//       console.error(`[xalor] ${errorMessage}`);
+//     console.error(`[xalor] ${errorMessage}`);
 
-//       vault.errors.set(metadata.key, [
-//         {
-//           key: metadata.key,
-//           path: '$',
-//           message: errorMessage,
-//           expected: IS_SOLID_CONFIG_ITEMS.solidVersion,
-//           received: metadata.version,
-//           area: metadata.area,
-//         },
-//       ]);
+//     vault.errors.set(metadata.key, [
+//       {
+//         key: metadata.key,
+//         path: '$',
+//         message: errorMessage,
+//         expected: IS_SOLID_CONFIG_ITEMS.solidVersion,
+//         received: metadata.version,
+//         area: metadata.area,
+//       },
+//     ]);
 
-//       return;
-//     }
-//     if (vault.items.has(metadata.key)) {
-//       // const existing = vault.items.get(metadata.key);
-
-//       // 💡 Option A: Throw if you want to be strict
-//       // throw new Error(`[xalor] Duplicate registration for key: ${metadata.key}`);
-
-//       // 💡 Option B: Log a warning and track in the errors map
-//       console.warn(
-//         `[xalor] ⚠️ Collision detected for key "${metadata.key}". Overwriting existing entry.`,
-//       );
-//     }
-//     if (!metadata.area || metadata.area === 'unknown') {
-//       metadata.area = getCallerLocation({ topParent: true });
-//     }
-//     vault.items.set(metadata.key, metadata);
+//     return;
 //   }
+//   if (vault.items.has(metadata.key)) {
+//     // const existing = vault.items.get(metadata.key);
+
+//     // 💡 Option A: Throw if you want to be strict
+//     // throw new Error(`[xalor] Duplicate registration for key: ${metadata.key}`);
+
+//     // 💡 Option B: Log a warning and track in the errors map
+//     console.warn(
+//       `[xalor] ⚠️ Collision detected for key "${metadata.key}". Overwriting existing entry.`,
+//     );
+//   }
+//   if (!metadata.area || metadata.area === 'unknown') {
+//     metadata.area = getCallerLocation({ topParent: true });
+//   }
+//   vault.items.set(metadata.key, metadata);
+// }
 
 //   /**
 //    * Retrieves a shape by its unique key from the items map.
