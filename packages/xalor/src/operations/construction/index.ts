@@ -1,7 +1,8 @@
 // src/index.ts
 //// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 // /// <reference path="../../../dist/solid-env.d.ts" />
-import { Registry } from '../../vault';
+import { XalethorVault } from '../../xalor-vault';
+import { XalorAuditor } from '../../xalor-auditor';
 import type { TSolidMetadata, TSolidError } from '../../models/types';
 // import { isXalor } from '../core';
 /**
@@ -10,7 +11,7 @@ import type { TSolidMetadata, TSolidError } from '../../models/types';
  */
 export function getSolid(key: string): TSolidMetadata | undefined {
   // isXalor<''>();
-  return Registry.get(key);
+  return XalethorVault.resolve(key);
 }
 /**
  * GET SOLID ERRORS
@@ -18,7 +19,7 @@ export function getSolid(key: string): TSolidMetadata | undefined {
  * Used after isSolid() returns false.
  */
 export function getSolidErrors(key: string): TSolidError[] {
-  return Registry.getErrors(key);
+  return XalorAuditor.getErrors(key);
 }
 /**
  * GET SOLID DEFAULT
@@ -40,5 +41,5 @@ export function getSolidErrors(key: string): TSolidError[] {
  * or generating skeleton objects for UI loaders that must adhere to a specific type.
  */
 export function getSolidDefault<T>(key: string): T {
-  return Registry.getDefault<T>(key);
+  return XalethorVault.getDefault<T>(key);
 }

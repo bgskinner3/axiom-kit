@@ -18,7 +18,7 @@ import {
   isPrimitive,
 } from '../utils/guards';
 import { yieldEntries, yieldFiltered } from '../utils';
-import { Registry } from '../vault';
+import { XalethorVault } from '../xalor-vault';
 /**
  * 💎 Collection Validators
  * Optimized for O(1) memory and fast-bailout.
@@ -122,7 +122,6 @@ export function validateIntersection(
   );
 
   for (const part of parts) {
-    // If one part fails, we stop immediately (Short-circuit)
     if (!solidifyShape(data, part, ctx)) {
       return false;
     }
@@ -141,7 +140,7 @@ export function validateReference(
   ctx: TValidationContext,
 ): boolean {
   // Pillar 2 in action: Resolve the ghost type by its string key
-  const metadata = Registry.get(shape.name);
+  const metadata = XalethorVault.resolve(shape.name);
 
   if (!metadata) {
     return reportError(

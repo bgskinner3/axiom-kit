@@ -1,3 +1,4 @@
+// transformer/miner/resolvers.ts
 import { addSyntheticLeadingComment, SyntaxKind } from 'typescript';
 import type { Node } from 'typescript';
 import type {
@@ -30,7 +31,7 @@ export function markAsPure<T extends Node>(node: T): T {
     node,
     SyntaxKind.MultiLineCommentTrivia,
     '* @__PURE__ ',
-    true, // ensures a trailing newline for clean output
+    true,
   );
 }
 /**
@@ -57,10 +58,8 @@ export function syncVault({ registry, payload }: TSyncVaultParams) {
     throw new Error(
       `[xalor] 🚨 Collision: Key "${payload.key}" is defined in ${payload.filePath} and ${payload.filePath}.`,
     );
-    // /* prettier-ignore */ throw new Error(XALOR_MESSAGE_HANDLER.ERROR.DEFINITION_COLLISION({key: payload.key, path: payload.filePath }));
   }
 
-  // 💎 PACKING EVERYTHING: No data left behind.
   registry.set(payload.key, payload);
 }
 /**

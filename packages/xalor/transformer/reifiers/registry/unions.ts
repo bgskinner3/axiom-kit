@@ -17,8 +17,6 @@ export function getUnionValues(type: ts.Type): (string | number | boolean)[] {
     if (isStringLiteralType(t) || isNumberLiteralType(t)) {
       values.push(t.value);
     } else if (t.getFlags() & ts.TypeFlags.BooleanLiteral) {
-      // TypeScript internal: boolean literals have 'intrinsicName'
-      // We check the flag and then the name string safely.
       const name = (t as { intrinsicName?: string }).intrinsicName;
       if (name === 'true') values.push(true);
       if (name === 'false') values.push(false);
@@ -62,7 +60,6 @@ export function createUnionCheck(
 registerReifier((type, _checker, next) => {
   if (!isUnionType(type)) return undefined;
 
-  // 1. Try to extract simple literals (for Enums/Status strings)
   const literals = getUnionValues(type);
 
   if (literals.length > 0 && literals.length === type.types.length) {
@@ -72,7 +69,6 @@ registerReifier((type, _checker, next) => {
     };
   }
 
-  // 2. If it's a complex union (e.g., Cat | Dog), recurse using 'next'
   return {
     kind: 'union',
     values: type.types.map((t) => next(t)),

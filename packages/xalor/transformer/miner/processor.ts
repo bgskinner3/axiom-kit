@@ -1,4 +1,4 @@
-// transformer/visitor/processor.ts
+// transformer/miner/processor.ts
 import type { ObjectLiteralExpression } from 'typescript';
 import type { TCreateSolidMetadata, TSolidVisitorProcessor } from '../types';
 import { generateShapeAST } from '../reifiers';

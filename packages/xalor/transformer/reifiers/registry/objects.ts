@@ -19,10 +19,8 @@ registerReifier((type, checker, next, seen) => {
   if (!isObjectType(type)) return undefined;
 
   const symbol = type.getSymbol();
-  // 💎 Fix: Rename 'name' to 'typeName' to avoid global scope confusion
   const typeName = symbol ? symbol.getName() : 'Anonymous';
 
-  // Check for circular reference
   if (seen.has(type)) {
     return { kind: 'reference', name: typeName };
   }

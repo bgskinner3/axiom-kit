@@ -1,6 +1,7 @@
 import { isXalor } from '../../../../src/operations/core';
-import { Registry } from '../../../../src/vault';
+// import { Registry } from '../../../../src/vault';
 import type { TSolidMetadata } from '../../../../src/models/types';
+import { XalethorVault } from '../../../../src/xalor-vault';
 // import { ISolidRegistry } from '@bgskinner2/xalor';
 
 declare module '../../../../src/' {
@@ -130,7 +131,7 @@ describe('isXalor Polymorphic Entry Point', () => {
     expect(isXalor(undefined, userMetadata)).toBe(true);
     expect(isXalor(undefined, productMetadata)).toBe(true);
     // expect(Registry.has('USER')).toBe(true);
-    expect(Registry.has('PRODUCT')).toBe(true);
+    expect(XalethorVault.has('PRODUCT')).toBe(true);
     interface User {
       id: number;
     } // 💎 Define it!

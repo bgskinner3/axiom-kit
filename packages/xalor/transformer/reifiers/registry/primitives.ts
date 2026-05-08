@@ -17,7 +17,6 @@ registerReifier((type) => {
   if (isStringLiteralType(type)) return { kind: 'literal', value: type.value };
   if (isNumberLiteralType(type)) return { kind: 'literal', value: type.value };
 
-  // 2. Boolean Literals (true / false)
   if (type.getFlags() & TypeFlags.BooleanLiteral) {
     const { intrinsicName } = type as Type & { intrinsicName: string };
     return { kind: 'literal', value: intrinsicName === 'true' };

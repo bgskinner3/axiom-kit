@@ -1,4 +1,4 @@
-// transformer/visitor/detector.ts
+// transformer/miner/detector.ts
 import type { TIdentifySolidCall } from '../types';
 /**
  *

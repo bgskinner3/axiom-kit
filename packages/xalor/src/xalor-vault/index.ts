@@ -57,7 +57,26 @@ export class XalethorVault {
       this.solidify(metadata);
     }
   }
+  /**
+   * 📦 RESOLVE
+   * Reconstructs the full TSolidMetadata package from specialized vaults.
+   * This replaces the deprecated 'items' lookup.
+   */
+  public static resolve(key: string): TSolidMetadata | undefined {
+    const shape = this.vault.blueprints.get(key);
+    const area = this.vault.manifest.get(key);
 
+    if (!shape || !area) return undefined;
+
+    // We assemble the object from the specialized stores
+    return {
+      key,
+      shape,
+      area,
+      version: '1.0.0', // You can add a 'versions' Map to the vault if needed
+      symbolName: this.vault.registry.get(key),
+    } as TSolidMetadata;
+  }
   /**
    * 🔍 vaultArchive
    *
@@ -302,38 +321,38 @@ export class XalethorVault {
 //    * 💎 REGISTER SHAPE
 //    * The primary entry point for Pillar 2. Populates the Triple-KV Vault.
 //    */
-//   public static registerShape(metadata: TSolidMetadata): void {
-//     const { key, shape, version, area } = metadata;
-//     const vault = ensureGlobalVault();
-//     const { ERROR } = XALOR_MESSAGE_HANDLER;
+// public static registerShape(metadata: TSolidMetadata): void {
+//   const { key, shape, version, area } = metadata;
+//   const vault = ensureGlobalVault();
+//   const { ERROR } = XALOR_MESSAGE_HANDLER;
 
-//     // 1. VERSION CHECK (Commandment VI)
-//     if (version !== IS_SOLID_CONFIG_ITEMS.solidVersion) {
-//       const msg = ERROR.DATABASE_VERSION_MIS_MATCH({ key, version });
-//       console.error(msg);
-//       this.setErrors(key, [{ key, path: '$', message: msg, expected: IS_SOLID_CONFIG_ITEMS.solidVersion, received: version, area }]);
-//       return;
-//     }
-
-//     // 2. THE COLLISION GUARD (The "Teeth")
-//     if (vault.blueprints.has(key)) {
-//       const originalArea = vault.manifest.get(key) || 'unknown location';
-//       throw new Error(ERROR.COLLISION({ key, msg: originalArea }));
-//     }
-
-//     // 3. FALLBACK AREA
-//     const resolvedArea = (!area || area === 'unknown')
-//       ? getCallerLocation({ topParent: true })
-//       : area;
-
-//     // 4. POPULATE TRIPLE-KV (Commandment I)
-//     vault.blueprints.set(key, shape);
-//     vault.manifest.set(key, resolvedArea);
-//     vault.registry.set(key, metadata.symbolName ?? 'unknown');
-
-//     // 5. LEGACY SUPPORT
-//     vault.items.set(key, { ...metadata, area: resolvedArea });
+//   // 1. VERSION CHECK (Commandment VI)
+//   if (version !== IS_SOLID_CONFIG_ITEMS.solidVersion) {
+//     const msg = ERROR.DATABASE_VERSION_MIS_MATCH({ key, version });
+//     console.error(msg);
+//     this.setErrors(key, [{ key, path: '$', message: msg, expected: IS_SOLID_CONFIG_ITEMS.solidVersion, received: version, area }]);
+//     return;
 //   }
+
+//   // 2. THE COLLISION GUARD (The "Teeth")
+//   if (vault.blueprints.has(key)) {
+//     const originalArea = vault.manifest.get(key) || 'unknown location';
+//     throw new Error(ERROR.COLLISION({ key, msg: originalArea }));
+//   }
+
+//   // 3. FALLBACK AREA
+//   const resolvedArea = (!area || area === 'unknown')
+//     ? getCallerLocation({ topParent: true })
+//     : area;
+
+//   // 4. POPULATE TRIPLE-KV (Commandment I)
+//   vault.blueprints.set(key, shape);
+//   vault.manifest.set(key, resolvedArea);
+//   vault.registry.set(key, metadata.symbolName ?? 'unknown');
+
+//   // 5. LEGACY SUPPORT
+//   vault.items.set(key, { ...metadata, area: resolvedArea });
+// }
 
 //   /**
 //    * 🔍 GET

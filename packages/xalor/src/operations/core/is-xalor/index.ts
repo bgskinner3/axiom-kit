@@ -6,7 +6,6 @@ import {
   isSolidKey,
   buildValidationTools,
 } from './helpers';
-// import { Registry } from '../../../vault';
 import { XalethorVault } from '../../../xalor-vault';
 import { isUndefined, isString } from '../../../utils/guards';
 import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';

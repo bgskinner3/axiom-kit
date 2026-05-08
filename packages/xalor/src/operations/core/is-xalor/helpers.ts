@@ -6,11 +6,12 @@ import {
   isUndefined,
   isString,
 } from '../../../utils/guards';
-import { Registry } from '../../../../src/vault';
+// import { Registry } from '../../../../src/vault';
 import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';
 import { createInitialContext } from '../../../../src/validation/context';
 import { solidifyShape } from '../../../../src/validation';
-
+import { XalethorVault } from '../../../xalor-vault';
+import { XalorAuditor } from '../../../xalor-auditor';
 export const isMetaData: TTypeGuard<TSolidMetadata> = (
   val: unknown,
 ): val is TSolidMetadata =>
@@ -32,7 +33,7 @@ export function isRegistration(arg1: unknown, arg2: unknown): boolean {
 export const isResolution: TTypeGuard<keyof ISolidRegistry> = (
   val: unknown,
 ): val is keyof ISolidRegistry =>
-  isString(val) && Registry.keys().includes(val);
+  isString(val) && XalethorVault.keys().includes(val);
 
 // export const isValidation = (arg1: unknown, arg2: unknown): boolean => {
 //   if (isUndefined(arg1)) return false;
@@ -59,7 +60,7 @@ export const isValidation = (...args: unknown[]): boolean => {
 export const isSolidKey: TTypeGuard<Extract<keyof ISolidRegistry, string>> = (
   key: unknown,
 ): key is Extract<keyof ISolidRegistry, string> =>
-  isString(key) && Registry.has(key);
+  isString(key) && XalethorVault.has(key);
 
 export function buildValidationTools<
   K extends Extract<keyof ISolidRegistry, string>,
@@ -73,21 +74,21 @@ export function buildValidationTools<
     val: unknown,
   ): val is ISolidRegistry[K] => {
     // Now TypeScript knows 'key' is definitely a string
-    const meta = Registry.get(key);
+    const meta = XalethorVault.resolve(key);
     if (!meta) return false;
 
     const ctx = createInitialContext();
     ctx.currentKey = key;
     const isValid = solidifyShape(val, meta.shape, ctx);
 
-    Registry.setErrors(key, isValid ? [] : ctx.errors);
+    XalorAuditor.setErrors(key, isValid ? [] : ctx.errors);
     return isValid;
   };
 
   // 🚀 The Assert: Throws or narrows type
   const assert = (val: unknown): asserts val is ISolidRegistry[K] => {
     if (!guard(val)) {
-      const errors = Registry.getErrors(key as string);
+      const errors = XalorAuditor.getErrors(key as string);
       const msg = errors[0]
         ? `[xalor] ${key} failed: ${errors[0].message}`
         : 'Validation failed';
