@@ -35,7 +35,9 @@ describe('Cache Generation Test', () => {
      * to the .cache file the moment this file is compiled by ts-jest.
      */
     isXalor<'USER_PERSIST_TEST', User>();
+    // isXalor<"">()
     isXalor<'FUCK', TTHISISBULL>();
+    // isXalor<"">();
     // const y = isXalor<'TFUCKKKKTT'>(undefined);
     // isXalor<'TFUCKKKKTT', TFUCKKKKTT>();
     // isXalor<''>();

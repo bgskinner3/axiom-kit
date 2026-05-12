@@ -111,7 +111,9 @@ declare const SolidBrand: unique symbol;
 export type TSolid<K extends string, T> = T & {
   readonly [SolidBrand]: K;
 };
-
+export type TStrictSolidMetaData = {
+  // --- additional type move here ----
+} & Required<Omit<TSolidMetadata, '_ghost'>>;
 /**
  * SHAPE KINDS
  * The exhaustive list of supported type categories in the Solid system.

@@ -1,4 +1,4 @@
-import type { TSolidMetadata } from '../../models/types';
+import type { TSolidMetadata, TStrictSolidMetaData } from '../../models/types';
 
 interface IAdditionalFields {
   filePath: string;
@@ -6,9 +6,6 @@ interface IAdditionalFields {
   symbolName: string;
 }
 
-export type TStrictSolidMetaData = {
-  // --- additional type move here ----
-} & Required<Omit<TSolidMetadata, '_ghost'>>;
 const rectifierRegistry: {
   [K in keyof IAdditionalFields]: (
     input: TSolidMetadata,

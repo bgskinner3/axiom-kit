@@ -1,9 +1,5 @@
 // transformer/emitters/intellisense-bridge.ts
-import {
-  IS_SOLID_CONFIG_ITEMS,
-  REGISTERED_INTELLIGENCE_FUNCTIONS,
-} from '../../src/models';
-import { ObjectUtils } from '../../src/utils';
+import { IS_SOLID_CONFIG_ITEMS } from '../../src/models';
 import * as fs from 'fs';
 import * as path from 'path';
 import type { TVaultSyncPayload } from '../types';
@@ -62,12 +58,6 @@ function temporalManifest(
     );
   });
 
-  const functionLines = ObjectUtils.values(
-    REGISTERED_INTELLIGENCE_FUNCTIONS,
-  ).map((config) =>
-    config.signature({ key: 'K', typeImport: 'ISolidRegistry[K]' }),
-  );
-
   return [
     emitter.banner,
     `/* eslint-disable ${emitter.eslintDisabled.join(' ')} */`,
@@ -83,9 +73,9 @@ function temporalManifest(
     `  interface ISolidRegistry {`,
     ...registryLines,
     `  }`,
-    '',
-    `  // --- UNIFIED GHOST API ---`,
-    ...functionLines,
+    // '',
+    // `  // --- UNIFIED GHOST API ---`,
+    // ...functionLines,
     `}`,
   ]
     .join('\n')
@@ -106,30 +96,6 @@ function temporalManifest(
  *    preventing unnecessary IDE re-indexes or build triggers.
  * 3. DIRECTORY SAFETY: Ensures the distribution path exists before writing.
  */
-export function hydrateIntellisenseBridged(
-  rootDir: string,
-  registry: Map<string, TVaultSyncPayload>,
-) {
-  const { emitter } = IS_SOLID_CONFIG_ITEMS;
-  const targetDir = path.join(rootDir, emitter.targetDir);
-  const envFile = path.join(targetDir, emitter.fileName);
-
-  // 🚩 DEBUG LOGS
-  // console.log(`[xalor-fs] Attempting to write to: ${envFile}`);
-  // console.log(`[xalor-fs] Registry size: ${registry.size}`);
-
-  const dts = temporalManifest(registry, targetDir, emitter);
-
-  if (!fs.existsSync(targetDir)) {
-    // console.log(`[xalor-fs] Creating missing directory: ${targetDir}`);
-    fs.mkdirSync(targetDir, { recursive: true });
-  }
-
-  fs.writeFileSync(envFile, dts);
-  // console.log(`[xalor-fs] ✅ File written successfully.`);
-}
-// transformer/emitters/intellisense-bridge.ts
-
 export function hydrateIntellisenseBridge(
   rootDir: string,
   registry: Map<string, TVaultSyncPayload>,

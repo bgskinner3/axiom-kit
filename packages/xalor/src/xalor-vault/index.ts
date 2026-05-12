@@ -3,8 +3,9 @@ import type {
   TSolidMetadata,
   TSolidVaultMap,
   TSolidShape,
+  TStrictSolidMetaData,
 } from '../models/types';
-import { preRegisterMetadata, TStrictSolidMetaData } from '../utils';
+import { preRegisterMetadata } from '../utils';
 // import { XALOR_MESSAGE_HANDLER } from '../xalor-auditor';
 // import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
 // import { serialize, yieldEntries } from '../utils';
@@ -26,20 +27,7 @@ export class XalethorVault {
     const metadata = preRegisterMetadata(rawMetadata);
 
     const { key, shape, area, filePath, symbolName, typeName } = metadata;
-    // if (this.vault.blueprints.has(key)) {
-    //   throw new Error(`[xalor] Collision: Key "${key}" is already registered.`);
-    // }
-    // if (this.vault.blueprints.has(key)) {
-    //   const existingShape = this.vault.blueprints.get(key);
 
-    //   if (JSON.stringify(existingShape) === JSON.stringify(shape)) {
-    //     // It's a perfect match. We can skip the Map.set() to save a microsecond.
-    //     return;
-    //   }
-
-    //   // It's different! We overwrite the RAM so the Validator uses the newest version.
-    //   console.log(`[xalor] Updating Type Logic: ${key}`);
-    // }
     if (this.vault.blueprints.has(key)) {
       const existing = JSON.stringify(this.vault.blueprints.get(key));
       const incoming = JSON.stringify(shape);
@@ -53,7 +41,6 @@ export class XalethorVault {
     this.vault.blueprints.set(key, shape);
     this.vault.manifest.set(key, { area, filePath });
     this.vault.registry.set(key, { symbolName, typeName });
-    // console.log(this.vault, 'HEREE');
   }
 
   /**
