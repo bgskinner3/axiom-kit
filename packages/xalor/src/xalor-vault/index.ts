@@ -8,18 +8,7 @@ import type {
 // import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
 // import { serialize, yieldEntries } from '../utils';
 import { produceDefault } from '../generation';
-// import * as fs from 'fs';
-// import * as path from 'path';
 
-// The Miner extracts the data.
-// The Emitter builds the Bridge.
-// ==>>>> THIS IS THIS CALSS The Hydrator (this code) puts the data into the three specialized Vault lists.
-/**
- * GOALS REFACOTRING THIS
- *  KEEP IN MIND THIS IS THE THE MAIN GATEWAY FOR THE
- *
- * IT SHOUDL ---> A> HYDRATE ...
- */
 export class XalethorVault {
   // private static errorMessageTemp = XALOR_MESSAGE_HANDLER.ERROR;
   // private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
@@ -45,7 +34,7 @@ export class XalethorVault {
     this.vault.manifest.set(key, area); // 2. Location (The Manifest)
     this.vault.registry.set(key, symbolName ?? 'unknown'); // 3. Identity (The Registry)
 
-    this.vault.items.set(key, metadata); // 4. Backward Compatibility
+    // this.vault.items.set(key, metadata); // 4. Backward Compatibility
   }
 
   /**

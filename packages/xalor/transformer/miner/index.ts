@@ -15,7 +15,7 @@ import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
 import { markAsPure, syncVault, getSpatialIdentity } from './resolvers';
 import type { TVaultSyncPayload } from '../types';
 import type { TSolidShape } from '../../src/models/types';
-// import type { TSolidShape } from '../../src/models';
+
 /**
  * The Miner (Build-Time Extraction)
  *
@@ -113,19 +113,19 @@ export function theMiner(
         version: solidVersion,
       } satisfies TVaultSyncPayload;
 
-      if (key === 'BigTEst') {
-        // 👉 ADD THESE LINES HERE:
-        console.log(`\n--- 💎 SOLID BLUEPRINT: ${key} ---`);
-        try {
-          console.log(JSON.stringify(shape, null, 2));
-        } catch (e) {
-          console.log(
-            '⚠️ CIRCULAR DEP DETECTED: Deep nesting failed. Using inspect instead:',
-          );
-          console.dir(shape, { depth: null, colors: true });
-        }
-        console.log('---------------------------------\n');
-      }
+      // if (key === 'BigTEst') {
+      //   // 👉 ADD THESE LINES HERE:
+      //   console.log(`\n--- 💎 SOLID BLUEPRINT: ${key} ---`);
+      //   try {
+      //     console.log(JSON.stringify(shape, null, 2));
+      //   } catch (e) {
+      //     console.log(
+      //       '⚠️ CIRCULAR DEP DETECTED: Deep nesting failed. Using inspect instead:',
+      //     );
+      //     console.dir(shape, { depth: null, colors: true });
+      //   }
+      //   console.log('---------------------------------\n');
+      // }
 
       syncVault({ registry: globalRegistry, payload });
       /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
@@ -200,3 +200,49 @@ export function theMiner(
 
 //   return visitor;
 // }
+/**
+ {
+  "version": "1.0.0",
+  "blueprints": {
+    "USER": {
+      "kind": "object",
+      "properties": {
+        "id": { "shape": { "kind": "primitive", "type": "number" }, "optional": false, "name": "id" },
+        "name": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "name" }
+      }
+    },
+    "MY_BALLS": {
+      "kind": "object",
+      "properties": {
+        "myLeftNut": { "shape": { "kind": "primitive", "type": "number" }, "optional": false, "name": "myLeftNut" },
+        "myRightNut": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "myRightNut" }
+      }
+    },
+    "BigTEst": {
+      "kind": "object",
+      "properties": {
+        "yourTingWinner": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "yourTingWinner" },
+        "moreStuff": { "shape": { "kind": "reference", "name": "BigTEst$d1" }, "optional": false, "name": "moreStuff" }
+      }
+    },
+    "BigTEst$d1": {
+      "kind": "object",
+      "properties": {
+        "id": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "id" },
+        "moreItems": { "shape": { "kind": "object", "properties": { "money": { "shape": { "kind": "primitive", "type": "unknown" }, "optional": false, "name": "money" } } }, "optional": false, "name": "moreItems" }
+      }
+    }
+  },
+  "manifest": {
+    "USER": { "area": "test-file.ts:14:5", "filePath": "test-file.ts" },
+    "MY_BALLS": { "area": "is-xalor.test.ts:141:5", "filePath": "__tests__/runtime/operations/core/is-xalor.test.ts" },
+    "BigTEst": { "area": "is-xalor.test.ts:142:5", "filePath": "__tests__/runtime/operations/core/is-xalor.test.ts" }
+  },
+  "registry": {
+    "USER": { "symbolName": "User", "typeName": "{ id: number; name: string; }" },
+    "MY_BALLS": { "symbolName": "TFUCKKKKTT", "typeName": "{ myLeftNut: number; myRightNut: string; }" },
+    "BigTEst": { "symbolName": "BigTEst", "typeName": "{ yourTingWinner: string; moreStuff: { ... }; }" }
+  }
+}
+
+ */

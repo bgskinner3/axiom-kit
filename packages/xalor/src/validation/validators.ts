@@ -8,6 +8,7 @@ import type {
   TSolidIntersectionShape,
   TSolidReferenceShape,
   TSolidLiteralShape,
+  TSolidPrimitiveShape,
 } from '../models/types';
 import { reportError } from './errors';
 import {
@@ -159,9 +160,10 @@ export function validateReference(
  */
 export function validatePrimitive(
   data: unknown,
-  type: string,
+  shape: TSolidPrimitiveShape,
   ctx: TValidationContext,
 ): boolean {
+  const { type } = shape;
   if (type === 'unknown') return true;
 
   const isValid = typeof data === type && isPrimitive(data);

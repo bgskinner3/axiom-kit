@@ -4,11 +4,11 @@ import type { Node } from 'typescript';
 import type {
   TSpatialIdentity,
   TInterfaceOrType,
-  TSyncVaultParams,
-  // TVaultSyncPayload,
+  // TSyncVaultParams,
+  TVaultSyncPayload,
 } from '../types';
 import { printGhostStructure } from './ghost-structures';
-
+import * as path from 'path';
 /**
  * 💎 MARK AS PURE (Minification Shield)
  *
@@ -51,22 +51,13 @@ export function markAsPure<T extends Node>(node: T): T {
  * - This satisfies Commandment I. By catching collisions here, we prevent
  *   buggy builds from ever reaching the node_modules cache.
  */
-export function syncVault({ registry, payload }: TSyncVaultParams) {
-  const existing = registry.get(payload.key);
-
-  if (existing && existing.filePath !== payload.filePath) {
-    throw new Error(
-      `[xalor] 🚨 Collision: Key "${payload.key}" is defined in ${payload.filePath} and ${payload.filePath}.`,
-    );
-  }
-
-  registry.set(payload.key, payload);
-}
-
-
-// transformer/miner/resolvers.ts
-ADD THIS 
-export function syncVault({ registry, payload }: { registry: Map<string, TVaultSyncPayload>, payload: TVaultSyncPayload }) {
+export function syncVault({
+  registry,
+  payload,
+}: {
+  registry: Map<string, TVaultSyncPayload>;
+  payload: TVaultSyncPayload;
+}) {
   // 💎 The Law: No "Leakage"
   // We ensure the payload is perfectly shaped for the 3 Vaults before it hits the Map.
   registry.set(payload.key, {
@@ -74,7 +65,7 @@ export function syncVault({ registry, payload }: { registry: Map<string, TVaultS
     // Ensure path is relative to root for the Manifest
     filePath: path.relative(process.cwd(), payload.filePath),
     // Ensure shape is the "Atomic" version
-    shape: payload.shape, 
+    shape: payload.shape,
   });
 }
 

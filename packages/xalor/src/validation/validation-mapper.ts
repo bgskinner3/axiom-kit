@@ -33,7 +33,7 @@ import { solidifyShape } from './solidify-shape';
 export const VALIDATORS: TValidatorMapper = {
   primitive: (data, shape, ctx) => {
     if (!isPrimitiveShape(shape)) return false;
-    return validatePrimitive(data, shape.type, ctx);
+    return validatePrimitive(data, shape, ctx);
   },
   literal: (data, shape, ctx) =>
     isLiteralShape(shape) && validateLiteral(data, shape, ctx),

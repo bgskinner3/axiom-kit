@@ -6,7 +6,7 @@ interface IAdditionalFields {
   symbolName: string;
 }
 
-export type TStrictSolidEntity = {
+export type TStrictSolidMetaData = {
   // --- additional type move here ----
 } & Required<Omit<TSolidMetadata, '_ghost'>>;
 const rectifierRegistry: {
@@ -33,7 +33,7 @@ const rectifierRegistry: {
 
 export const preRegisterMetadata = (
   input: TSolidMetadata,
-): TStrictSolidEntity => {
+): TStrictSolidMetaData => {
   return {
     // Standard Metadata
     key: input.key,
