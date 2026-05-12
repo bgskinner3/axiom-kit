@@ -1,19 +1,12 @@
 import { XalethorService } from '../xalor-service';
 import type {
   ISolidRegistry,
-  TSolidMetadata,
   TStrictSolidMetaData,
   TSolidBranded,
+  TReturnTypeIsXalor,
+  TXalorArgs,
 } from '../models/types';
-import { isMetaData } from '../utils/guards/operations';
-
-type TXalorArgs<K extends keyof ISolidRegistry> =
-  | /* prettier-ignore */ { mode?: never; injectedKey?: never; data?: undefined; injected?: TSolidMetadata } // Registration
-  | /* prettier-ignore */ { mode: 'meta'; injectedKey: K; data?: never; injected?: never } // Resolution
-  | /* prettier-ignore */ { mode: 'guard'; injectedKey: K; data: unknown; injected?: never } // Validation
-  | /* prettier-ignore */ { mode: 'assert'; injectedKey: K; data: unknown; injected?: never } // Assertion
-  | /* prettier-ignore */ { mode: 'parse'; injectedKey: K; data: unknown }
-  | /* prettier-ignore */ { mode: 'parseAsync'; injectedKey: K; data: unknown };
+import { isMetaData, markAsSolid } from '../utils';
 
 /** I. REGISTRATION (Generic call for the Miner) */
 /* prettier-ignore */ export function isXalor<_K extends keyof ISolidRegistry | (string & {}), _T>(): void;
@@ -26,7 +19,7 @@ type TXalorArgs<K extends keyof ISolidRegistry> =
 /** V. PARSE (The Boolean Guard) */
 /* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: { mode: 'parse', injectedKey: K, data: unknown }): TSolidBranded<K, ISolidRegistry[K]>;
 /* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: { mode: 'parseAsync', injectedKey: K, data: unknown }): Promise<TSolidBranded<K, ISolidRegistry[K]>>;
-/* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: TXalorArgs<K> = {}): void | boolean | TStrictSolidMetaData | Promise<TSolidBranded<K, ISolidRegistry[K]>> | TSolidBranded<K, ISolidRegistry[K]> {
+/* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: TXalorArgs<K> = {}): TReturnTypeIsXalor<K> {
  const { mode, injectedKey, data } = params;
 
 if (!mode && isMetaData(params))  return XalethorService.solidify(params); 
@@ -41,21 +34,18 @@ if (!mode && isMetaData(params))  return XalethorService.solidify(params);
 }
   if (mode === 'parse') {
     if (XalethorService.validateShape(data, injectedKey)) {
-      // TypeScript allows this return because 'data' is part of the union 
-      // via ISolidRegistry[K] (which is what TSolidBranded wraps)
-      return data as TSolidBranded<K, ISolidRegistry[K]>; 
+      if (markAsSolid<K, ISolidRegistry[K]>(data)) return data; 
     }
     XalethorService.panic(injectedKey);
   }
 
-  // 7. Async Parse Hat
+  // 5️⃣ Async Parse
   if (mode === 'parseAsync') {
-    // We use an async iife or return a chain starting with data
-    return Promise.resolve(data).then((val): TSolidBranded<K, ISolidRegistry[K]> => {
+    return Promise.resolve(data).then((val) => {
       if (XalethorService.validateShape(val, injectedKey)) {
-        return val as TSolidBranded<K, ISolidRegistry[K]>;
+        if (markAsSolid<K, ISolidRegistry[K]>(val)) return val;
       }
-      XalethorService.panic(injectedKey);
+      return XalethorService.panic(injectedKey);
     });
   }
 
