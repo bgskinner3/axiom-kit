@@ -14,14 +14,20 @@
       "jest"
     ],
     "paths": {
+      // "@bgskinner2/xalor": [
+      //   "./src/index.ts"
+      // ],
+      // "@bgskinner2/xalor/*": [
+      //   "./src/*"
+      // ],
+      // "@bgskinner2/xalor/generated": [
+      //   "./node_modules/@bgskinner2/xalor/dist/generated/solid-env.d.ts"
+      // ]
       "@bgskinner2/xalor": [
         "./src/index.ts"
       ],
-      "@bgskinner2/xalor/*": [
-        "./src/*"
-      ],
       "@bgskinner2/xalor/generated": [
-        "./node_modules/@bgskinner2/xalor/dist/generated/solid-env.d.ts"
+        "./node_modules/.cache/xalor/solid-env.d.ts"
       ]
     }
   },

@@ -27,7 +27,7 @@ export function isXalor<K extends keyof ISolidRegistry>(params: {
 /** IV. ASSERTION (The Auditor Enforcer) */
 export function isXalor<K extends keyof ISolidRegistry>(params: {
   mode: 'assert';
-  injectedKey: K;
+  injectedKey?: K;
   data: unknown;
 }): asserts params is {
   mode: 'assert';

@@ -1,6 +1,6 @@
-import type { TToXalorArgs, ISolidRegistry } from '../models/types';
-import { XalethorService } from '../xalor-service';
-import { isMetaData, markAsSolid } from '../utils';
+// import type { TToXalorArgs, ISolidRegistry } from '../models/types';
+// import { XalethorService } from '../xalor-service';
+// import { isMetaData, markAsSolid } from '../utils';
 
 // /** VII. DEFAULT */
 // export function toXalor<K extends keyof ISolidRegistry>(
