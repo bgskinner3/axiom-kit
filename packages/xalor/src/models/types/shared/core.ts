@@ -64,14 +64,14 @@ export type TSolidError = {
   received: unknown;
   /** The file:line:char where this export type was defined processor */
   area?: string;
-  origin?: string;
+  origin?: string | TVaultManifestEntry;
 };
 /**
  * 📦 PERSISTENCE SHAPES
  * These are the objects stored inside the Vault drawers.
  */
-export type TManifestEntry = { area: string; filePath: string };
-export type TRegistryEntry = { symbolName: string; typeName: string };
+export type TVaultManifestEntry = { area: string; filePath: string };
+export type TVaultRegistryEntry = { symbolName: string; typeName: string };
 
 /**
  * 🗄️ TRIPLE-KV SNAPSHOT (The "Bunker" Schema)
@@ -79,8 +79,8 @@ export type TRegistryEntry = { symbolName: string; typeName: string };
  */
 export type TTripleKV = {
   blueprints: Record<string, TSolidShape>;
-  manifest: Record<string, TManifestEntry>;
-  registry: Record<string, TRegistryEntry>;
+  manifest: Record<string, TVaultManifestEntry>;
+  registry: Record<string, TVaultRegistryEntry>;
   version: string;
 };
 
@@ -89,10 +89,10 @@ export type TSolidVaultMap = {
   blueprints: Map<string, TSolidShape>;
 
   /** 2. MANIFEST: Traceability data (GPS + FilePath). */
-  manifest: Map<string, TManifestEntry>;
+  manifest: Map<string, TVaultManifestEntry>;
 
   /** 3. REGISTRY: IDE Identity (SymbolName + DNA). */
-  registry: Map<string, TRegistryEntry>;
+  registry: Map<string, TVaultRegistryEntry>;
 
   /** 4. ERROR CACHE: Runtime failure reports. */
   errors: Map<string, TSolidError[]>;
@@ -108,7 +108,7 @@ export type TSolidVaultMap = {
  * helpw ith tracking and managing etc ....
  */
 declare const SolidBrand: unique symbol;
-export type TSolid<K extends string, T> = T & {
+export type TSolidBranded<K extends string, T> = T & {
   readonly [SolidBrand]: K;
 };
 export type TStrictSolidMetaData = {

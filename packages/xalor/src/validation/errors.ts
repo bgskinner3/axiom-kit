@@ -1,7 +1,7 @@
 // src/validation/errors.ts
 import type { TValidationContext, TSolidShape } from '../models/types';
 import { serialize, getCallerLocation } from '../utils';
-import { XalethorVault } from '../xalor-vault';
+import { XalethorService } from '../xalor-service';
 /**
  * Records a validation failure into the current context.
  * Returns false to allow for: return reportError(...)
@@ -15,7 +15,7 @@ export function reportError(
 
   // 📍 ARCHITECTURE LINK: Pull the "Origin GPS" from the Triple-KV Manifest
   const originArea = ctx.currentKey
-    ? XalethorVault.vaultArchive('manifest', ctx.currentKey)
+    ? XalethorService.manifestVault(ctx.currentKey)
     : 'unknown';
 
   ctx.errors.push({

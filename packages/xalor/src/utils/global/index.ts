@@ -1,7 +1,7 @@
 // models/utils/global/index.ts
 import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
 import type { TSolidVaultMap } from '../../models/types';
-import { XalethorVaultArchive } from '../../xalor-vault/vault-archive';
+import { XalethorService } from '../../xalor-service';
 // ====================================================================
 /**
  * GLOBAL VAULT ACCESSORS
@@ -53,7 +53,7 @@ export function ensureGlobalVault(): TSolidVaultMap {
     vault._isHydrated = true; // Mark true immediately to prevent recursive triggers
     try {
       // We wrap in try/catch for Browser/Serverless environments
-      const archive = new XalethorVaultArchive();
+      const archive = new XalethorService();
       archive.hydrateFromGenesis(process.cwd());
     } catch {
       // Fail silently: we stay in "Ghost" mode if the file is missing

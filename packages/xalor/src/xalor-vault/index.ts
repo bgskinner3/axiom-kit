@@ -4,12 +4,14 @@ import type {
   TSolidVaultMap,
   TSolidShape,
   TStrictSolidMetaData,
+  TVaultRegistryEntry,
+  TVaultManifestEntry,
 } from '../models/types';
 import { preRegisterMetadata } from '../utils';
 import { validateShape, createInitialContext } from '../validation';
 import { produceDefault } from '../generation';
 
-export class XalethorVault {
+class XalethorVault {
   // private static errorMessageTemp = XALOR_MESSAGE_HANDLER.ERROR;
   // private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
 
@@ -31,6 +33,7 @@ export class XalethorVault {
 
     return isValid;
   }
+
   /**
    * Registers a single type into the Triple-KV system.
    * Replaces 'Registry.registerShape'.
@@ -55,16 +58,6 @@ export class XalethorVault {
     this.vault.registry.set(key, { symbolName, typeName });
   }
 
-  /**
-   * 🌊 HYDRATE
-   * Bulk registers types using lazy iteration.
-   * Zero memory allocation for intermediate arrays.
-   */
-  // public static hydrate(entries: Iterable<[string, TSolidMetadata]>): void {
-  //   for (const [_, metadata] of entries) {
-  //     this.solidify(metadata);
-  //   }
-  // }
   /**
    * 📦 RESOLVE
    * Reconstructs the full TSolidMetadata package from specialized vaults.
@@ -95,11 +88,12 @@ export class XalethorVault {
    * It maps the variant request to the specific internal Map.
    */
   /* prettier-ignore */ public static vaultArchive( variant: 'blueprint', key: string): TSolidShape | undefined;
-  /* prettier-ignore */ public static vaultArchive( variant: 'manifest' | 'registry', key: string,): string | undefined;
+  /* prettier-ignore */ public static vaultArchive( variant: 'registry', key: string,): TVaultRegistryEntry | undefined;
+  /* prettier-ignore */ public static vaultArchive( variant: 'manifest', key: string,): TVaultManifestEntry | undefined;
   public static vaultArchive(
     variant: 'blueprint' | 'manifest' | 'registry',
     key: string,
-  ): TSolidShape | string | undefined {
+  ): TSolidShape | TVaultManifestEntry | TVaultRegistryEntry | undefined {
     return this.vault[variant].get(key);
   }
 

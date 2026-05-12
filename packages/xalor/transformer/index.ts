@@ -5,8 +5,7 @@ import { theMiner } from './miner';
 import { hydrateIntellisenseBridge } from './emitters';
 import type { TVaultSyncPayload } from './types';
 import { visitNode } from 'typescript';
-import { XalethorVaultArchive } from '../src/xalor-vault/vault-archive';
-import { XalethorVault } from '../src/xalor-vault';
+import { XalethorService } from '../src/xalor-service';
 
 export default function (
   program: ts.Program,
@@ -18,7 +17,7 @@ export default function (
   // We wake up the Vault and load the Bunker BEFORE we start mining.
   // This ensures the Transformer knows about existing UUIDs.
   try {
-    const archive = new XalethorVaultArchive();
+    const archive = new XalethorService();
     archive.hydrateFromGenesis(rootDir);
   } catch {
     // Silence for clean builds
@@ -62,10 +61,10 @@ export default function (
       const shouldFlush = isLastFile || (isTest && globalKeyRegistry.size > 0);
 
       if (shouldFlush) {
-        const archive = new XalethorVaultArchive();
+        const archive = new XalethorService();
 
         // 💾 PERSISTENCE: Create node_modules/.cache/xalor/vault-snapshot.json
-        archive.persist(rootDir, globalKeyRegistry);
+        archive.persist({ rootDir, registry: globalKeyRegistry });
 
         // 🌉 BRIDGE: Create src/.xalor/solid-env.d.ts
         hydrateIntellisenseBridge(rootDir, globalKeyRegistry);
@@ -73,7 +72,7 @@ export default function (
         // 🚀 INJECTION: If testing, populate RAM so the current test passes
         if (isTest) {
           globalKeyRegistry.forEach((payload) => {
-            XalethorVault.solidify(payload);
+            XalethorService.solidify(payload);
           });
 
           // Log only once per file to keep output clean

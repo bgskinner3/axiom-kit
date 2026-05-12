@@ -49,9 +49,7 @@ export function solidVisitorProcessor({
   const areaString = `${sourceFile.fileName}:${line + 1}:${character + 1}`;
   const metadata = createSolidMetadata({ factory, areaString, shape, key });
   const finalArgs =
-    node.arguments.length === 0
-      ? [factory.createIdentifier('undefined'), metadata]
-      : [node.arguments[0], metadata];
+    node.arguments.length === 0 ? [metadata] : [node.arguments[0], metadata];
 
   return factory.updateCallExpression(
     node,

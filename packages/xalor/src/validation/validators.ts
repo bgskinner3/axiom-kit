@@ -19,7 +19,8 @@ import {
   isPrimitive,
 } from '../utils/guards';
 import { yieldEntries, yieldFiltered } from '../utils';
-import { XalethorVault } from '../xalor-vault';
+import { XalethorService } from '../xalor-service';
+
 /**
  * 💎 Collection Validators
  * Optimized for O(1) memory and fast-bailout.
@@ -141,7 +142,7 @@ export function validateReference(
   ctx: TValidationContext,
 ): boolean {
   // Pillar 2 in action: Resolve the ghost type by its string key
-  const metadata = XalethorVault.resolve(shape.name);
+  const metadata = XalethorService.inspectMetaData(shape.name);
 
   if (!metadata) {
     return reportError(

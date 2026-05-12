@@ -1,5 +1,5 @@
 // import { XALOR_MESSAGE_HANDLER } from './msg';
-import { XalethorVault } from '../xalor-vault';
+// import { XalethorVault } from '../xalor-vault';
 import { ensureGlobalVault } from '../utils';
 import type { TSolidError, TSolidVaultMap } from '../models/types';
 
@@ -9,100 +9,89 @@ import type { TSolidError, TSolidVaultMap } from '../models/types';
  * The system's central inspector. It monitors the health of the
  * Triple-KV Archive and records validation failures in the Vault.
  */
-export class XalorAuditor {
-  private static get errorVault(): TSolidVaultMap['errors'] {
-    return ensureGlobalVault().errors;
-  }
-
-  public static getErrors(key: string): TSolidError[] {
-    return this.errorVault.get(key) ?? [];
-  }
-  public static clearErrors(key?: string): void {
-    if (key) this.errorVault.delete(key);
-    if (!key) this.errorVault.clear();
-  }
-  /**
-   * Internal: Sets the errors for a specific key in the errors map.
-   */
-  public static setErrors(key: string, errors: TSolidError[]): void {
-    this.errorVault.set(key, errors);
-  }
-
-  public static record(error: TSolidError): void {
-    const currentErrors = this.getErrors(error.key);
-    currentErrors.push(error);
-    this.setErrors(error.key, currentErrors);
-  }
-
-  /**
-   * 📑 SCAN (Dev Tool)
-   * Diagnostic table showing the health of the Triple-KV Archive.
-   */
+class XalorAuditor {
+  // private static get errorVault(): TSolidVaultMap['errors'] {
+  //   return ensureGlobalVault().errors;
+  // }
+  // public static getErrors(key: string): TSolidError[] {
+  //   return this.errorVault.get(key) ?? [];
+  // }
+  // public static clearErrors(key?: string): void {
+  //   if (key) this.errorVault.delete(key);
+  //   if (!key) this.errorVault.clear();
+  // }
+  // /**
+  //  * Internal: Sets the errors for a specific key in the errors map.
+  //  */
+  // public static setErrors(key: string, errors: TSolidError[]): void {
+  //   this.errorVault.set(key, errors);
+  // }
+  // public static record(error: TSolidError): void {
+  //   const currentErrors = this.getErrors(error.key);
+  //   currentErrors.push(error);
+  //   this.setErrors(error.key, currentErrors);
+  // }
+  // /**
+  //  * 📑 SCAN (Dev Tool)
+  //  * Diagnostic table showing the health of the Triple-KV Archive.
+  //  */
+  // // public static scan(): void {
+  // //   const keys = XalethorVault.keys();
+  // //   if (keys.length === 0) {
+  // //     console.log('\n[xalor-audit] 📭 The Archive is empty.\n');
+  // //     return;
+  // //   }
+  // //   const inventory = keys.map((key) => ({
+  // //     /* prettier-ignore */ 'Key 🔑': key,
+  // //     /* prettier-ignore */ 'Symbol 🆔': XalethorVault.vaultArchive('registry', key) || '⚠️ MISSING',
+  // //     /* prettier-ignore */ 'Location 📍': XalethorVault.vaultArchive('manifest', key) || '⚠️ UNKNOWN',
+  // //     /* prettier-ignore */ 'Kind 🏗️': XalethorVault.vaultArchive('blueprint', key)?.kind || '❌ BROKEN',
+  // //   }));
+  // //   console.log('\n--- 🏛️ XALETHOR ARCHIVE AUDIT ---');
+  // //   console.table(inventory);
+  // // }
+  // /**
+  //  * 📑 SCAN (Diagnostic Tool)
+  //  *
+  //  * Performs a physical inspection of the Triple-KV Archive.
+  //  * Prints a high-definition table of all solidified types.
+  //  */
   // public static scan(): void {
+  //   // 💎 We use our XalethorVault keys to get the truth
   //   const keys = XalethorVault.keys();
-
   //   if (keys.length === 0) {
-  //     console.log('\n[xalor-audit] 📭 The Archive is empty.\n');
+  //     console.log('\n[xalor-audit] 📭 The Archive is currently empty.\n');
   //     return;
   //   }
-
-  //   const inventory = keys.map((key) => ({
-  //     /* prettier-ignore */ 'Key 🔑': key,
-  //     /* prettier-ignore */ 'Symbol 🆔': XalethorVault.vaultArchive('registry', key) || '⚠️ MISSING',
-  //     /* prettier-ignore */ 'Location 📍': XalethorVault.vaultArchive('manifest', key) || '⚠️ UNKNOWN',
-  //     /* prettier-ignore */ 'Kind 🏗️': XalethorVault.vaultArchive('blueprint', key)?.kind || '❌ BROKEN',
-  //   }));
-
+  //   const inventory = keys.map((key) => {
+  //     // 📍 Using your resolve logic for the GPS Coordinates
+  //     const location = XalethorVault.vaultArchive('manifest', key);
+  //     const symbol = XalethorVault.vaultArchive('registry', key);
+  //     const blueprint = XalethorVault.vaultArchive('blueprint', key);
+  //     return {
+  //       'Key 🔑': key,
+  //       'Symbol 🆔': symbol || '⚠️ UNKNOWN',
+  //       'Location 📍': location || '⚠️ UNKNOWN',
+  //       'Kind 🏗️': blueprint?.kind || '❌ BROKEN',
+  //     };
+  //   });
   //   console.log('\n--- 🏛️ XALETHOR ARCHIVE AUDIT ---');
   //   console.table(inventory);
+  //   console.log(`Total Solidified: ${keys.length}\n`);
   // }
-  /**
-   * 📑 SCAN (Diagnostic Tool)
-   *
-   * Performs a physical inspection of the Triple-KV Archive.
-   * Prints a high-definition table of all solidified types.
-   */
-  public static scan(): void {
-    // 💎 We use our XalethorVault keys to get the truth
-    const keys = XalethorVault.keys();
-
-    if (keys.length === 0) {
-      console.log('\n[xalor-audit] 📭 The Archive is currently empty.\n');
-      return;
-    }
-
-    const inventory = keys.map((key) => {
-      // 📍 Using your resolve logic for the GPS Coordinates
-      const location = XalethorVault.vaultArchive('manifest', key);
-      const symbol = XalethorVault.vaultArchive('registry', key);
-      const blueprint = XalethorVault.vaultArchive('blueprint', key);
-
-      return {
-        'Key 🔑': key,
-        'Symbol 🆔': symbol || '⚠️ UNKNOWN',
-        'Location 📍': location || '⚠️ UNKNOWN',
-        'Kind 🏗️': blueprint?.kind || '❌ BROKEN',
-      };
-    });
-
-    console.log('\n--- 🏛️ XALETHOR ARCHIVE AUDIT ---');
-    console.table(inventory);
-    console.log(`Total Solidified: ${keys.length}\n`);
-  }
-
-  /**
-   * 🔍 DIAGNOSE (Dev Tool)
-   * Prints active runtime errors for a specific key.
-   */
-  public static diagnose(key: string): void {
-    const errors = this.getErrors(key);
-    if (errors.length === 0) {
-      console.log(`[xalor-audit] No active errors for key: ${key}`);
-      return;
-    }
-    console.warn(`\n--- 🕵️‍♂️ DISCREPANCY REPORT: ${key} ---`);
-    console.table(errors);
-  }
+  // /**
+  //  * 🔍 DIAGNOSE (Dev Tool)
+  //  * Prints active runtime errors for a specific key.
+  //  */
+  // public static diagnose(key: string): void {
+  //   const errors = this.getErrors(key);
+  //   if (errors.length === 0) {
+  //     console.log(`[xalor-audit] No active errors for key: ${key}`);
+  //     return;
+  //   }
+  //   console.warn(`\n--- 🕵️‍♂️ DISCREPANCY REPORT: ${key} ---`);
+  //   console.table(errors);
+  // }
 }
 
 /**

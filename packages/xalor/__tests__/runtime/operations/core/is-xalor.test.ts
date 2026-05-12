@@ -1,5 +1,6 @@
 import '@bgskinner2/xalor/generated';
 import { isXalor } from '@bgskinner2/xalor';
+// import { isXalor } from '../../../../src/operations';
 // import { Registry } from '../../../../src/vault';
 // import type { TSolidMetadata } from '../../../../src/models/types';
 import { XalethorVault } from '../../../../src/xalor-vault';
