@@ -13,10 +13,10 @@ export function reportError(
 ): false {
   const runtimeCaller = getCallerLocation({ preferredIndex: 4 });
 
-  // 📍 ARCHITECTURE LINK: Pull the "Origin GPS" from the Triple-KV Manifest
-  const originArea = ctx.currentKey
+  const manifest = ctx.currentKey
     ? XalethorService.manifestVault(ctx.currentKey)
-    : 'unknown';
+    : undefined;
+  const originArea = manifest ? manifest.area : 'unknown';
 
   ctx.errors.push({
     key: ctx.currentKey || 'unknown',

@@ -22,6 +22,7 @@ export const PRIMITIVE_DEFAULTS = {
   number: 0,
   boolean: false,
   bigint: BigInt(0),
+  array: [],
   unknown: undefined,
 } as const;
 

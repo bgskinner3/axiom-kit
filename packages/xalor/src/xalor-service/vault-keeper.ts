@@ -11,15 +11,25 @@ import { preRegisterMetadata } from '../utils';
 import { IS_SOLID_CONFIG_ITEMS } from '../models';
 
 /**
- * 🏛️ XalethorVaultKeeper
+ * XALETHOR VAULT KEEPER
  *
- * ROLE: The "Librarian."
- * It manages the raw I/O for the Triple-KV drawers. It is the only class
- * that physically touches the Maps in RAM.
+ * ROLE:
+ * The central "Librarian" of the Triple-KV system. It owns the raw Map
+ * operations in RAM and manages the reification of shredded metadata.
+ *
+ * WHAT GOES HERE:
+ * - Direct interaction with 'globalThis.__SOLID_VAULT__'.
+ * - Metadata reconstruction (Stitching blueprints, manifest, and registry).
+ * - High-performance 'peek' and 'resolve' methods.
+ *
+ * WHAT DOES NOT GO HERE:
+ * - NO Validation logic (Bouncers don't live in the library).
+ * - NO Disk I/O (Librarians don't build the building).
+ * - NO Error formatting or panic logic.
  */
 export class XalethorVaultKeeper {
   private static solidVersion = IS_SOLID_CONFIG_ITEMS.solidVersion;
-  private static get vault(): TSolidVaultMap {
+  public static get vault(): TSolidVaultMap {
     return ensureGlobalVault();
   }
   /**

@@ -1,7 +1,23 @@
 import { ensureGlobalVault } from '../utils';
 import type { TSolidVaultMap } from '../models/types';
 import { validateShape, createInitialContext } from '../validation';
-
+/**
+ * XALETHOR VAULT VALIDATOR
+ *
+ * ROLE:
+ * The "Bouncer" and Execution Engine. It takes raw data and compares
+ * it against the Blueprints stored in the Vault.
+ *
+ * WHAT GOES HERE:
+ * - Entry points for 'guard', 'assert', and 'parse' logic.
+ * - Coordination of the recursive 'solidifyShape' engine.
+ * - Context creation and recursion protection (seen Map).
+ *
+ * WHAT DOES NOT GO HERE:
+ * - NO Hard-coded error strings (Let the Auditor speak).
+ * - NO Persistence logic.
+ * - NO Blueprint modification (The Bouncer doesn't rewrite the rules).
+ */
 export class XalethorVaultValidator {
   private static get vault(): TSolidVaultMap {
     return ensureGlobalVault();

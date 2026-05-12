@@ -1,8 +1,13 @@
-import type { TSolidMetadata, TPersistParams } from '../models/types';
+import type {
+  TSolidMetadata,
+  TPersistParams,
+  ISolidRegistry,
+} from '../models/types';
 import { XalethorVaultKeeper } from './vault-keeper';
 import { XalethorVaultValidator } from './vault-validator';
 import { XalethorVaultAuditor } from './vault-auditor';
 import { XalethorVaultArchive } from './vault-archive';
+import { XalethorVaultGenerator } from './vault-generator';
 
 export class XalethorService {
   // ============================================================
@@ -48,6 +53,15 @@ export class XalethorService {
   public hydrateFromGenesis(rootDir: string): void {
     return XalethorVaultArchive.hydrateFromGenesis(rootDir);
   }
+
+  // ============================================================
+  // GENERATOR
+  // ============================================================
+  public static produceDefault<K extends keyof ISolidRegistry>(
+    key: K,
+  ): ISolidRegistry[K] {
+    return XalethorVaultGenerator.getDefault(key);
+  }
 }
 // public static has(key: string): boolean {
 //   return (
@@ -84,3 +98,10 @@ export class XalethorService {
 
 //   return produceDefault(shape) as T;
 // }
+/**
+ XalethorVaultArchive
+ XalethorVaultAuditor
+ XalethorVaultKeeper
+ XalethorVaultValidator
+ XalethorVaultGenerator
+ */

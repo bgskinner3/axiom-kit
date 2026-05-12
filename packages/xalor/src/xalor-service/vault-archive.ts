@@ -4,6 +4,23 @@ import { serialize, yieldEntries, logDev } from '../utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { XalethorVaultKeeper } from './vault-keeper';
+/**
+ * XALETHOR VAULT ARCHIVE
+ *
+ * ROLE:
+ * The "Banker" of the Bunker. It manages the physical preservation of
+ * the DNA on the disk to ensure the library survives restarts.
+ *
+ * WHAT GOES HERE:
+ * - File system operations (fs.writeFileSync / fs.readFileSync).
+ * - Serialization and normalization of paths for portability.
+ * - Stage 4 (Persist) and Stage 5 (Hydrate) lifecycle triggers.
+ *
+ * WHAT DOES NOT GO HERE:
+ * - NO Runtime logic or type guarding.
+ * - NO Metadata extraction (The Banker doesn't mine the gold).
+ * - NO Global state initialization (handled by utils).
+ */
 export class XalethorVaultArchive {
   private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
 

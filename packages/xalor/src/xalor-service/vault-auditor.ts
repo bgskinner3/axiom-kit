@@ -2,10 +2,21 @@ import { ensureGlobalVault } from '../utils';
 import type { TSolidError, TSolidVaultMap } from '../models/types';
 
 /**
- * 🕵️‍♂️ XALETHOR AUDITOR
+ * XALETHOR VAULT AUDITOR
  *
- * The system's central inspector. It monitors the health of the
- * Triple-KV Archive and records validation failures in the Vault.
+ * ROLE:
+ * The "Detective" and Communication Hub. It monitors system health
+ * and translates raw binary failures into human-readable GPS reports.
+ *
+ * WHAT GOES HERE:
+ * - Error recording and state management.
+ * - Terminal formatting with Double-GPS (Origin vs. Failure) links.
+ * - The 'panic' mechanism for throwing meaningful assertions.
+ *
+ * WHAT DOES NOT GO HERE:
+ * - NO Validation execution (Detectives don't catch criminals, they report).
+ * - NO Type extraction or Miner logic.
+ * - NO Shape generation.
  */
 export class XalethorVaultAuditor {
   private static get errorVault(): TSolidVaultMap['errors'] {
@@ -55,12 +66,15 @@ export class XalethorVaultAuditor {
 
     return `${header}${body}\n`;
   }
-  public static panic(key: string): never {
+  public static panic(key: string, customMessage?: string): never {
     const report = this.formatReport(key);
-    // Clear the errors after panicking to keep the next run clean
+
+    // 🛡️ If the engine didn't produce a report, create a System Panic message
+    const finalMessage =
+      report ||
+      `[xalor] 🚨 ${customMessage || 'Assertion failure'} for key: ${key}`;
+
     this.clearErrors(key);
-    throw new Error(
-      report || `[xalor] Unknown assertion failure for key: ${key}`,
-    );
+    throw new Error(finalMessage);
   }
 }

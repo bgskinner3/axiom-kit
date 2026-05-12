@@ -73,9 +73,6 @@ function temporalManifest(
     `  interface ISolidRegistry {`,
     ...registryLines,
     `  }`,
-    // '',
-    // `  // --- UNIFIED GHOST API ---`,
-    // ...functionLines,
     `}`,
   ]
     .join('\n')
