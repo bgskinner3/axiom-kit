@@ -25,7 +25,7 @@ export function extractSolidKey(
   return isSolidKey(key) ? key : undefined;
 }
 /** I. REGISTRATION */
-/* prettier-ignore */ export function isXalor<_K extends ISolidRegistry | (string & {}), _T>(data?: undefined, injected?: TSolidMetadata): true;
+/* prettier-ignore */ export function isXalor<_K extends keyof ISolidRegistry | (string & {}), _T>(data?: undefined, injected?: TSolidMetadata): true;
 /** II. RESOLUTION */
 /* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(data?: undefined, injectedKey?: K): TSolidMetadata;
 /** III. VALIDATION */

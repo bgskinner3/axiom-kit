@@ -12,6 +12,14 @@ export type TFUCKKKKTT = {
   myLeftNut: number;
   myRightNut: string;
 };
+export type TFUCKKK20 = {
+  myLeftNut: number;
+  myRightNut: string;
+  moreStuff: {
+    id: number;
+    name: string;
+  };
+};
 describe('Cache Generation Test', () => {
   test('Triggering the Bunker', () => {
     /**
@@ -21,8 +29,9 @@ describe('Cache Generation Test', () => {
      * to the .cache file the moment this file is compiled by ts-jest.
      */
     isXalor<'USER_PERSIST_TEST', User>();
-    isXalor<"">();
-
+    isXalor<'TFUCKKKKTT', TFUCKKKKTT>();
+    // isXalor<'TFUCKKKKTT', TFUCKKKKTT>();
+    // isXalor<''>();
     // isXalor<"">
     // isXalor<''>;
     // Check RAM
@@ -30,7 +39,7 @@ describe('Cache Generation Test', () => {
     // expect(true).toBe(true);
   });
 });
-// declare module '../../../../src/' {
+// declare module '../../../../src/' {∏
 //   interface ISolidRegistry {
 //     USER: any;
 //     PRODUCT: any;
