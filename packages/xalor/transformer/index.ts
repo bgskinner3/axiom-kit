@@ -7,6 +7,7 @@ import type { TVaultSyncPayload } from './types';
 import { visitNode } from 'typescript';
 import { XalethorVaultArchive } from '../src/xalor-vault/vault-archive';
 import { XalethorVault } from '../src/xalor-vault';
+
 export default function (
   program: ts.Program,
 ): ts.TransformerFactory<ts.SourceFile> {

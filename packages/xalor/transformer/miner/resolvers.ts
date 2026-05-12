@@ -62,6 +62,22 @@ export function syncVault({ registry, payload }: TSyncVaultParams) {
 
   registry.set(payload.key, payload);
 }
+
+
+// transformer/miner/resolvers.ts
+ADD THIS 
+export function syncVault({ registry, payload }: { registry: Map<string, TVaultSyncPayload>, payload: TVaultSyncPayload }) {
+  // 💎 The Law: No "Leakage"
+  // We ensure the payload is perfectly shaped for the 3 Vaults before it hits the Map.
+  registry.set(payload.key, {
+    ...payload,
+    // Ensure path is relative to root for the Manifest
+    filePath: path.relative(process.cwd(), payload.filePath),
+    // Ensure shape is the "Atomic" version
+    shape: payload.shape, 
+  });
+}
+
 /**
  * 🛰️ GET SPATIAL IDENTITY (The GPS)
  *
