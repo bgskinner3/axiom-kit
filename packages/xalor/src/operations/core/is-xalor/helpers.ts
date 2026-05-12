@@ -8,7 +8,7 @@ import {
 } from '../../../utils/guards';
 import type { ISolidRegistry, TSolidMetadata } from '../../../models/types';
 import { createInitialContext } from '../../../../src/validation/context';
-import { solidifyShape } from '../../../../src/validation';
+import { validateShape } from '../../../../src/validation';
 import { XalethorVault } from '../../../xalor-vault';
 import { XalorAuditor } from '../../../xalor-auditor';
 export const isMetaData: TTypeGuard<TSolidMetadata> = (
@@ -78,7 +78,7 @@ export function buildValidationTools<
 
     const ctx = createInitialContext();
     ctx.currentKey = key;
-    const isValid = solidifyShape(val, meta.shape, ctx);
+    const isValid = validateShape(val, meta.shape, ctx);
 
     XalorAuditor.setErrors(key, isValid ? [] : ctx.errors);
     return isValid;

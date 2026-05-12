@@ -6,23 +6,6 @@ import { XalethorVault } from '../xalor-vault';
  * Records a validation failure into the current context.
  * Returns false to allow for: return reportError(...)
  */
-// export function reportError(
-//   ctx: TValidationContext,
-//   expected: string | TSolidShape,
-//   received: unknown,
-// ): false {
-//   const caller = getCallerLocation({ preferredIndex: 4 });
-//   ctx.errors.push({
-//     key: ctx.currentKey || 'unknown',
-//     path: ctx.path,
-//     message: `Validation failed at ${ctx.path}`,
-//     expected: serialize(expected),
-//     received: serialize(received),
-//     area: caller,
-//   });
-//   return false;
-// }
-// XalorAuditor
 export function reportError(
   ctx: TValidationContext,
   expected: string | TSolidShape,
@@ -41,9 +24,26 @@ export function reportError(
     message: `Validation failed at ${ctx.path}`,
     expected: serialize(expected),
     received: serialize(received),
-    area: runtimeCaller, //  incidente: Where it failed
-    origin: originArea, // origin: Where the type was defined
+    area: runtimeCaller,
+    origin: originArea,
   });
 
   return false;
 }
+// export function reportError(
+//   ctx: TValidationContext,
+//   expected: string | TSolidShape,
+//   received: unknown,
+// ): false {
+//   const caller = getCallerLocation({ preferredIndex: 4 });
+//   ctx.errors.push({
+//     key: ctx.currentKey || 'unknown',
+//     path: ctx.path,
+//     message: `Validation failed at ${ctx.path}`,
+//     expected: serialize(expected),
+//     received: serialize(received),
+//     area: caller,
+//   });
+//   return false;
+// }
+// XalorAuditor

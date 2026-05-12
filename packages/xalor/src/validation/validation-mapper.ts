@@ -19,7 +19,7 @@ import {
   isUnionShape,
   isReferenceShape,
 } from '../utils/guards';
-import { solidifyShape } from './solidify-shape';
+import { validateShape } from './solidify-shape';
 /**
  * 💎 VALIDATOR MAPPING TABLE
  *
@@ -48,7 +48,7 @@ export const VALIDATORS: TValidatorMapper = {
   branded: (data, shape, ctx) => {
     if (!isBrandedShape(shape)) return false;
 
-    return solidifyShape(data, shape.base, ctx);
+    return validateShape(data, shape.base, ctx);
   },
   array: (data, shape, ctx) => {
     if (!isArrayShape(shape)) return false;

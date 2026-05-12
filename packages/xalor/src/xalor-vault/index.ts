@@ -6,6 +6,7 @@ import type {
   TStrictSolidMetaData,
 } from '../models/types';
 import { preRegisterMetadata } from '../utils';
+import { validateShape, createInitialContext } from '../validation';
 import { produceDefault } from '../generation';
 
 export class XalethorVault {
@@ -15,7 +16,21 @@ export class XalethorVault {
   private static get vault(): TSolidVaultMap {
     return ensureGlobalVault();
   }
+  public static verify(data: unknown, key: string): boolean {
+    const shape = this.vault.blueprints.get(key);
+    if (!shape) return false;
 
+    // Reset errors for this specific key before a new run
+    this.vault.errors.delete(key);
+
+    const ctx = createInitialContext();
+    const isValid = validateShape(data, shape, ctx);
+
+    // If it failed, we save the errors so the Auditor can find them
+    if (!isValid) this.vault.errors.set(key, ctx.errors);
+
+    return isValid;
+  }
   /**
    * Registers a single type into the Triple-KV system.
    * Replaces 'Registry.registerShape'.
@@ -45,11 +60,11 @@ export class XalethorVault {
    * Bulk registers types using lazy iteration.
    * Zero memory allocation for intermediate arrays.
    */
-  public static hydrate(entries: Iterable<[string, TSolidMetadata]>): void {
-    for (const [_, metadata] of entries) {
-      this.solidify(metadata);
-    }
-  }
+  // public static hydrate(entries: Iterable<[string, TSolidMetadata]>): void {
+  //   for (const [_, metadata] of entries) {
+  //     this.solidify(metadata);
+  //   }
+  // }
   /**
    * 📦 RESOLVE
    * Reconstructs the full TSolidMetadata package from specialized vaults.
