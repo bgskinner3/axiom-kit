@@ -6,7 +6,7 @@ export class XalethorVaultValidator {
   private static get vault(): TSolidVaultMap {
     return ensureGlobalVault();
   }
-  private static has(key: string): boolean {
+  public static has(key: string): boolean {
     return (
       this.vault.blueprints.has(key) &&
       this.vault.manifest.has(key) &&

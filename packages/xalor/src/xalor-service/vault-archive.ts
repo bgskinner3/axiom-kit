@@ -1,5 +1,4 @@
 import type { TTripleKV, TPersistParams } from '../models/types';
-import type { TVaultSyncPayload } from '../../transformer/types';
 // import { XALOR_MESSAGE_HANDLER } from '../xalor-auditor';
 import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
 import { serialize, yieldEntries } from '../utils';

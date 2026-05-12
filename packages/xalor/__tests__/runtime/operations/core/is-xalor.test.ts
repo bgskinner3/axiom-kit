@@ -3,7 +3,7 @@ import { isXalor } from '@bgskinner2/xalor';
 // import { isXalor } from '../../../../src/operations';
 // import { Registry } from '../../../../src/vault';
 // import type { TSolidMetadata } from '../../../../src/models/types';
-import { XalethorVault } from '../../../../src/xalor-vault';
+import { XalethorService } from '../../../../src/xalor-service';
 // import { ISolidRegistry } from '@bgskinner2/xalor';
 interface User {
   id: number;
@@ -46,7 +46,7 @@ describe('Cache Generation Test', () => {
     // isXalor<"">
     // isXalor<''>;
     // Check RAM
-    expect(XalethorVault.has('USER_PERSIST_TEST')).toBe(true);
+    expect(XalethorService.has('USER_PERSIST_TEST')).toBe(true);
     // expect(true).toBe(true);
   });
 });
