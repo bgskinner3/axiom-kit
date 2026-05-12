@@ -1,6 +1,22 @@
-// import type { TToXalorArgs } from '../models/types';
-// import { XalethorService } from '../xalor-service';
-// import { isMetaData, markAsSolid } from '../utils';
+import type { TToXalorArgs, ISolidRegistry } from '../models/types';
+import { XalethorService } from '../xalor-service';
+import { isMetaData, markAsSolid } from '../utils';
+
+// /** VII. DEFAULT */
+// export function toXalor<K extends keyof ISolidRegistry>(
+//   params: { mode: 'default', injectedKey: K }
+// ): ISolidRegistry[K];
+
+// /** VIII. MOCK */
+// export function toXalor<K extends keyof ISolidRegistry>(
+//   params: { mode: 'mock', injectedKey: K }
+// ): ISolidRegistry[K];
+
+// /** IX. CLONE / SCRUB */
+// export function toXalor<K extends keyof ISolidRegistry>(
+//   params: { mode: 'clone', injectedKey: K, data: unknown }
+// ): ISolidRegistry[K];
+
 // # 🧠 construction
 
 // ### What it represents:
