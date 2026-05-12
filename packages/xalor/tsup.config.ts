@@ -9,18 +9,25 @@ export default defineConfig({
     'transformer/index': 'transformer/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: { resolve: true },
+  dts: {
+    resolve: true,
+    // 💎 THE MAGIC FIX:
+    // Setting this forces TSUP to create self-contained files
+    // without cross-entry-point chunking.
+    compilerOptions: {
+      composite: false,
+      incremental: false,
+    },
+  },
   platform: 'node',
   clean: true, // Keep this to ensure fresh builds
   minify: true,
   splitting: true,
+  bundle: true,
   treeshake: true,
   sourcemap: true,
-  external: ['typescript'],
+  external: ['typescript', 'fs', 'path'],
   tsconfig: 'tsconfig.build.json',
-  // esbuildOptions(options) {
-  //   options.preserveSymlinks = true;
-  // },
   onSuccess: async () => {
     const root = process.cwd();
     const distDir = path.join(root, 'dist');

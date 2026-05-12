@@ -1,7 +1,7 @@
 {
   "name": "@bgskinner2/xalor",
   "description": "Ambient runtime type database for TypeScript. Solidifies ghost types into a global vault.",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.1",
   "author": "Brennan Skinner",
   "license": "MIT",
   "type": "module",

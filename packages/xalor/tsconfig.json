@@ -31,7 +31,7 @@
     5072,
     5103
   ],
-  "include": [ // DO NOT REMOVE CAUSES ERROS
+  "include": [
     "src/**/*",
     "transformer/**/*",
     "models/**/*",
