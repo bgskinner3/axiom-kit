@@ -1,7 +1,9 @@
 // export * from './temp-index';
 export * from './operations';
 export * from './models/types/definitions';
-export * from './models/types/shared/core';
+export * from './models/types/shared/blueprints';
+export * from './models/types/shared/metadata';
+export * from './models/types/shared/vault';
 // /**
 //  * 👻 THE GHOST LINK
 //  * We point to the node_modules location so the IDE finds the generated

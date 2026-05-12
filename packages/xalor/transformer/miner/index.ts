@@ -13,8 +13,7 @@ import type {
 } from 'typescript';
 import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
 import { markAsPure, syncVault, getSpatialIdentity } from './resolvers';
-import type { TVaultSyncPayload } from '../types';
-import type { TSolidShape } from '../../src/models/types';
+import type { TSolidShape, TVaultSyncPayload } from '../../src/models/types';
 
 /**
  * The Miner (Build-Time Extraction)

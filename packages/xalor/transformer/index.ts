@@ -3,9 +3,10 @@ import './reifiers/registry/index';
 import ts from 'typescript';
 import { theMiner } from './miner';
 import { hydrateIntellisenseBridge } from './emitters';
-import type { TVaultSyncPayload } from './types';
+import type { TVaultSyncPayload } from '../src/models/types';
 import { visitNode } from 'typescript';
 import { XalethorService } from '../src/xalor-service';
+import { logDev } from '../src/utils';
 
 export default function (
   program: ts.Program,
@@ -30,13 +31,10 @@ export default function (
   return (context: ts.TransformationContext) => {
     return (sourceFile: ts.SourceFile): ts.SourceFile => {
       if (!program || typeof program.getTypeChecker !== 'function') {
-        console.warn(
-          `[xalor] ⚠️ TypeChecker not found for: ${sourceFile.fileName}`,
-        );
+        /* prettier-ignore */ logDev(`[xalor] ⚠️ TypeChecker not found for: ${sourceFile.fileName}`, { type: 'warn', service: 'transformer/index.ts', override: true });
         return sourceFile;
       }
 
-      // 1. Traverse the AST and extract the metadata
       const visitor = theMiner(
         program,
         context,
@@ -70,14 +68,16 @@ export default function (
         hydrateIntellisenseBridge(rootDir, globalKeyRegistry);
 
         // 🚀 INJECTION: If testing, populate RAM so the current test passes
+        // TODO: REMOVE WHNE BUILDING PACKAGE
         if (isTest) {
           globalKeyRegistry.forEach((payload) => {
             XalethorService.solidify(payload);
           });
 
           // Log only once per file to keep output clean
-          console.log(
+          logDev(
             `[xalor] 📦 Test Environment Synced: ${globalKeyRegistry.size} types cached & injected.`,
+            { service: 'transformer/index.ts' },
           );
         }
       }
@@ -86,12 +86,3 @@ export default function (
     };
   };
 }
-// // 🚀 STAGE 4.5: BUILD-TIME HYDRATION
-// // We wake up the Vault and load the Bunker BEFORE we start mining.
-// // This ensures the Transformer knows about existing UUIDs.
-// try {
-//   const archive = new XalethorVaultArchive();
-//   archive.hydrateFromGenesis(rootDir);
-// } catch {
-//   // Silence for clean builds
-// }

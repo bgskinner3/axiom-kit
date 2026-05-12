@@ -1,12 +1,8 @@
 // transformer/miner/resolvers.ts
 import { addSyntheticLeadingComment, SyntaxKind } from 'typescript';
 import type { Node } from 'typescript';
-import type {
-  TSpatialIdentity,
-  TInterfaceOrType,
-  // TSyncVaultParams,
-  TVaultSyncPayload,
-} from '../types';
+import type { TSpatialIdentity, TInterfaceOrType } from '../types';
+import type { TVaultSyncPayload } from '../../src/models/types';
 import { printGhostStructure } from './ghost-structures';
 import * as path from 'path';
 /**

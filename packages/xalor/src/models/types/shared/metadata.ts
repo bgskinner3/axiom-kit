@@ -45,7 +45,12 @@ export type TSolidBranded<K extends string, T> = T & {
 
 /**
  * 🌊 VAULT SYNC PAYLOAD
- * Transformer-specific replica used for syncing metadata drawers.
+ * Replica of TSolidMetadata used by the transformer pipeline for
+ * syncing and transporting metadata between systems.
+ *
+ * This format mirrors the core metadata structure but includes
+ * additional resolver fields (filePath, typeName) required for
+ * serialization, mapping, and vault synchronization.
  */
 export type TVaultSyncPayload = {
   readonly filePath: string;

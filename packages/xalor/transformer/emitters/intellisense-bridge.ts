@@ -2,7 +2,7 @@
 import { IS_SOLID_CONFIG_ITEMS } from '../../src/models';
 import * as fs from 'fs';
 import * as path from 'path';
-import type { TVaultSyncPayload } from '../types';
+import type { TVaultSyncPayload } from '../../src/models/types';
 /**
  * temporalManifest
  *

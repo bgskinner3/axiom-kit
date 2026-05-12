@@ -6,7 +6,10 @@ import type {
   Type,
   Node,
 } from 'typescript';
-import type { TSolidShape } from '../../src/models/types/shared';
+import type {
+  TSolidShape,
+  TVaultSyncPayload,
+} from '../../src/models/types/shared';
 /**
  * TYPE: TIdentifySolidCall
  *
@@ -78,26 +81,6 @@ export type TInterfaceOrType = {
   shapeType: Type;
   checker: TypeChecker;
   node: Node;
-};
-/**
- * TVaultSyncPayload
- * -----
- * Replica of TSolidMetadata used by the transformer pipeline for
- * syncing and transporting metadata between systems.
- *
- * This format mirrors the core metadata structure but includes
- * additional resolver fields (filePath, typeName) required for
- * serialization, mapping, and vault synchronization.
- */
-export type TVaultSyncPayload = {
-  readonly filePath: string; // Absolute Path
-  readonly typeName: string; // Ghost Structure (import path)
-
-  readonly key: string;
-  readonly area: string; // GPS: file:line:char
-  readonly symbolName: string; // TS Identity (User)
-  readonly shape: TSolidShape; // The Logic
-  readonly version: string; // Engine Version
 };
 
 export type TSyncVaultParams = {

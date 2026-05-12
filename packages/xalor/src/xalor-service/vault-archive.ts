@@ -1,12 +1,10 @@
 import type { TTripleKV, TPersistParams } from '../models/types';
-// import { XALOR_MESSAGE_HANDLER } from '../xalor-auditor';
 import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-import { serialize, yieldEntries } from '../utils';
+import { serialize, yieldEntries, logDev } from '../utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { XalethorVaultKeeper } from './vault-keeper';
 export class XalethorVaultArchive {
-  // private errorMessageTemp = XALOR_MESSAGE_HANDLER.ERROR;
   private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
 
   /**
@@ -78,12 +76,10 @@ export class XalethorVaultArchive {
       // 💎 LAW: Zero-Any Serialization
       const solidData = serialize(snapshot);
       fs.writeFileSync(targetFile, solidData, 'utf-8');
-
-      // console.log(
-      //   `[xalor] 🏁 STAGE 4: Persistence successful. Shredded ${registry.size} types.`,
-      // );
+      /* prettier-ignore */ logDev( `[xalor:stage-4] 🏁 Persistence Complete. Bunker sealed at: ${this.lifeCyclePaths.cacheDir}`, { service: 'vault-archive.ts-persist' });
+      /* prettier-ignore */ logDev( `[xalor:stage-4] 🧬 Shredded & Saved: [${Array.from(registry.keys()).join(', ')}]`, { service: 'vault-archive.ts-persist' });
     } catch (error) {
-      console.error(`[xalor-persist] Failed to solidify cache: ${error}`);
+      /* prettier-ignore */ logDev(`[xalor-persist] Failed to solidify cache: ${error}`, { type: 'error', service: 'vault-archive.ts-persist', override: true });
     }
   }
 
@@ -134,11 +130,9 @@ export class XalethorVaultArchive {
           version: snapshot.version,
         });
       }
-      // console.log(
-      //   `[xalor] 🌿 Hydrated ${Object.keys(snapshot.blueprints).length} types from Genesis.`,
-      // );
+      /* prettier-ignore */ logDev( `[xalor] 🌿 Hydrated ${Object.keys(snapshot.blueprints).length} types from Genesis`, { service: 'vault-archive.ts-hydrateFromGenesis' });
     } catch (error) {
-      console.error(`[xalor-stage-5] Genesis Hydration failed: ${error}`);
+      /* prettier-ignore */ logDev(`[xalor-stage-5] Genesis Hydration failed: ${error}`, { type: 'error', service: 'vault-archive.ts-hydrateFromGenesis', override: true });
     }
   }
 }
