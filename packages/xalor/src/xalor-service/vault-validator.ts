@@ -36,7 +36,7 @@ export class XalethorVaultValidator {
     // Reset errors for this specific key before a new run
     this.vault.errors.delete(key);
 
-    const ctx = createInitialContext();
+    const ctx = createInitialContext(key);
     const isValid = validateShape(data, shape, ctx);
 
     // If it failed, we save the errors so the Auditor can find them

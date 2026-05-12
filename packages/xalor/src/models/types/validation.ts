@@ -8,6 +8,7 @@ export type TValidationContext = {
   errors: TSolidError[];
   // ✨ Keep track of the current Key for error indexing
   currentKey?: string;
+  depth: number;
 };
 
 export type TValidatorFn = (

@@ -7,9 +7,9 @@ import { ANSI_COLOR_CODES, DEFAULT_TYPE_COLORS } from '../../models';
  * If set to false, all logDev calls for that service will be silenced.
  */
 const LOG_CONFIG = {
-  'transformer/index.ts': true,
-  'vault-archive.ts-persist': true,
-  'vault-archive.ts-hydrateFromGenesis': true,
+  'transformer/index.ts': false,
+  'vault-archive.ts-persist': false,
+  'vault-archive.ts-hydrateFromGenesis': false,
   off: false,
 } as const;
 // hydrateFromGenesis

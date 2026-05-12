@@ -76,10 +76,10 @@ export const XALOR_PATHS = {
  * @law maxStringLength - Guards against "URL Shutdown" scenarios.
  */
 const REIFY_DEPTH_LENGTH_SIZE_LIMITS = {
-  maxDepth: 3,
+  maxDepth: 10,
   maxStringLength: 4096,
-  maxObjectProperties: 100,
-  maxUnionVariants: 25,
+  maxObjectProperties: 200,
+  maxUnionVariants: 50,
   autoChop: true,
 } as const;
 

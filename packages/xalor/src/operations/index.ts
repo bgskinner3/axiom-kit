@@ -1,5 +1,4 @@
 export * from './is-xalor';
-export * from './construction';
 
 /**
  * FUNCTIONS TO ADD

@@ -4,7 +4,7 @@ import { REIFIERS } from './registry/index';
 import type { TSolidShape } from '../../src/models/types';
 import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
 import { TReifyDispatcherBuild, TReifyCTX } from '../types';
-
+import { internShape } from './interning';
 const DEFAULT_REIFY_CTX: TReifyCTX = {
   depth: 0,
   maxDepth: IS_SOLID_CONFIG_ITEMS.reifyLimit.maxDepth,
@@ -34,7 +34,10 @@ export function reifyType({
     return { kind: 'reference', name: fragmentKey };
   }
 
-  return runReifierLoop(type, checker, ctx);
+  // return runReifierLoop(type, checker, ctx);
+  const result = runReifierLoop(type, checker, ctx);
+
+  return internShape(result);
 }
 function runReifierLoop(
   type: Type,

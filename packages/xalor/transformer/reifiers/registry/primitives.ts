@@ -45,25 +45,3 @@ registerReifier((type, _checker, _next, _ctx) => {
 
   return undefined;
 });
-
-// registerReifier((type) => {
-//   if (isStringLiteralType(type)) return { kind: 'literal', value: type.value };
-//   if (isNumberLiteralType(type)) return { kind: 'literal', value: type.value };
-
-//   if (type.getFlags() & TypeFlags.BooleanLiteral) {
-//     const { intrinsicName } = type as Type & { intrinsicName: string };
-//     return { kind: 'literal', value: intrinsicName === 'true' };
-//   }
-
-//   const flags = type.getFlags();
-//   /* prettier-ignore */ if (flags & TypeFlags.Null) return { kind: 'primitive', type: 'unknown' };
-//   /* prettier-ignore */ if (flags & TypeFlags.Undefined) return { kind: 'primitive', type: 'unknown' };
-
-//   // 1. Base Primitives
-//   /* prettier-ignore */ if (flags & TypeFlags.String) return { kind: 'primitive', type: 'string' };
-//   /* prettier-ignore */ if (flags & TypeFlags.Number) return { kind: 'primitive', type: 'number' };
-//   /* prettier-ignore */ if (flags & TypeFlags.Boolean) return { kind: 'primitive', type: 'boolean' };
-//   /* prettier-ignore */ if (flags & TypeFlags.BigInt) return { kind: 'primitive', type: 'bigint' };
-
-//   return undefined;
-// });

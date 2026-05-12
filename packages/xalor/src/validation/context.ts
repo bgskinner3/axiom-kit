@@ -7,5 +7,6 @@ export function createInitialContext(key?: string): TValidationContext {
     path: '$',
     errors: [],
     currentKey: key,
+    depth: 0,
   };
 }

@@ -5,7 +5,11 @@ import { isXalor } from '@bgskinner2/xalor';
 // import type { TSolidMetadata } from '../../../../src/models/types';
 import { XalethorService } from '../../../../src/xalor-service';
 // import { ISolidRegistry } from '@bgskinner2/xalor';
-interface User {
+export interface User {
+  id: number;
+  name: string;
+}
+export interface UserTwo {
   id: number;
   name: string;
 }
@@ -36,7 +40,7 @@ describe('Cache Generation Test', () => {
      * to the .cache file the moment this file is compiled by ts-jest.
      */
     isXalor<'USER_PERSIST_TEST', User>();
-    isXalor<'USER_PERSIST_TESTgg', TFUCKKK20>();
+    isXalor<'USER_PERSIST_TESTgg', UserTwo>();
     // isXalor<"">()
     // type TredeclareUSer2 = isXalor<'USER_PERSIST_TEST'>;
     // isXalor<"">();
