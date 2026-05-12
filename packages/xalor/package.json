@@ -37,7 +37,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "dev": "tsup --watch",
@@ -56,5 +57,14 @@
   },
   "peerDependencies": {
     "typescript": ">=5.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgskinner3/axiom-kit/tree/main/packages/xalor",
+    "directory": "packages/xalor"
+  },
+  "bugs": {
+    "url": "https://github.com/bgskinner3/axiom-kit/tree/main/packages/xalor"
+  },
+  "homepage": "https://github.com/bgskinner3/axiom-kit"
 }

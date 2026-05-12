@@ -49,7 +49,7 @@ export class XalethorVaultArchive {
   }
 
   /**
-   * 🏁 STAGE 4: THE PERSISTENCE (THE FLUSH)
+   * THE PERSISTENCE (THE FLUSH)
    *
    * STATE:
    * - The Miner has finished scanning the Abstract Syntax Tree (AST).
