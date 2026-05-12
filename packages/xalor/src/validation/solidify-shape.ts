@@ -14,7 +14,7 @@ import { VALIDATORS } from './validation-mapper';
 export function validateShape(
   data: unknown,
   shape: TSolidShape,
-  ctx: TValidationContext,
+  ctx: TValidationContext = createInitialContext(),
 ): boolean {
   // 🛡️ 1. THE DEPTH LAW (Security)
   if (ctx.depth > 25) return false;

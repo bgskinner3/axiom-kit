@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import { theMiner } from '../../transformer/miner';
 import { UTIL_CONFIG_OPTIONS } from './constants';
-import type { TVaultSyncPayload } from '../../transformer/types';
+import type { TVaultSyncPayload } from '../../src/models/types';
 
 /**
  * mineTransformation
@@ -30,6 +30,7 @@ import type { TVaultSyncPayload } from '../../transformer/types';
 export function mineTransformation(
   code: string,
   globalRegistry = new Map<string, TVaultSyncPayload>(),
+  sessionRegistry = new Map<string, string>(),
 ) {
   const filename = UTIL_CONFIG_OPTIONS.fileName;
   const target = ts.ScriptTarget.Latest;
@@ -83,6 +84,7 @@ export function mineTransformation(
     transformationContext,
     sourceFileRef,
     globalRegistry,
+    sessionRegistry,
   );
   const result = ts.visitNode(sourceFileRef, visitor) as ts.SourceFile;
 
