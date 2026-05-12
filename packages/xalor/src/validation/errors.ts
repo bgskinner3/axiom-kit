@@ -30,20 +30,3 @@ export function reportError(
 
   return false;
 }
-// export function reportError(
-//   ctx: TValidationContext,
-//   expected: string | TSolidShape,
-//   received: unknown,
-// ): false {
-//   const caller = getCallerLocation({ preferredIndex: 4 });
-//   ctx.errors.push({
-//     key: ctx.currentKey || 'unknown',
-//     path: ctx.path,
-//     message: `Validation failed at ${ctx.path}`,
-//     expected: serialize(expected),
-//     received: serialize(received),
-//     area: caller,
-//   });
-//   return false;
-// }
-// XalorAuditor
