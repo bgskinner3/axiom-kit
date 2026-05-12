@@ -6,42 +6,30 @@
     "noEmit": true,
     "skipLibCheck": false,
     "isolatedModules": false,
-    "verbatimModuleSyntax": false, // 🚨 Set this to false for tests
-    "module": "ESNext", // 💎 Ensure ESNext is used for better interop
+    "verbatimModuleSyntax": false,
+    "module": "ESNext",
     "moduleResolution": "Bundler",
     "types": [
       "node",
       "jest"
     ],
     "paths": {
-      // 🚀 1. The Core Library: Map name to your local source files
       "@bgskinner2/xalor": [
         "./src/index.ts"
       ],
       "@bgskinner2/xalor/*": [
         "./src/*"
       ],
-      // 👻 2. The Ghost Bridge: Map the generated subpath to node_modules
-      // This is what wakes up the IDE for your 'USER_PERSIST_TEST' keys
       "@bgskinner2/xalor/generated": [
         "./node_modules/@bgskinner2/xalor/dist/generated/solid-env.d.ts"
       ]
     }
-    // "paths": {
-    //   "@bgskinner2/xalor": [
-    //     "./src/index.ts"
-    //   ],
-    //   "@bgskinner2/xalor/*": [
-    //     "./src/*"
-    //   ]
-    // }
   },
   "include": [
     "src/**/*",
     "transformer/**/*",
     "__tests__/**/*",
     "models/**/*",
-    // 🏛️ 3. Inclusion: Ensure TS compiler "swallows" the ghost file
     "node_modules/@bgskinner2/xalor/dist/generated/solid-env.d.ts"
   ]
 }

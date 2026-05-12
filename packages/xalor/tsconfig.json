@@ -4,15 +4,14 @@
     "rootDir": ".",
     "baseUrl": ".",
     "outDir": "./dist",
-    "composite": false, // ✨ Set to false to avoid project reference strictness
+    "composite": false, 
     "declaration": true,
     "declarationMap": true,
     "incremental": false,
     "noEmit": false,
-    // 🚨 THE CRITICAL OVERRIDES
     "moduleResolution": "Bundler",
     "verbatimModuleSyntax": false,
-    "noImplicitAny": false, // ✨ Fixes the 'ctx' any errors
+    "noImplicitAny": false,
     "isolatedModules": false,
     "types": [
       "node",

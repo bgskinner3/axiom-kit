@@ -1,20 +1,33 @@
-<h1 align="center">🚀 Xalor</h1>
+<h1
+  style="
+    opacity:0;
+    position:absolute;
+    pointer-events:none;
+    user-select:none;
+  "
+>
+  Xalor — TypeScript types that survive runtime
+</h1>
 
-<p align="center">
-  Turn TypeScript "ghost types" into real runtime validation
-  <br />
-  <strong>— with zero bundle cost</strong>
+<p
+  style="
+    opacity:0;
+    position:absolute;
+    pointer-events:none;
+    user-select:none;
+  "
+>
+  Build-time constructed. Runtime executable.
 </p>
 
 <p align="center">
-  <img src="./assets/hero.png" alt="Xalor hero" width="600"/>
+  <img
+    src="./assets/header.png"
+    alt="Xalor hero"
+    width="100%"
+  />
 </p>
 
-<p align="center">
-  <em>Write types once. Ship nothing extra.</em>
-</p>
-
----
 
 ## 🧠 What is Xalor?
 
