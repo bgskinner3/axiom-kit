@@ -1,4 +1,4 @@
-export * from './core';
+export * from './is-xalor';
 export * from './construction';
 
 /**

@@ -37,6 +37,7 @@ export function extractSolidKey(
    if (isRegistration(data, arg2)) {
 
     const meta = isMetaData(arg2) ? arg2 : (isMetaData(data) ? data : null);
+    console.log(data, arg2, "METTTAA /\n\n\n")
     if (meta) XalethorVault.solidify(meta);  //Registry.register(meta);
     return true; 
   }

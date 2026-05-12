@@ -20,6 +20,12 @@ export type TFUCKKK20 = {
     name: string;
   };
 };
+export type TTHISISBULL = {
+  myNuts: string;
+  helloWorld: {
+    id: number;
+  };
+};
 describe('Cache Generation Test', () => {
   test('Triggering the Bunker', () => {
     /**
@@ -29,7 +35,8 @@ describe('Cache Generation Test', () => {
      * to the .cache file the moment this file is compiled by ts-jest.
      */
     isXalor<'USER_PERSIST_TEST', User>();
-    isXalor<'TFUCKKKKTT', TFUCKKKKTT>();
+    isXalor<'FUCK', TTHISISBULL>();
+    // const y = isXalor<'TFUCKKKKTT'>(undefined);
     // isXalor<'TFUCKKKKTT', TFUCKKKKTT>();
     // isXalor<''>();
     // isXalor<"">

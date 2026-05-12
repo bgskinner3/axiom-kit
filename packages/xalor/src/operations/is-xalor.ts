@@ -1,43 +1,68 @@
-// import { XalethorVault } from '../xalor-vault';
+import { XalethorVault } from '../xalor-vault';
 // import { isUndefined, isString } from '../utils/guards';
-// import type { ISolidRegistry, TSolidMetadata } from '../models/types';
-// import {
-//   isRegistration,
-//   isValidation,
-//   isResolution,
-//   isMetaData,
-//   isSolidKey,
-// } from '../utils/guards/operations';
-// /**
+import type { ISolidRegistry, TSolidMetadata } from '../models/types';
+import {
+  // isRegistration,
+  // isValidation,
+  // isResolution,
 
-//  */
+  // isSolidKey,
+  isMetaData,
+} from '../utils/guards/operations';
+// injected?: TSolidMetadata
+type TXalorArgs<K extends keyof ISolidRegistry> =
+  | {
+      mode?: never;
+      injectedKey?: never;
+      data?: undefined;
+    }
+  | { mode: 'meta'; injectedKey: K; data?: never; injected?: never } // Resolution
+  | { mode: 'type'; injectedKey: K; data?: never; injected?: never } // Extraction
+  | { mode: 'guard'; injectedKey: K; data: unknown; injected?: never } // Validation
+  | { mode: 'assert'; injectedKey: K; data: unknown; injected?: never }; // Assertion
 
-// /** I. REGISTRATION */
-// /* prettier-ignore */ export function isXalor<_K extends string, _T>(data?: undefined, injected?: TSolidMetadata): true;
-// /** II. RESOLUTION */
-// /* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(data?: undefined, injectedKey?: K): TSolidMetadata;
-// /** III. VALIDATION */
-// /* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(data: unknown, injectedKey?: K): data is ISolidRegistry[K];
-// /* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(data: unknown, assert: true, injectedKey?: K): asserts data is ISolidRegistry[K];
-// /* prettier-ignore */ export function isXalor(...args: unknown[]): boolean | TSolidMetadata {
+/** I. REGISTRATION (Generic call for the Miner) */
+/* prettier-ignore */ export function isXalor<_K extends keyof ISolidRegistry | (string & {}), _T>(): void;
+/** II. RESOLUTION (Metadata lookup) */
+/* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: {  mode: 'meta', injectedKey: K }): TSolidMetadata;
+/** III. EXTRACTION (The Ghost Type helper) */
+/* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: { mode: 'type', injectedKey: K }): ISolidRegistry[K];
+/** IV. VALIDATION (The Boolean Guard) */
+/* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: { mode: 'guard', injectedKey: K, data: unknown }): params is { mode: 'guard', injectedKey: K, data: ISolidRegistry[K] }
+/** V. ASSERTION (The Auditor Enforcer) */
+/* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: { mode: 'assert', injectedKey: K, data: unknown }): asserts params is { mode: 'assert', injectedKey: K, data: ISolidRegistry[K] };
+/* prettier-ignore */ export function isXalor<K extends keyof ISolidRegistry>(params: TXalorArgs<K> = {}): void | boolean | TSolidMetadata {
+ const { mode,  } = params;
+//  if(XalethorVault.has(injectedKey))
+  // if (!mode) {
+  //   // If the transformer worked, 'params' is now populated with metadata
+  //   // We check the 'params' object itself or a nested 'injected' property
+  //   const meta = isMetaData(params) ? params : (params.injected || null);
+    
+  //   console.log(meta, "METTTAA /\n\n\n");
+    
+  //   if (meta) {
+  //     console.log("HEREEE")
+  //     XalethorVault.solidify(meta);
+  //   }
+  //   return; 
+  // }
 
-//    const [data, arg2, arg3] = args;
-//    XalethorVault.resolve('')
-//   // 1. REGISTRATION & INJECTION
-//    if (isRegistration(data, arg2)) {
+//  if(mode === 'type') {
+//   return
+//  }
+//  if(mode === 'meta') {
+//   return
+//  }
 
-//     const meta = isMetaData(arg2) ? arg2 : (isMetaData(data) ? data : null);
-//     if (meta) XalethorVault.solidify(meta);  //Registry.register(meta);
-//     return true;
-//   }
+//   if(mode === 'guard') {
+//   return
+//  }
+//  if(mode === 'assert') {
+//   return
+//  }
+}
 
-//   if (isResolution(data) || (isUndefined(data) && isResolution(arg2))) {
-//     // const key = String(isResolution(data) ? data : arg2);
+// /* prettier-ignore */ export function isXalor(...args: unknown[]): void | boolean | TSolidMetadata {
 
-//     // 💎 FIX: Use your polymorphic archive to return the full metadata
-//     // This allows 'const meta = isXalor<"USER">()' to work again.
-//     return false
-//   }
-
-//   return true;
 // }
