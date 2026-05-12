@@ -1,4 +1,4 @@
-import { identifySolidCall } from '../../../transformer/visitor/detector';
+import { identifySolidCall } from '../../../transformer/miner/detector';
 import ts from 'typescript';
 
 describe('Visitor Detector', () => {

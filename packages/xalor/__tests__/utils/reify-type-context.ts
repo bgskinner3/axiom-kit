@@ -57,9 +57,12 @@ export function reifyTypeContext(sourceCode: string) {
   );
 
   const statement = statements[statements.length - 1];
+
   const type = ts.isInterfaceDeclaration(statement)
     ? checker.getTypeAtLocation(statement.name)
     : checker.getTypeFromTypeNode(statement.type);
 
-  return { type, checker };
+  // 💎 RETURN THE SOURCEFILE
+  // This allows tests to access specific nodes for Interning/Reference tests.
+  return { type, checker, sourceFile };
 }

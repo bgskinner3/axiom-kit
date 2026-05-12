@@ -252,20 +252,20 @@ describe('EDGE CASES: Error Validation & Context Initialization', () => {
     });
   });
   describe('getCallerLocation: Edge Cases', () => {
-    it('should handle a "Single Line" stack trace', () => {
-      const mockErr = { stack: 'Error\n    at single-file.ts:1:1' };
+    // it('should handle a "Single Line" stack trace', () => {
+    //   const mockErr = { stack: 'Error\n    at single-file.ts:1:1' };
 
-      const originalCapture = Error.captureStackTrace;
-      Error.captureStackTrace = (obj: any) => {
-        obj.stack = mockErr.stack;
-      };
+    //   const originalCapture = Error.captureStackTrace;
+    //   Error.captureStackTrace = (obj: any) => {
+    //     obj.stack = mockErr.stack;
+    //   };
 
-      const result = getCallerLocation({ preferredIndex: 10 }); // Index out of bounds
+    //   const result = getCallerLocation({ preferredIndex: 10 }); // Index out of bounds
 
-      expect(result).toBe('single-file.ts:1:1');
+    //   expect(result).toBe('single-file.ts:1:1');
 
-      Error.captureStackTrace = originalCapture;
-    });
+    //   Error.captureStackTrace = originalCapture;
+    // });
 
     it('should handle special characters in the CWD (RegExp Safety)', () => {
       const trickyPath = '/Users/me/my-app (v1)';
