@@ -5,12 +5,13 @@ describe('Guard IsSolid', () => {
     expect(true).toBe(true);
   });
 });
+
 // import '@bgskinner2/xalor/generated';
 // import { isXalor } from '@bgskinner2/xalor';
 // // import { isXalor } from '../../../../src/operations';
 // // import { Registry } from '../../../../src/vault';
 // // import type { TSolidMetadata } from '../../../../src/models/types';
-// import { XalethorService } from '../../../../src/xalor-service';
+// import { XalethorService } from '../../../src/xalor-service';
 // // import { ISolidRegistry } from '@bgskinner2/xalor';
 // export interface User {
 //   id: number;

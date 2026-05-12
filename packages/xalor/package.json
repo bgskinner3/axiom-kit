@@ -41,22 +41,26 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsup --watch",
+    "prepare": "ts-patch install -s",
     "build": "tsup",
     "test": "npm run build && jest"
   },
+  "dependencies": {
+    "ts-patch": "^3.3.0",
+    "tslib": "^2.6.2"
+  },
+
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
+
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^20.0.0",
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "tsup": "^8.5.1",
-    "typescript": "^5.0.0",
-    "ts-patch": "^3.0.0",
-    "tslib": "^2.6.2"
-  },
-  "peerDependencies": {
-    "typescript": ">=5.0.0"
+    "typescript": "^5.0.0"
   },
   "repository": {
     "type": "git",

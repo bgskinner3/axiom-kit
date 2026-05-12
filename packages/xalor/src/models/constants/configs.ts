@@ -34,8 +34,8 @@ const SOLID_EMITTER_KEYS = {
   imports: [
     // "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
     process.env.NODE_ENV !== 'test'
-      ? "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
-      : "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../../../../../dist';",
+      ? "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
+      : "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../../../../../dist';",
   ],
 } as const;
 
