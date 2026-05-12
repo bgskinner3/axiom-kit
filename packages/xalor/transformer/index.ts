@@ -13,6 +13,18 @@ export default function (
 ): ts.TransformerFactory<ts.SourceFile> {
   const rootDir = program.getCompilerOptions().rootDir ?? process.cwd();
   const sourceFiles = program.getSourceFiles();
+
+  // 🚀 STAGE 4.5: BUILD-TIME HYDRATION
+  // We wake up the Vault and load the Bunker BEFORE we start mining.
+  // This ensures the Transformer knows about existing UUIDs.
+  try {
+    const archive = new XalethorVaultArchive();
+    archive.hydrateFromGenesis(rootDir);
+  } catch {
+    // Silence for clean builds
+  }
+
+  const sessionRegistry = new Map<string, string>();
   // The strictly-typed in-memory manifest for this build session.
   const globalKeyRegistry = new Map<string, TVaultSyncPayload>();
 
@@ -26,7 +38,13 @@ export default function (
       }
 
       // 1. Traverse the AST and extract the metadata
-      const visitor = theMiner(program, context, sourceFile, globalKeyRegistry);
+      const visitor = theMiner(
+        program,
+        context,
+        sourceFile,
+        globalKeyRegistry,
+        sessionRegistry,
+      );
       const transformedFile = visitNode(sourceFile, visitor) as ts.SourceFile;
 
       // 2. STAGE 4 TRIGGER: The Final Flush
@@ -69,3 +87,12 @@ export default function (
     };
   };
 }
+// // 🚀 STAGE 4.5: BUILD-TIME HYDRATION
+// // We wake up the Vault and load the Bunker BEFORE we start mining.
+// // This ensures the Transformer knows about existing UUIDs.
+// try {
+//   const archive = new XalethorVaultArchive();
+//   archive.hydrateFromGenesis(rootDir);
+// } catch {
+//   // Silence for clean builds
+// }

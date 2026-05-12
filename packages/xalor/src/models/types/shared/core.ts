@@ -101,7 +101,7 @@ export type TSolidVaultMap = {
   _isHydrated?: boolean;
 
   /** @deprecated Use resolve(key) to reconstruct metadata from drawers. */
-  items: Map<string, TSolidMetadata>;
+  // items: Map<string, TSolidMetadata>;
 };
 /**
  * BRANDING TYPES WAS PART OF OUR ORIGINAL idea

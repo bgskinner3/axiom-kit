@@ -33,7 +33,6 @@ export function printGhostStructure({
     return `${itemString}[]`;
   }
 
-  // 2. Objects / Interfaces (Structural Expansion)
   if (type.isClassOrInterface() || type.getFlags() & ts.TypeFlags.Object) {
     const props = checker.getPropertiesOfType(type);
     const propStrings = props.map((p) => {
@@ -48,6 +47,5 @@ export function printGhostStructure({
     return `{ ${propStrings.join(' ')} }`;
   }
 
-  // 3. Fallback for primitives
   return checker.typeToString(type, node, ts.TypeFormatFlags.NoTruncation);
 }

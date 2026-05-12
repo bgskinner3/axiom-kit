@@ -36,8 +36,6 @@ export function ensureGlobalVault(): TSolidVaultMap {
       manifest: new Map(),
       registry: new Map(),
       errors: new Map(),
-      /** @deprecated */
-      items: new Map(),
     };
   }
 
@@ -51,7 +49,6 @@ export function ensureGlobalVault(): TSolidVaultMap {
   if (!(vault.errors instanceof Map)) vault.errors = new Map();
 
   // Legacy repair
-  if (!(vault.items instanceof Map)) vault.items = new Map();
   if (!vault._isHydrated) {
     vault._isHydrated = true; // Mark true immediately to prevent recursive triggers
     try {

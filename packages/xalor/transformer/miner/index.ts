@@ -31,12 +31,12 @@ import type { TSolidShape } from '../../src/models/types';
  * 5. REIFY: Recursively converts the TS Type into a JSON-friendly "Solid Shape".
  * 6. PROCESS: Replaces the original call with optimized runtime registration logic.
  */
-
 export function theMiner(
   program: Program,
   context: TransformationContext,
   sourceFile: SourceFile,
   globalRegistry: Map<string, TVaultSyncPayload>,
+  sessionRegistry: Map<string, string>,
 ): Visitor {
   const checker = program.getTypeChecker();
   const { factory } = context;
@@ -51,7 +51,19 @@ export function theMiner(
 
     const { keyType, shapeType } = identifySolidCall({ node, checker });
     const key = keyType.isStringLiteral() ? keyType.value : 'Anonymous';
+    if (keyType.isStringLiteral()) {
+      const filePath = sourceFile.fileName;
 
+      if (sessionRegistry.has(key)) {
+        const originalFile = sessionRegistry.get(key);
+        throw new Error(
+          `[xalor] 🚨 BUILD-TIME COLLISION: Key "${key}" is already registered in ${originalFile}. ` +
+            `Every unique type must have a unique UUID. Attempted re-use in ${filePath}.`,
+        );
+      }
+      // Log the key to this build session
+      sessionRegistry.set(key, filePath);
+    }
     const fragments = new Map<string, TSolidShape>();
 
     const shape = reifyType({
@@ -61,22 +73,10 @@ export function theMiner(
         depth: 0,
         maxDepth: reifyLimit.maxDepth,
         fragments,
-        parentKey: key, // Now this is a real string!
+        parentKey: key,
         seen: new Set(),
       },
     });
-    // fragments.forEach((fShape, fKey) => {
-    //   globalRegistry.set(fKey, {
-    //     key: fKey,
-    //     filePath: sourceFile.fileName,
-    //     area: `${identity.area} (Fragment)`,
-    //     symbolName: 'AnonymousFragment',
-    //     typeName: 'Fragment',
-    //     shape: fShape,
-    //     version: IS_SOLID_CONFIG_ITEMS.solidVersion,
-    //   });
-    // });
-    // const shape = reifyType(shapeType, checker, new Set());
 
     if (keyType.isStringLiteral()) {
       const identity = getSpatialIdentity({
@@ -113,21 +113,7 @@ export function theMiner(
         version: solidVersion,
       } satisfies TVaultSyncPayload;
 
-      // if (key === 'BigTEst') {
-      //   // 👉 ADD THESE LINES HERE:
-      //   console.log(`\n--- 💎 SOLID BLUEPRINT: ${key} ---`);
-      //   try {
-      //     console.log(JSON.stringify(shape, null, 2));
-      //   } catch (e) {
-      //     console.log(
-      //       '⚠️ CIRCULAR DEP DETECTED: Deep nesting failed. Using inspect instead:',
-      //     );
-      //     console.dir(shape, { depth: null, colors: true });
-      //   }
-      //   console.log('---------------------------------\n');
-      // }
-
-      syncVault({ registry: globalRegistry, payload });
+      /* prettier-ignore */ syncVault({ registry: globalRegistry, payload });
       /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
       return markAsPure(updatedCall);
     }

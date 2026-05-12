@@ -6,9 +6,6 @@ import type {
   TStrictSolidMetaData,
 } from '../models/types';
 import { preRegisterMetadata } from '../utils';
-// import { XALOR_MESSAGE_HANDLER } from '../xalor-auditor';
-// import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-// import { serialize, yieldEntries } from '../utils';
 import { produceDefault } from '../generation';
 
 export class XalethorVault {

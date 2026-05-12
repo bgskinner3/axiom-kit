@@ -53,7 +53,7 @@ type TXalorArgs<K extends keyof ISolidRegistry> =
   // }
 
  if(mode === 'type') {
-  return
+  return 
  }
  if(mode === 'meta') {
   return XalethorVault.resolve(injectedKey)

@@ -35,8 +35,9 @@ describe('Cache Generation Test', () => {
      * to the .cache file the moment this file is compiled by ts-jest.
      */
     isXalor<'USER_PERSIST_TEST', User>();
+    isXalor<'USER_PERSIST_TESTgg', TFUCKKK20>();
     // isXalor<"">()
-    isXalor<'FUCK', TTHISISBULL>();
+    // type TredeclareUSer2 = isXalor<'USER_PERSIST_TEST'>;
     // isXalor<"">();
     // const y = isXalor<'TFUCKKKKTT'>(undefined);
     // isXalor<'TFUCKKKKTT', TFUCKKKKTT>();
