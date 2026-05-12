@@ -64,36 +64,44 @@ export type TSolidError = {
   received: unknown;
   /** The file:line:char where this export type was defined processor */
   area?: string;
+  origin?: string;
+};
+/**
+ * 📦 PERSISTENCE SHAPES
+ * These are the objects stored inside the Vault drawers.
+ */
+export type TManifestEntry = { area: string; filePath: string };
+export type TRegistryEntry = { symbolName: string; typeName: string };
+
+/**
+ * 🗄️ TRIPLE-KV SNAPSHOT (The "Bunker" Schema)
+ * Used for JSON Persistence (Stage 4) and Hydration (Stage 5).
+ */
+export type TTripleKV = {
+  blueprints: Record<string, TSolidShape>;
+  manifest: Record<string, TManifestEntry>;
+  registry: Record<string, TRegistryEntry>;
+  version: string;
 };
 
 export type TSolidVaultMap = {
-  /**
-   * @deprecated
-   */
-  items: Map<string, TSolidMetadata>;
-  /**
-   * 1. BLUEPRINTS (The Shape Map)
-   * The JSON-ified structure used for validation and defaults.
-   */
+  /** 1. BLUEPRINTS: Structural Logic for validation/defaults. */
   blueprints: Map<string, TSolidShape>;
 
-  /**
-   * 2. MANIFEST (The Area Map)
-   * Tracks 'file:line' for every key to satisfy Commandment VI (Traceability).
-   */
-  manifest: Map<string, string>;
+  /** 2. MANIFEST: Traceability data (GPS + FilePath). */
+  manifest: Map<string, TManifestEntry>;
 
-  /**
-   * 3. REGISTRY (The Symbol Map)
-   * Maps keys back to TS names (e.g., 'User') to power the IDE Bridge.
-   */
-  registry: Map<string, string>;
+  /** 3. REGISTRY: IDE Identity (SymbolName + DNA). */
+  registry: Map<string, TRegistryEntry>;
 
-  /**
-   * 4. ERROR CACHE
-   * Stores the breadcrumb failure reports from runtime checks.
-   */
+  /** 4. ERROR CACHE: Runtime failure reports. */
   errors: Map<string, TSolidError[]>;
+
+  /** 🔄 INTERNAL: Tracks if Stage 5 Hydration has completed. */
+  _isHydrated?: boolean;
+
+  /** @deprecated Use resolve(key) to reconstruct metadata from drawers. */
+  items: Map<string, TSolidMetadata>;
 };
 /**
  * BRANDING TYPES WAS PART OF OUR ORIGINAL idea

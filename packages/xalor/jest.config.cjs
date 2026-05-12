@@ -7,6 +7,11 @@ module.exports = {
   rootDir: path.resolve(__dirname),
   // is-solid
   moduleNameMapper: {
+    // 👻 1. Map the Generated Bridge to its physical node_modules location
+    '^@bgskinner2/xalor/generated$': '<rootDir>/__tests__/utils/empty-stub.ts',
+
+    // 🚀 2. Map the Core Library to your source (Keep this as is)
+    '^@bgskinner2/xalor$': '<rootDir>/src/index.ts',
     '^@bgskinner2/xalor(.*)$': '<rootDir>/src/$1', // Fixed mapping
     '^@bgskinner2/(.*)$': '<rootDir>/../$1/src',
   },

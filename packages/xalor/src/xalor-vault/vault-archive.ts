@@ -83,9 +83,9 @@ export class XalethorVaultArchive {
       const solidData = serialize(snapshot);
       fs.writeFileSync(targetFile, solidData, 'utf-8');
 
-      console.log(
-        `[xalor] 🏁 STAGE 4: Persistence successful. Shredded ${registry.size} types.`,
-      );
+      // console.log(
+      //   `[xalor] 🏁 STAGE 4: Persistence successful. Shredded ${registry.size} types.`,
+      // );
     } catch (error) {
       console.error(`[xalor-persist] Failed to solidify cache: ${error}`);
     }
@@ -120,7 +120,7 @@ export class XalethorVaultArchive {
       // 2. We use the 'blueprints' drawer as our primary iteration key
       const entries = yieldEntries(
         snapshot.blueprints,
-        (k, v): k is string => !!v,
+        (_k, v): _k is string => !!v,
       );
 
       for (const [key, shape] of entries) {
@@ -138,9 +138,9 @@ export class XalethorVaultArchive {
           version: snapshot.version,
         });
       }
-      console.log(
-        `[xalor] 🌿 Hydrated ${Object.keys(snapshot.blueprints).length} types from Genesis.`,
-      );
+      // console.log(
+      //   `[xalor] 🌿 Hydrated ${Object.keys(snapshot.blueprints).length} types from Genesis.`,
+      // );
     } catch (error) {
       console.error(`[xalor-stage-5] Genesis Hydration failed: ${error}`);
     }

@@ -1,6 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
     "outDir": "./dist",
     "composite": false, // ✨ Set to false to avoid project reference strictness
     "declaration": true,
@@ -16,6 +18,11 @@
       "node",
       "jest"
     ],
+    "paths": {
+      "@bgskinner2/xalor/generated": [
+        "./node_modules/@bgskinner2/xalor/dist/generated/solid-env.d.ts"
+      ]
+    }
   },
   "ignoreDiagnostics": [
     5023,
@@ -30,7 +37,8 @@
     "models/**/*",
     "tsup.config.ts",
     "__tests__",
-    "dist/solid-env.d.ts"
+    "dist/solid-env.d.ts",
+    "node_modules/@bgskinner2/xalor/dist/generated/solid-env.d.ts"
   ],
   "exclude": [
     "dist",

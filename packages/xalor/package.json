@@ -30,6 +30,9 @@
       "types": "./dist/transformer.d.ts",
       "import": "./dist/transformer.js",
       "require": "./dist/transformer.cjs"
+    },
+    "./generated": {
+      "types": "./dist/generated/solid-env.d.ts"
     }
   },
   "files": [

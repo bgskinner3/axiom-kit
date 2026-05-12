@@ -1,6 +1,7 @@
 // models/utils/global/index.ts
 import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
 import type { TSolidVaultMap } from '../../models/types';
+import { XalethorVaultArchive } from '../../xalor-vault/vault-archive';
 // ====================================================================
 /**
  * GLOBAL VAULT ACCESSORS
@@ -51,79 +52,15 @@ export function ensureGlobalVault(): TSolidVaultMap {
 
   // Legacy repair
   if (!(vault.items instanceof Map)) vault.items = new Map();
-
+  if (!vault._isHydrated) {
+    vault._isHydrated = true; // Mark true immediately to prevent recursive triggers
+    try {
+      // We wrap in try/catch for Browser/Serverless environments
+      const archive = new XalethorVaultArchive();
+      archive.hydrateFromGenesis(process.cwd());
+    } catch {
+      // Fail silently: we stay in "Ghost" mode if the file is missing
+    }
+  }
   return vault;
 }
-// export function ensureGlobalVault(): TSolidVaultMap {
-//   // 1. Initialize the root if it's missing
-//   if (!globalThis.__SOLID_VAULT__) {
-//     globalThis.__SOLID_VAULT__ = {
-//       items: new Map(),
-//       errors: new Map(),
-//     };
-//   }
-
-//   const vault = globalThis.__SOLID_VAULT__;
-
-//   // 2. 💎 THE RESILIENCY FIX (Pillar 2)
-//   // If an edge case (or external lib) set these to null/undefined,
-//   // we repair them using standard instanceof checks.
-//   if (!(vault.items instanceof Map)) {
-//     vault.items = new Map(); // Note: Internal repair still needs one-time safety or @ts-ignore
-//   }
-
-//   if (!(vault.errors instanceof Map)) {
-//     vault.errors = new Map();
-//   }
-
-//   return vault;
-// }
-// export function ensureGlobalVault(): TSolidVaultMap {
-//   const g = globalThis as any;
-//   if (!g.__SOLID_VAULT__) {
-//     g.__SOLID_VAULT__ = { items: new Map(), errors: new Map() };
-//   }
-
-//   const vault = g.__SOLID_VAULT__;
-//   // 💎 THE FIX: If an edge case set these to null, repair them NOW
-//   if (!(vault.items instanceof Map)) vault.items = new Map();
-//   if (!(vault.errors instanceof Map)) vault.errors = new Map();
-
-//   return vault;
-// }
-// export function ensureGlobalVault(): TSolidVaultMap {
-//   if (globalThis.__SOLID_VAULT__) return globalThis.__SOLID_VAULT__;
-
-//   const vault: TSolidVaultMap = {
-//     items: new Map(),
-//     errors: new Map(),
-//   } satisfies TSolidVaultMap;
-
-//   globalThis.__SOLID_VAULT__ = vault;
-//   return vault;
-// }
-// export function ensureGlobalVault(): TSolidVaultMap {
-//   // 1. Initialize if cold-starting
-//   if (!globalThis.__SOLID_VAULT__) {
-//     globalThis.__SOLID_VAULT__ = {
-//       items: new Map(),
-//       errors: new Map(),
-//     };
-//   }
-
-//   const vault = globalThis.__SOLID_VAULT__;
-
-//   // 2. 🛡️ THE RESILIENCY REPAIR
-//   // Self-healing logic for the Edge Case tests (handling null/undefined properties)
-//   if (!(vault.items instanceof Map)) {
-//     // @ts-ignore - Only needed to fix intentional corruption from tests
-//     vault.items = new Map();
-//   }
-
-//   if (!(vault.errors instanceof Map)) {
-//     // @ts-ignore
-//     vault.errors = new Map();
-//   }
-
-//   return vault;
-// }

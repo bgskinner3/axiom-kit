@@ -4,6 +4,7 @@ import type {
   TSolidVaultMap,
   TSolidShape,
 } from '../models/types';
+import { preRegisterMetadata, TStrictSolidMetaData } from '../utils';
 // import { XALOR_MESSAGE_HANDLER } from '../xalor-auditor';
 // import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
 // import { serialize, yieldEntries } from '../utils';
@@ -21,20 +22,37 @@ export class XalethorVault {
    * Registers a single type into the Triple-KV system.
    * Replaces 'Registry.registerShape'.
    */
-  public static solidify(metadata: TSolidMetadata): void {
-    // console.log({ metadata });
-    const { key, shape, area, symbolName } = metadata;
-    if (this.vault.blueprints.has(key)) {
-      // const originalPath = this.vault.manifest.get(key) ?? 'unknown';
-      throw new Error(
-        '  this.errorMessageTemp.COLLISION({ key, msg: originalPath }),',
-      );
-    }
-    this.vault.blueprints.set(key, shape); // 1. Structure (The Blueprint)
-    this.vault.manifest.set(key, area); // 2. Location (The Manifest)
-    this.vault.registry.set(key, symbolName ?? 'unknown'); // 3. Identity (The Registry)
+  public static solidify(rawMetadata: TSolidMetadata): void {
+    const metadata = preRegisterMetadata(rawMetadata);
+    const { key, shape, area, filePath, symbolName, typeName } = metadata;
+    // if (this.vault.blueprints.has(key)) {
+    //   throw new Error(`[xalor] Collision: Key "${key}" is already registered.`);
+    // }
+    // if (this.vault.blueprints.has(key)) {
+    //   const existingShape = this.vault.blueprints.get(key);
 
-    // this.vault.items.set(key, metadata); // 4. Backward Compatibility
+    //   if (JSON.stringify(existingShape) === JSON.stringify(shape)) {
+    //     // It's a perfect match. We can skip the Map.set() to save a microsecond.
+    //     return;
+    //   }
+
+    //   // It's different! We overwrite the RAM so the Validator uses the newest version.
+    //   console.log(`[xalor] Updating Type Logic: ${key}`);
+    // }
+    if (this.vault.blueprints.has(key)) {
+      const existing = JSON.stringify(this.vault.blueprints.get(key));
+      const incoming = JSON.stringify(shape);
+
+      // If they are identical, just skip the work.
+      if (existing === incoming) return;
+
+      // If they changed, log it so you know the Miner is updating the Bunker.
+      console.log(`[xalor] 🔄 Updating logic for: ${key}`);
+    }
+    this.vault.blueprints.set(key, shape);
+    this.vault.manifest.set(key, { area, filePath });
+    this.vault.registry.set(key, { symbolName, typeName });
+    // console.log(this.vault, 'HEREE');
   }
 
   /**
@@ -52,20 +70,23 @@ export class XalethorVault {
    * Reconstructs the full TSolidMetadata package from specialized vaults.
    * This replaces the deprecated 'items' lookup.
    */
-  public static resolve(key: string): TSolidMetadata | undefined {
+  public static resolve(key: string): TStrictSolidMetaData | undefined {
     const shape = this.vault.blueprints.get(key);
     const area = this.vault.manifest.get(key);
 
     if (!shape || !area) return undefined;
+    //TODO FIX
+    const registry = this.vault.registry.get(key);
 
-    // We assemble the object from the specialized stores
     return {
       key,
       shape,
-      area,
+      area: area.area,
+      filePath: area.filePath,
       version: '1.0.0', // You can add a 'versions' Map to the vault if needed
-      symbolName: this.vault.registry.get(key),
-    } as TSolidMetadata;
+      symbolName: registry?.symbolName ?? '',
+      typeName: registry?.typeName ?? '',
+    };
   }
   /**
    * 🔍 vaultArchive

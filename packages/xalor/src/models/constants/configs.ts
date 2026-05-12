@@ -32,7 +32,10 @@ const SOLID_EMITTER_KEYS = {
     '@typescript-eslint/no-explicit-any',
   ],
   imports: [
-    "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from './index';",
+    // "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
+    process.env.NODE_ENV !== 'test'
+      ? "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
+      : "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../../../../../dist';",
   ],
 } as const;
 
@@ -50,7 +53,8 @@ export const XALOR_PATHS = {
   vaultFile: 'vault-snapshot.json',
 
   /** The IDE Bridge destination (The Ghost Layer) */
-  bridgeDir: 'src/.xalor',
+  // bridgeDir: 'src/.xalor',
+  bridgeDir: 'node_modules/@bgskinner2/xalor/dist/generated',
 
   /** The filename for the ambient declarations */
   bridgeFile: 'solid-env.d.ts',

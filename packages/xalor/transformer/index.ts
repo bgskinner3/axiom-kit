@@ -34,23 +34,33 @@ export default function (
       const isLastFile = lastFile?.fileName === sourceFile.fileName;
       const isTest = process.env.NODE_ENV === 'test';
 
-      if (isLastFile || (isTest && globalKeyRegistry.size >= 0)) {
+      /**
+       * 🏁 STAGE 4 TRIGGER: THE PERSISTENCE GATE
+       *
+       * We trigger the flush if:
+       * 1. It's the last file of a full production build.
+       * 2. We are in a Test Environment AND we actually found types to save.
+       */
+      const shouldFlush = isLastFile || (isTest && globalKeyRegistry.size > 0);
+
+      if (shouldFlush) {
         const archive = new XalethorVaultArchive();
 
-        // 🏁 FLUSH A: The Genesis Cache (Saves to Disk)
+        // 💾 PERSISTENCE: Create node_modules/.cache/xalor/vault-snapshot.json
         archive.persist(rootDir, globalKeyRegistry);
 
-        // 🏁 FLUSH B: The Ghost Bridge (Saves to .d.ts)
+        // 🌉 BRIDGE: Create src/.xalor/solid-env.d.ts
         hydrateIntellisenseBridge(rootDir, globalKeyRegistry);
 
-        // 🚀 NEW - THE INJECTION: Populate Memory immediately for Tests
-        if (isTest && globalKeyRegistry.size > 0) {
+        // 🚀 INJECTION: If testing, populate RAM so the current test passes
+        if (isTest) {
           globalKeyRegistry.forEach((payload) => {
-            // 💎 This maps the Miner's payload to the Triple-KV Vaults
             XalethorVault.solidify(payload);
           });
+
+          // Log only once per file to keep output clean
           console.log(
-            `[xalor] 🚀 FORCED SYNC: Solidified ${globalKeyRegistry.size} types in RAM.`,
+            `[xalor] 📦 Test Environment Synced: ${globalKeyRegistry.size} types cached & injected.`,
           );
         }
       }

@@ -6,5 +6,5 @@
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ISolidIdentity {
-  /* The Miner will merge imports here */
+  /* The Transformer will merge entries here automatically */
 }

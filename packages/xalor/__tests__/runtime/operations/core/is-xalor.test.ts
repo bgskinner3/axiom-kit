@@ -1,182 +1,187 @@
-import { isXalor } from '../../../../src/operations/core';
+import '@bgskinner2/xalor/generated';
+import { isXalor } from '@bgskinner2/xalor';
 // import { Registry } from '../../../../src/vault';
-import type { TSolidMetadata } from '../../../../src/models/types';
+// import type { TSolidMetadata } from '../../../../src/models/types';
 import { XalethorVault } from '../../../../src/xalor-vault';
 // import { ISolidRegistry } from '@bgskinner2/xalor';
-
-declare module '../../../../src/' {
-  interface ISolidRegistry {
-    USER: any;
-    PRODUCT: any;
-    SETTINGS: any;
-    SESSION: any;
-  }
+interface User {
+  id: number;
+  name: string;
 }
 export type TFUCKKKKTT = {
   myLeftNut: number;
   myRightNut: string;
 };
-export interface BigTEst {
-  yourTingWinner: string;
-  moreStuff: {
-    id: string;
-    moreItems: {
-      money: {
-        id: string;
-        value: {
-          isThereMoney: boolean;
-        };
-      };
-    };
-  };
-}
-/**
+describe('Cache Generation Test', () => {
+  test('Triggering the Bunker', () => {
+    /**
+     * 🚀 THIS IS THE KEY:
+     * When the Miner sees this GENERIC call, it extracts the metadata.
+     * Because 'isTest' is true, the Transformer will write this
+     * to the .cache file the moment this file is compiled by ts-jest.
+     */
+    isXalor<'USER_PERSIST_TEST', User>();
+    isXalor<"">();
 
- */
-describe('isXalor Polymorphic Entry Point', () => {
-  // 💎 MOCK 1: Standard User
-  const userMetadata: TSolidMetadata = {
-    key: 'USER',
-    area: 'test-file.ts',
-    version: '1.0.0',
-    shape: {
-      kind: 'object',
-      properties: {
-        id: {
-          name: 'id',
-          optional: false,
-          shape: { kind: 'primitive', type: 'number' },
-        },
-        name: {
-          name: 'name',
-          optional: false,
-          shape: { kind: 'primitive', type: 'string' },
-        },
-      },
-    },
-  };
-
-  // 💎 MOCK 2: Simple Product
-  const productMetadata: TSolidMetadata = {
-    key: 'PRODUCT',
-    area: 'test-file.ts',
-    version: '1.0.0',
-    shape: {
-      kind: 'object',
-      properties: {
-        sku: {
-          name: 'sku',
-          optional: false,
-          shape: { kind: 'primitive', type: 'string' },
-        },
-        price: {
-          name: 'price',
-          optional: false,
-          shape: { kind: 'primitive', type: 'number' },
-        },
-      },
-    },
-  };
-
-  // 💎 MOCK 3: App Settings
-  // const settingsMetadata: TSolidMetadata = {
-  //   key: 'SETTINGS',
-  //   area: 'test-file.ts',
-  //   version: '1.0.0',
-  //   shape: {
-  //     kind: 'object',
-  //     properties: {
-  //       theme: {
-  //         name: 'theme',
-  //         optional: true,
-  //         shape: { kind: 'primitive', type: 'string' },
-  //       },
-  //       retries: {
-  //         name: 'retries',
-  //         optional: false,
-  //         shape: { kind: 'primitive', type: 'number' },
-  //       },
-  //     },
-  //   },
-  // };
-
-  // // 💎 MOCK 4: Session Info
-  // const sessionMetadata: TSolidMetadata = {
-  //   key: 'SESSION',
-  //   area: 'test-file.ts',
-  //   version: '1.0.0',
-  //   shape: {
-  //     kind: 'object',
-  //     properties: {
-  //       token: {
-  //         name: 'token',
-  //         optional: false,
-  //         shape: { kind: 'primitive', type: 'string' },
-  //       },
-  //     },
-  //   },
-  // };
-
-  beforeEach(() => {
-    const vault = (globalThis as any).__SOLID_VAULT__;
-    if (vault) {
-      vault.items.clear();
-      vault.errors.clear();
-    }
+    // isXalor<"">
+    // isXalor<''>;
+    // Check RAM
+    expect(XalethorVault.has('USER_PERSIST_TEST')).toBe(true);
+    // expect(true).toBe(true);
   });
-
-  test('🛡️ Hat 1: Registration (Miner Injection)', () => {
-    expect(isXalor(undefined, userMetadata)).toBe(true);
-    expect(isXalor(undefined, productMetadata)).toBe(true);
-    // expect(Registry.has('USER')).toBe(true);
-    expect(XalethorVault.has('PRODUCT')).toBe(true);
-    interface User {
-      id: number;
-    } // 💎 Define it!
-
-    isXalor<'USER_NUMBER_TWO', User>(); // 💎 Use it!
-
-    isXalor<'MY_BALLS', TFUCKKKKTT>();
-    isXalor<'BigTEst', BigTEst>();
-    // isXalor<'BigTEst', BigTEst>();
-    console.log(globalThis.__SOLID_VAULT__);
-  });
-
-  // test('🔍 Hat 2: Resolution', () => {
-  //   isXalor(undefined, settingsMetadata); // Register
-  //   const resolved = isXalor<'SETTINGS'>(undefined, 'SETTINGS');
-  //   expect(resolved).toEqual(settingsMetadata);
-  //   expect(resolved.key).toBe('SETTINGS');
-  // });
-
-  // test('✅ Hat 3: Validation (Guard)', () => {
-  //   isXalor(undefined, userMetadata); // Register
-  //   const validData = { id: 1, name: 'John' };
-  //   const invalidData = { id: 'not-a-number', name: 'John' };
-
-  //   expect(isXalor(validData, 'USER')).toBe(true);
-  //   expect(isXalor(invalidData, 'USER')).toBe(false);
-  // });
-
-  // test('🚀 Hat 3: Validation (Assertion)', () => {
-  //   isXalor(undefined, sessionMetadata); // Register
-  //   const invalidData = { token: 12345 }; // Should be string
-
-  //   expect(() => {
-  //     isXalor(invalidData, true, 'SESSION');
-  //   }).toThrow(/\[xalor\] SESSION failed/);
-  //   /**
-  //        expect(() => {
-  //     isXalor< 'SESSION'>(invalidData, true);
-  //   }).toThrow(/\[xalor\] SESSION failed/);
-  //    */
-  // });
-
-  // test('👻 Hat 4: Ghost Call Fallback', () => {
-  //   expect(isXalor()).toBe(true);
-  //   expect(isXalor(undefined)).toBe(true);
-  // });
 });
+// declare module '../../../../src/' {
+//   interface ISolidRegistry {
+//     USER: any;
+//     PRODUCT: any;
+//     SETTINGS: any;
+//     SESSION: any;
+//   }
+// }
+// export type TFUCKKKKTT = {
+//   myLeftNut: number;
+//   myRightNut: string;
+// };
+// export interface BigTEst {
+//   yourTingWinner: string;
+//   moreStuff: {
+//     id: string;
+//     moreItems: {
+//       money: {
+//         id: string;
+//         value: {
+//           isThereMoney: boolean;
+//         };
+//       };
+//     };
+//   };
+// }
+// /**
+
+//  */
+// describe('isXalor Polymorphic Entry Point', () => {
+//   // 💎 MOCK 1: Standard User
+//   const userMetadata: TSolidMetadata = {
+//     key: 'USER',
+//     area: 'test-file.ts',
+//     version: '1.0.0',
+//     shape: {
+//       kind: 'object',
+//       properties: {
+//         id: {
+//           name: 'id',
+//           optional: false,
+//           shape: { kind: 'primitive', type: 'number' },
+//         },
+//         name: {
+//           name: 'name',
+//           optional: false,
+//           shape: { kind: 'primitive', type: 'string' },
+//         },
+//       },
+//     },
+//   };
+
+//   // 💎 MOCK 2: Simple Product
+//   const productMetadata: TSolidMetadata = {
+//     key: 'PRODUCT',
+//     area: 'test-file.ts',
+//     version: '1.0.0',
+//     shape: {
+//       kind: 'object',
+//       properties: {
+//         sku: {
+//           name: 'sku',
+//           optional: false,
+//           shape: { kind: 'primitive', type: 'string' },
+//         },
+//         price: {
+//           name: 'price',
+//           optional: false,
+//           shape: { kind: 'primitive', type: 'number' },
+//         },
+//       },
+//     },
+//   };
+
+//   beforeEach(() => {
+//     const vault = (globalThis as any).__SOLID_VAULT__;
+//     if (vault) {
+//       vault.items.clear();
+//       vault.errors.clear();
+//     }
+//   });
+
+//   test('🛡️ Hat 1: Registration (Miner Injection)', () => {
+//     expect(isXalor(undefined, userMetadata)).toBe(true);
+//     expect(isXalor(undefined, productMetadata)).toBe(true);
+//     // expect(Registry.has('USER')).toBe(true);
+//     expect(XalethorVault.has('PRODUCT')).toBe(true);
+//     interface User {
+//       id: number;
+//     } // 💎 Define it!
+
+//     isXalor<'USER_NUMBER_TWO', User>(); // 💎 Use it!
+
+//     isXalor<'MY_BALLS', TFUCKKKKTT>();
+//     isXalor<'BigTEst', BigTEst>();
+//     // isXalor<'BigTEst', BigTEst>();
+//     // console.log(globalThis.__SOLID_VAULT__);
+//   });
+// });
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+// test('🔍 Hat 2: Resolution', () => {
+//   isXalor(undefined, settingsMetadata); // Register
+//   const resolved = isXalor<'SETTINGS'>(undefined, 'SETTINGS');
+//   expect(resolved).toEqual(settingsMetadata);
+//   expect(resolved.key).toBe('SETTINGS');
+// });
+
+// test('✅ Hat 3: Validation (Guard)', () => {
+//   isXalor(undefined, userMetadata); // Register
+//   const validData = { id: 1, name: 'John' };
+//   const invalidData = { id: 'not-a-number', name: 'John' };
+
+//   expect(isXalor(validData, 'USER')).toBe(true);
+//   expect(isXalor(invalidData, 'USER')).toBe(false);
+// });
+
+// test('🚀 Hat 3: Validation (Assertion)', () => {
+//   isXalor(undefined, sessionMetadata); // Register
+//   const invalidData = { token: 12345 }; // Should be string
+
+//   expect(() => {
+//     isXalor(invalidData, true, 'SESSION');
+//   }).toThrow(/\[xalor\] SESSION failed/);
+//   /**
+//        expect(() => {
+//     isXalor< 'SESSION'>(invalidData, true);
+//   }).toThrow(/\[xalor\] SESSION failed/);
+//    */
+// });
+
+// test('👻 Hat 4: Ghost Call Fallback', () => {
+//   expect(isXalor()).toBe(true);
+//   expect(isXalor(undefined)).toBe(true);
+// });
 // describe('isXalor Polymorphic Entry Point', () => {
 //   const mockMetadata: TSolidMetadata = {
 //     key: 'USER',
@@ -249,3 +254,41 @@ describe('isXalor Polymorphic Entry Point', () => {
 //   //   expect(isXalor()).toBe(true);
 //   // });
 // });
+// 💎 MOCK 3: App Settings
+// const settingsMetadata: TSolidMetadata = {
+//   key: 'SETTINGS',
+//   area: 'test-file.ts',
+//   version: '1.0.0',
+//   shape: {
+//     kind: 'object',
+//     properties: {
+//       theme: {
+//         name: 'theme',
+//         optional: true,
+//         shape: { kind: 'primitive', type: 'string' },
+//       },
+//       retries: {
+//         name: 'retries',
+//         optional: false,
+//         shape: { kind: 'primitive', type: 'number' },
+//       },
+//     },
+//   },
+// };
+
+// // 💎 MOCK 4: Session Info
+// const sessionMetadata: TSolidMetadata = {
+//   key: 'SESSION',
+//   area: 'test-file.ts',
+//   version: '1.0.0',
+//   shape: {
+//     kind: 'object',
+//     properties: {
+//       token: {
+//         name: 'token',
+//         optional: false,
+//         shape: { kind: 'primitive', type: 'string' },
+//       },
+//     },
+//   },
+// };
