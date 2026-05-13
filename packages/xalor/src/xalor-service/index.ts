@@ -2,6 +2,7 @@ import type {
   TSolidMetadata,
   TPersistParams,
   ISolidRegistry,
+  TSolidError,
 } from '../models/types';
 import { XalethorVaultKeeper } from './vault-keeper';
 import { XalethorVaultValidator } from './vault-validator';
@@ -31,7 +32,7 @@ export class XalethorService {
   // ============================================================
   // VALIDATOR
   // ============================================================
-  public static validateShape(data: unknown, key: string) {
+  public static validateShape(data: unknown, key: string): boolean {
     return XalethorVaultValidator.validateShape(data, key);
   }
   public static has(key: string): boolean {
@@ -43,7 +44,12 @@ export class XalethorService {
   public static panic(key: string): never {
     return XalethorVaultAuditor.panic(key);
   }
-
+  public static getKeyErrors(key: string): TSolidError[] {
+    return XalethorVaultAuditor.getErrors(key);
+  }
+  public static auditReport(isValid: boolean, rawErrors: TSolidError[]) {
+    return XalethorVaultAuditor.compileAuditReport(isValid, rawErrors);
+  }
   // ============================================================
   // ARCHIVE
   // ============================================================

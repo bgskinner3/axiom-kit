@@ -47,3 +47,42 @@ export type TSolidError = {
   area?: string; // Runtime failure GPS
   origin?: string | TVaultManifestEntry; // Definition GPS
 };
+/**
+ * 🏷️ TXALOR RULE KIND
+ * Explicit architectural categories for runtime data schema failures.
+ */
+export type TXalorRuleKind =
+  | 'primitive_mismatch'
+  | 'literal_mismatch'
+  | 'missing_property'
+  | 'excess_property'
+  | 'union_exhausted'
+  | 'intersection_breached'
+  | 'depth_overflow';
+
+/**
+ * 📦 TXALOR ISSUE
+ * A deeply detailed, scannable record representing a single structural violation.
+ */
+export type TXalorIssue = {
+  /** The full dot-notation breadcrumb path matching the payload (e.g., '$.address.zip') */
+  path: string;
+  /** A human-readable description or stringified representation of the required shape */
+  expected: string;
+  /** A stringified JSON or primitive readout of the broken input that was provided */
+  received: string;
+  /** The specific type-system rule or boundary law that was violated */
+  rule: TXalorRuleKind;
+};
+
+/**
+ * 📊 TXALOR AUDIT REPORT
+ * The unified return interface for soft-fail programmatic diagnostics.
+ */
+export type TXalorAuditReport = {
+  /** Quick flag indicating if the data satisfies the target blueprint */
+  valid: boolean;
+  /** An array containing deterministic diagnostic traces for each failure found */
+  issues: TXalorIssue[];
+};
+// TXalorAuditReport, TXalorIssue, TXalorRuleKind

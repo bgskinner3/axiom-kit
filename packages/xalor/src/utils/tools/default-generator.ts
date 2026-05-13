@@ -6,6 +6,7 @@ import {
   isLiteralShape,
   isBrandedShape,
   isReferenceShape,
+  isIntersectionShape,
 } from '../guards';
 import { ObjectUtils } from '../object-utils';
 import {
@@ -56,7 +57,33 @@ export function produceDefault(shape: TSolidShape, depth = 0): unknown {
 
   // 3. COLLECTIONS
   if (isArrayShape(shape)) return [];
+  if (isIntersectionShape(shape)) {
+    /**
+     * 💎 INTERSECTION LAW: To materialize an intersection, we construct
+     * every atomic sub-constituent and aggregate their properties flatly.
+     */
+    let merged: Record<string, unknown> | unknown = undefined;
 
+    for (const part of shape.parts) {
+      const defaultPart = produceDefault(part, depth);
+
+      if (defaultPart === null || defaultPart === undefined) continue;
+
+      if (typeof defaultPart === 'object' && !Array.isArray(defaultPart)) {
+        // 🎯 THE TYPE-SAFE TWIST: Safely narrow unknown to perform property spreads
+        const currentObj = defaultPart as Record<string, unknown>;
+
+        merged =
+          merged && typeof merged === 'object' && !Array.isArray(merged)
+            ? { ...(merged as Record<string, unknown>), ...currentObj }
+            : currentObj;
+      } else {
+        // If it evaluates to a scalar primitive or literal value, it seeds the tracking base
+        merged = defaultPart;
+      }
+    }
+    return merged;
+  }
   // 4. GRAPH JUMPS (Atomic Cuts)
   if (isReferenceShape(shape)) {
     const subShape = XalethorVaultKeeper.peek('blueprint', shape.name);

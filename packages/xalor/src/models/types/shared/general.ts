@@ -28,4 +28,4 @@ import type { TSolidShape } from '../shared';
 /* prettier-ignore */ export type TTypeGuard<T> = (value: unknown) => value is T;
 /* prettier-ignore */ export type TPrimitive = string | number | boolean | bigint;
 /* prettier-ignore */ export type TAnyFunction = (...args: unknown[]) => unknown;
-/* prettier-ignore */ export type TAssert<T> = (value: unknown) => asserts value is T;
+/* prettier-ignore */ export type TAssert<T> = (value: unknown, message?: string) => asserts value is T;

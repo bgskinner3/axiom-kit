@@ -1,4 +1,4 @@
-export * from './is-xalor';
+export * from './validate-xalor';
 export * from './register-xalor';
 
 // export const SENTRY_TRIGGER_NAMES = ['registerXalor', 'isXalor'] as const;

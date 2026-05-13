@@ -11,7 +11,7 @@ const SOLID_GLOBAL_KEYS = {
   solidVaultKey: '__SOLID_VAULT__',
   solidVersion: '1.0.0',
   //
-  sentryTriggers: ['registerXalor', 'isXalor'],
+  sentryTriggers: ['registerXalor', 'validateXalor'],
 } as const;
 
 /**

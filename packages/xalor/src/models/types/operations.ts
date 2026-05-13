@@ -1,29 +1,57 @@
 import type { ISolidRegistry } from './definitions';
 import type {
-  TSolidMetadata,
-  TStrictSolidMetaData,
+  TTypeGuard,
+  TAssert,
+  TXalorRuleKind,
   TSolidBranded,
+  TXalorAuditReport,
 } from './shared';
 
 // type TIsXalorModes = 'meta' | 'guard' | 'parse' | 'parseAsync';
-
-export type TIsXalorArgs<K extends keyof ISolidRegistry> =
-  | /* prettier-ignore */ { mode?: never; injectedKey?: never; data?: undefined; injected?: TSolidMetadata } // Registration
-  | /* prettier-ignore */ { mode: 'meta'; injectedKey: K; data?: never; injected?: never } // Resolution
-  | /* prettier-ignore */ { mode: 'guard'; injectedKey: K; data: unknown; injected?: never } // Validation
-  | /* prettier-ignore */ { mode: 'assert'; injectedKey: K; data: unknown; injected?: never } // Assertion
-  | /* prettier-ignore */ { mode: 'parse'; injectedKey: K; data: unknown }
-  | /* prettier-ignore */ { mode: 'parseAsync'; injectedKey: K; data: unknown };
-
-export type TReturnTypeIsXalor<K extends keyof ISolidRegistry> =
-  | void
-  | boolean
-  | TStrictSolidMetaData
-  | TSolidBranded<K, ISolidRegistry[K]>
-  | Promise<TSolidBranded<K, ISolidRegistry[K]>>;
 
 export type TToXalorArgs<K extends keyof ISolidRegistry> =
   | { mode: 'default'; injectedKey: K; data?: never } // The "Zero-Value" Object
   | { mode: 'mock'; injectedKey: K; data?: never } // Random/Realistic Data
   | { mode: 'clone'; injectedKey: K; data: unknown } // Deep Clone + Strip extra keys
   | { mode: 'cast'; injectedKey: K; data: unknown }; // Force-fix data to fit shape
+
+// ====================================================================
+// ====================================================================
+// VALIDATE XALOR API TYPES
+// ====================================================================
+// ====================================================================
+
+export type TValidateXalorModes =
+  | 'guard'
+  | 'assert'
+  | 'parse'
+  | 'parseAsync'
+  | 'audit';
+
+export type TValidateXalorResultMap<K extends keyof ISolidRegistry> = {
+  guard: TTypeGuard<ISolidRegistry[K]>;
+  assert: void;
+  parse: TSolidBranded<K, ISolidRegistry[K]>;
+  parseAsync: Promise<TSolidBranded<K, ISolidRegistry[K]>>;
+  audit: TXalorAuditReport;
+};
+export type TValidateXalorReturn<
+  K extends keyof ISolidRegistry,
+  M extends TValidateXalorModes,
+> = TValidateXalorResultMap<K>[M];
+
+export type TTValidateStrategyEngine<K extends keyof ISolidRegistry> = {
+  readonly [Mode in TValidateXalorModes]: (
+    data: unknown,
+    key: K,
+  ) => TValidateXalorResultMap<K>[Mode];
+};
+
+// HELPERS
+
+export type TReturnValidationTools<K extends keyof ISolidRegistry> = {
+  guard: TTypeGuard<ISolidRegistry[K]>;
+  assert: TAssert<ISolidRegistry[K]>;
+};
+
+export type TRuleAuditorMapper = readonly [readonly string[], TXalorRuleKind][];

@@ -1,5 +1,12 @@
-import { ensureGlobalVault } from '../utils';
-import type { TSolidError, TSolidVaultMap } from '../models/types';
+import { ensureGlobalVault, RULE_MATCHERS_MAPPER } from '../utils';
+import type {
+  TSolidError,
+  TSolidVaultMap,
+  TXalorAuditReport,
+  TXalorIssue,
+  TXalorRuleKind,
+} from '../models/types';
+import { isString } from '../utils/guards';
 
 /**
  * XALETHOR VAULT AUDITOR
@@ -58,8 +65,8 @@ export class XalethorVaultAuditor {
           `  ❌ Path: $.${err.path}`,
           `     Expected: ${err.expected}`,
           `     Received: ${JSON.stringify(err.received)}`,
-          `     📍 Origin: ${origin || 'unknown'}`, // Where the type is defined
-          `     ⚡ Failed: ${err.area || 'unknown'}`, // Where the data hit the engine
+          `     📍 Origin: ${origin || 'unknown'}`,
+          `     ⚡ Failed: ${err.area || 'unknown'}`,
         ].join('\n');
       })
       .join('\n\n');
@@ -76,5 +83,35 @@ export class XalethorVaultAuditor {
 
     this.clearErrors(key);
     throw new Error(finalMessage);
+  }
+  public static compileAuditReport(
+    isValid: boolean,
+    rawErrors: TSolidError[],
+  ): TXalorAuditReport {
+    if (isValid) return { valid: true, issues: [] };
+
+    const issues: TXalorIssue[] = rawErrors.map((err) => {
+      const msg = err.message?.toLowerCase() || '';
+
+      const matched = RULE_MATCHERS_MAPPER.find(([keywords]) =>
+        keywords.some((keyword) => msg.includes(keyword)),
+      );
+
+      // 3. Fallback evaluation via nullish coalescing
+      const rule: TXalorRuleKind = matched ? matched[1] : 'primitive_mismatch';
+
+      return {
+        path: err.path || '$.',
+        expected: isString(err.expected)
+          ? err.expected
+          : JSON.stringify(err.expected),
+        received: isString(err.received)
+          ? err.received
+          : JSON.stringify(err.received),
+        rule,
+      };
+    });
+
+    return { valid: false, issues };
   }
 }

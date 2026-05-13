@@ -30,3 +30,23 @@ export function registerXalor(params?: unknown): void {
    */
   return;
 }
+// ## ⛏️ Category 1: Registration API (The Ingest Gates)
+
+// **Role:**
+// The declarative placeholders monitored by the build-time Miner. They contain zero runtime logic and are strictly used to safely feed the Vault.
+
+// ### Current Implementations
+
+// - `registerXalor<K, T>()`
+//   Explicit interface mapping via generics.
+
+// - `registerXalor<K>(data)`
+//   Structural discovery via physical object type inference.
+
+// ### Future Enterprise Additions
+
+// - `registerXalorRemote(endpoint, options)`
+//   Dynamic configuration placeholder telling the compiler to prepare for a runtime schema fetch from a centralized schema registry.
+
+// - `registerXalorModule(plugin)`
+//   Used to register third-party custom type reifiers or domain-specific type transformations at build time.
