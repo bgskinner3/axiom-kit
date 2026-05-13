@@ -5,20 +5,14 @@ import type {
   SourceFile,
   Type,
   Node,
+  Program,
+  TransformationContext,
 } from 'typescript';
 import type {
   TSolidShape,
   TVaultSyncPayload,
 } from '../../src/models/types/shared';
-/**
- * TYPE: TIdentifySolidCall
- *
- * Extracts and resolves Type Arguments from an active CallExpression.
- */
-export type TIdentifySolidCall = {
-  node: CallExpression;
-  checker: TypeChecker;
-};
+
 /**
  * TYPE: TCreateSolidMetadata
  *
@@ -86,4 +80,25 @@ export type TInterfaceOrType = {
 export type TSyncVaultParams = {
   registry: Map<string, TVaultSyncPayload>;
   payload: TVaultSyncPayload;
+};
+
+export type TMinerCorParams = {
+  program: Program;
+  context: TransformationContext;
+  sourceFile: SourceFile;
+  globalRegistry: Map<string, TVaultSyncPayload>;
+  sessionRegistry: Map<string, string>;
+};
+export type TFlushToRegistryParams = {
+  key: string;
+  /** The reified JSON blueprint */
+  shape: TSolidShape;
+  /** The GPS and Symbol metadata captured by the Harvester */
+  identity: TSpatialIdentity;
+  /** Map of chopped fragments created during Atomic Cutting */
+  fragments: Map<string, TSolidShape>;
+  /** The shared session registry for the Bunker sync */
+  globalRegistry: Map<string, TVaultSyncPayload>;
+  /** The physical source file being mined */
+  sourceFile: SourceFile;
 };

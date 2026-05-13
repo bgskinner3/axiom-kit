@@ -1,136 +1,96 @@
 // transformer/miner/index.ts
-import { identifySolidCall } from './detector';
+import { resolveMiningTarget } from './mining-target';
 import { solidVisitorProcessor } from './processor';
 import { visitEachChild } from 'typescript';
 import { reifyType } from '../reifiers';
 import { isSolidCall } from '../utils';
-import type {
-  Program,
-  TransformationContext,
-  SourceFile,
-  Visitor,
-  Node,
-} from 'typescript';
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
-import { markAsPure, syncVault, getSpatialIdentity } from './resolvers';
-import type { TSolidShape, TVaultSyncPayload } from '../../src/models/types';
-
+import type { Visitor, Node } from 'typescript';
+import { flushToRegistry } from './flush-registry';
+import { getSpatialIdentity } from './spatial-identity';
+import { markAsPure, enforceCollisionLaw, createMiningCtx } from './resolvers';
+import type { TSolidShape } from '../../src/models/types';
+import { TMinerCorParams } from '../types';
+import { logDev } from '../../src/utils';
 /**
- * The Miner (Build-Time Extraction)
+ * THE MINER (Build-Time DNA Extraction)
  *
- * The createVisitor function orchestrates the transformation process. It scans
- * the Abstract Syntax Tree (AST), identifies `isSolid` calls, and bridges
- * the gap between static TypeScript types and runtime JavaScript metadata.
+ * ROLE:
+ * Orchestrates the reification of static TypeScript types into physical
+ * JSON blueprints. It acts as the "Surgical Drill" of the ecosystem.
  *
- * Workflow:
- * 1. SCAN: Traverses the file node by node.
- * 2. IDENTIFY: Uses `isSolidCall` to find the target function.
- * 3. ANALYZE: Queries the TypeChecker to resolve the generic <Key, Type>.
- * 4. REGISTRY: Logs the Key and its origin file to the Global Vault Index.
- * 5. REIFY: Recursively converts the TS Type into a JSON-friendly "Solid Shape".
- * 6. PROCESS: Replaces the original call with optimized runtime registration logic.
+ * WORKFLOW:
+ * 1.  SCOUT (Stage 1): Identifies 'isXalor' or 'registerXalor' calls via the AST.
+ * 2.  HARVEST (Stage 2): Resolves the Target via Generic <T> or physical Data.
+ * 3.  GUARD (Stage 3): Enforces UUID uniqueness to prevent data collisions.
+ * 4.  REIFY (Stage 4): Recursively mines the TS Type into a TSolidShape.
+ * 5.  MAPPING (Stage 5): Captures GPS coordinates (area) for the Auditor.
+ * 6.  FLUSH (Stage 6): Persists the reified DNA and fragments into the Vault.
+ * 7.  REWRITE (Stage 7): Injects the metadata back into the JS source.
  */
-export function theMiner(
-  program: Program,
-  context: TransformationContext,
-  sourceFile: SourceFile,
-  globalRegistry: Map<string, TVaultSyncPayload>,
-  sessionRegistry: Map<string, string>,
-): Visitor {
+export function theMiner({
+  program,
+  context,
+  sourceFile,
+  globalRegistry,
+  sessionRegistry,
+}: TMinerCorParams): Visitor {
   const checker = program.getTypeChecker();
   const { factory } = context;
-  const { solidVersion, reifyLimit } = IS_SOLID_CONFIG_ITEMS;
 
   const visitor: Visitor = (node: Node): Node => {
     if (!isSolidCall(node, checker)) {
       return visitEachChild(node, visitor, context);
     }
+    /* prettier-ignore */ logDev(`[xalor:stage-1] Found candidate call in ${sourceFile.fileName}`, { service: 'transformer/index.ts' });
 
-    if (!node.typeArguments || node.typeArguments.length < 2) return node;
+    const target = resolveMiningTarget(node, checker);
+    if (!target) return node;
 
-    const { keyType, shapeType } = identifySolidCall({ node, checker });
+    const { keyType, shapeType } = target;
     const key = keyType.isStringLiteral() ? keyType.value : 'Anonymous';
-    if (keyType.isStringLiteral()) {
-      const filePath = sourceFile.fileName;
-
-      if (sessionRegistry.has(key)) {
-        const originalFile = sessionRegistry.get(key);
-        throw new Error(
-          `[xalor] 🚨 BUILD-TIME COLLISION: Key "${key}" is already registered in ${originalFile}. ` +
-            `Every unique type must have a unique UUID. Attempted re-use in ${filePath}.`,
-        );
-      }
-      // Log the key to this build session
-      sessionRegistry.set(key, filePath);
-    }
+    /* prettier-ignore */ logDev( `[xalor:stage-2] Targeted Key: "${key}" (Resolution: ${keyType.isStringLiteral() ? 'Static' : 'Dynamic'})`, { service: 'transformer/index.ts' });
+    enforceCollisionLaw(key, sourceFile.fileName, sessionRegistry);
     const fragments = new Map<string, TSolidShape>();
 
     const shape = reifyType({
       type: shapeType,
       checker,
-      ctx: {
-        depth: 0,
-        maxDepth: reifyLimit.maxDepth,
-        fragments,
-        parentKey: key,
-        seen: new Set(),
-      },
+      ctx: createMiningCtx(key, fragments),
     });
-
+    /* prettier-ignore */ logDev( `[xalor:stage-4] Reification complete for "${key}". Found ${fragments.size} fragments.`, { service: 'transformer/index.ts' });
     if (keyType.isStringLiteral()) {
-      const identity = getSpatialIdentity({
-        node,
-        sourceFile,
-        shapeType,
-        checker,
-      });
-
-      /**
-       * 💎 THE FRAGMENT FLUSH
-       * We iterate through any chopped pieces and register them as
-       * top-level "Solid" entries so they persist in the Vault.
-       */
-
-      fragments.forEach((fShape, fKey) => {
-        globalRegistry.set(fKey, {
-          key: fKey,
-          filePath: sourceFile.fileName,
-          area: `${identity.area} (Fragment)`,
-          symbolName: 'AnonymousFragment',
-          typeName: 'Fragment',
-          shape: fShape,
-          version: IS_SOLID_CONFIG_ITEMS.solidVersion,
-        });
-      });
-      const payload: TVaultSyncPayload = {
+      // GPS: Map the physical location and TypeScript identity
+      /* prettier-ignore */ const identity = getSpatialIdentity({ node, sourceFile, shapeType, checker });
+      // SYNC: Flush fragments and the main payload to the Global Vault
+      flushToRegistry({
         key,
-        filePath: sourceFile.fileName,
-        area: identity.area,
-        symbolName: identity.symbolName,
-        typeName: identity.typeName,
         shape,
-        version: solidVersion,
-      } satisfies TVaultSyncPayload;
-
-      /* prettier-ignore */ syncVault({ registry: globalRegistry, payload });
+        identity,
+        fragments,
+        globalRegistry,
+        sourceFile,
+      });
+      /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${key}" successfully solidified.`, { service: 'transformer/index.ts' });
+      // PROCESS: Rewrite the AST call to inject the metadata
       /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
       return markAsPure(updatedCall);
     }
 
     return visitEachChild(node, visitor, context);
   };
-
   return visitor;
 }
-
+// ORIGINAL
 // export function theMiner(
 //   program: Program,
 //   context: TransformationContext,
 //   sourceFile: SourceFile,
 //   globalRegistry: Map<string, TVaultSyncPayload>,
+//   sessionRegistry: Map<string, string>,
 // ): Visitor {
 //   const checker = program.getTypeChecker();
 //   const { factory } = context;
+//   const { solidVersion, reifyLimit } = IS_SOLID_CONFIG_ITEMS;
 
 //   const visitor: Visitor = (node: Node): Node => {
 //     if (!isSolidCall(node, checker)) {
@@ -140,10 +100,35 @@ export function theMiner(
 //     if (!node.typeArguments || node.typeArguments.length < 2) return node;
 
 //     const { keyType, shapeType } = identifySolidCall({ node, checker });
-//     const shape = reifyType(shapeType, checker, new Set());
+//     const key = keyType.isStringLiteral() ? keyType.value : 'Anonymous';
+//     if (keyType.isStringLiteral()) {
+//       const filePath = sourceFile.fileName;
+
+//       if (sessionRegistry.has(key)) {
+//         const originalFile = sessionRegistry.get(key);
+//         throw new Error(
+//           `[xalor] 🚨 BUILD-TIME COLLISION: Key "${key}" is already registered in ${originalFile}. ` +
+//             `Every unique type must have a unique UUID. Attempted re-use in ${filePath}.`,
+//         );
+//       }
+//       // Log the key to this build session
+//       sessionRegistry.set(key, filePath);
+//     }
+//     const fragments = new Map<string, TSolidShape>();
+
+//     const shape = reifyType({
+//       type: shapeType,
+//       checker,
+//       ctx: {
+//         depth: 0,
+//         maxDepth: reifyLimit.maxDepth,
+//         fragments,
+//         parentKey: key,
+//         seen: new Set(),
+//       },
+//     });
 
 //     if (keyType.isStringLiteral()) {
-//       const key = keyType.value;
 //       const identity = getSpatialIdentity({
 //         node,
 //         sourceFile,
@@ -151,6 +136,23 @@ export function theMiner(
 //         checker,
 //       });
 
+//       /**
+//        * 💎 THE FRAGMENT FLUSH
+//        * We iterate through any chopped pieces and register them as
+//        * top-level "Solid" entries so they persist in the Vault.
+//        */
+
+//       fragments.forEach((fShape, fKey) => {
+//         globalRegistry.set(fKey, {
+//           key: fKey,
+//           filePath: sourceFile.fileName,
+//           area: `${identity.area} (Fragment)`,
+//           symbolName: 'AnonymousFragment',
+//           typeName: 'Fragment',
+//           shape: fShape,
+//           version: IS_SOLID_CONFIG_ITEMS.solidVersion,
+//         });
+//       });
 //       const payload: TVaultSyncPayload = {
 //         key,
 //         filePath: sourceFile.fileName,
@@ -158,24 +160,10 @@ export function theMiner(
 //         symbolName: identity.symbolName,
 //         typeName: identity.typeName,
 //         shape,
-//         version: IS_SOLID_CONFIG_ITEMS.solidVersion,
+//         version: solidVersion,
 //       } satisfies TVaultSyncPayload;
 
-//       if (key === 'BigTEst') {
-//         // 👉 ADD THESE LINES HERE:
-//         console.log(`\n--- 💎 SOLID BLUEPRINT: ${key} ---`);
-//         try {
-//           console.log(JSON.stringify(shape, null, 2));
-//         } catch (e) {
-//           console.log(
-//             '⚠️ CIRCULAR DEP DETECTED: Deep nesting failed. Using inspect instead:',
-//           );
-//           console.dir(shape, { depth: null, colors: true });
-//         }
-//         console.log('---------------------------------\n');
-//       }
-
-//       syncVault({ registry: globalRegistry, payload });
+//       /* prettier-ignore */ syncVault({ registry: globalRegistry, payload });
 //       /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
 //       return markAsPure(updatedCall);
 //     }
@@ -185,49 +173,3 @@ export function theMiner(
 
 //   return visitor;
 // }
-/**
- {
-  "version": "1.0.0",
-  "blueprints": {
-    "USER": {
-      "kind": "object",
-      "properties": {
-        "id": { "shape": { "kind": "primitive", "type": "number" }, "optional": false, "name": "id" },
-        "name": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "name" }
-      }
-    },
-    "MY_BALLS": {
-      "kind": "object",
-      "properties": {
-        "myLeftNut": { "shape": { "kind": "primitive", "type": "number" }, "optional": false, "name": "myLeftNut" },
-        "myRightNut": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "myRightNut" }
-      }
-    },
-    "BigTEst": {
-      "kind": "object",
-      "properties": {
-        "yourTingWinner": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "yourTingWinner" },
-        "moreStuff": { "shape": { "kind": "reference", "name": "BigTEst$d1" }, "optional": false, "name": "moreStuff" }
-      }
-    },
-    "BigTEst$d1": {
-      "kind": "object",
-      "properties": {
-        "id": { "shape": { "kind": "primitive", "type": "string" }, "optional": false, "name": "id" },
-        "moreItems": { "shape": { "kind": "object", "properties": { "money": { "shape": { "kind": "primitive", "type": "unknown" }, "optional": false, "name": "money" } } }, "optional": false, "name": "moreItems" }
-      }
-    }
-  },
-  "manifest": {
-    "USER": { "area": "test-file.ts:14:5", "filePath": "test-file.ts" },
-    "MY_BALLS": { "area": "is-xalor.test.ts:141:5", "filePath": "__tests__/runtime/operations/core/is-xalor.test.ts" },
-    "BigTEst": { "area": "is-xalor.test.ts:142:5", "filePath": "__tests__/runtime/operations/core/is-xalor.test.ts" }
-  },
-  "registry": {
-    "USER": { "symbolName": "User", "typeName": "{ id: number; name: string; }" },
-    "MY_BALLS": { "symbolName": "TFUCKKKKTT", "typeName": "{ myLeftNut: number; myRightNut: string; }" },
-    "BigTEst": { "symbolName": "BigTEst", "typeName": "{ yourTingWinner: string; moreStuff: { ... }; }" }
-  }
-}
-
- */

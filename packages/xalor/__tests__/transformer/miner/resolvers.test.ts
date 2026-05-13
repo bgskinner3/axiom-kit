@@ -1,11 +1,9 @@
 import ts from 'typescript';
 import {
   markAsPure,
-  syncVault,
   // getSpatialIdentity,
 } from '../../../transformer/miner/resolvers';
-import * as path from 'path';
-import type { TVaultSyncPayload } from '../../../src/models/types';
+
 describe('Visitor Actions', () => {
   describe('markAsPure', () => {
     it('should inject @__PURE__ comment into nodes', () => {
@@ -22,27 +20,27 @@ describe('Visitor Actions', () => {
       expect(result).toContain('/** @__PURE__ */');
     });
   });
-  describe('syncVault', () => {
-    it('should normalize file paths and store payloads correctly', () => {
-      const registry = new Map<string, TVaultSyncPayload>();
-      const payload: TVaultSyncPayload = {
-        key: 'USER',
-        filePath: path.join(process.cwd(), 'src/user.ts'), // Absolute path
-        symbolName: 'User',
-        area: 'src/user.ts:1:1',
-        typeName: '{ id: number }',
-        shape: { kind: 'primitive', type: 'unknown' },
-        version: '1.0.0',
-      };
+  // describe('syncVault', () => {
+  //   it('should normalize file paths and store payloads correctly', () => {
+  //     const registry = new Map<string, TVaultSyncPayload>();
+  //     const payload: TVaultSyncPayload = {
+  //       key: 'USER',
+  //       filePath: path.join(process.cwd(), 'src/user.ts'), // Absolute path
+  //       symbolName: 'User',
+  //       area: 'src/user.ts:1:1',
+  //       typeName: '{ id: number }',
+  //       shape: { kind: 'primitive', type: 'unknown' },
+  //       version: '1.0.0',
+  //     };
 
-      syncVault({ registry, payload });
+  //     syncVault({ registry, payload });
 
-      const entry = registry.get('USER');
-      expect(entry).toBeDefined();
-      // 🛡️ Verify Path Normalization (Relative for Bunker portability)
-      expect(entry?.filePath).toBe('src/user.ts');
-    });
-  });
+  //     const entry = registry.get('USER');
+  //     expect(entry).toBeDefined();
+  //     // 🛡️ Verify Path Normalization (Relative for Bunker portability)
+  //     expect(entry?.filePath).toBe('src/user.ts');
+  //   });
+  // });
 
   // describe('getSpatialIdentity', () => {
   //   // Note: Testing this requires a real TS Program/SourceFile

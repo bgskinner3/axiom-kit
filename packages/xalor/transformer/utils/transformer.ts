@@ -62,13 +62,13 @@ export function runMiningPass(
   globalRegistry: Map<string, TVaultSyncPayload>,
   sessionRegistry: Map<string, string>,
 ): ts.SourceFile {
-  const visitor = theMiner(
+  const visitor = theMiner({
     program,
     context,
     sourceFile,
     globalRegistry,
     sessionRegistry,
-  );
+  });
   return visitNode(sourceFile, visitor) as ts.SourceFile;
 }
 /**

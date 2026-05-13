@@ -79,13 +79,13 @@ export function mineTransformation(
   } as any;
 
   //  Run Visitor on the BOUND source file
-  const visitor = theMiner(
+  const visitor = theMiner({
     program,
-    transformationContext,
-    sourceFileRef,
+    context: transformationContext,
+    sourceFile: sourceFileRef,
     globalRegistry,
     sessionRegistry,
-  );
+  });
   const result = ts.visitNode(sourceFileRef, visitor) as ts.SourceFile;
 
   const printer = ts.createPrinter({ removeComments: false });

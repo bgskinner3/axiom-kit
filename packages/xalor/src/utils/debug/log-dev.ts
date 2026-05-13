@@ -10,6 +10,7 @@ const LOG_CONFIG = {
   'transformer/index.ts': false,
   'vault-archive.ts-persist': false,
   'vault-archive.ts-hydrateFromGenesis': false,
+  'miner/index.ts': true,
   off: false,
 } as const;
 // hydrateFromGenesis

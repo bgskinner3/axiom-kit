@@ -1,5 +1,5 @@
 export * from './is-xalor';
-
+export * from './register-xalor';
 /**
  * FUNCTIONS TO ADD
  * II.getSolidMock<T>(key)

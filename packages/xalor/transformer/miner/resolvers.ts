@@ -1,10 +1,8 @@
 // transformer/miner/resolvers.ts
 import { addSyntheticLeadingComment, SyntaxKind } from 'typescript';
-import type { Node } from 'typescript';
-import type { TSpatialIdentity, TInterfaceOrType } from '../types';
-import type { TVaultSyncPayload } from '../../src/models/types';
-import { printGhostStructure } from './ghost-structures';
-import * as path from 'path';
+import type { Node, Type } from 'typescript';
+import type { TSolidShape } from '../../src/models/types';
+import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
 /**
  * 💎 MARK AS PURE (Minification Shield)
  *
@@ -30,87 +28,60 @@ export function markAsPure<T extends Node>(node: T): T {
     true,
   );
 }
+
 /**
- * 📦 SYNC VAULT (The Accumulator)
+ * 🛡️ ENFORCE COLLISION LAW
  *
  * ROLE:
- * - The "Integrity Guard." It manages the Stage 3 (Accumulation) Map
- *   and enforces the Single Source of Truth.
+ * The "Integrity Guard." It ensures that every UUID in the Xalor ecosystem
+ * is truly unique within the current build session.
  *
  * STRATEGY:
- * - COLLISION DETECTION: Explicitly blocks two different files from claiming
- *   the same string key to prevent silent data corruption.
- * - TOTAL PACKING: Ensures the high-definition payload (GPS, Identity, Shape)
- *   is preserved for the Stage 4 (Persist) flush.
+ * - Session Tracking: Compares the incoming key against a Map of keys already
+ *   claimed by other files in this build.
+ * - Exception: Ignores 'Anonymous' keys (internal fragments) to allow
+ *   flexible shredding.
  *
  * WHY:
- * - This satisfies Commandment I. By catching collisions here, we prevent
- *   buggy builds from ever reaching the node_modules cache.
+ * Prevents "Silent Data Corruption" where two different types share the same
+ * key, causing the Validator to use the wrong blueprint at runtime.
  */
-export function syncVault({
-  registry,
-  payload,
-}: {
-  registry: Map<string, TVaultSyncPayload>;
-  payload: TVaultSyncPayload;
-}) {
-  // 💎 The Law: No "Leakage"
-  // We ensure the payload is perfectly shaped for the 3 Vaults before it hits the Map.
-  registry.set(payload.key, {
-    ...payload,
-    // Ensure path is relative to root for the Manifest
-    filePath: path.relative(process.cwd(), payload.filePath),
-    // Ensure shape is the "Atomic" version
-    shape: payload.shape,
-  });
+export function enforceCollisionLaw(
+  key: string,
+  file: string,
+  session: Map<string, string>,
+) {
+  if (key === 'Anonymous') return;
+  if (session.has(key) && session.get(key) !== file) {
+    throw new Error(
+      `[xalor] 🚨 COLLISION: Key "${key}" already registered in ${session.get(key)}. ` +
+        `Every unique type must have a unique UUID.`,
+    );
+  }
+  session.set(key, file);
 }
 
 /**
- * 🛰️ GET SPATIAL IDENTITY (The GPS)
+ * 🏗️ CREATE MINING CTX
  *
  * ROLE:
- * - The "Identity Constructor." It maps a transient TypeScript symbol to a
- *   permanent, multi-dimensional physical record.
+ * The "Notebook." Initializes the recursive state for the Reification engine.
  *
  * STRATEGY:
- * - DUAL-TRACKING: Captures the 'area' (GPS coordinate for the Auditor) AND
- *   the 'typeName' (Nominal link for the IDE Bridge) simultaneously.
- * - EXPORT VALIDATION: Checks the source file symbol to determine if a type
- *   is public-facing or internal, setting the 'symbolName' accordingly.
- *
- * WHY:
- * - This provides the Triple-KV Vault with everything it needs in one shot.
- * - It bridges the gap between where a type "lives" (file) and where it
- *   "occurs" (line/char).
+ * - Depth Sync: Seeds the limit from IS_SOLID_CONFIG_ITEMS to ensure
+ *   Atomic Cutting happens at the correct level.
+ * - Fragment Drawer: Provides an empty Map to collect shredded pieces
+ *   encountered during the walk.
  */
-export function getSpatialIdentity({
-  node,
-  sourceFile,
-  shapeType,
-  checker,
-}: TInterfaceOrType): TSpatialIdentity {
-  // 📍 1. THE GPS (For the Auditor)
-  const { line, character } = sourceFile.getLineAndCharacterOfPosition(
-    node.getStart(),
-  );
-  const area = `${sourceFile.fileName}:${line + 1}:${character + 1}`;
-
-  const typeName = printGhostStructure({ type: shapeType, checker, node });
-
-  const symbol = shapeType.aliasSymbol || shapeType.getSymbol();
-  let symbolName = 'unknown';
-
-  if (symbol) {
-    const name = symbol.getName();
-    const sourceFileSymbol = checker.getSymbolAtLocation(sourceFile);
-    const isExported = !!sourceFileSymbol?.exports?.has(symbol.escapedName);
-    symbolName = isExported ? name : 'unknown';
-  }
-
+export function createMiningCtx(
+  key: string,
+  fragments: Map<string, TSolidShape>,
+) {
   return {
-    area,
-    typeName,
-    symbolName,
-    filePath: sourceFile.fileName,
+    depth: 0,
+    maxDepth: IS_SOLID_CONFIG_ITEMS.reifyLimit.maxDepth,
+    fragments,
+    parentKey: key,
+    seen: new Set<Type>(),
   };
 }
