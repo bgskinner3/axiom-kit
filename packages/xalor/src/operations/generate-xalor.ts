@@ -1,3 +1,28 @@
+// import { XalethorService } from '../xalor-service';
+// import type {
+//   ISolidRegistry,
+//   TSolidBranded,
+//   TTypeGuard,
+// } from '../models/types';
+// export type TGenerateXalorModes = 'default' | 'mock' | 'clone' | 'cast';
+
+// export function generateXalor<
+//   K extends keyof ISolidRegistry,
+//   _M extends 'default',
+// >(data: unknown, injectedKey: K, mode: _M): void;
+// export function generateXalor<
+//   K extends keyof ISolidRegistry,
+//   _M extends 'mock',
+// >(data: unknown, injectedKey: K, mode: _M): void;
+// export function generateXalor<
+//   K extends keyof ISolidRegistry,
+//   _M extends 'clone',
+// >(data: unknown, injectedKey: K, mode: _M): void;
+// export function generateXalor<
+//   K extends keyof ISolidRegistry,
+//   _M extends 'cast',
+// >(data: unknown, injectedKey: K, mode: _M): void;
+
 // import type { TToXalorArgs, ISolidRegistry } from '../models/types';
 // import { XalethorService } from '../xalor-service';
 // import { isMetaData, markAsSolid } from '../utils';

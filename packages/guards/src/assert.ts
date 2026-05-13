@@ -28,6 +28,7 @@ export function assertValue<T>(
     );
   }
 }
+
 /**
  * @utilType util
  * @name makeAssert
