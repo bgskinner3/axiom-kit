@@ -7,7 +7,7 @@ import type {
   TVaultRegistryEntry,
   TVaultManifestEntry,
 } from '../models/types';
-import { preRegisterMetadata } from '../utils';
+import { preRegisterMetadata, logDev } from '../utils';
 import { IS_SOLID_CONFIG_ITEMS } from '../models';
 
 /**
@@ -38,7 +38,7 @@ export class XalethorVaultKeeper {
    */
   public static solidify(rawMetadata: TSolidMetadata): void {
     const metadata = preRegisterMetadata(rawMetadata);
-
+    /* prettier-ignore */ logDev( `[xalor]: parse metaData ${metadata}`, { service: 'vault-keeper.ts/solidifyMeta' });
     const { key, shape, area, filePath, symbolName, typeName } = metadata;
 
     if (this.vault.blueprints.has(key)) {
@@ -48,8 +48,7 @@ export class XalethorVaultKeeper {
       // If they are identical, just skip the work.
       if (existing === incoming) return;
 
-      // If they changed, log it so you know the Miner is updating the Bunker.
-      console.log(`[xalor] 🔄 Updating logic for: ${key}`);
+      /* prettier-ignore */ logDev( `[xalor] 🔄 Updating logic for: ${key}`, { service: 'vault-keeper.ts/Updating' });
     }
     this.vault.blueprints.set(key, shape);
     this.vault.manifest.set(key, { area, filePath });

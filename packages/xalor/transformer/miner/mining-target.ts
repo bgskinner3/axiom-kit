@@ -1,6 +1,6 @@
 import type { Node } from 'typescript';
 import ts from 'typescript';
-
+import { logDev } from '../../src/utils';
 /**
  * RESOLVE MINING TARGET
  *
@@ -25,28 +25,32 @@ export function resolveMiningTarget(node: Node, checker: ts.TypeChecker) {
   const typeArgs = node.typeArguments;
   const args = node.arguments;
 
-  // Path A: Explicit Registration <'KEY', Type>()
-  // 📍 CHANGE: Ensure we only proceed if [0] is a string literal
+  // --- PATH A: <'KEY', Type>() ---
   if (typeArgs && typeArgs.length >= 2) {
-    const keyNode = typeArgs[0];
-    const shapeNode = typeArgs[1];
+    const keyType = checker.getTypeFromTypeNode(typeArgs[0]);
+    const shapeType = checker.getTypeFromTypeNode(typeArgs[1]);
 
-    const keyType = checker.getTypeFromTypeNode(keyNode);
-    const shapeType = checker.getTypeFromTypeNode(shapeNode);
+    // 🎯 THE FIX: Ensure we extract the physical string value
+    if (!keyType.isStringLiteral()) return null;
+
     return {
+      keyName: keyType.value, // This is the physical string 'USER_TEST'
       keyType,
       shapeType,
     };
   }
 
-  // Path B: Inferred Registration <'KEY'>(data)
-  // 📍 CHANGE: Targets index [0] of physical arguments
+  // --- PATH B: <'KEY'>(data) ---
   if (typeArgs && typeArgs.length === 1 && args.length >= 1) {
+    const keyType = checker.getTypeFromTypeNode(typeArgs[0]);
+    const shapeType = checker.getTypeAtLocation(args[0]);
+
+    if (!keyType.isStringLiteral()) return null;
+
     return {
-      // 1. Still a Type (The literal 'KEY' type)
-      keyType: checker.getTypeFromTypeNode(typeArgs[0]),
-      // 2. 🎯 SYNC: Get the inferred Type of the physical data node
-      shapeType: checker.getTypeAtLocation(args[0]),
+      keyName: keyType.value, // This is the physical string
+      keyType,
+      shapeType,
     };
   }
 

@@ -48,17 +48,17 @@ export function markAsPure<T extends Node>(node: T): T {
  */
 export function enforceCollisionLaw(
   key: string,
-  file: string,
+  area: string,
   session: Map<string, string>,
 ) {
   if (key === 'Anonymous') return;
-  if (session.has(key) && session.get(key) !== file) {
+  if (session.has(key)) {
     throw new Error(
       `[xalor] 🚨 COLLISION: Key "${key}" already registered in ${session.get(key)}. ` +
         `Every unique type must have a unique UUID.`,
     );
   }
-  session.set(key, file);
+  session.set(key, area);
 }
 
 /**

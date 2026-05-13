@@ -1,5 +1,8 @@
 export * from './is-xalor';
 export * from './register-xalor';
+
+// export const SENTRY_TRIGGER_NAMES = ['registerXalor', 'isXalor'] as const;
+
 /**
  * FUNCTIONS TO ADD
  * II.getSolidMock<T>(key)

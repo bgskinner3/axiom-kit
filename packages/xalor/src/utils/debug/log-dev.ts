@@ -10,6 +10,8 @@ const LOG_CONFIG = {
   'transformer/index.ts': false,
   'vault-archive.ts-persist': false,
   'vault-archive.ts-hydrateFromGenesis': false,
+  'vault-keeper.ts/Updating': false,
+  'vault-keeper.ts/solidifyMeta': false,
   'miner/index.ts': true,
   off: false,
 } as const;
@@ -52,7 +54,7 @@ export function logDev(message: string, options: ILogOptions = {}) {
   }
 
   // 1. Logic Check: Only log if service is unregistered OR set to true
-  if (service !== undefined && LOG_CONFIG[service] === false && !override) {
+  if (service !== undefined && LOG_CONFIG[service] === false) {
     return;
   }
 

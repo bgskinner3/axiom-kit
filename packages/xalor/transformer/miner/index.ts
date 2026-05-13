@@ -46,33 +46,34 @@ export function theMiner({
     const target = resolveMiningTarget(node, checker);
     if (!target) return node;
 
-    const { keyType, shapeType } = target;
-    const key = keyType.isStringLiteral() ? keyType.value : 'Anonymous';
-    /* prettier-ignore */ logDev( `[xalor:stage-2] Targeted Key: "${key}" (Resolution: ${keyType.isStringLiteral() ? 'Static' : 'Dynamic'})`, { service: 'transformer/index.ts' });
-    enforceCollisionLaw(key, sourceFile.fileName, sessionRegistry);
+    const { keyName, keyType, shapeType } = target;
+    // const key = keyType.isStringLiteral() ? keyType.value : 'Anonymous';
+    /* prettier-ignore */ logDev( `[xalor:stage-2] Targeted Key: "${keyName}" (Resolution: ${keyType.isStringLiteral() ? 'Static' : 'Dynamic'})`, { service: 'transformer/index.ts' });
+    /* prettier-ignore */ const identity = getSpatialIdentity({ node, sourceFile, shapeType, checker });
+    enforceCollisionLaw(keyName, identity.area, sessionRegistry);
     const fragments = new Map<string, TSolidShape>();
 
     const shape = reifyType({
       type: shapeType,
       checker,
-      ctx: createMiningCtx(key, fragments),
+      ctx: createMiningCtx(keyName, fragments),
     });
-    /* prettier-ignore */ logDev( `[xalor:stage-4] Reification complete for "${key}". Found ${fragments.size} fragments.`, { service: 'transformer/index.ts' });
+    /* prettier-ignore */ logDev( `[xalor:stage-4] Reification complete for "${keyName}". Found ${fragments.size} fragments.`, { service: 'transformer/index.ts' });
     if (keyType.isStringLiteral()) {
       // GPS: Map the physical location and TypeScript identity
-      /* prettier-ignore */ const identity = getSpatialIdentity({ node, sourceFile, shapeType, checker });
+
       // SYNC: Flush fragments and the main payload to the Global Vault
       flushToRegistry({
-        key,
+        key: keyName,
         shape,
         identity,
         fragments,
         globalRegistry,
         sourceFile,
       });
-      /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${key}" successfully solidified.`, { service: 'transformer/index.ts' });
+      /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${keyName}" successfully solidified.`, { service: 'transformer/index.ts' });
       // PROCESS: Rewrite the AST call to inject the metadata
-      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key, sourceFile, node,});
+      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key: keyName, sourceFile, node,});
       return markAsPure(updatedCall);
     }
 

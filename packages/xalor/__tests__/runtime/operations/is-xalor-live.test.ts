@@ -1,5 +1,7 @@
 // __tests__/engine/guard/is-solid.test.ts
-
+/**
+  pnpm run test -- __tests__/runtime/operations/is-xalor-live.test.ts
+ */
 // describe('Guard ISXalor', () => {
 //   it('is a placeholder', () => {
 //     expect(true).toBe(true);
@@ -49,6 +51,7 @@ describe('Cache Generation Test', () => {
      */
     registerXalor<'USER_PERSIST_TEST', User>();
     registerXalor<'USER_TEST_2', UserTwo>();
+    registerXalor<'TFUCKKKKTT', TFUCKKKKTT>();
 
     const userData = {
       id: 0,
