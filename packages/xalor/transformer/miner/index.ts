@@ -44,7 +44,9 @@ export function theMiner({
     /* prettier-ignore */ logDev(`[xalor:stage-1] Found candidate call in ${sourceFile.fileName}`, { service: 'transformer/index.ts' });
 
     const target = resolveMiningTarget(node, checker);
-    if (!target) return node;
+    if (!target) {
+      return visitEachChild(node, visitor, context);
+    }
 
     const { keyName, keyType, shapeType } = target;
     // const key = keyType.isStringLiteral() ? keyType.value : 'Anonymous';

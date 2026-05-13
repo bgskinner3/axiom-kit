@@ -1,6 +1,6 @@
 import type { TTripleKV, TPersistParams, TSolidShape } from '../models/types';
 import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-import { serialize, logDev, ObjectUtils } from '../utils';
+import { serialize, logDev } from '../utils';
 import { EXTRACT_SHAPE_NORMALIZERS, BUILD_SHAPE_INFLATORS } from '../mappers';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -24,7 +24,6 @@ import { XalethorVaultKeeper } from './vault-keeper';
  */
 export class XalethorVaultArchive {
   private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
-  private static version = IS_SOLID_CONFIG_ITEMS.solidVersion;
 
   /**
    * RECURSIVE RE-SHREDDER
@@ -110,7 +109,7 @@ export class XalethorVaultArchive {
       references: {},
       manifest: {},
       registry: {},
-      version: this.version,
+      version: IS_SOLID_CONFIG_ITEMS.solidVersion,
     } satisfies TTripleKV;
 
     registry.forEach((meta, key) => {
@@ -174,7 +173,7 @@ export class XalethorVaultArchive {
       const snapshot: TTripleKV = JSON.parse(raw);
 
       // Fallback matching: Handle modern reference index tables or old snapshots
-      const nominalKeys = ObjectUtils.keys(
+      const nominalKeys = Object.keys(
         snapshot.references || snapshot.blueprints,
       );
 

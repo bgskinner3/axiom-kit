@@ -86,13 +86,22 @@ export function handlePersistenceGate(
   program: ts.Program,
   rootDir: string,
   registry: Map<string, TVaultSyncPayload>,
+  previousSize: number,
 ): ts.SourceFile {
-  const allFiles = program.getSourceFiles();
-  const isLastFile = allFiles[allFiles.length - 1]?.fileName === file.fileName;
   const isTest = process.env.NODE_ENV === 'test';
 
-  /** ⚖️ Determine if we should trigger the Stage 4 Persistence */
-  const shouldFlush = isLastFile || (isTest && registry.size > 0);
+  // 1. Production Build Boundary Check
+  const allFiles = program.getSourceFiles();
+  const isLastFile = allFiles[allFiles.length - 1]?.fileName === file.fileName;
+
+  // 2. Local Development Watch/Save Mutation Check
+  const hasNewRegistrations = registry.size > previousSize;
+
+  // 🎯 THE DUAL-TRIGGER DETERMINATION LAW
+  // We flush the system data if we hit the final compilation barrier OR
+  // if an individual watch-save pass introduces brand new structural metadata records.
+  const shouldFlush =
+    isLastFile || hasNewRegistrations || (isTest && registry.size > 0);
 
   if (shouldFlush) {
     const archive = new XalethorService();
