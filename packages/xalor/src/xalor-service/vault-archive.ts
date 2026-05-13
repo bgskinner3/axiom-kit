@@ -89,6 +89,46 @@ export class XalethorVaultArchive {
     return executeInflator(shape.kind, shape);
   }
   /**
+   * 🛠️ WORKER: ENSURE BASELINE CACHE (Cold-Start Guard)
+   *
+   * ROLE:
+   * Generates project-local directory trees and drops empty baseline type bridges
+   * onto the user's filesystem immediately during initial boot if the cache is missing.
+   *
+   * STRATEGY:
+   * Solves cold-start IDE import resolution breaks cleanly by copying ready-to-go templates,
+   * then returning the redirected snapshot path string back to the hydration caller.
+   */
+  private static ensureBaselineCache(
+    localCacheDir: string,
+    fallbackSnapshotPath: string,
+  ): string {
+    try {
+      // 1. Create the local project cache directory folder tree structure immediately
+      if (!fs.existsSync(localCacheDir)) {
+        fs.mkdirSync(localCacheDir, { recursive: true });
+      }
+
+      // Resolve relative path pointers for the static templates bundled inside your npm package
+      /* prettier-ignore */ const templateBridgePath = path.join(__dirname,'../static-templates/solid-env.d.ts',);
+      /* prettier-ignore */ const localBridgeFile = path.join(localCacheDir, 'solid-env.d.ts');
+
+      // Physical file copy of the ghost bridge directly to disk
+      /* prettier-ignore */ if (fs.existsSync(templateBridgePath) && !fs.existsSync(localBridgeFile)) {
+        fs.copyFileSync(templateBridgePath, localBridgeFile);
+      }
+
+      /* prettier-ignore */ logDev(`[xalor:genesis] ❄️ Local cache empty. Initialized cold-start baseline templates.`, { service: 'vault-archive.ts-hydrateFromGenesis' });
+
+      // redirected target pointer to point straight to the packaged JSON template
+      return fallbackSnapshotPath;
+    } catch (seedError) {
+      /* prettier-ignore */ logDev(`[xalor:genesis] ⚠️ Ambient preloading failed: Unable to write workspace folder tree configurations. (${seedError})`,{ type: 'error', service: 'vault-archive.ts-hydrateFromGenesis', override: true });
+      // Fallback: Return the original path location parameter if file operations error out
+      return fallbackSnapshotPath;
+    }
+  }
+  /**
    * THE PERSISTENCE (THE FLUSH)
    *
    * STATE:
@@ -161,34 +201,31 @@ export class XalethorVaultArchive {
    *   to rebuild deep nested objects into flat runtime dictionaries.
    */
   public static hydrateFromGenesis(rootDir: string): void {
-    const cacheFile = path.join(
-      rootDir,
-      this.lifeCyclePaths.cacheDir,
-      this.lifeCyclePaths.vaultFile,
-    );
+    const localCacheDir = path.join(rootDir, this.lifeCyclePaths.cacheDir);
+    let cacheFile = path.join(localCacheDir, this.lifeCyclePaths.vaultFile);
+    // 🎯 THE BASELINE FALLBACK HOOK:
+    if (!fs.existsSync(cacheFile)) {
+      /* prettier-ignore */ const templateSnapshotPath = path.join(__dirname, '../static-templates/vault-snapshot.json');
+      /* prettier-ignore */ cacheFile = this.ensureBaselineCache(localCacheDir, templateSnapshotPath);
+    }
+    // Defensive execution boundary brake
     if (!fs.existsSync(cacheFile)) return;
 
     try {
       const raw = fs.readFileSync(cacheFile, 'utf-8');
       const snapshot: TTripleKV = JSON.parse(raw);
-
-      // Fallback matching: Handle modern reference index tables or old snapshots
       const nominalKeys = Object.keys(
         snapshot.references || snapshot.blueprints,
       );
-
       // 🔄 THE RECONSTRUCTION LOOP
-      // Rehydrate the actual public interfaces back into clear Nominal Keys in RAM
       for (const key of nominalKeys) {
         const shapeHash = snapshot.references ? snapshot.references[key] : key;
         const rawShape = snapshot.blueprints[shapeHash];
-
         const manifest = snapshot.manifest[key];
         const registry = snapshot.registry[key];
 
         if (!rawShape) continue;
 
-        // 🚀 THE HYBRID ACCELERATION
         // Expand the content addressable hash into a complete, raw reference tree
         const fullyInflatedShape = this.inflateAndNormalizeShape(
           rawShape,
@@ -197,7 +234,7 @@ export class XalethorVaultArchive {
 
         XalethorVaultKeeper.solidify({
           key,
-          shape: fullyInflatedShape, // Restores clean Nominal Key -> Full Nested Tree pairing
+          shape: fullyInflatedShape,
           area: manifest?.area ?? 'unknown:0:0',
           filePath: manifest?.filePath ?? 'unknown_file.ts',
           symbolName: registry?.symbolName ?? 'unknown',
@@ -205,8 +242,6 @@ export class XalethorVaultArchive {
           version: snapshot.version,
         });
       }
-
-      /* prettier-ignore */
       /* prettier-ignore */ logDev( `[xalor] 🌿 Hydrated ${Object.keys(snapshot.blueprints).length} types from Genesis`, { service: 'vault-archive.ts-hydrateFromGenesis' });
     } catch (error) {
       /* prettier-ignore */ logDev(`[xalor-stage-5] Genesis Hydration failed: ${error}`, { type: 'error', service: 'vault-archive.ts-hydrateFromGenesis', override: true });

@@ -2,7 +2,6 @@
 import { defineConfig } from 'tsup';
 import fs from 'fs';
 import path from 'path';
-
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
@@ -17,11 +16,11 @@ export default defineConfig({
     },
   },
   platform: 'node',
-  clean: true, 
+  clean: true,
   minify: true,
-  splitting: true,
+  splitting: false,
+  treeshake: false,
   bundle: true,
-  treeshake: true,
   sourcemap: true,
   external: ['typescript', 'fs', 'path'],
   tsconfig: 'tsconfig.build.json',
@@ -33,7 +32,7 @@ export default defineConfig({
     if (!fs.existsSync(transDir)) {
       fs.mkdirSync(transDir, { recursive: true });
     }
-
+    // Maintain strict subpath module format overrides
     fs.writeFileSync(
       path.join(transDir, 'package.json'),
       JSON.stringify({ type: 'commonjs' }, null, 2),
@@ -45,5 +44,71 @@ export default defineConfig({
     if (fs.existsSync(srcTransformer)) {
       fs.copyFileSync(srcTransformer, destTransformer);
     }
+
+    // 2. TEMPLATE ATTACHMENT pre seed
+    const srcTemplatesDir = path.join(root, 'static-templates');
+    const destTemplatesDir = path.join(distDir, 'static-templates');
+    if (fs.existsSync(srcTemplatesDir)) {
+      if (!fs.existsSync(destTemplatesDir)) {
+        fs.mkdirSync(destTemplatesDir, { recursive: true });
+      }
+
+      const files = fs.readdirSync(srcTemplatesDir);
+      for (const file of files) {
+        fs.copyFileSync(
+          path.join(srcTemplatesDir, file),
+          path.join(destTemplatesDir, file),
+        );
+      }
+      console.log(
+        '[xalor:build] 📦 Static baseline templates embedded successfully into dist/',
+      );
+    }
   },
 });
+
+// ORGINAL
+// export default defineConfig({
+//   entry: {
+//     index: 'src/index.ts',
+//     'transformer/index': 'transformer/index.ts',
+//   },
+//   format: ['cjs', 'esm'],
+//   dts: {
+//     resolve: true,
+//     compilerOptions: {
+//       composite: false,
+//       incremental: false,
+//     },
+//   },
+//   platform: 'node',
+//   clean: true,
+//   minify: true,
+//   splitting: true,
+//   bundle: true,
+//   treeshake: true,
+//   sourcemap: true,
+//   external: ['typescript', 'fs', 'path'],
+//   tsconfig: 'tsconfig.build.json',
+//   onSuccess: async () => {
+//     const root = process.cwd();
+//     const distDir = path.join(root, 'dist');
+//     const transDir = path.join(distDir, 'transformer');
+
+//     if (!fs.existsSync(transDir)) {
+//       fs.mkdirSync(transDir, { recursive: true });
+//     }
+
+//     fs.writeFileSync(
+//       path.join(transDir, 'package.json'),
+//       JSON.stringify({ type: 'commonjs' }, null, 2),
+//     );
+
+//     const srcTransformer = path.join(distDir, 'transformer.cjs');
+//     const destTransformer = path.join(transDir, 'index.cjs');
+
+//     if (fs.existsSync(srcTransformer)) {
+//       fs.copyFileSync(srcTransformer, destTransformer);
+//     }
+//   },
+// });

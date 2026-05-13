@@ -5,11 +5,23 @@
   "author": "Brennan Skinner",
   "license": "MIT",
   "type": "module",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "typescript": {
     "plugins": [
       {
         "transform": "./dist/transformer/index.cjs",
         "type": "program"
+      }
+    ],
+    "serverPlugins": [
+      {
+        "name": "@bgskinner2/xalor/transformer"
       }
     ]
   },

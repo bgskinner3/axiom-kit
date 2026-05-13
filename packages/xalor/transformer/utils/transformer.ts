@@ -26,6 +26,7 @@ export function bootloader(rootDir: string): void {
     /* prettier-ignore */ logDev( `[xalor:stage-4.5] 🌬️ Bootloader: No Genesis Cache found. Starting volatile.`, { service: 'transformer/index.ts', type: 'warn', override: true }, );
   }
 }
+
 /**
  *
  * ROLE:
