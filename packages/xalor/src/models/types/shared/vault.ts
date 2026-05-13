@@ -15,6 +15,7 @@ export type TTripleKV = {
   blueprints: Record<string, TSolidShape>;
   manifest: Record<string, TVaultManifestEntry>;
   registry: Record<string, TVaultRegistryEntry>;
+  references: Record<string, string>;
   version: string;
 };
 
@@ -23,7 +24,10 @@ export type TTripleKV = {
  * The live runtime memory structure for the Xalethor system.
  */
 export type TSolidVaultMap = {
+  /** The physical, flat structural DNA pool (keyed by Content Hashes like 'sh_sbug7v') */
   blueprints: Map<string, TSolidShape>;
+  /** 🎯 NEW: Nominal Key -> Structural Content Hash mapping ('USER_TEST' -> 'sh_sbug7v') */
+  references: Map<string, string>;
   manifest: Map<string, TVaultManifestEntry>;
   registry: Map<string, TVaultRegistryEntry>;
   errors: Map<string, TSolidError[]>;

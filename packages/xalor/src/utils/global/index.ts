@@ -33,6 +33,7 @@ export function ensureGlobalVault(): TSolidVaultMap {
   if (!globalThis.__SOLID_VAULT__) {
     globalThis.__SOLID_VAULT__ = {
       blueprints: new Map(),
+      references: new Map(),
       manifest: new Map(),
       registry: new Map(),
       errors: new Map(),
@@ -44,6 +45,7 @@ export function ensureGlobalVault(): TSolidVaultMap {
   // 2. 🛡️ THE RESILIENCY FIX
   // We ensure every specific Map is healthy to prevent runtime crashes.
   if (!(vault.blueprints instanceof Map)) vault.blueprints = new Map();
+  if (!(vault.references instanceof Map)) vault.references = new Map();
   if (!(vault.manifest instanceof Map)) vault.manifest = new Map();
   if (!(vault.registry instanceof Map)) vault.registry = new Map();
   if (!(vault.errors instanceof Map)) vault.errors = new Map();

@@ -1,6 +1,5 @@
 import type { Node } from 'typescript';
 import ts from 'typescript';
-import { logDev } from '../../src/utils';
 /**
  * RESOLVE MINING TARGET
  *

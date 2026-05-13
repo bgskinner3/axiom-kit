@@ -1,6 +1,12 @@
-import type { TTripleKV, TPersistParams } from '../models/types';
+import type { TTripleKV, TPersistParams, TSolidShape } from '../models/types';
 import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-import { serialize, yieldEntries, logDev } from '../utils';
+import {
+  serialize,
+  logDev,
+  EXTRACT_SHAPE_NORMALIZERS,
+  BUILD_SHAPE_INFLATORS,
+  ObjectUtils,
+} from '../utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { XalethorVaultKeeper } from './vault-keeper';
@@ -23,31 +29,71 @@ import { XalethorVaultKeeper } from './vault-keeper';
  */
 export class XalethorVaultArchive {
   private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
+  private static version = IS_SOLID_CONFIG_ITEMS.solidVersion;
 
   /**
-   * Checks if a Genesis Cache exists on disk.
+   * RECURSIVE RE-SHREDDER
+   *
+   * ROLE:
+   * Deeply normalizes structural objects into a flat content-addressable pool.
+   *
+   * STRATEGY:
+   * - Structural Shredding: Only 'object' kinds are replaced with 'sh_' reference keys.
+   * - Value Inlining: Primitives, Literals, Unions, Arrays, and Brands maintain inline
+   *   payload positioning to prevent intermediate map hop overhead during system boots.
    */
-  public static exists(rootDir: string): boolean {
-    return fs.existsSync(
-      path.join(
-        rootDir,
-        this.lifeCyclePaths.cacheDir,
-        this.lifeCyclePaths.vaultFile,
-      ),
-    );
-  }
+  private static extractAndNormalizeShape(
+    shape: TSolidShape,
+    flatPool: Record<string, TSolidShape>,
+  ): TSolidShape {
+    if (!shape) return shape;
 
+    const executeNormalizer = <K extends TSolidShape['kind']>(
+      kind: K,
+      targetShape: Extract<TSolidShape, { kind: K }>,
+    ): TSolidShape => {
+      const normalizer = EXTRACT_SHAPE_NORMALIZERS[kind];
+      return normalizer(
+        targetShape,
+        flatPool,
+        this.extractAndNormalizeShape.bind(this),
+      );
+    };
+
+    return executeNormalizer(shape.kind, shape);
+  }
   /**
-   * Wipes the local cache entirely.
+   * RECURSIVE RE-ASSEMBLER
+   *
+   * ROLE:
+   * Deeply inflates content-addressable reference hashes into fully expanded,
+   * nested layout graphs ready for active RAM lookups.
+   *
+   * STRATEGY:
+   * - Relational Expansion: Follows storage references ('sh_') and rebuilds full parent maps.
+   * - Performance Shielding: Unpacks structures *prior* to runtime cache insertions,
+   *   ensuring the Bouncer validation engine can perform linear synchronous checks.
    */
-  public static purge(rootDir: string): void {
-    const target = path.join(rootDir, this.lifeCyclePaths.cacheDir);
-    if (fs.existsSync(target)) {
-      fs.rmSync(target, { recursive: true, force: true });
-      console.log('[xalor] 🧹 Cache purged.');
-    }
-  }
+  private static inflateAndNormalizeShape(
+    shape: TSolidShape,
+    blueprintsPool: Record<string, TSolidShape>,
+  ): TSolidShape {
+    if (!shape) return shape;
 
+    const executeInflator = <K extends TSolidShape['kind']>(
+      kind: K,
+      targetShape: Extract<TSolidShape, { kind: K }>,
+    ): TSolidShape => {
+      const inflator = BUILD_SHAPE_INFLATORS[kind];
+      return inflator(
+        targetShape,
+        blueprintsPool,
+        this.inflateAndNormalizeShape.bind(this), // Pass continuation loop
+      );
+    };
+
+    return executeInflator(shape.kind, shape);
+  }
   /**
    * THE PERSISTENCE (THE FLUSH)
    *
@@ -63,15 +109,25 @@ export class XalethorVaultArchive {
   public static persist({ rootDir, registry }: TPersistParams): void {
     const cacheDir = path.join(rootDir, this.lifeCyclePaths.cacheDir);
     const targetFile = path.join(cacheDir, this.lifeCyclePaths.vaultFile);
+
     const snapshot: TTripleKV = {
       blueprints: {},
+      references: {},
       manifest: {},
       registry: {},
-      version: IS_SOLID_CONFIG_ITEMS.solidVersion,
+      version: this.version,
     } satisfies TTripleKV;
 
     registry.forEach((meta, key) => {
-      snapshot.blueprints[key] = meta.shape;
+      // 🚀 Run the deep normalization pass
+      const pointerReference = this.extractAndNormalizeShape(
+        meta.shape,
+        snapshot.blueprints,
+      );
+
+      // If the top level became a reference pointer, record its pointer name string
+      snapshot.references[key] =
+        pointerReference.kind === 'reference' ? pointerReference.name : key;
 
       snapshot.manifest[key] = {
         area: meta.area,
@@ -89,29 +145,26 @@ export class XalethorVaultArchive {
 
     try {
       if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
-
-      // 💎 LAW: Zero-Any Serialization
-      const solidData = serialize(snapshot);
-      fs.writeFileSync(targetFile, solidData, 'utf-8');
+      fs.writeFileSync(targetFile, serialize(snapshot), 'utf-8');
+      /* prettier-ignore */
       /* prettier-ignore */ logDev( `[xalor:stage-4] 🏁 Persistence Complete. Bunker sealed at: ${this.lifeCyclePaths.cacheDir}`, { service: 'vault-archive.ts-persist' });
       /* prettier-ignore */ logDev( `[xalor:stage-4] 🧬 Shredded & Saved: [${Array.from(registry.keys()).join(', ')}]`, { service: 'vault-archive.ts-persist' });
     } catch (error) {
       /* prettier-ignore */ logDev(`[xalor-persist] Failed to solidify cache: ${error}`, { type: 'error', service: 'vault-archive.ts-persist', override: true });
     }
   }
-
   /**
-   * 🏁 STAGE 5: THE GENESIS HYDRATION (THE SEEDING)
+   * 🌿 STAGE 5: THE GENESIS HYDRATION (THE SEEDING)
    *
-   * STATE:
-   * - The process has restarted (e.g., Jest is starting or the App is booting).
-   * - The Live Vault (__SOLID_VAULT__) is currently empty.
-   * - The Genesis Cache (node_modules/.cache) contains the Stage 4 snapshot.
+   * ROLE:
+   * The "Decompressor." It reifies the content-addressable disk database
+   * back into fast, fully-inlined execution graphs in live RAM.
    *
-   * PURPOSE:
-   * - Reifies the "Solid" types back into memory from the disk.
-   * - Broadcasts the cached metadata into the specialized Triple-KV maps.
-   * - Ensures that build-time extraction is available for runtime operations.
+   * STRATEGY:
+   * - Separation of Concerns: Resolves internal structural pointers *before*
+   *   feeding the Keeper, ensuring the runtime engine remains simple and fast.
+   * - In-Memory Unpacking: Traverses internal pointer links recursively
+   *   to rebuild deep nested objects into flat runtime dictionaries.
    */
   public static hydrateFromGenesis(rootDir: string): void {
     const cacheFile = path.join(
@@ -123,33 +176,68 @@ export class XalethorVaultArchive {
 
     try {
       const raw = fs.readFileSync(cacheFile, 'utf-8');
-      // 1. Parse as the Shredded Triple-KV structure
       const snapshot: TTripleKV = JSON.parse(raw);
 
-      // 2. We use the 'blueprints' drawer as our primary iteration key
-      const entries = yieldEntries(
-        snapshot.blueprints,
-        (_k, v): _k is string => !!v,
+      // Fallback matching: Handle modern reference index tables or old snapshots
+      const nominalKeys = ObjectUtils.keys(
+        snapshot.references || snapshot.blueprints,
       );
 
-      for (const [key, shape] of entries) {
-        // 3. RECONSTRUCTION: Stitch the metadata back together for the Vault
+      // 🔄 THE RECONSTRUCTION LOOP
+      // Rehydrate the actual public interfaces back into clear Nominal Keys in RAM
+      for (const key of nominalKeys) {
+        const shapeHash = snapshot.references ? snapshot.references[key] : key;
+        const rawShape = snapshot.blueprints[shapeHash];
+
         const manifest = snapshot.manifest[key];
         const registry = snapshot.registry[key];
 
+        if (!rawShape) continue;
+
+        // 🚀 THE HYBRID ACCELERATION
+        // Expand the content addressable hash into a complete, raw reference tree
+        const fullyInflatedShape = this.inflateAndNormalizeShape(
+          rawShape,
+          snapshot.blueprints,
+        );
+
         XalethorVaultKeeper.solidify({
           key,
-          shape,
-          area: manifest?.area ?? 'unknown',
-          filePath: manifest?.filePath ?? 'unknown',
+          shape: fullyInflatedShape, // Restores clean Nominal Key -> Full Nested Tree pairing
+          area: manifest?.area ?? 'unknown:0:0',
+          filePath: manifest?.filePath ?? 'unknown_file.ts',
           symbolName: registry?.symbolName ?? 'unknown',
-          typeName: registry?.typeName ?? 'unknown',
+          typeName: registry?.typeName ?? '{ ... }',
           version: snapshot.version,
         });
       }
+
+      /* prettier-ignore */
       /* prettier-ignore */ logDev( `[xalor] 🌿 Hydrated ${Object.keys(snapshot.blueprints).length} types from Genesis`, { service: 'vault-archive.ts-hydrateFromGenesis' });
     } catch (error) {
       /* prettier-ignore */ logDev(`[xalor-stage-5] Genesis Hydration failed: ${error}`, { type: 'error', service: 'vault-archive.ts-hydrateFromGenesis', override: true });
     }
   }
 }
+// /**
+//  * Checks if a Genesis Cache exists on disk.
+//  */
+// public static exists(rootDir: string): boolean {
+//   return fs.existsSync(
+//     path.join(
+//       rootDir,
+//       this.lifeCyclePaths.cacheDir,
+//       this.lifeCyclePaths.vaultFile,
+//     ),
+//   );
+// }
+// /**
+//  * Wipes the local cache entirely.
+//  */
+// public static purge(rootDir: string): void {
+//   const target = path.join(rootDir, this.lifeCyclePaths.cacheDir);
+//   if (fs.existsSync(target)) {
+//     fs.rmSync(target, { recursive: true, force: true });
+//     console.log('[xalor] 🧹 Cache purged.');
+//   }
+// }

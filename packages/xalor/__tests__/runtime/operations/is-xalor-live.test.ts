@@ -26,14 +26,14 @@ export interface UserTwo {
 export type TFUCKKKKTT = {
   myLeftNut: number;
   myRightNut: string;
+  additional: {
+    id: number;
+    name: string;
+  };
 };
 export type TFUCKKK20 = {
   myLeftNut: number;
   myRightNut: string;
-  moreStuff: {
-    id: number;
-    name: string;
-  };
 };
 export type TTHISISBULL = {
   myNuts: string;
@@ -51,7 +51,6 @@ describe('Cache Generation Test', () => {
      */
     registerXalor<'USER_PERSIST_TEST', User>();
     registerXalor<'USER_TEST_2', UserTwo>();
-    registerXalor<'TFUCKKKKTT', TFUCKKKKTT>();
 
     const userData = {
       id: 0,
@@ -60,6 +59,7 @@ describe('Cache Generation Test', () => {
       },
     };
     registerXalor<'USER_TEST_4'>(userData);
+    registerXalor<'TFUCKKKKTT', TFUCKKKKTT>();
     // isXalor<"">()
     // type TredeclareUSer2 = isXalor<'USER_PERSIST_TEST'>;
     // isXalor<"">();
