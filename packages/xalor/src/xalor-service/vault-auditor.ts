@@ -1,4 +1,4 @@
-import { ensureGlobalVault, RULE_MATCHERS_MAPPER } from '../utils';
+import { ensureGlobalVault } from '../utils';
 import type {
   TSolidError,
   TSolidVaultMap,
@@ -7,6 +7,7 @@ import type {
   TXalorRuleKind,
 } from '../models/types';
 import { isString } from '../utils/guards';
+import { RULE_MATCHERS_MAPPER } from '../mappers';
 
 /**
  * XALETHOR VAULT AUDITOR

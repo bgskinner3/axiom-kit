@@ -1,4 +1,4 @@
-import type { TToXalorArgs, ISolidRegistry } from '../models/types';
+// import type { TToXalorArgs, ISolidRegistry } from '../models/types';
 // import { XalethorService } from '../xalor-service';
 // import { isMetaData, markAsSolid } from '../utils';
 

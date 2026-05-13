@@ -1,12 +1,7 @@
 import type { TTripleKV, TPersistParams, TSolidShape } from '../models/types';
 import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-import {
-  serialize,
-  logDev,
-  EXTRACT_SHAPE_NORMALIZERS,
-  BUILD_SHAPE_INFLATORS,
-  ObjectUtils,
-} from '../utils';
+import { serialize, logDev, ObjectUtils } from '../utils';
+import { EXTRACT_SHAPE_NORMALIZERS, BUILD_SHAPE_INFLATORS } from '../mappers';
 import * as fs from 'fs';
 import * as path from 'path';
 import { XalethorVaultKeeper } from './vault-keeper';

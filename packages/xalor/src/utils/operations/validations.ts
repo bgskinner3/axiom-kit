@@ -4,7 +4,6 @@ import type {
   TTypeGuard,
   TAssert,
   TReturnValidationTools,
-  TRuleAuditorMapper,
 } from '../../models/types';
 import { makeAssert } from '../common';
 
@@ -19,12 +18,3 @@ export function buildValidationTools<
 
   return { guard, assert };
 }
-
-export const RULE_MATCHERS_MAPPER: TRuleAuditorMapper = [
-  [['missing', 'required'], 'missing_property'],
-  [['literal'], 'literal_mismatch'],
-  [['excess', 'stray'], 'excess_property'],
-  [['union'], 'union_exhausted'],
-  [['depth', 'overflow'], 'depth_overflow'],
-  [['intersection'], 'intersection_breached'],
-] satisfies TRuleAuditorMapper;

@@ -7,14 +7,6 @@ import type {
   TXalorAuditReport,
 } from './shared';
 
-// type TIsXalorModes = 'meta' | 'guard' | 'parse' | 'parseAsync';
-
-export type TToXalorArgs<K extends keyof ISolidRegistry> =
-  | { mode: 'default'; injectedKey: K; data?: never } // The "Zero-Value" Object
-  | { mode: 'mock'; injectedKey: K; data?: never } // Random/Realistic Data
-  | { mode: 'clone'; injectedKey: K; data: unknown } // Deep Clone + Strip extra keys
-  | { mode: 'cast'; injectedKey: K; data: unknown }; // Force-fix data to fit shape
-
 // ====================================================================
 // ====================================================================
 // VALIDATE XALOR API TYPES

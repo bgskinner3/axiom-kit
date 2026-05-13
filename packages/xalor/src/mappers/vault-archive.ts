@@ -3,8 +3,30 @@ import type {
   TShapeNormalizerMap,
   TSolidObjectRawShape,
   TShapeInflatorMap,
-} from '../../models/types';
-import { computeStringHash } from '../common';
+} from '../models/types';
+import { computeStringHash } from '../utils/common';
+
+/**
+ * ============================================================================
+ * BUILD-TIME ENCODE MAP: EXTRACT SHAPE NORMALIZERS
+ * ============================================================================
+ *
+ * ROLE:
+ * The "De-duplicator." Performs a recursive, content-addressable shredding pass
+ * during Stage 4 (Persist) to compress structural layouts before writing to disk.
+ *
+ * STRATEGY:
+ * - Targeted Shredding: Isolates 'object' schemas, replaces them with deterministically
+ *   hashed reference tokens ('sh_'), and pushes them flatly into the global database pool.
+ * - Value Inlining: Leaves scalars (primitives, literals) and wrappers (arrays, unions)
+ *   inline to eliminate empty reference token bloat and optimize downstream reads.
+ *
+ * WHY:
+ * Converts deep, redundant, object dependency trees into a highly compacted,
+ * single-instance structural grid—saving massive disk space across monorepos.
+ *
+ * @see XalethorVaultArchive.persist
+ */
 export const EXTRACT_SHAPE_NORMALIZERS: TShapeNormalizerMap = {
   object: (shape, flatPool, recurse) => {
     const normalizedProps: Record<string, TSolidObjectRawShape> = {};
@@ -56,7 +78,27 @@ export const EXTRACT_SHAPE_NORMALIZERS: TShapeNormalizerMap = {
   literal: (shape) => shape,
   reference: (shape) => shape,
 } satisfies TShapeNormalizerMap;
-
+/**
+ * ============================================================================
+ * RUNTIME DECODE MAP: BUILD SHAPE INFLATORS
+ * ============================================================================
+ *
+ * ROLE:
+ * The "Re-Assembler." Performs a single-pass inverse tree reconstruction on boot
+ * during Stage 5 (Hydrate) to expand flat hashes back into full memory definitions.
+ *
+ * STRATEGY:
+ * - Relational Expansion: Intercepts 'sh_' hash string indicators, jumps to the flat
+ *   database snapshot table, and embeds the structural object properties deep inside.
+ * - Nominal Isolation: Detects original compiler nominal fragments (like User$d10)
+ *   and allows them to bypass the map to maintain cross-fragment tracking for the Bouncer.
+ *
+ * WHY:
+ * Resolves the entire graph data matrix *prior* to inserting blueprints into memory.
+ * This ensures your validation runs carrying zero map-hopping lookup overhead.
+ *
+ * @see XalethorVaultArchive.hydrateFromGenesis
+ */
 export const BUILD_SHAPE_INFLATORS: TShapeInflatorMap = {
   reference: (shape, blueprintsPool, recurse) => {
     // If this reference name points to an internal content hash entry, jump and inflate it!

@@ -1,4 +1,4 @@
-import type { TTypeGuard, TAssert } from '../../models/types';
+import type { TTypeGuard, TAssert, TSolidShape } from '../../models/types';
 import { XalethorService } from '../../xalor-service';
 
 /**
@@ -73,28 +73,13 @@ export const makeAssert = <T>(
     assertValue(value, guard, message);
   };
 };
-// export const makeAssert = <T>(
-//   guard: TTypeGuard<T>,
-//   key: string,
-// ): TAssert<T> => {
-//   return (value: unknown): asserts value is T => {
-//     if (!guard(value)) {
-//       // 🚀 Instead of throwing generic Error, trigger your structured panic tool directly
-//       XalethorService.panic(key);
-//     }
-//   };
-// };
-// export const makeAssert = <T>(
-//   guard: TTypeGuard<T>,
-//   key: string,
-//   configuredMessage?: string, // 👈 Optional custom message added here
-// ): TAssert<T> => {
-//   const defaultMsg = `Validation failed for property: ${key}`;
 
-//   return (value: unknown, callSiteMessage?: string): asserts value is T => {
-//     if (!guard(value)) {
-//       // Priority: 1. Runtime Call Message -> 2. Configuration Message -> 3. Fallback Key Message
-//       throw new Error(callSiteMessage ?? configuredMessage ?? defaultMsg);
-//     }
-//   };
-// };
+// GENRATORS
+export const generateRandomString = (maxLength: number = 20): string => {
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ';
+  const length = Math.floor(Math.random() * Math.min(maxLength, 20)) + 5;
+  return Array.from({ length }, () =>
+    chars.charAt(Math.floor(Math.random() * chars.length)),
+  ).join('');
+};
