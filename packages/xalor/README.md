@@ -84,7 +84,7 @@ Your TypeScript types are the source of truth — everything else is generated f
 
 &nbsp;
 
-## The Solution
+## The Inversion
 
 Xalor closes the gap between compile-time and runtime by turning TypeScript types into persistent, executable metadata.
 
@@ -107,13 +107,57 @@ Write types once. Use them everywhere. Ship no duplicate validation layer.
 
 ## ⚡ Quick Start
 
+
+View the full installation and configration process 
+> LINK
+
+
 ---
 
-## Core API
+## 🧪 API Peek
+
+### `registerXalor` (The Registor)
+
+One gateway multiple ways to register types. Our Dyanmic overloaded methods wrap multiple ways to register types.
+
+By stright Type injection
+
+```ts
+
+```
+
+
+Or Just pass Your Whole Data Object
+
+```ts
+
+```
+
+Either way you register to the vault your type its pormised to be gloablly acessible and aviablbe to any other of our runtime APis
+
+### `validateXalor` (The Validator)
+
+The Swiss-Army knife of validation. Use it to check, assert, or parse data.
+
+```ts
+
+```
+
+All packed into one avaiible function and more!
+
+See all live apis and avioable and pending functionalities
+> LINK
+
 
 ---
 
 ## Features
+
+- list 3-4 current features ... examples ?
+
+
+View All
+> LINK
 
 ---
 
@@ -122,3 +166,4 @@ Write types once. Use them everywhere. Ship no duplicate validation layer.
 Examples
 Philosophy
 Deep Dive (Medium)
+LIcense
