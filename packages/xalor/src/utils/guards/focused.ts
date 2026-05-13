@@ -1,4 +1,10 @@
-import type { TSolidShape } from '../../models/types';
+import type {
+  TSolidShape,
+  TTypeGuard,
+  TSolidMetadata,
+} from '../../models/types';
+import { isObject, isKeyInObject } from './objects';
+import { isNull } from './primitives';
 /**
  * FOCUSED SHAPE GUARDS
  *
@@ -14,3 +20,25 @@ import type { TSolidShape } from '../../models/types';
 /* prettier-ignore */ export const isBrandedShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'branded' }> => s.kind === 'branded';
 /* prettier-ignore */ export const isIntersectionShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'intersection' }> => s.kind === 'intersection';
 /* prettier-ignore */ export const isReferenceShape = (s: TSolidShape): s is Extract<TSolidShape, { kind: 'reference' }> => s.kind === 'reference';
+
+/**
+ * 🛰️ IS METADATA
+ *
+ * ROLE:
+ * A structural check for the Xalor Miner's payload.
+ * This ensures that a call to isXalor() contains the necessary
+ * "DNA" (key, shape, area) before it is solidified in RAM.
+ *
+ * INVARIANTS:
+ * - Must verify the presence of 'key' and 'shape' (The minimal blueprint).
+ * - Must verify 'area' for Auditor traceability.
+ */
+export const isMetaData: TTypeGuard<TSolidMetadata> = (
+  val: unknown,
+): val is TSolidMetadata =>
+  !isNull(val) &&
+  isObject(val) &&
+  isKeyInObject('key')(val) &&
+  isKeyInObject('shape')(val) &&
+  isKeyInObject('area')(val) &&
+  isKeyInObject('version')(val);

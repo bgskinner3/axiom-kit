@@ -5,7 +5,7 @@ import type {
   TShapeCloneMapperMap,
 } from '../models/types';
 import { ObjectUtils } from '../utils/object-utils';
-import { generateRandomString } from '../utils/common';
+import { generateRandomString } from '../utils/transformers';
 import { isObject, isNull } from '../utils/guards';
 import { PRIMITIVE_DEFAULTS } from '../models/constants';
 import { XalethorVaultKeeper } from '../xalor-service/vault-keeper';
@@ -203,7 +203,7 @@ export const CLONE_SHAPE_SANITIZER_MAPPER: TShapeCloneMapperMap = {
         Reflect.has(blueprintProps, key) &&
         Reflect.has(data as object, key)
       ) {
-        const sourceValue = (data as any)[key];
+        const sourceValue = data[key];
         const metadata = blueprintProps[key];
 
         cleanObj[key] = recurse(sourceValue, metadata.shape, seen, depth + 1);

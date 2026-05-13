@@ -1,5 +1,4 @@
-import type { TTypeGuard, TAssert, TSolidShape } from '../../models/types';
-import { XalethorService } from '../../xalor-service';
+import type { TTypeGuard, TAssert } from '../../models/types';
 
 /**
  * Generates a rapid, zero-dependency 32-bit structural fingerprint from a raw string.
@@ -72,14 +71,4 @@ export const makeAssert = <T>(
   return (value: unknown, message?: string): asserts value is T => {
     assertValue(value, guard, message);
   };
-};
-
-// GENRATORS
-export const generateRandomString = (maxLength: number = 20): string => {
-  const chars =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ';
-  const length = Math.floor(Math.random() * Math.min(maxLength, 20)) + 5;
-  return Array.from({ length }, () =>
-    chars.charAt(Math.floor(Math.random() * chars.length)),
-  ).join('');
 };

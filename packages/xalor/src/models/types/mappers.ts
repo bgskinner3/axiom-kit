@@ -1,4 +1,8 @@
-import type { TSolidShape } from '../types';
+import type {
+  TSolidShape,
+  TStrictSolidMetaData,
+  TSolidMetadata,
+} from '../types';
 
 /**
  * TSHAPE_DEFAULT_MATERIALIZE_MAP
@@ -54,4 +58,21 @@ export type TShapeCloneMapperMap = {
     /* prettier-ignore */ depth: number,
     /* prettier-ignore */ recurse: (d: unknown, s: TSolidShape, seen: Map<unknown, unknown>, depth: number) => unknown,
   ) => unknown;
+};
+/**
+ * TRectifierRegistryMapper
+ *
+ * ROLE:
+ * The static type-system layout contract for the "Refiner" registry. It forces
+ * exhaustive, compile-time verified mapping signatures when upgrading raw
+ * metadata packets into high-definition, strict storage containers.
+ *
+ * @see RECTIFIER_REGISTRY
+ * @see preRegisterMetadata
+ * @see TStrictSolidMetaData
+ */
+export type TRectifierRegistryMapper = {
+  readonly [K in keyof TStrictSolidMetaData]: (
+    input: TSolidMetadata,
+  ) => TStrictSolidMetaData[K];
 };
