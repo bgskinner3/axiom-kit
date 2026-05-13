@@ -1,148 +1,124 @@
-<h1
-  style="
-    opacity:0;
-    position:absolute;
-    pointer-events:none;
-    user-select:none;
-  "
->
-  Xalor — TypeScript types that survive runtime
-</h1>
-
-<p
-  style="
-    opacity:0;
-    position:absolute;
-    pointer-events:none;
-    user-select:none;
-  "
->
-  Build-time constructed. Runtime executable.
-</p>
-
 <p align="center">
   <img
-    src="./assets/header.png"
+    src="./assets/xalor.png"
     alt="Xalor hero"
     width="100%"
   />
 </p>
 
+<div align="center">
 
-## 🧠 What is Xalor?
+  <a href="https://www.npmjs.com/package/@bgskinner2/xalor">
+    <img src="https://img.shields.io/npm/v/@bgskinner2/xalor.svg" />
+  </a>
 
-Xalor is a **Type-First** validation ecosystem. It eliminates the need for separate schema libraries (like Zod or Joi) by using a build-time **Transformer** to "mine" your existing TypeScript interfaces and inject them into a runtime **Vault**.
+  <a href="https://www.npmjs.com/package/@bgskinner2/xalor">
+    <img src="https://img.shields.io/npm/types/@bgskinner2/xalor.svg" />
+  </a>
 
-### ⚓ The Five Pillars of Xalor
+  <a href="https://github.com/YOUR_REPO/blob/main/LICENSE">
+    <img src="https://img.shields.io/npm/l/@bgskinner2/xalor.svg" />
+  </a>
 
-1. **The Miner**: A build-time transformer that reifies static types into JSON blueprints.
-2. **The Vault**: A high-performance Triple-KV memory store for your type DNA.
-3. **The Bridge**: An ambient Type Layer that gives you zero-import IDE autocomplete.
-4. **The Bouncer**: A recursive validation engine with built-in Depth-Bomb protection.
-5. **The Auditor**: A "Double-GPS" reporting system that links runtime failures back to source code.
+  <a href="https://bundlephobia.com/package/@bgskinner2/xalor">
+    <img src="https://img.shields.io/bundlephobia/minzip/@bgskinner2/xalor" />
+  </a>
 
----
+</div>
 
-## 🚨 The problem
+&nbsp;
 
-In most TypeScript applications:
-
-- Types exist only at compile time
-- Runtime validation requires separate schema systems (Zod, Joi, etc.)
-- This leads to duplication between:
-  - TypeScript interfaces
-  - validation schemas
-- Developers often bypass safety using `as Type`, leading to "type lying"
-
----
-
-## 🚨 The "Type Lying" Problem
-
-In standard TypeScript apps, types vanish at runtime. To stay safe, developers maintain duplicate schemas (Zod/Joi). When these get out of sync, or when developers resort to `as Type` casting, "Type Lying" occurs—where the compiler believes the data is safe, but the runtime crashes.
-
-**Xalor solves this by making your TypeScript interfaces the physical source of truth.**
+<p align="center">
+    📦  <a href="./docs/installation">Installation</a>
+  •
+  📖 <a href="./docs">Docs</a>
+  •
+  ⚙️ <a href="./docs">API Ref</a>
+</p>
 
 ---
 
-## ⚙️ The Lifecycle (Stage 1-5)
+&nbsp;
 
-### ⛏️ 1. Extraction (The Miner)
+<div align="center">
 
-During your build (Webpack/Vite/Rollup), Xalor scans your code for calls to `isXalor`. It extracts the generic type (e.g., `User`) and converts it into a structural blueprint.
+<p style="font-size:20px; max-width:700px;">
+“A build-time TypeScript engine that turns your native types into a live runtime validation and generation system — without duplicating schemas or shipping validation libraries.”
+</p>
 
-### 🗄️ 2. Persistence (The Bunker)
+</div>
 
-Extracted types are "shredded" into atomic fragments and saved to `node_modules/.cache/xalor`. This ensures your validation logic survives restarts and works across monorepo packages.
+&nbsp;
 
-### 🌉 3. Intellisense (The Ghost Bridge)
 
-Xalor generates an ambient declaration file (`solid-env.d.ts`). This allows your IDE to provide **full autocomplete** on string keys without you ever having to export or import a schema.
 
-### 🛡️ 4. Validation (The Bouncer)
+## The Runtime Gap
 
-At runtime, the engine compares incoming data against the Vault's blueprints.
+TypeScript gives you powerful types — but they disappear at runtime.
 
-- **Identity Law**: Prevents stack overflows on circular references.
-- **Depth Law**: Blocks "Depth Bomb" security attacks.
+That creates a hidden gap in modern applications:
 
----
+- Your API receives untrusted data with no built-in guarantee it matches your types
+- Validation is duplicated across schemas (Zod, io-ts, custom logic)
+- Types and runtime logic drift over time
+- Every layer of the system re-defines the same structure in different ways
 
-## 🧪 Core API
+The result is a fragmented system where TypeScript is “true at compile-time” — but optional at runtime.
 
-### `isXalor` (The Inspector)
+&nbsp;
 
-The Swiss-Army knife of validation. Use it to check, assert, or parse data.
 
-```typescript
-// 1. Boolean Guard (True/False)
-if (isXalor({ data, injectedKey: 'USER', mode: 'guard' })) {
-  console.log(data.name); // data is automatically narrowed!
-}
+<div align="center">
+  <div style="max-width: 600px; text-align: center;">
+Most validation libraries require you to redefine your types as schemas at runtime.
+<br/>
 
-// 2. Assertion (Throws on fail)
-isXalor({ data, injectedKey: 'USER', mode: 'assert' });
+**We invert this model:**
 
-// 3. Parser (Returns branded "Solid" data)
-const user = isXalor({ data, injectedKey: 'USER', mode: 'parse' });
-```
+<br/>
 
-### `toXalor` (The Architect)
+Your TypeScript types are the source of truth — everything else is generated from them at build-time.
 
-The generator counterpart used to materialize data from blueprints.
+  </div>
+</div>
 
-```typescript
-// Generate a valid "Zero-Value" object from an interface
-const newUser = toXalor({ injectedKey: 'USER', mode: 'default' });
+&nbsp;
 
-// Deep-clone and sanitize (strips properties not in the TS interface)
-const safeUser = toXalor({
-  data: rawApiData,
-  injectedKey: 'USER',
-  mode: 'clone',
-});
-```
+## The Solution
 
----
+Xalor closes the gap between compile-time and runtime by turning TypeScript types into persistent, executable metadata.
 
-## 🕵️‍♂️ The Auditor (Double-GPS Reporting)
+Instead of duplicating schemas or rebuilding validation logic, Xalor:
 
-When a validation fails, Xalor doesn't just say "Invalid." It provides a clickable trace:
+- Compiles native TypeScript types during build time
+- Stores them in a lightweight runtime vault
+- Uses a global registry to access them anywhere in the app
+- Generates validation, parsing, and data utilities from the same source of truth
 
-```bash
-[xalor] 🛑 SOLIDITY BREAK: "USER"
-  ❌ Path: $.profile.email
-     Expected: string (maxLength: 4096)
-     Received: number (123)
-     📍 Origin: src/models/User.ts:12:5  <-- Click to see the Type
-     ⚡ Failed: src/api/handler.ts:45:10 <-- Click to see the Data
-```
+This means your types don’t just describe your system — they _become the system at runtime_.
+
+Write types once. Use them everywhere. Ship no duplicate validation layer.
 
 ---
 
-## 🚄 Performance
-
-- **Zero Bundle Bloat**: Type metadata is injected only where used.
-- **Interning**: Identical sub-structures share the same memory reference.
-- **Bailout**: Build-time scout skips files that don't use Xalor, keeping builds fast.
+## Install
 
 ---
+
+## ⚡ Quick Start
+
+---
+
+## Core API
+
+---
+
+## Features
+
+---
+
+---
+
+Examples
+Philosophy
+Deep Dive (Medium)
