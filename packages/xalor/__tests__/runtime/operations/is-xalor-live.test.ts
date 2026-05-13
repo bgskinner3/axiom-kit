@@ -8,7 +8,7 @@
 //   });
 // });
 
-import '@bgskinner2/xalor/generated';
+// import '@bgskinner2/xalor/generated';
 import { registerXalor } from '@bgskinner2/xalor';
 // import { isXalor } from '../../../../src/operations';
 // import { Registry } from '../../../../src/vault';

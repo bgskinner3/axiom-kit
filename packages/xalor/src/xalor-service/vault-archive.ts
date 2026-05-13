@@ -110,7 +110,7 @@ export class XalethorVaultArchive {
       }
 
       // Resolve relative path pointers for the static templates bundled inside your npm package
-      /* prettier-ignore */ const templateBridgePath = path.join(__dirname,'../static-templates/solid-env.d.ts',);
+      /* prettier-ignore */ const templateBridgePath = path.join(__dirname,'../static-templates/solid-env.d.ts.template',);
       /* prettier-ignore */ const localBridgeFile = path.join(localCacheDir, 'solid-env.d.ts');
 
       // Physical file copy of the ghost bridge directly to disk

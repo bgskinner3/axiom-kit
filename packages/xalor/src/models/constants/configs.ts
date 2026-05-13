@@ -23,20 +23,21 @@ const SOLID_GLOBAL_KEYS = {
  * are suppressed to ensure a seamless developer experience.
  */
 const SOLID_EMITTER_KEYS = {
-  targetDir: './dist',
+  targetDir: './node_modules/.cache/xalor',
   fileName: 'solid-env.d.ts',
   // TODO: PUT BACK
-  moduleName: process.env.NODE_ENV !== 'test' ? '.' : '@bgskinner2/xalor',
+  moduleName: '@bgskinner2/xalor',
   banner: `/** 💎 SOLIDIFIED TYPE DATABASE (AUTO-GENERATED) */`,
   eslintDisabled: [
     '@typescript-eslint/no-unused-vars',
     '@typescript-eslint/no-explicit-any',
   ],
   imports: [
+    "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '@bgskinner2/xalor';",
     // "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
-    process.env.NODE_ENV !== 'test'
-      ? "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
-      : "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../../../../../dist';",
+    // process.env.NODE_ENV !== 'test'
+    //   ? "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
+    //   : "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../../../../../dist';",
   ],
 } as const;
 
@@ -55,7 +56,7 @@ export const XALOR_PATHS = {
 
   /** The IDE Bridge destination (The Ghost Layer) */
   // bridgeDir: 'src/.xalor',
-  bridgeDir: 'node_modules/@bgskinner2/xalor/dist/generated',
+  bridgeDir: 'node_modules/.cache/xalor',
 
   /** The filename for the ambient declarations */
   bridgeFile: 'solid-env.d.ts',

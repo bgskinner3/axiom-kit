@@ -1,3 +1,2 @@
-export * from './solidify-shape';
-export * from './validation-mapper';
+export * from './validate-shape';
 export * from './context';

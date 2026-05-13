@@ -25,24 +25,26 @@ import type { ISolidRegistry } from '../models/types';
  * - NO Disk persistence.
  */
 export class XalethorVaultGenerator {
-  public static getDefault<K extends keyof ISolidRegistry>(
+  private static requireShape<K extends keyof ISolidRegistry>(
     key: K,
-  ): ISolidRegistry[K] {
+    msg: string,
+  ) {
     const shape = XalethorVaultKeeper.peek('blueprint', key);
 
     if (!shape) {
-      // 🕵️‍♂️ Now passes the specific error message to the Auditor
-      XalethorVaultAuditor.panic(
-        key,
-        'Generation failed: Blueprint missing from Vault.',
-      );
+      XalethorVaultAuditor.panic(key, msg);
     }
+    return shape;
+  }
+  public static getDefault<K extends keyof ISolidRegistry>(
+    key: K,
+  ): ISolidRegistry[K] {
+    /* prettier-ignore */ const shape = 
+    this.requireShape( key, 'Generation failed: Blueprint missing from Vault.');
+
     const data = produceDefault(shape);
-    // 💎 Use the Type Guard to narrow 'unknown' to the Registry Type
-    // This removes the need for 'as any' entirely.
-    if (markAsSolid<K, ISolidRegistry[K]>(data)) {
-      return data;
-    }
+
+    if (markAsSolid<K, ISolidRegistry[K]>(data)) return data;
 
     throw new Error(`[xalor] Failed to brand default object for ${key}`);
   }
@@ -60,21 +62,12 @@ export class XalethorVaultGenerator {
   public static getMock<K extends keyof ISolidRegistry>(
     key: K,
   ): ISolidRegistry[K] {
-    const shape = XalethorVaultKeeper.peek('blueprint', key);
-
-    if (!shape) {
-      XalethorVaultAuditor.panic(
-        key,
-        'Mocking failed: Blueprint missing from Vault.',
-      );
-    }
+    /* prettier-ignore */ const shape = 
+    this.requireShape( key, 'Mocking failed: Blueprint missing from Vault.');
 
     const data = produceMock(shape);
 
-    // 💎 Bridge the 'unknown' data to the Branded Registry Type
-    if (markAsSolid<K, ISolidRegistry[K]>(data)) {
-      return data;
-    }
+    if (markAsSolid<K, ISolidRegistry[K]>(data)) return data;
 
     throw new Error(`[xalor] Failed to brand mock object for ${key}`);
   }
@@ -97,22 +90,12 @@ export class XalethorVaultGenerator {
     data: unknown,
     key: K,
   ): ISolidRegistry[K] {
-    const shape = XalethorVaultKeeper.peek('blueprint', key);
+    /* prettier-ignore */ const shape = 
+    this.requireShape( key, 'Cloning failed: Blueprint missing from Vault.');
 
-    if (!shape) {
-      XalethorVaultAuditor.panic(
-        key,
-        'Cloning failed: Blueprint missing from Vault.',
-      );
-    }
-
-    // 🛡️ Fresh 'seen' map for each top-level operation
     const cleanData = produceClone(data, shape, new Map());
 
-    // 💎 Bridge the 'unknown' data to the Branded Registry Type
-    if (markAsSolid<K, ISolidRegistry[K]>(cleanData)) {
-      return cleanData;
-    }
+    if (markAsSolid<K, ISolidRegistry[K]>(cleanData)) return cleanData;
 
     throw new Error(`[xalor] Failed to brand purified clone for ${key}`);
   }

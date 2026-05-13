@@ -49,24 +49,6 @@ export class XalethorVaultKeeper {
     this.vault.registry.set(key, { symbolName, typeName });
   }
 
-  // /** 📤 RETRIEVAL: Reconstructs the ghost-identity for the API */
-  // public static resolve(key: string): TStrictSolidMetaData | undefined {
-  //   const shape = this.vault.blueprints.get(key);
-  //   const manifest = this.vault.manifest.get(key);
-  //   const registry = this.vault.registry.get(key);
-
-  //   if (!shape || !manifest || !registry) return undefined;
-
-  //   return {
-  //     key,
-  //     shape,
-  //     area: manifest.area,
-  //     filePath: manifest.filePath,
-  //     symbolName: registry.symbolName,
-  //     typeName: registry.typeName,
-  //     version: this.solidVersion,
-  //   };
-  // }
   /**
    * 📤 RETRIEVAL: Reconstructs the ghost-identity for the public API
    * 🎯 UPDATED: Resilient to partial or missing metadata drawers.

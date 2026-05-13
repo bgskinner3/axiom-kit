@@ -1,5 +1,5 @@
 // __tests__/engine/validator.test.ts
-import { validateShape } from '../../src/validation/solidify-shape';
+import { validateShape } from '../../src/validation/validate-shape';
 import { XalethorVaultKeeper } from '../../src/xalor-service/vault-keeper';
 import { createInitialContext } from '../../src/validation/context';
 import type { TSolidShape } from '../../src/models/types';

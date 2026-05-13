@@ -68,6 +68,11 @@ export class XalethorService {
   ): ISolidRegistry[K] {
     return XalethorVaultGenerator.getDefault(key);
   }
+  // public static produceMock<K extends keyof ISolidRegistry>(
+  //   key: K,
+  // ): ISolidRegistry[K] {
+  //   return XalethorVaultGenerator.getMock(key);
+  // }
 }
 // public static has(key: string): boolean {
 //   return (

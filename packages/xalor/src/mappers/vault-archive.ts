@@ -1,8 +1,8 @@
 import type {
   TSolidShape,
-  TShapeNormalizerMap,
+  TShapeNormalizerMapper,
   TSolidObjectRawShape,
-  TShapeInflatorMap,
+  TShapeInflatorMapper,
 } from '../models/types';
 import { computeStringHash } from '../utils/common';
 
@@ -27,7 +27,7 @@ import { computeStringHash } from '../utils/common';
  *
  * @see XalethorVaultArchive.persist
  */
-export const EXTRACT_SHAPE_NORMALIZERS: TShapeNormalizerMap = {
+export const EXTRACT_SHAPE_NORMALIZERS: TShapeNormalizerMapper = {
   object: (shape, flatPool, recurse) => {
     const normalizedProps: Record<string, TSolidObjectRawShape> = {};
 
@@ -77,7 +77,7 @@ export const EXTRACT_SHAPE_NORMALIZERS: TShapeNormalizerMap = {
   primitive: (shape) => shape,
   literal: (shape) => shape,
   reference: (shape) => shape,
-} satisfies TShapeNormalizerMap;
+} satisfies TShapeNormalizerMapper;
 /**
  * ============================================================================
  * RUNTIME DECODE MAP: BUILD SHAPE INFLATORS
@@ -99,7 +99,7 @@ export const EXTRACT_SHAPE_NORMALIZERS: TShapeNormalizerMap = {
  *
  * @see XalethorVaultArchive.hydrateFromGenesis
  */
-export const BUILD_SHAPE_INFLATORS: TShapeInflatorMap = {
+export const BUILD_SHAPE_INFLATORS: TShapeInflatorMapper = {
   reference: (shape, blueprintsPool, recurse) => {
     // If this reference name points to an internal content hash entry, jump and inflate it!
     if (Reflect.has(blueprintsPool, shape.name)) {
@@ -125,7 +125,6 @@ export const BUILD_SHAPE_INFLATORS: TShapeInflatorMap = {
     return { ...shape, properties: inflatedProps };
   },
 
-  // 🛰️ THE PASS-THROUGH INFLATORS
   array: (shape, blueprintsPool, recurse) => ({
     ...shape,
     items: recurse(shape.items, blueprintsPool),
@@ -149,4 +148,4 @@ export const BUILD_SHAPE_INFLATORS: TShapeInflatorMap = {
   // 🛡️ STATIC LEAF NODES (Zero modifications)
   primitive: (shape) => shape,
   literal: (shape) => shape,
-} satisfies TShapeInflatorMap;
+} satisfies TShapeInflatorMapper;

@@ -2,7 +2,9 @@ import type {
   TSolidShape,
   TStrictSolidMetaData,
   TSolidMetadata,
-} from '../types';
+  TValidationContext,
+  TXalorRuleKind,
+} from './shared';
 
 /**
  * TSHAPE_DEFAULT_MATERIALIZE_MAP
@@ -49,7 +51,6 @@ export type TShapeMockMapperMap = {
  * @see CLONE_SHAPE_SANITIZER
  * @see produceClone
  */
-
 export type TShapeCloneMapperMap = {
   [K in TSolidShape['kind']]: (
     /* prettier-ignore */ shape: Extract<TSolidShape, { kind: K }>,
@@ -76,3 +77,61 @@ export type TRectifierRegistryMapper = {
     input: TSolidMetadata,
   ) => TStrictSolidMetaData[K];
 };
+/**
+ * TSHAPE_NORMALIZER_MAPPER
+ *
+ * ROLE:
+ * The static compiler-layer blueprint contract for the Banker Engine.
+ * Drives build-time Content-Addressable Storage (CAS) shredding by forcing
+ * exhaustive mapping routines to isolate, index, and deduplicate sub-properties.
+ */
+export type TShapeNormalizerMapper = {
+  [K in TSolidShape['kind']]: (
+    shape: Extract<TSolidShape, { kind: K }>,
+    flatPool: Record<string, TSolidShape>,
+    recurse: (s: TSolidShape, pool: Record<string, TSolidShape>) => TSolidShape,
+  ) => TSolidShape;
+};
+/**
+ * TSHAPE_INFLATOR_MAPPER
+ *
+ * ROLE:
+ * The static database de-serialization contract for Stage 5 (Hydration).
+ * Enforces strict dictionary compilation paths to expand content-addressable
+ * pointer strings recursively into inline execution graphs in active RAM.
+ */
+export type TShapeInflatorMapper = {
+  [K in TSolidShape['kind']]: (
+    shape: Extract<TSolidShape, { kind: K }>,
+    blueprintsPool: Record<string, TSolidShape>,
+    recurse: (s: TSolidShape, pool: Record<string, TSolidShape>) => TSolidShape,
+  ) => TSolidShape;
+};
+/**
+ * T_VALIDATOR_MAPPER
+ *
+ * ROLE:
+ * The static runtime constraint contract for Category 2 (Validation API).
+ * Maps incoming physical JSON data types instantly to their matching
+ * structural check signatures, guaranteeing sub-microsecond parsing traps.
+ */
+export type TValidatorMapper = {
+  [K in TSolidShape['kind']]: (
+    data: unknown,
+    shape: TSolidShape,
+    ctx: TValidationContext,
+  ) => boolean;
+};
+/**
+ * T_RULE_AUDITOR_MAPPER
+ *
+ * ROLE:
+ * The static compiler-layer validation matrix schema for the Diagnostic Engine.
+ * Enforces strict structural typing bounds on rule classification mappings,
+ * ensuring dictionary arrays map token match buckets to concrete category enums.
+ *
+ * DESIGN:
+ * Leverages a dual-tuple multi-dimensional readonly design format to enforce
+ * static evaluation safety across deep parsing translation runs.
+ */
+export type TRuleAuditorMapper = readonly [readonly string[], TXalorRuleKind][];

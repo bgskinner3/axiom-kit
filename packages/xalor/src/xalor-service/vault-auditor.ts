@@ -98,7 +98,6 @@ export class XalethorVaultAuditor {
         keywords.some((keyword) => msg.includes(keyword)),
       );
 
-      // 3. Fallback evaluation via nullish coalescing
       const rule: TXalorRuleKind = matched ? matched[1] : 'primitive_mismatch';
 
       return {

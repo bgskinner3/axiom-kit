@@ -1,5 +1,5 @@
 // src/validation/validators.ts
-import { validateShape } from './solidify-shape';
+import { validateShape } from './validate-shape';
 import type {
   TSolidArrayShape,
   TValidationContext,

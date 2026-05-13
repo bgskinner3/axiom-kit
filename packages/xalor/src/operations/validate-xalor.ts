@@ -102,18 +102,3 @@ export function validateXalor<
 
   return VALIDATOR_MODES[mode](data, injectedKey);
 }
-
-// ## 🛡️ Category 2: Validation API (The Bouncer Core)
-
-// **Role:**
-// The execution switches used to inspect, verify, and brand incoming payloads synchronously at runtime.
-
-// ### Current Implementations
-
-// ### Future Enterprise Additions
-
-// - `isXalor({ mode: 'guardMany', data: unknown[] })`
-//   High-throughput bulk validator that processes whole arrays using internal looping optimizations, returning a comprehensive validation ledger.
-
-// - `isXalor({ mode: 'stream', pipeline })`
-//   Node stream or Web stream transformer that performs chunk-by-chunk schema validation on incoming raw data packets (e.g., file uploads, server-sent events).

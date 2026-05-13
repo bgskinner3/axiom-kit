@@ -1,11 +1,11 @@
 import type { ISolidRegistry } from './definitions';
-import type {
-  TTypeGuard,
-  TAssert,
-  TXalorRuleKind,
-  TSolidBranded,
-  TXalorAuditReport,
-} from './shared';
+import type { TTypeGuard, TSolidBranded, TXalorAuditReport } from './shared';
+
+// ====================================================================
+// ====================================================================
+// GENERATOR XALOR API TYPES
+// ====================================================================
+// ====================================================================
 
 // ====================================================================
 // ====================================================================
@@ -38,12 +38,3 @@ export type TTValidateStrategyEngine<K extends keyof ISolidRegistry> = {
     key: K,
   ) => TValidateXalorResultMap<K>[Mode];
 };
-
-// HELPERS
-
-export type TReturnValidationTools<K extends keyof ISolidRegistry> = {
-  guard: TTypeGuard<ISolidRegistry[K]>;
-  assert: TAssert<ISolidRegistry[K]>;
-};
-
-export type TRuleAuditorMapper = readonly [readonly string[], TXalorRuleKind][];

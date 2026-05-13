@@ -1,4 +1,3 @@
-// src/validation/validation-mapper.ts
 import {
   validateArray,
   validateReference,
@@ -7,7 +6,7 @@ import {
   validateObject,
   validatePrimitive,
   validateLiteral,
-} from './validators';
+} from '../validation/validators';
 import type { TValidatorMapper } from '../models/types';
 import {
   isPrimitiveShape,
@@ -19,9 +18,9 @@ import {
   isUnionShape,
   isReferenceShape,
 } from '../utils/guards';
-import { validateShape } from './solidify-shape';
+import { validateShape } from '../validation/validate-shape';
 /**
- * 💎 VALIDATOR MAPPING TABLE
+ * 💎 SHAPE_VALIDATION_MAPPER MAPPING TABLE
  *
  * A specialized lookup table that maps Shape Kinds to their execution logic.
  *
@@ -30,7 +29,7 @@ import { validateShape } from './solidify-shape';
  * - Governed by COMMANDMENT VIII: Internal Efficiency (Static lookup).
  * - ZERO 'as' casts. ZERO 'any' usage.
  */
-export const VALIDATORS: TValidatorMapper = {
+export const SHAPE_VALIDATION_MAPPER: TValidatorMapper = {
   primitive: (data, shape, ctx) => {
     if (!isPrimitiveShape(shape)) return false;
     return validatePrimitive(data, shape, ctx);

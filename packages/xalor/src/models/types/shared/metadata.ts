@@ -1,5 +1,6 @@
 import type { TSolidShape } from './blueprints';
 import { IS_SOLID_SHAPE_KINDS_CONFIG } from '../../constants';
+import type { TSolidError } from './vault';
 /**
  * 🛰️ TSOLID METADATA
  * The master transport object for type DNA.
@@ -66,3 +67,25 @@ export type TVaultSyncPayload = {
  * The exhaustive list of supported type categories in the Solid system.
  */
 export type TSolidShapeKinds = keyof typeof IS_SOLID_SHAPE_KINDS_CONFIG;
+
+/**
+ * 🛰️ TVALIDATION_CONTEXT
+ *
+ * ROLE:
+ * The live state tracker for Category 2 (Validation API) execution passes.
+ * Collects structural errors linearly, manages real-time nested path tracking,
+ * and implements graph safety limits to enforce memory boundary thresholds.
+ *
+ * STRATEGY:
+ * - Cyclic Memory Guard: Uses the 'seen' Map to track evaluated object references
+ *   against structural schemas, short-circuiting infinite loops on graph loops.
+ * - Flat Diagnostics Array: Gathers violation issues synchronously, avoiding complex
+ *   exception state jumps to preserve sub-microsecond validation speeds.
+ */
+export type TValidationContext = {
+  seen: Map<unknown, Set<TSolidShape>>;
+  path: string;
+  errors: TSolidError[];
+  currentKey?: string;
+  depth: number;
+};
