@@ -135,3 +135,32 @@ export type TValidatorMapper = {
  * static evaluation safety across deep parsing translation runs.
  */
 export type TRuleAuditorMapper = readonly [readonly string[], TXalorRuleKind][];
+
+/**
+ * 🎛️ TSHAPE_CAST_MAPPER_MAP
+ *
+ * ROLE:
+ * The static type-system structural graph contract for the Coercion Engine.
+ * Enforces exhaustive mapping signatures when safely coercing loose runtime
+ * payloads into the exact primitive or structural types demanded by the blueprint.
+ */
+export type TShapeCastMapperMapper = {
+  [K in TSolidShape['kind']]: (
+    shape: Extract<TSolidShape, { kind: K }>,
+    data: unknown,
+    depth: number,
+    recurse: (shape: TSolidShape, data: unknown, depth: number) => unknown,
+  ) => unknown;
+};
+type TPrimitiveTypeMap = {
+  string: string;
+  number: number;
+  boolean: boolean;
+  bigint: bigint;
+  unknown: unknown;
+};
+export type TCastingPrimitiveMapper = {
+  [K in keyof TPrimitiveTypeMap]: (
+    data: unknown,
+  ) => TPrimitiveTypeMap[K] | unknown;
+};

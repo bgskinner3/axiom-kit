@@ -3,6 +3,7 @@ import type {
   TPersistParams,
   ISolidRegistry,
   TSolidError,
+  TSolidBranded,
 } from '../models/types';
 import { XalethorVaultKeeper } from './vault-keeper';
 import { XalethorVaultValidator } from './vault-validator';
@@ -65,14 +66,26 @@ export class XalethorService {
   // ============================================================
   public static produceDefault<K extends keyof ISolidRegistry>(
     key: K,
-  ): ISolidRegistry[K] {
+  ): TSolidBranded<K, ISolidRegistry[K]> {
     return XalethorVaultGenerator.getDefault(key);
   }
-  // public static produceMock<K extends keyof ISolidRegistry>(
-  //   key: K,
-  // ): ISolidRegistry[K] {
-  //   return XalethorVaultGenerator.getMock(key);
-  // }
+  public static produceMock<K extends keyof ISolidRegistry>(
+    key: K,
+  ): TSolidBranded<K, ISolidRegistry[K]> {
+    return XalethorVaultGenerator.getMock(key);
+  }
+  public static produceClone<K extends keyof ISolidRegistry>(
+    data: unknown,
+    key: K,
+  ): TSolidBranded<K, ISolidRegistry[K]> {
+    return XalethorVaultGenerator.getClone(data, key);
+  }
+  public static produceCast<K extends keyof ISolidRegistry>(
+    data: unknown,
+    key: K,
+  ): TSolidBranded<K, ISolidRegistry[K]> {
+    return XalethorVaultGenerator.getCast(data, key);
+  }
 }
 // public static has(key: string): boolean {
 //   return (

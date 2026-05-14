@@ -7,6 +7,24 @@ import type { TTypeGuard, TSolidBranded, TXalorAuditReport } from './shared';
 // ====================================================================
 // ====================================================================
 
+export type TGenerateXalorModes = 'default' | 'mock' | 'clone' | 'cast';
+export type TGenerateXalorResultMap<K extends keyof ISolidRegistry> = {
+  default: TSolidBranded<K, ISolidRegistry[K]>;
+  mock: TSolidBranded<K, ISolidRegistry[K]>;
+  clone: TSolidBranded<K, ISolidRegistry[K]>;
+  cast: TSolidBranded<K, ISolidRegistry[K]>;
+};
+export type TGenerateXalorStrategyEngine<K extends keyof ISolidRegistry> = {
+  readonly [P in TGenerateXalorModes]: (
+    k: K,
+    d: unknown,
+  ) => TGenerateXalorResultMap<K>[P];
+};
+export type TGenerateXalorReturn<
+  K extends keyof ISolidRegistry,
+  M extends TGenerateXalorModes,
+> = TGenerateXalorResultMap<K>[M];
+
 // ====================================================================
 // ====================================================================
 // VALIDATE XALOR API TYPES
@@ -38,3 +56,15 @@ export type TTValidateStrategyEngine<K extends keyof ISolidRegistry> = {
     key: K,
   ) => TValidateXalorResultMap<K>[Mode];
 };
+
+// ====================================================================
+// ====================================================================
+// TRANSFORM XALOR API TYPES
+// ====================================================================
+// ====================================================================
+
+// ====================================================================
+// ====================================================================
+// Build XALOR API TYPES
+// ====================================================================
+// ====================================================================

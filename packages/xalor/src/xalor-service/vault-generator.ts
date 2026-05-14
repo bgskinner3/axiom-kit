@@ -5,8 +5,9 @@ import {
   markAsSolid,
   produceMock,
   produceClone,
+  produceCast,
 } from '../utils';
-import type { ISolidRegistry } from '../models/types';
+import type { ISolidRegistry, TSolidBranded } from '../models/types';
 /**
  * XALETHOR VAULT GENERATOR
  *
@@ -38,7 +39,7 @@ export class XalethorVaultGenerator {
   }
   public static getDefault<K extends keyof ISolidRegistry>(
     key: K,
-  ): ISolidRegistry[K] {
+  ): TSolidBranded<K, ISolidRegistry[K]> {
     /* prettier-ignore */ const shape = 
     this.requireShape( key, 'Generation failed: Blueprint missing from Vault.');
 
@@ -89,7 +90,7 @@ export class XalethorVaultGenerator {
   public static getClone<K extends keyof ISolidRegistry>(
     data: unknown,
     key: K,
-  ): ISolidRegistry[K] {
+  ): TSolidBranded<K, ISolidRegistry[K]> {
     /* prettier-ignore */ const shape = 
     this.requireShape( key, 'Cloning failed: Blueprint missing from Vault.');
 
@@ -99,5 +100,36 @@ export class XalethorVaultGenerator {
 
     throw new Error(`[xalor] Failed to brand purified clone for ${key}`);
   }
-  // public static getCast() {}
+  /**
+   * 🧹 GET_CAST
+   *
+   * ROLE:
+   * Coerces loose runtime input payloads into the exact structural and
+   * primitive types demanded by your type blueprint contracts.
+   * (e.g., safely turning the string "123" into the primitive number 123).
+   *
+   * STRATEGY:
+   * Resolves the target configuration blueprint, pipes execution into the
+   * exhaustive O(1) casting dictionary, and applies a protective nominal brand tag.
+   */
+  public static getCast<K extends keyof ISolidRegistry>(
+    data: unknown,
+    key: K,
+  ): TSolidBranded<K, ISolidRegistry[K]> {
+    // 1. Fetch the mandatory schema contract boundary from the active vault
+    /* prettier-ignore */
+    const shape = this.requireShape(key, 'Coercion failed: Blueprint missing from Vault.');
+
+    // 2. Route the loose data payload down into the recursive casting generator
+    const castedData = produceCast(shape, data);
+
+    // 3. 🚀 Apply nominal brand tagging to seal type safety securely
+    if (markAsSolid<K, ISolidRegistry[K]>(castedData)) {
+      return castedData;
+    }
+
+    throw new Error(
+      `[xalor] Failed to brand coerced data layout container for key: ${key}`,
+    );
+  }
 }

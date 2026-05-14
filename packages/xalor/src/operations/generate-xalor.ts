@@ -1,98 +1,102 @@
-// import { XalethorService } from '../xalor-service';
-// import type {
-//   ISolidRegistry,
-//   TSolidBranded,
-//   TTypeGuard,
-// } from '../models/types';
-// export type TGenerateXalorModes = 'default' | 'mock' | 'clone' | 'cast';
+import { XalethorService } from '../xalor-service';
+import type {
+  ISolidRegistry,
+  TSolidBranded,
+  TGenerateXalorReturn,
+  TGenerateXalorStrategyEngine,
+  TGenerateXalorModes,
+} from '../models/types';
 
-// export function generateXalor<
-//   K extends keyof ISolidRegistry,
-//   _M extends 'default',
-// >(data: unknown, injectedKey: K, mode: _M): void;
-// export function generateXalor<
-//   K extends keyof ISolidRegistry,
-//   _M extends 'mock',
-// >(data: unknown, injectedKey: K, mode: _M): void;
-// export function generateXalor<
-//   K extends keyof ISolidRegistry,
-//   _M extends 'clone',
-// >(data: unknown, injectedKey: K, mode: _M): void;
-// export function generateXalor<
-//   K extends keyof ISolidRegistry,
-//   _M extends 'cast',
-// >(data: unknown, injectedKey: K, mode: _M): void;
+export function generateXalor<
+  K extends keyof ISolidRegistry,
+  M extends 'default',
+>(key: K, mode: M): TSolidBranded<K, ISolidRegistry[K]>;
+export function generateXalor<K extends keyof ISolidRegistry, M extends 'mock'>(
+  key: K,
+  mode: M,
+): TSolidBranded<K, ISolidRegistry[K]>;
 
-// import type { TToXalorArgs, ISolidRegistry } from '../models/types';
-// import { XalethorService } from '../xalor-service';
-// import { isMetaData, markAsSolid } from '../utils';
+// --- OVERLOAD 3: THE PURIFIED CLONE STRUCT (Requires Data) ---
+export function generateXalor<
+  K extends keyof ISolidRegistry,
+  M extends 'clone',
+>(key: K, mode: M, data: unknown): TSolidBranded<K, ISolidRegistry[K]>;
 
-// /** VII. DEFAULT */
-// export function toXalor<K extends keyof ISolidRegistry>(
-//   params: { mode: 'default', injectedKey: K }
-// ): ISolidRegistry[K];
+// --- OVERLOAD 4: THE SYMMETRIC COERCION CAST (Requires Data) ---
+export function generateXalor<K extends keyof ISolidRegistry, M extends 'cast'>(
+  key: K,
+  mode: M,
+  data: unknown,
+): TSolidBranded<K, ISolidRegistry[K]>;
 
-// /** VIII. MOCK */
-// export function toXalor<K extends keyof ISolidRegistry>(
-//   params: { mode: 'mock', injectedKey: K }
-// ): ISolidRegistry[K];
+// --- CONSOLIDATED IMPLEMENTATION GATEWAY ---
+// By rearranging positional parameters to (key, mode, data?), the signatures
+// stack with mathematical precision. Users get crisp, clean autocomplete profiles.
+export function generateXalor<
+  K extends keyof ISolidRegistry,
+  M extends TGenerateXalorModes,
+>(key: K, mode: M, data?: unknown): TGenerateXalorReturn<K, M> {
+  if (!key || !mode) {
+    throw new Error(
+      `[xalor] 🚨 GATEWAY BLOCK: 'generateXalor' executed without compiled metadata properties.\n` +
+        `Ensure your build-time transformer plugin is active.`,
+    );
+  }
+  const GENERATOR_MODES: TGenerateXalorStrategyEngine<K> = {
+    default: (k) => XalethorService.produceDefault(k),
 
-// /** IX. CLONE / SCRUB */
-// export function toXalor<K extends keyof ISolidRegistry>(
-//   params: { mode: 'clone', injectedKey: K, data: unknown }
-// ): ISolidRegistry[K];
+    mock: (k) => XalethorService.produceMock(k),
 
-// # 🧠 construction
+    clone: (k, d) => XalethorService.produceClone(d, k),
 
-// ### What it represents:
+    cast: (k, d) => XalethorService.produceCast(d, k),
+  } satisfies TGenerateXalorStrategyEngine<K>;
 
-// Generated outputs derived from type definitions.
+  return GENERATOR_MODES[mode](key, data);
+}
 
-// ### Must contain ONLY:
-
-// - `getSolidDefault`
-
-// ### Future additions:
-
-// - `getSolidMock`
-// - `getSolidSchema`
-
-// ### Responsibility:
-
-// - Convert type metadata into usable runtime objects
-// - Provide zero-value or synthetic data structures
-
-// ### Do NOT include:
-
-// - validation logic
-// - registry access logic
-// - mutation or state management
-//   export function getSolid(key: string): TSolidMetadata | undefined {
-//   return Registry.get(key);
-//   }
 // ## 🏗️ Category 3: Generator API (The Factory Layer)
 
 // **Role:**
-// The generative framework used to construct new objects or reshape existing data to structurally align with a specified blueprint.
-
-// ### Current Implementations
-
-// - `toXalor({ mode: 'default', ... })`
-//   Materializes a fresh "Zero-State" object utilizing primitive default values based on required fields.
-
-// - `toXalor({ mode: 'mock', ... })`
-//   Materializes stochastic (randomized) data that respects blueprint limits (`maxLength`, union choices) for UI testing and load testing.
-
-// - `toXalor({ mode: 'clone', ... })`
-//   Deep-copies data safely using your circularity protection seen map while physically scrubbing away properties missing from the TypeScript interface.
-
-// - `toXalor({ mode: 'cast', ... })`
-//   Coerces loose data into valid types (e.g., safely turning the string `"123"` into the number `123` if the blueprint demands it).
 
 // ### Future Enterprise Additions
 
-// - `toXalor({ mode: 'template', baselineData })`
+// - `generateXalor({ mode: 'template', baselineData })`
 //   Merges user properties into a type-safe template, injecting required defaults if values are omitted.
 
-// - `toXalor({ mode: 'fixture', seed })`
+// - `generateXalor({ mode: 'fixture', seed })`
 //   Deterministic mock generation where providing a specific seed returns the exact same dataset every time—critical for reliable unit testing graphs.
+
+/**
+ * Future Enterprise Additions: generateXalor
+ *    `generateXalor({ mode: 'template', baselineData })`
+ * I. The Template Core Engine (mode: 'template')
+ *   - What It Is: An intelligent configuration merger that fuses incoming user payloads with your blueprint’s default structure.
+ *      It acts as a defensive hydration filter, ensuring partial data states are instantly built out into valid, complete object
+ *      records before they reach your system backend layers
+ *   - What It Does: When a developer inputs an incomplete data object, the template engine captures the payload and scans the type layout.
+ *     Instead of failing validation or throwing missing property flags, it preserves the user's explicit values and automatically injects
+ *     type-safe, required zero-state defaults into any omitted properties
+ *   - Operational Mechanism: Under the hood, it passes your data through the casting engine (getCast) to massage string variables, calls the
+ *     default materializer (getDefault) to generate a clean skeleton layer, and flatly spreads them together ({ ...defaults, ...userInput })
+ *     into a fully compliant structural record.
+ *   - Use Cases
+ *     - Under the hood, it passes your data through the casting engine (getCast) to massage string variables, calls the default materializer (getDefault) to generate a clean skeleton layer, and flatly spreads them together ({ ...defaults, ...userInput }) into a fully compliant structural record.
+ *.    - Form State Hydration: Initializing complex multi-step settings panels where the database passes an incomplete or fresh profile object that must be built out into a complete skeleton map immediately on the client side.
+     
+      `generateXalor({ mode: 'fixture', seed })`  
+ * II .The Deterministic Test Fixture (mode: 'fixture')
+ *   - What It Is: A seedable simulation engine that upgrades random mock generation into a reproducible data pipeline. It removes
+ *     volatile entropy from your testing code while still outputting complex structural payloads
+ *   - What It Does: Standard random mock generation (mode: 'mock') is excellent for fast UI prototyping, but it introduces non-deterministic
+ *     text strings and floats that destroy testing stability. The fixture engine replaces the native Math.random() utility inside your mock
+ *     drawers with an isolated Pseudo-Random Number Generator (PRNG) Seed Core. Providing a specific number seed forces the engine to
+ *     emit the exact same line-precise strings, values, and array collection trees on every single execution run
+ *   - Operational Mechanism: The generator tracks a thread-safe mathematical seed iteration counter down your recursive shape mappers.
+ *    Passing seed 12345 always outputs user "Alice" with age 28; passing seed 67890 always yields user "Bob" with age 42 across any
+ *    local or remote operating machine.
+ *   - Use Cases
+ *     - Reliable Integration Testing: Generating vast mock database states for local unit-testing matrices where assert statements require predictable values to ensure test logs never become flaky.
+ *     - Deterministic Front-End Snapshots: Driving headless UI snapshot tests (such as Jest or Playwright runs) where a single layout variation in a random string length would otherwise cause visual tests to trigger false alerts.
+ *
+ */

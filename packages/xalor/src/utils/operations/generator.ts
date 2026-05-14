@@ -4,6 +4,7 @@ import {
   DEFAULT_SHAPE_MATERIALIZER,
   MOCK_SHAPE_MATERIALIZER,
   CLONE_SHAPE_SANITIZER_MAPPER,
+  CAST_SHAPE_MAPPER,
 } from '../../mappers';
 // TODO: add proper return type for mocks, default clones ...
 /**
@@ -13,9 +14,7 @@ import {
  */
 export function produceDefault(shape: TSolidShape, depth = 0): unknown {
   // 🛑 THE EMERGENCY BRAKE: Protects thread from cyclic execution crashes
-  if (depth >= IS_SOLID_CONFIG_ITEMS.reifyLimit.maxDepth) {
-    return null;
-  }
+  if (depth >= IS_SOLID_CONFIG_ITEMS.reifyLimit.maxDepth) return null;
 
   if (!shape) return undefined;
 
@@ -46,9 +45,7 @@ export function produceDefault(shape: TSolidShape, depth = 0): unknown {
  */
 export function produceMock(shape: TSolidShape, depth = 0): unknown {
   // 🛑 THE EMERGENCY BRAKE: Protects thread from cyclic execution crashes
-  if (depth >= IS_SOLID_CONFIG_ITEMS.reifyLimit.maxDepth) {
-    return null;
-  }
+  if (depth >= IS_SOLID_CONFIG_ITEMS.reifyLimit.maxDepth) return null;
 
   if (!shape) return undefined;
 
@@ -110,4 +107,37 @@ export function produceClone(
   };
 
   return executeCloneSanitizer(shape.kind, shape);
+}
+/**
+ * 🧹 PRODUCE CAST
+ *
+ * ROLE:
+ * Coerces loose runtime data values cleanly into the exact structural and
+ * primitive types demanded by your type blueprint contracts.
+ *
+ * LAW: Zero 'any', Zero type assertions ('as'), and Zero 'switch' blocks.
+ */
+export function produceCast(
+  shape: TSolidShape,
+  data: unknown,
+  depth = 0,
+): unknown {
+  // 🛑 THE EMERGENCY BRAKE: Protects execution threads from cyclic graph recursion crashes
+  if (depth >= IS_SOLID_CONFIG_ITEMS.reifyLimit.maxDepth) {
+    return data; // Safe fallback to raw loose input if depth threshold is blown
+  }
+  if (!shape) return data;
+
+  // 🎯 THE TYPE-SAFE DISPATCHER
+  // Captures the configuration kind as a distinct generic constituent K,
+  // mapping parameters perfectly to the corresponding map worker function.
+  const executeCastMaterializer = <K extends TSolidShape['kind']>(
+    kind: K,
+    targetShape: Extract<TSolidShape, { kind: K }>,
+  ): unknown => {
+    const caster = CAST_SHAPE_MAPPER[kind];
+    return caster(targetShape, data, depth, produceCast);
+  };
+
+  return executeCastMaterializer(shape.kind, shape);
 }

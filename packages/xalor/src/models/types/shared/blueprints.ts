@@ -1,3 +1,10 @@
+export type TSolidShapePrimitiveKeys =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'bigint'
+  | 'unknown';
+
 /**
  * 💎 TSOLID SHAPE
  *
@@ -9,7 +16,7 @@
  * structural checks at runtime.
  */
 export type TSolidShape =
-  | /* prettier-ignore */ { kind: 'primitive'; type: 'string' | 'number' | 'boolean' | 'bigint' | 'unknown'; }
+  | /* prettier-ignore */ { kind: 'primitive'; type: TSolidShapePrimitiveKeys }
   | /* prettier-ignore */ { kind: 'literal'; value: string | number | boolean }
   | /* prettier-ignore */ { kind: 'union'; values: TSolidShape[] }
   | /* prettier-ignore */ { kind: 'intersection'; parts: TSolidShape[] }
