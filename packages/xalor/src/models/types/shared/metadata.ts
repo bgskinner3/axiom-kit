@@ -1,5 +1,9 @@
 import type { TSolidShape } from './blueprints';
-import { IS_SOLID_SHAPE_KINDS_CONFIG } from '../../constants';
+import {
+  IS_SOLID_SHAPE_KINDS_CONFIG,
+  IS_SOLID_CONFIG_ITEMS,
+  SENTRY_TRIGGER_NAMES,
+} from '../../constants';
 import type { TSolidError } from './vault';
 /**
  * 🛰️ TSOLID METADATA
@@ -39,9 +43,13 @@ export type TStrictSolidMetaData = {
  * 💎 TSOLID BRANDED
  * A nominal type wrapper that "seals" validated data.
  */
-declare const SolidBrand: unique symbol;
+// declare const SolidBrand: unique symbol;
+// export type TSolidBranded<K extends string, T> = T & {
+//   readonly [SolidBrand]: K;
+// };
+
 export type TSolidBranded<K extends string, T> = T & {
-  readonly [SolidBrand]: K;
+  readonly [IS_SOLID_CONFIG_ITEMS.solidBrandKey]: K;
 };
 
 /**
@@ -89,3 +97,8 @@ export type TValidationContext = {
   currentKey?: string;
   depth: number;
 };
+
+/**
+ * API TRIGGER NAMES
+ */
+export type TSentryTriggerName = (typeof SENTRY_TRIGGER_NAMES)[number];

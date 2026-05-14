@@ -1,6 +1,6 @@
 // models/guards/transformer/nodes.ts
 import ts from 'typescript';
-import { SENTRY_TRIGGER_NAMES } from '../../src/operations';
+import { SENTRY_TRIGGER_NAMES } from '../../src/models/constants/configs';
 /**
  * # IS SOLID CALL #####
  * Identifies the 'isSolid' function call within the AST.

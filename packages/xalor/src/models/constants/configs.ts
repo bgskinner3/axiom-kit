@@ -1,4 +1,3 @@
-// import { SENTRY_TRIGGER_NAMES } from '../../operations';
 /**
  * 🔑 CORE GLOBAL KEYS
  *
@@ -10,6 +9,8 @@
 const SOLID_GLOBAL_KEYS = {
   solidVaultKey: '__SOLID_VAULT__',
   solidVersion: '1.0.0',
+  //
+  solidBrandKey: '__xalorBrand',
 } as const;
 
 /**
@@ -99,3 +100,22 @@ export const IS_SOLID_CONFIG_ITEMS = {
     ...REIFY_DEPTH_LENGTH_SIZE_LIMITS,
   },
 } as const;
+
+/**
+ * SENTRY_TRIGGER_NAMES
+ *
+ * ROLE:
+ * The primary identifier matrix used by the compiler's static analysis layer.
+ * These string literals represent the exact public API macro entry points.
+ *
+ * STRATEGY:
+ * - High-Velocity Screening: Used by the Scout Pass (`shouldProcessFile`) to
+ *   perform rapid string token scans before running recursive AST visitors.
+ * - Toolchain Synchronization: Ensures that any module invoking these runtime
+ *   functions is intercepted, mined, and compiled into the CAS database cache.
+ */
+export const SENTRY_TRIGGER_NAMES = [
+  'registerXalor',
+  // 'validateXalor',
+  // 'generateXalor',
+] as const;

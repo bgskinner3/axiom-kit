@@ -10,7 +10,7 @@ import type {
 export function generateXalor<
   K extends keyof ISolidRegistry,
   M extends 'default',
->(key: K, mode: M): TSolidBranded<K, ISolidRegistry[K]>;
+>(key?: K, mode?: M): TSolidBranded<K, ISolidRegistry[K]>;
 export function generateXalor<K extends keyof ISolidRegistry, M extends 'mock'>(
   key: K,
   mode: M,
@@ -31,7 +31,8 @@ export function generateXalor<K extends keyof ISolidRegistry, M extends 'cast'>(
 export function generateXalor<
   K extends keyof ISolidRegistry,
   M extends TGenerateXalorModes,
->(key: K, mode: M, data?: unknown): TGenerateXalorReturn<K, M> {
+>(key?: K, mode?: M, data?: unknown): TGenerateXalorReturn<K, M> {
+  console.log(key, mode, 'HERE');
   if (!key || !mode) {
     throw new Error(
       `[xalor] 🚨 GATEWAY BLOCK: 'generateXalor' executed without compiled metadata properties.\n` +

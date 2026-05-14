@@ -77,3 +77,36 @@ export const isKeyInObject =
   <K extends PropertyKey>(key: K) =>
   (obj: unknown): obj is Record<K, unknown> =>
     isObject(obj) && key in obj;
+/**
+ * @utilType Guard
+ * @name isKeyOfArray
+ * @category Guards Core
+ * @description Validates if a primitive value exists within a specific readonly array of allowed keys.
+ * @link #iskeyofarray
+ *
+ * ## 🧩 isKeyOfArray — Type Guard for Allowed Primitive Keys
+ *
+ * ### 📘 Example Usage
+ * ```ts
+ * const allowedKeys = ['id', 'name', 'age'] as const;
+ * const key: unknown = 'name';
+ *
+ * if (isKeyOfArray(allowedKeys)(key)) {
+ *   // ✅ TypeScript now knows `key` is 'id' | 'name' | 'age'
+ *   console.log(key); // 'name'
+ * }
+ *
+ * const invalidKey: unknown = 'email';
+ * isKeyOfArray(allowedKeys)(invalidKey); // false
+ *
+ * // Inline usage
+ * isKeyOfArray(['x', 'y', 'z'] as const)('x'); // true
+ * isKeyOfArray(['x', 'y', 'z'] as const)('a'); // false
+ * ```
+ */
+export const isKeyOfArray =
+  <T extends readonly (string | number | symbol)[]>(
+    keys: T,
+  ): TTypeGuard<T[number]> =>
+  (key: unknown): key is T[number] =>
+    (isString(key) || isNumber(key) || isSymbol(key)) && keys.includes(key);

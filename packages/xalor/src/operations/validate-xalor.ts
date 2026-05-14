@@ -1,7 +1,6 @@
 import { XalethorService } from '../xalor-service';
 import type {
   ISolidRegistry,
-  TSolidBranded,
   TTypeGuard,
   TXalorAuditReport,
   TValidateXalorModes,
@@ -24,16 +23,12 @@ export function validateXalor<
 export function validateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'parse',
->(data: unknown, injectedKey: K, mode: _M): TSolidBranded<K, ISolidRegistry[K]>;
+>(data: unknown, injectedKey: K, mode: _M): ISolidRegistry[K];
 // --- OVERLOAD 4: THE ASYNC PARSER ---
 export function validateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'parseAsync',
->(
-  data: unknown,
-  injectedKey: K,
-  mode: _M,
-): Promise<TSolidBranded<K, ISolidRegistry[K]>>;
+>(data: unknown, injectedKey: K, mode: _M): Promise<ISolidRegistry[K]>;
 // --- OVERLOAD 5: THE AUDIT ---
 export function validateXalor<
   K extends keyof ISolidRegistry,

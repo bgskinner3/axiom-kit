@@ -41,8 +41,8 @@ export type TValidateXalorModes =
 export type TValidateXalorResultMap<K extends keyof ISolidRegistry> = {
   guard: TTypeGuard<ISolidRegistry[K]>;
   assert: void;
-  parse: TSolidBranded<K, ISolidRegistry[K]>;
-  parseAsync: Promise<TSolidBranded<K, ISolidRegistry[K]>>;
+  parse: ISolidRegistry[K];
+  parseAsync: Promise<ISolidRegistry[K]>;
   audit: TXalorAuditReport;
 };
 export type TValidateXalorReturn<

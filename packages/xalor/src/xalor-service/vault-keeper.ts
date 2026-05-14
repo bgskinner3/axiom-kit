@@ -88,6 +88,9 @@ export class XalethorVaultKeeper {
     variant: 'blueprint' | 'manifest' | 'registry',
     key: string,
   ): TSolidShape | TVaultManifestEntry | TVaultRegistryEntry | undefined {
-    return this.vault[variant].get(key);
+    if (variant === 'blueprint') return this.vault.blueprints.get(key);
+    if (variant === 'manifest') return this.vault.manifest.get(key);
+    if (variant === 'registry') return this.vault.registry.get(key);
+    return undefined;
   }
 }

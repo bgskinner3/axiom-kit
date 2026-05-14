@@ -8,6 +8,7 @@ import {
   produceCast,
 } from '../utils';
 import type { ISolidRegistry, TSolidBranded } from '../models/types';
+
 /**
  * XALETHOR VAULT GENERATOR
  *

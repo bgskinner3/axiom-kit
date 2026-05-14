@@ -6,7 +6,7 @@ import type { TVaultSyncPayload } from '../../src/models/types';
 import { visitNode } from 'typescript';
 import { XalethorService } from '../../src/xalor-service';
 import { logDev } from '../../src/utils';
-import { SENTRY_TRIGGER_NAMES } from '../../src/operations';
+import { SENTRY_TRIGGER_NAMES } from '../../src/models/constants/configs';
 
 /**
  *

@@ -13,13 +13,13 @@ export * from './generate-xalor';
  * - High-Velocity Screening: Used by the Scout Pass (`shouldProcessFile`) to
  *   perform rapid string token scans before running recursive AST visitors.
  * - Toolchain Synchronization: Ensures that any module invoking these runtime
- *   functions is intercepted, mined, and compiled into the CAS database cache.
- */
-export const SENTRY_TRIGGER_NAMES = [
+ *   functions is intercepted, mined, and compiled into the CAS database cache
+ export const SENTRY_TRIGGER_NAMES = [
   'registerXalor',
-  'isXalor',
+  'validateXalor',
   'generateXalor',
 ] as const;
+ */
 
 /**
  * FUNCTIONS TO ADD

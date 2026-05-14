@@ -157,10 +157,10 @@ export const MOCK_SHAPE_MATERIALIZER: TShapeMockMapperMap = {
       const mockedPart = recurse(part, depth);
       if (mockedPart === null || mockedPart === undefined) continue;
 
-      if (typeof mockedPart === 'object' && !Array.isArray(mockedPart)) {
+      if (typeof mockedPart === 'object' && !isArray(mockedPart)) {
         const currentObj = mockedPart as Record<string, unknown>;
         merged =
-          merged && typeof merged === 'object' && !Array.isArray(merged)
+          merged && typeof merged === 'object' && !isArray(merged)
             ? { ...(merged as Record<string, unknown>), ...currentObj }
             : currentObj;
       } else {
