@@ -10,8 +10,6 @@
 const SOLID_GLOBAL_KEYS = {
   solidVaultKey: '__SOLID_VAULT__',
   solidVersion: '1.0.0',
-  //
-  sentryTriggers: ['registerXalor', 'validateXalor'],
 } as const;
 
 /**
@@ -25,7 +23,6 @@ const SOLID_GLOBAL_KEYS = {
 const SOLID_EMITTER_KEYS = {
   targetDir: './node_modules/.cache/xalor',
   fileName: 'solid-env.d.ts',
-  // TODO: PUT BACK
   moduleName: '@bgskinner2/xalor',
   banner: `/** 💎 SOLIDIFIED TYPE DATABASE (AUTO-GENERATED) */`,
   eslintDisabled: [
@@ -34,10 +31,6 @@ const SOLID_EMITTER_KEYS = {
   ],
   imports: [
     "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '@bgskinner2/xalor';",
-    // "import type { TSolid, TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
-    // process.env.NODE_ENV !== 'test'
-    //   ? "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../index';"
-    //   : "import type { TSolidMetadata, ISolidRegistry, ISolidIdentity } from '../../../../../dist';",
   ],
 } as const;
 

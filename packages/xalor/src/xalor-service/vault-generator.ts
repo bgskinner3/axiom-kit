@@ -62,7 +62,7 @@ export class XalethorVaultGenerator {
    */
   public static getMock<K extends keyof ISolidRegistry>(
     key: K,
-  ): ISolidRegistry[K] {
+  ): TSolidBranded<K, ISolidRegistry[K]> {
     /* prettier-ignore */ const shape = 
     this.requireShape( key, 'Mocking failed: Blueprint missing from Vault.');
 

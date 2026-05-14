@@ -6,7 +6,7 @@ import type { TVaultSyncPayload } from '../../src/models/types';
 import { visitNode } from 'typescript';
 import { XalethorService } from '../../src/xalor-service';
 import { logDev } from '../../src/utils';
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
+import { SENTRY_TRIGGER_NAMES } from '../../src/operations';
 
 /**
  *
@@ -43,7 +43,7 @@ export function shouldProcessFile(
 ): boolean {
   if (!program || typeof program.getTypeChecker !== 'function') return false;
 
-  const triggers = IS_SOLID_CONFIG_ITEMS.sentryTriggers;
+  const triggers = SENTRY_TRIGGER_NAMES;
   return triggers.some((fn) => file.text.includes(fn));
 }
 /**

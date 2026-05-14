@@ -1,6 +1,6 @@
 // models/guards/transformer/nodes.ts
 import ts from 'typescript';
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
+import { SENTRY_TRIGGER_NAMES } from '../../src/operations';
 /**
  * # IS SOLID CALL #####
  * Identifies the 'isSolid' function call within the AST.
@@ -22,7 +22,7 @@ export function isSolidCall(
   if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression))
     return false;
   // 2. Name-Based Sentry Check
-  const triggers: Readonly<string[]> = IS_SOLID_CONFIG_ITEMS.sentryTriggers;
+  const triggers: Readonly<string[]> = SENTRY_TRIGGER_NAMES;
   const functionName = node.expression.text;
 
   if (!triggers.includes(functionName)) return false;
@@ -52,15 +52,3 @@ export function isSolidCall(
 
   return true;
 }
-
-// /**
-//  * IS IDENTIFIER
-//  * Validates if a node is a TypeScript Identifier with a specific name.
-//  * Used to target internal keywords or specific brand names during AST walking.
-//  */
-// export function isIdentifier(
-//   node: ts.Node,
-//   text: string,
-// ): node is ts.Identifier {
-//   return ts.isIdentifier(node) && node.text === text;
-// }

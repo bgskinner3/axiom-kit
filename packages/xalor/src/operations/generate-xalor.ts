@@ -28,10 +28,6 @@ export function generateXalor<K extends keyof ISolidRegistry, M extends 'cast'>(
   mode: M,
   data: unknown,
 ): TSolidBranded<K, ISolidRegistry[K]>;
-
-// --- CONSOLIDATED IMPLEMENTATION GATEWAY ---
-// By rearranging positional parameters to (key, mode, data?), the signatures
-// stack with mathematical precision. Users get crisp, clean autocomplete profiles.
 export function generateXalor<
   K extends keyof ISolidRegistry,
   M extends TGenerateXalorModes,
