@@ -29,11 +29,11 @@
 &nbsp;
 
 <p align="center">
-    📦  <a href="./docs/installation">Installation</a>
+    📦  <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/Installation.md">Installation</a>
   •
-  📖 <a href="./docs">Docs</a>
+  📖 <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/api.md">Docs</a>
   •
-  ⚙️ <a href="./docs">API Ref</a>
+  ⚙️ <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/api.md">API Ref</a>
 </p>
 
 ---
@@ -148,7 +148,7 @@ Xalor works by compiling your native TypeScript types into a persistent runtime 
 
 No runtime setup required — just install, configure once, and use native TypeScript.
 
-👉 Full setup & configuration guide: [Installation & Config Docs](./docs/installation.md)
+👉 Full setup & configuration guide: [Installation & Config Docs](https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/Installation.md)
 
 ---
 
@@ -268,7 +268,7 @@ const user = parseUser(data);
 
 All APIs are powered by a single compiled TypeScript registry, enabling shared access across validation, parsing, and generation layers without duplicated schemas or external validation systems.
 
-👉 Full API reference: [Installation & Config Docs](./docs/installation.md)
+👉 Full API reference: [Full API](https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/api.md)
 
 ---
 
@@ -299,7 +299,7 @@ All APIs are powered by a single compiled TypeScript registry, enabling shared a
 - ✔ **Build-time compilation (no runtime overhead)**  
   Everything is generated during build, not execution
 
-👉 **Full feature set:** [All Features](./docs/installation.md)
+👉 **Full feature set:** [All Features](https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/features.md)
 
 
 ---

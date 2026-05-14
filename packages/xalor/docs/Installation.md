@@ -1,117 +1,136 @@
-## 🧠 What is Xalor?
+> ⚠️ **Work in Progress**
+> This documentation is actively evolving. APIs, configuration steps, and behavior may change before the first stable release.
 
-Xalor is a **Type-First** validation ecosystem. It eliminates the need for separate schema libraries (like Zod or Joi) by using a build-time **Transformer** to "mine" your existing TypeScript interfaces and inject them into a runtime **Vault**.
+# SETTINGS
 
-### ⚓ The Five Pillars of Xalor
+# 🛰️ Xalor Installation & Configuration Manual
 
-1. **The Miner**: A build-time transformer that reifies static types into JSON blueprints.
-2. **The Vault**: A high-performance Triple-KV memory store for your type DNA.
-3. **The Bridge**: An ambient Type Layer that gives you zero-import IDE autocomplete.
-4. **The Bouncer**: A recursive validation engine with built-in Depth-Bomb protection.
-5. **The Auditor**: A "Double-GPS" reporting system that links runtime failures back to source code.
+Xalor is an ambient data integrity engine that compiles your native TypeScript types into light, hidden runtime blueprints with **zero duplicate code and near-zero bundle cost**.
 
 ---
 
-## 🚨 The problem
+### 📦 Step 1: Installation
 
-In most TypeScript applications:
+Xalor requires native hook access to the **TypeScript Compiler API** during project compilation sweeps. It installs alongside **`ts-patch`**, the industry standard for executing custom AST transformers without mutating core compiler binaries.
 
-- Types exist only at compile time
-- Runtime validation requires separate schema systems (Zod, Joi, etc.)
-- This leads to duplication between:
-  - TypeScript interfaces
-  - validation schemas
-- Developers often bypass safety using `as Type`, leading to "type lying"
-
----
-
-## 🚨 The "Type Lying" Problem
-
-In standard TypeScript apps, types vanish at runtime. To stay safe, developers maintain duplicate schemas (Zod/Joi). When these get out of sync, or when developers resort to `as Type` casting, "Type Lying" occurs—where the compiler believes the data is safe, but the runtime crashes.
-
-**Xalor solves this by making your TypeScript interfaces the physical source of truth.**
-
----
-
-## ⚙️ The Lifecycle (Stage 1-5)
-
-### ⛏️ 1. Extraction (The Miner)
-
-During your build (Webpack/Vite/Rollup), Xalor scans your code for calls to `isXalor`. It extracts the generic type (e.g., `User`) and converts it into a structural blueprint.
-
-### 🗄️ 2. Persistence (The Bunker)
-
-Extracted types are "shredded" into atomic fragments and saved to `node_modules/.cache/xalor`. This ensures your validation logic survives restarts and works across monorepo packages.
-
-### 🌉 3. Intellisense (The Ghost Bridge)
-
-Xalor generates an ambient declaration file (`solid-env.d.ts`). This allows your IDE to provide **full autocomplete** on string keys without you ever having to export or import a schema.
-
-### 🛡️ 4. Validation (The Bouncer)
-
-At runtime, the engine compares incoming data against the Vault's blueprints.
-
-- **Identity Law**: Prevents stack overflows on circular references.
-- **Depth Law**: Blocks "Depth Bomb" security attacks.
-
----
-
-## 🧪 Core API
-
-### `isXalor` (The Inspector)
-
-The Swiss-Army knife of validation. Use it to check, assert, or parse data.
-
-```typescript
-// 1. Boolean Guard (True/False)
-if (isXalor({ data, injectedKey: 'USER', mode: 'guard' })) {
-  console.log(data.name); // data is automatically narrowed!
-}
-
-// 2. Assertion (Throws on fail)
-isXalor({ data, injectedKey: 'USER', mode: 'assert' });
-
-// 3. Parser (Returns branded "Solid" data)
-const user = isXalor({ data, injectedKey: 'USER', mode: 'parse' });
-```
-
-### `toXalor` (The Architect)
-
-The generator counterpart used to materialize data from blueprints.
-
-```typescript
-// Generate a valid "Zero-Value" object from an interface
-const newUser = toXalor({ injectedKey: 'USER', mode: 'default' });
-
-// Deep-clone and sanitize (strips properties not in the TS interface)
-const safeUser = toXalor({
-  data: rawApiData,
-  injectedKey: 'USER',
-  mode: 'clone',
-});
-```
-
----
-
-## 🕵️‍♂️ The Auditor (Double-GPS Reporting)
-
-When a validation fails, Xalor doesn't just say "Invalid." It provides a clickable trace:
+Run the following command in your terminal to install the dependencies:
 
 ```bash
-[xalor] 🛑 SOLIDITY BREAK: "USER"
-  ❌ Path: $.profile.email
-     Expected: string (maxLength: 4096)
-     Received: number (123)
-     📍 Origin: src/models/User.ts:12:5  <-- Click to see the Type
-     ⚡ Failed: src/api/handler.ts:45:10 <-- Click to see the Data
+npm install --save-dev ts-patch typescript
+npm install @bgskinner2/xalor
 ```
 
 ---
 
-## 🚄 Performance
+### 🎛️ Step 2: Configuration (`tsconfig.json` & Lifecycle Hooks)
 
-- **Zero Bundle Bloat**: Type metadata is injected only where used.
-- **Interning**: Identical sub-structures share the same memory reference.
-- **Bailout**: Build-time scout skips files that don't use Xalor, keeping builds fast.
+To enable **Incremental Build-Time Type Reification**, you must register Xalor inside your project's TypeScript configuration and patch your local lifecycle scripts. This allows the framework to intercept your compilation passes transparently.
+
+#### 1. Update `tsconfig.json`
+
+Add the Xalor transformer to the `plugins` array directly under `compilerOptions`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "skipLibCheck": true,
+
+    // 🚀 REGISTER THE AST MINER
+    "plugins": [
+      {
+        "transform": "@bgskinner2/xalor/transformer"
+      }
+    ]
+  },
+  "include": ["src/**/*"]
+}
+```
+
+#### 2. Patch Your `package.json` Scripts
+
+TypeScript ignores custom transformers by default. Configure a `prepare` script to force `ts-patch` to wire itself into your project environment immediately after your node modules are installed.
+
+Update your workspace tasks exactly like this:
+
+```json
+{
+  "name": "my-xalor-app",
+  "type": "module",
+  "scripts": {
+    // 🛠️ THE LIFECYCLE HOOK: Auto-patches your compiler on install
+    "prepare": "ts-patch install",
+
+    // 🚀 THE DEV LOOP: Watch mode automatically triggers on-save flushes
+    "dev": "tsc --watch",
+
+    // 📦 THE PRODUCTION PASS: Seals your final content-addressable Bunker cache
+    "build": "tsc"
+  }
+}
+```
 
 ---
+
+### 💻 Step 3: IDE Optimization (`.vscode/settings.json`)
+
+To unlock **Ambient HMR Hydration** so your type cache updates instantly on every file save—**without needing a terminal process running in the background**—you must configure your code editor to load your TypeScript plugins natively.
+
+Modern code editors run an internal, background instance of TypeScript (called `tsserver`) to handle real-time autocompletes and error detection. By default, editors ignore your `tsconfig.json` plugins for security reasons.
+
+#### Configure Your Local Workspace Settings
+
+Create a `.vscode/settings.json` file in the root directory of your project:
+
+```json
+{
+  "typescript.tsserver.pluginIds": ["@bgskinner2/xalor/transformer"],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
+```
+
+---
+
+### 🧪 Step 4: Real-World Usage Code (The Smoke Test)
+
+Create a test file named `src/index.ts` in your project to verify that your **Incremental Build-Time Type Reification loop** is working properly. This is the smallest possible example of registering a type and executing validation.
+
+```typescript
+import { registerXalor, validateXalor } from '@bgskinner2/xalor';
+
+// 1. Declare a standard type model using native TypeScript syntax
+interface IAlphaUser {
+  id: number;
+  token: string;
+}
+
+// 2. Fire the Type Ingest Target (The Miner's Anchor)
+registerXalor<'ALPHA_USER', IAlphaUser>();
+
+const payload: unknown = { id: 777, token: 'solid_hash_value' };
+
+// 3. Fire the Category 2 Validation Guard
+// 🎯 DX FEATURE: Pass your type data and target execution mode purely as generics.
+// The data object parameter is the ONLY runtime argument you need to input!
+if (validateXalor<'ALPHA_USER', 'guard'>(payload)) {
+  // 🚀 Inside this block, 'payload' is fully narrowed to your IAlphaUser type!
+  console.log(`[xalor-smoke] Success: Payload Narrowed! ID: ${payload.id}`);
+}
+```
+
+Now, press **Save** on this file inside your editor or run your build script in your terminal:
+
+```bash
+npm run build
+```
+
+Your project root will instantly generate a hidden data drawer containing your deep-interned types database layout:
+
+```text
+node_modules/.cache/xalor/
+├── vault-snapshot.json <-- 🗄️ THE DATA: Content-Addressable structural graph database
+└── solid-env.d.ts      <-- 🛰️ THE AUTOCOMPLETE: Nominal key intellisense declaration merging
+```
