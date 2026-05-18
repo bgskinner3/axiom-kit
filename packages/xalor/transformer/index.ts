@@ -67,7 +67,7 @@ export default function (
   const sessionRegistry = new Map<string, string>();
   const globalKeyRegistry = new Map<string, TVaultSyncPayload>();
 
-  bootloader(rootDir);
+  bootloader(rootDir, globalKeyRegistry);
 
   return (context: ts.TransformationContext) => {
     return (sourceFile: ts.SourceFile): ts.SourceFile => {
@@ -101,7 +101,7 @@ export function create(modules: { typescript: typeof ts }) {
   return {
     create(info: ts.server.PluginCreateInfo): ts.LanguageService {
       const rootDir = info.project.getCurrentDirectory();
-      bootloader(rootDir);
+      bootloader(rootDir, globalKeyRegistry);
 
       if (info.languageServiceHost.getCustomTransformers) {
         const originalGetCustomTransformers =

@@ -3,3 +3,4 @@ export * from './blueprints';
 export * from './general';
 export * from './metadata';
 export * from './vault';
+export * from './genesis';

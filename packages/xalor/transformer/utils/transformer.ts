@@ -5,8 +5,15 @@ import { hydrateIntellisenseBridge } from '../emitters';
 import type { TVaultSyncPayload } from '../../shared';
 import { visitNode } from 'typescript';
 import { XalethorService } from '../../src/xalor-service';
-import { logDev, SENTRY_TRIGGER_NAMES } from '../../shared';
-
+import {
+  logDev,
+  SENTRY_TRIGGER_NAMES,
+  IS_SOLID_CONFIG_ITEMS,
+  processGenesisHydration,
+} from '../../shared';
+import * as fs from 'fs';
+import * as path from 'path';
+import { ensureBaselineCache } from './baseline-guard';
 /**
  *
  * ROLE:
@@ -16,15 +23,44 @@ import { logDev, SENTRY_TRIGGER_NAMES } from '../../shared';
  * Reads existing blueprints from the Bunker so the Transformer
  * is aware of pre-registered UUIDs and avoids collisions.
  */
-export function bootloader(rootDir: string): void {
+export function bootloader(
+  rootDir: string,
+  globalKeyRegistry: Map<string, TVaultSyncPayload>,
+): void {
+  /* prettier-ignore */ const localCacheDir = path.join(rootDir, IS_SOLID_CONFIG_ITEMS.lifeCyclePaths.cacheDir);
+  /* prettier-ignore */ let cacheFile = path.join(localCacheDir, IS_SOLID_CONFIG_ITEMS.lifeCyclePaths.vaultFile);
+
+  if (!fs.existsSync(cacheFile)) {
+    /* prettier-ignore */ const templateSnapshotPath = path.join(__dirname, '../static-templates/vault-snapshot.json');
+    cacheFile = ensureBaselineCache(localCacheDir, templateSnapshotPath);
+  }
+
+  if (!fs.existsSync(cacheFile)) return;
+
   try {
-    const archive = new XalethorService();
-    archive.hydrateFromGenesis(rootDir);
-    /* prettier-ignore */ logDev(`[xalor:stage-4.5] ⚡ Bootloader: Vault hydrated from Genesis.`, { service: 'transformer/index.ts' });
-  } catch {
-    /* prettier-ignore */ logDev( `[xalor:stage-4.5] 🌬️ Bootloader: No Genesis Cache found. Starting volatile.`, { service: 'transformer/index.ts', type: 'warn', override: true }, );
+    const rawContent = fs.readFileSync(cacheFile, 'utf-8');
+
+    // 🚀 Execute the Shared Pure Parsing Engine
+    processGenesisHydration(rawContent, (metadata) => {
+      globalKeyRegistry.set(metadata.key, metadata as TVaultSyncPayload);
+    });
+  } catch (error) {
+    // 📢 INTERCEPT COMPILER ERRORS CLEANLY
+    // Captures structural runtime JSON syntax panics or file corruption issues gracefully.
+    /* prettier-ignore */
+    logDev(`[xalor:boot] 🚨 Genesis file serialization or hydration parse failure: ${error instanceof Error ? error.message : String(error)}`, { type: 'error', service: 'transformer/boot', override: true });
   }
 }
+//ORGINAL
+// export function bootloader(rootDir: string): void {
+//   try {
+//     const archive = new XalethorService();
+//     archive.hydrateFromGenesis(rootDir);
+//     /* prettier-ignore */ logDev(`[xalor:stage-4.5] ⚡ Bootloader: Vault hydrated from Genesis.`, { service: 'transformer/index.ts' });
+//   } catch {
+//     /* prettier-ignore */ logDev( `[xalor:stage-4.5] 🌬️ Bootloader: No Genesis Cache found. Starting volatile.`, { service: 'transformer/index.ts', type: 'warn', override: true }, );
+//   }
+// }
 
 /**
  *

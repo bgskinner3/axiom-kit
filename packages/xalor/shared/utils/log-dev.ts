@@ -14,6 +14,7 @@ const LOG_CONFIG = {
   'vault-keeper.ts/solidifyMeta': false,
   'miner/index.ts': true,
   'transformer/index.ts/Main': false,
+  'transformer/boot': false,
   off: false,
 } as const;
 // hydrateFromGenesis
