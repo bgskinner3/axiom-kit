@@ -2,11 +2,10 @@
 import ts from 'typescript';
 import { theMiner } from '../miner';
 import { hydrateIntellisenseBridge } from '../emitters';
-import type { TVaultSyncPayload } from '../../src/models/types';
+import type { TVaultSyncPayload } from '../../shared';
 import { visitNode } from 'typescript';
 import { XalethorService } from '../../src/xalor-service';
-import { logDev } from '../../src/utils';
-import { SENTRY_TRIGGER_NAMES } from '../../src/models/constants/configs';
+import { logDev, SENTRY_TRIGGER_NAMES } from '../../shared';
 
 /**
  *
@@ -91,29 +90,20 @@ export function handlePersistenceGate(
 ): ts.SourceFile {
   const isTest = process.env.NODE_ENV === 'test';
 
-  // 1. Production Build Boundary Check
   const allFiles = program.getSourceFiles();
   const isLastFile = allFiles[allFiles.length - 1]?.fileName === file.fileName;
 
-  // 2. Local Development Watch/Save Mutation Check
   const hasNewRegistrations = registry.size > previousSize;
 
-  // 🎯 THE DUAL-TRIGGER DETERMINATION LAW
-  // We flush the system data if we hit the final compilation barrier OR
-  // if an individual watch-save pass introduces brand new structural metadata records.
   const shouldFlush =
     isLastFile || hasNewRegistrations || (isTest && registry.size > 0);
 
   if (shouldFlush) {
     const archive = new XalethorService();
-
-    // 💾 FLUSH TO DISK: node_modules/.cache/xalor/vault-snapshot.json
     archive.persist({ rootDir, registry });
 
-    // 🌉 SYNC BRIDGE: src/.xalor/solid-env.d.ts
     hydrateIntellisenseBridge(rootDir, registry);
 
-    // 🚀 INJECT RAM: Populate Vault for Test Runners (Jest/Vitest)
     if (isTest) {
       registry.forEach((payload) => XalethorService.solidify(payload));
       logDev(

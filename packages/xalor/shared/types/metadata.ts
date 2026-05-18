@@ -1,10 +1,11 @@
-import type { TSolidShape } from './blueprints';
 import {
   IS_SOLID_SHAPE_KINDS_CONFIG,
   IS_SOLID_CONFIG_ITEMS,
   SENTRY_TRIGGER_NAMES,
-} from '../../constants';
+} from '../constants';
+import type { TSolidShape } from './blueprints';
 import type { TSolidError } from './vault';
+
 /**
  * 🛰️ TSOLID METADATA
  * The master transport object for type DNA.

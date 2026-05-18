@@ -1,5 +1,4 @@
-// models/guards/common/objects.ts
-import type { TTypeGuard } from '../../models/types';
+import type { TTypeGuard } from '../../types';
 import { isNull, isString, isNumber, isSymbol } from './primitives';
 /**
  * @utilType Guard

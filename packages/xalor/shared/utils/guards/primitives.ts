@@ -1,5 +1,5 @@
 // models/guards/common/primitives.ts
-import type { TTypeGuard, TPrimitive, TAnyFunction } from '../../models/types';
+import type { TTypeGuard, TPrimitive, TAnyFunction } from '../../types';
 /**
  * @utilType Guard
  * @name isNull

@@ -1,6 +1,7 @@
 // models/guards/transformer/nodes.ts
 import ts from 'typescript';
-import { SENTRY_TRIGGER_NAMES } from '../../src/models/constants/configs';
+import { SENTRY_TRIGGER_NAMES, isKeyOfArray } from '../../shared';
+import type { TSentryTriggerName } from '../../shared';
 /**
  * # IS SOLID CALL #####
  * Identifies the 'isSolid' function call within the AST.
@@ -51,4 +52,25 @@ export function isSolidCall(
   }
 
   return true;
+}
+
+/**
+ *
+ * @param node
+ * @returns
+ */
+export function getAPIName(node: ts.CallExpression): TSentryTriggerName {
+  const expression = node.expression;
+
+  if (ts.isIdentifier(expression)) {
+    const name = expression.text;
+    if (isKeyOfArray(SENTRY_TRIGGER_NAMES)(name)) return name;
+  }
+
+  if (ts.isPropertyAccessExpression(expression)) {
+    const propertyName = expression.name.text;
+    if (isKeyOfArray(SENTRY_TRIGGER_NAMES)(propertyName)) return propertyName;
+  }
+
+  throw new Error(`[xalor] Unknown API trigger: ${name}`);
 }

@@ -1,7 +1,7 @@
 // src/validation/solidify-shape.ts
-import type { TValidationContext, TSolidShape } from '../models/types';
+import type { TValidationContext, TSolidShape } from '../../shared';
 import { createInitialContext } from './context';
-import { isObject, isNull, isFunction } from '../utils/guards';
+import { isObject, isNull, isFunction } from '../../shared';
 import { SHAPE_VALIDATION_MAPPER } from '../mappers';
 /**
  * 💎 solidify

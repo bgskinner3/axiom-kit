@@ -8,10 +8,7 @@ import type {
   Program,
   TransformationContext,
 } from 'typescript';
-import type {
-  TSolidShape,
-  TVaultSyncPayload,
-} from '../../src/models/types/shared';
+import type { TSolidShape, TVaultSyncPayload } from '../../shared';
 
 /**
  * TYPE: TCreateSolidMetadata

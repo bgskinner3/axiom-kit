@@ -1,12 +1,11 @@
 import { XalethorService } from '../xalor-service';
 import type {
   ISolidRegistry,
-  TSolidBranded,
   TGenerateXalorReturn,
   TGenerateXalorStrategyEngine,
   TGenerateXalorModes,
 } from '../models/types';
-
+import type { TSolidBranded } from '../../shared';
 export function generateXalor<
   K extends keyof ISolidRegistry,
   M extends 'default',

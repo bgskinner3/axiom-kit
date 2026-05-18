@@ -1,12 +1,10 @@
 import { XalethorService } from '../../xalor-service';
 import type {
   ISolidRegistry,
-  TTypeGuard,
-  TAssert,
   TReturnValidationTools,
 } from '../../models/types';
 import { makeAssert } from '../common';
-
+import type { TTypeGuard, TAssert } from '../../../shared';
 export function buildValidationTools<
   K extends Extract<keyof ISolidRegistry, string>,
 >(key: K): TReturnValidationTools<K> {

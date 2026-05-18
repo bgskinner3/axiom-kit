@@ -1,8 +1,8 @@
 // transformer/reifiers/reify-type.ts
 import type { Type, TypeChecker } from 'typescript';
 import { REIFIERS } from './registry/index';
-import type { TSolidShape } from '../../src/models/types';
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
+import type { TSolidShape } from '../../shared';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
 import { TReifyDispatcherBuild, TReifyCTX } from '../types';
 import { internShape } from './interning';
 const DEFAULT_REIFY_CTX: TReifyCTX = {

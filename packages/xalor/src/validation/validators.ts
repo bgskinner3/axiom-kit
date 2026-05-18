@@ -9,15 +9,9 @@ import type {
   TSolidReferenceShape,
   TSolidLiteralShape,
   TSolidPrimitiveShape,
-} from '../models/types';
+} from '../../shared';
 import { reportError } from './errors';
-import {
-  isArray,
-  isObject,
-  isNull,
-  isRecord,
-  isPrimitive,
-} from '../utils/guards';
+import { isArray, isObject, isNull, isRecord, isPrimitive } from '../../shared';
 import { yieldEntries, yieldFiltered } from '../utils';
 import { XalethorService } from '../xalor-service';
 

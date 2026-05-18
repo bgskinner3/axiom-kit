@@ -1,10 +1,11 @@
+import type { ISolidRegistry } from '../../models/types';
+import { RECTIFIER_REGISTRY_MAPPER } from '../../mappers';
 import type {
-  ISolidRegistry,
   TSolidBranded,
   TSolidMetadata,
   TStrictSolidMetaData,
-} from '../../models/types';
-import { RECTIFIER_REGISTRY_MAPPER } from '../../mappers';
+} from '../../../shared';
+
 /**
  * 💎 MARK AS SOLID
  *

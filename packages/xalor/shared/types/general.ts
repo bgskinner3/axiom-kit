@@ -1,4 +1,4 @@
-import type { TSolidShape } from '../shared';
+import type { TSolidShape } from './blueprints';
 /**
  * 🛡️ SHAPE GATE TYPES
  *

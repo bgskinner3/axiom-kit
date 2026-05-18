@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import { theMiner } from '../../transformer/miner';
 import { UTIL_CONFIG_OPTIONS } from './constants';
-import type { TVaultSyncPayload } from '../../src/models/types';
+import type { TVaultSyncPayload } from '../../shared';
 
 /**
  * mineTransformation

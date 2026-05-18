@@ -1,11 +1,9 @@
 import type {
-  TSolidShape,
   TShapeNormalizerMapper,
-  TSolidObjectRawShape,
   TShapeInflatorMapper,
 } from '../models/types';
 import { computeStringHash } from '../utils/common';
-
+import type { TSolidObjectRawShape, TSolidShape } from '../../shared';
 /**
  * ============================================================================
  * BUILD-TIME ENCODE MAP: EXTRACT SHAPE NORMALIZERS

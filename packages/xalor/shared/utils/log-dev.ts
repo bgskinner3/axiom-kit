@@ -1,4 +1,4 @@
-import { ANSI_COLOR_CODES, DEFAULT_TYPE_COLORS } from '../../models';
+import { ANSI_COLOR_CODES, DEFAULT_TYPE_COLORS } from '../constants';
 /**
  * LOG DEV CONFIG
  *

@@ -1,8 +1,8 @@
 // transformer/emitters/intellisense-bridge.ts
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
 import * as fs from 'fs';
 import * as path from 'path';
-import type { TVaultSyncPayload } from '../../src/models/types';
+import type { TVaultSyncPayload } from '../../shared';
 /**
  * temporalManifest
  *

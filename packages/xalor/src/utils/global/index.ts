@@ -1,6 +1,6 @@
 // models/utils/global/index.ts
-import { IS_SOLID_CONFIG_ITEMS } from '../../models/constants';
-import type { TSolidVaultMap } from '../../models/types';
+import { IS_SOLID_CONFIG_ITEMS } from '../../../shared';
+import type { TSolidVaultMap } from '../../../shared';
 import { XalethorService } from '../../xalor-service';
 // ====================================================================
 /**

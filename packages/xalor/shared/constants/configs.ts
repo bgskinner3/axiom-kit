@@ -117,5 +117,5 @@ export const IS_SOLID_CONFIG_ITEMS = {
 export const SENTRY_TRIGGER_NAMES = [
   'registerXalor',
   // 'validateXalor',
-  // 'generateXalor',
+  'generateXalor',
 ] as const;

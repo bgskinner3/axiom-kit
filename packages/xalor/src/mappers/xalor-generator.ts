@@ -1,7 +1,6 @@
 import type {
   TShapeDefaultMaterializeMap,
   TShapeMockMapperMap,
-  TSolidShape,
   TShapeCloneMapperMap,
   TShapeCastMapperMapper,
   TCastingPrimitiveMapper,
@@ -17,11 +16,12 @@ import {
   isBigInt,
   isUndefined,
   isArray,
-} from '../utils/guards';
+} from '../../shared';
 import { PRIMITIVE_DEFAULTS } from '../models/constants';
 import { XalethorVaultKeeper } from '../xalor-service/vault-keeper';
-import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
 import { validateShape, createInitialContext } from '../validation';
+import type { TSolidShape } from '../../shared';
 /**
  * ============================================================================
  * 🏗️ DESIGN SYSTEM MAPPER: DEFAULT SHAPE MATERIALIZER

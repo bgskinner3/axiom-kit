@@ -1,5 +1,5 @@
-import type { TSolidShapeKinds } from '../models/types';
-import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
+import type { TSolidShapeKinds } from '../../shared';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
 
 /**
  * 💎 MESSAGE MANIFEST

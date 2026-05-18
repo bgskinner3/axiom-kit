@@ -1,5 +1,5 @@
 import { XalethorService } from '../../src/xalor-service';
-import type { TVaultSyncPayload, TSolidShape } from '../../src/models/types';
+import type { TVaultSyncPayload, TSolidShape } from '../../shared';
 
 /**
  * 🧪 SEED TEST VAULT

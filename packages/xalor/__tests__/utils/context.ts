@@ -1,4 +1,4 @@
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
 import { TReifyCTX } from '../../transformer/types';
 
 /**

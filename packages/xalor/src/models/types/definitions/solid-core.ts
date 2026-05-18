@@ -1,5 +1,5 @@
 // models/types/definitions/solid-blueprints.d.ts
-import type { TSolidVaultMap } from '../shared';
+import type { TSolidVaultMap } from '../../../../shared';
 /**
  *  THE AMBIENT BLUEPRINTS
  * These are the serialized structures stored in the Vault.

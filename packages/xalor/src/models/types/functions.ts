@@ -1,4 +1,4 @@
-import type { TVaultSyncPayload, TTypeGuard, TAssert } from './shared';
+import type { TVaultSyncPayload, TTypeGuard, TAssert } from '../../../shared';
 import type { ISolidRegistry } from './definitions';
 /**
  * TPERSIST_PARAMS

@@ -1,5 +1,5 @@
 import type { TRectifierRegistryMapper } from '../models/types';
-import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
 /**
  * 🗄️ UNIFIED METADATA RECTIFIER MAPPER
  *

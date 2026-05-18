@@ -1,10 +1,5 @@
-import type {
-  TSolidMetadata,
-  TPersistParams,
-  ISolidRegistry,
-  TSolidError,
-  TSolidBranded,
-} from '../models/types';
+import type { TPersistParams, ISolidRegistry } from '../models/types';
+import type { TSolidMetadata, TSolidError, TSolidBranded } from '../../shared';
 import { XalethorVaultKeeper } from './vault-keeper';
 import { XalethorVaultValidator } from './vault-validator';
 import { XalethorVaultAuditor } from './vault-auditor';

@@ -1,4 +1,4 @@
-import { isBigInt, isString, isUndefined } from '../guards';
+import { isBigInt, isString, isUndefined } from '../../../shared';
 
 /**
  * @utilType util

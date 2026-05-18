@@ -1,5 +1,5 @@
 import { ensureGlobalVault } from '../utils';
-import type { TSolidVaultMap } from '../models/types';
+import type { TSolidVaultMap } from '../../shared';
 import { validateShape, createInitialContext } from '../validation';
 /**
  * XALETHOR VAULT VALIDATOR

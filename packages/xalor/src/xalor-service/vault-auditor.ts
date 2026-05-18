@@ -5,8 +5,8 @@ import type {
   TXalorAuditReport,
   TXalorIssue,
   TXalorRuleKind,
-} from '../models/types';
-import { isString } from '../utils/guards';
+} from '../../shared';
+import { isString } from '../../shared';
 import { RULE_MATCHERS_MAPPER } from '../mappers';
 
 /**

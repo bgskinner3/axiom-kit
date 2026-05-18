@@ -1,9 +1,9 @@
 // transformer/miner/resolvers.ts
 import { addSyntheticLeadingComment, SyntaxKind } from 'typescript';
 import type { Node, Type } from 'typescript';
-import type { TSolidShape } from '../../src/models/types';
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
-import ts from 'typescript';
+import type { TSolidShape } from '../../shared';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
+// import ts from 'typescript';
 /**
  * 💎 MARK AS PURE (Minification Shield)
  *
@@ -85,17 +85,4 @@ export function createMiningCtx(
     parentKey: key,
     seen: new Set<Type>(),
   };
-}
-export function getFunctionName(node: ts.CallExpression): string | null {
-  const expression = node.expression;
-
-  if (ts.isIdentifier(expression)) {
-    return expression.text;
-  }
-
-  if (ts.isPropertyAccessExpression(expression)) {
-    return expression.name.text;
-  }
-
-  return null;
 }

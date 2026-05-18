@@ -1,5 +1,9 @@
 import type { ISolidRegistry } from './definitions';
-import type { TTypeGuard, TSolidBranded, TXalorAuditReport } from './shared';
+import type {
+  TTypeGuard,
+  TSolidBranded,
+  TXalorAuditReport,
+} from '../../../shared';
 
 // ====================================================================
 // ====================================================================

@@ -4,7 +4,7 @@ import type {
   TSolidMetadata,
   TValidationContext,
   TXalorRuleKind,
-} from './shared';
+} from '../../../shared';
 
 /**
  * TSHAPE_DEFAULT_MATERIALIZE_MAP

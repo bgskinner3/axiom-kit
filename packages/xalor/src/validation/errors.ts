@@ -1,5 +1,5 @@
 // src/validation/errors.ts
-import type { TValidationContext, TSolidShape } from '../models/types';
+import type { TValidationContext, TSolidShape } from '../../shared';
 import { serialize, getCallerLocation } from '../utils';
 import { XalethorService } from '../xalor-service';
 /**

@@ -77,7 +77,6 @@ export function getSpatialIdentity({
   shapeType,
   checker,
 }: TInterfaceOrType): TSpatialIdentity {
-  // 📍 1. THE GPS (For the Auditor)
   const { line, character } = sourceFile.getLineAndCharacterOfPosition(
     node.getStart(),
   );

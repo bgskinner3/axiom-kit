@@ -1,4 +1,4 @@
-import type { TTypeGuard, TAssert } from '../../models/types';
+import type { TTypeGuard, TAssert } from '../../../shared';
 
 /**
  * Generates a rapid, zero-dependency 32-bit structural fingerprint from a raw string.

@@ -1,14 +1,14 @@
 // transformer/index.ts
 import './reifiers/registry/index';
 import ts from 'typescript';
-import type { TVaultSyncPayload } from '../src/models/types';
+import type { TVaultSyncPayload } from '../shared';
 import {
   bootloader,
   shouldProcessFile,
   runMiningPass,
   handlePersistenceGate,
 } from './utils';
-import { logDev } from '../src/utils';
+import { logDev } from '../shared';
 /**
  * 🎛️ CORE TRANSFORMER SYSTEM SWITCHBOARD
  *

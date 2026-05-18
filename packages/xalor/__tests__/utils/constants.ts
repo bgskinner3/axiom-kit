@@ -1,4 +1,4 @@
-import type { TSolidShape } from '../../src/models/types';
+import type { TSolidShape } from '../../shared';
 
 export const UTIL_CONFIG_OPTIONS = {
   fileName: 'test.ts',

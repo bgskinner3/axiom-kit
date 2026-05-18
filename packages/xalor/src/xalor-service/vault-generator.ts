@@ -7,8 +7,8 @@ import {
   produceClone,
   produceCast,
 } from '../utils';
-import type { ISolidRegistry, TSolidBranded } from '../models/types';
-
+import type { ISolidRegistry } from '../models/types';
+import type { TSolidBranded } from '../../shared';
 /**
  * XALETHOR VAULT GENERATOR
  *

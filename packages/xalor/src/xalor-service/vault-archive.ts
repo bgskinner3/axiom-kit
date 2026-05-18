@@ -1,6 +1,7 @@
-import type { TTripleKV, TPersistParams, TSolidShape } from '../models/types';
-import { IS_SOLID_CONFIG_ITEMS } from '../models/constants';
-import { serialize, logDev } from '../utils';
+import type { TPersistParams } from '../models/types';
+import type { TTripleKV, TSolidShape } from '../../shared';
+import { IS_SOLID_CONFIG_ITEMS, logDev } from '../../shared';
+import { serialize } from '../utils';
 import { EXTRACT_SHAPE_NORMALIZERS, BUILD_SHAPE_INFLATORS } from '../mappers';
 import * as fs from 'fs';
 import * as path from 'path';

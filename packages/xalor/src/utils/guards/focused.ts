@@ -1,10 +1,6 @@
-import type {
-  TSolidShape,
-  TTypeGuard,
-  TSolidMetadata,
-} from '../../models/types';
-import { isObject, isKeyInObject } from './objects';
-import { isNull } from './primitives';
+import type { TSolidShape, TTypeGuard, TSolidMetadata } from '../../../shared';
+import { isObject, isKeyInObject, isNull } from '../../../shared';
+
 /**
  * FOCUSED SHAPE GUARDS
  *

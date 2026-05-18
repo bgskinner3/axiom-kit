@@ -2,7 +2,7 @@
 import { isObjectType } from '../../utils';
 import { registerReifier, maxObjectProperties } from './core';
 import { SymbolFlags } from 'typescript';
-import type { TSolidObjectRawShape } from '../../../src/models/types';
+import type { TSolidObjectRawShape } from '../../../shared';
 
 /**
  * STRUCTURAL REIFIER (OBJECTS & INTERFACES)

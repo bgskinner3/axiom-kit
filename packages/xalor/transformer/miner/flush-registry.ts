@@ -1,5 +1,5 @@
-import { IS_SOLID_CONFIG_ITEMS } from '../../src/models/constants';
-import type { TSolidShape, TVaultSyncPayload } from '../../src/models/types';
+import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
+import type { TSolidShape, TVaultSyncPayload } from '../../shared';
 import type { TFlushToRegistryParams } from '../types';
 import * as path from 'path';
 /**

@@ -6,9 +6,9 @@ import type {
   TStrictSolidMetaData,
   TVaultRegistryEntry,
   TVaultManifestEntry,
-} from '../models/types';
-import { preRegisterMetadata, logDev } from '../utils';
-import { IS_SOLID_CONFIG_ITEMS } from '../models';
+} from '../../shared';
+import { preRegisterMetadata } from '../utils';
+import { IS_SOLID_CONFIG_ITEMS, logDev } from '../../shared';
 
 /**
  * XALETHOR VAULT KEEPER

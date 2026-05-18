@@ -1,5 +1,5 @@
 import type { Type, TypeChecker } from 'typescript';
-import type { TSolidShape } from '../../src/models/types/shared';
+import type { TSolidShape } from '../../shared';
 /**
  * REIFIER CONTEXT
  * Encapsulates the necessary tools and state required during the
