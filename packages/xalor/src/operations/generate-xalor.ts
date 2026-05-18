@@ -7,30 +7,24 @@ import type {
 import type { TSolidBranded, TGenerateXalorModes } from '../../shared';
 export function generateXalor<
   K extends keyof ISolidRegistry,
-  M extends 'default',
->(key?: K, mode?: M): TSolidBranded<K, ISolidRegistry[K]>;
-export function generateXalor<K extends keyof ISolidRegistry, M extends 'mock'>(
-  key: K,
-  mode: M,
-): TSolidBranded<K, ISolidRegistry[K]>;
-
-// --- OVERLOAD 3: THE PURIFIED CLONE STRUCT (Requires Data) ---
+  _M extends 'default',
+>(): TSolidBranded<K, ISolidRegistry[K]>;
 export function generateXalor<
   K extends keyof ISolidRegistry,
-  M extends 'clone',
->(key: K, mode: M, data: unknown): TSolidBranded<K, ISolidRegistry[K]>;
-
-// --- OVERLOAD 4: THE SYMMETRIC COERCION CAST (Requires Data) ---
-export function generateXalor<K extends keyof ISolidRegistry, M extends 'cast'>(
-  key: K,
-  mode: M,
-  data: unknown,
-): TSolidBranded<K, ISolidRegistry[K]>;
+  _M extends 'mock',
+>(): TSolidBranded<K, ISolidRegistry[K]>;
+export function generateXalor<
+  K extends keyof ISolidRegistry,
+  _M extends 'clone',
+>(data: unknown): TSolidBranded<K, ISolidRegistry[K]>;
+export function generateXalor<
+  K extends keyof ISolidRegistry,
+  _M extends 'cast',
+>(data: unknown): TSolidBranded<K, ISolidRegistry[K]>;
 export function generateXalor<
   K extends keyof ISolidRegistry,
   M extends TGenerateXalorModes,
 >(key?: K, mode?: M, data?: unknown): TGenerateXalorReturn<K, M> {
-  console.log(key, mode, 'HERE');
   if (!key || !mode) {
     throw new Error(
       `[xalor] 🚨 GATEWAY BLOCK: 'generateXalor' executed without compiled metadata properties.\n` +

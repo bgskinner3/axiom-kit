@@ -287,37 +287,6 @@ export const CLONE_SHAPE_SANITIZER_MAPPER: TShapeCloneMapperMap = {
 } satisfies TShapeCloneMapperMap;
 
 /**
- * 🧱 COERCION IMPLEMENTATION DRAWERS
- * Executed linearly via O(1) dictionary lookups with absolute zero switch statement overhead.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-/**
  * CASTING_PRIMITIVE_GENERATORS
  *
  */
@@ -396,14 +365,25 @@ export const CAST_SHAPE_MAPPER: TShapeCastMapperMapper = {
   literal: (shape, data, _depth, _recurse) => {
     if (data === shape.value) return data;
 
-    // Strict match or try exact loose alignment coercion
+    if (isString(shape.value) && isString(data)) {
+      // If they match case-insensitively, force it to the contract's exact target value!
+      if (data.trim().toLowerCase() === shape.value.toLowerCase()) {
+        return shape.value;
+      }
+    }
+
     if (isNumber(shape.value)) {
       const parsed = Number(data);
-      if (parsed === shape.value) return parsed;
+      if (!isNaN(parsed) && parsed === shape.value) {
+        return parsed;
+      }
     }
+
     if (isBoolean(shape.value)) {
-      if (String(data).toLowerCase() === String(shape.value))
+      const normalizedInput = String(data).trim().toLowerCase();
+      if (normalizedInput === String(shape.value)) {
         return shape.value;
+      }
     }
 
     return data;
