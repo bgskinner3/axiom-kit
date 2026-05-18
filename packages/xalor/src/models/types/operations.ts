@@ -4,6 +4,7 @@ import type {
   TSolidBranded,
   TXalorAuditReport,
 } from '../../../shared';
+import type { TGenerateXalorModes, TValidateXalorModes } from '../../../shared';
 
 // ====================================================================
 // ====================================================================
@@ -11,7 +12,6 @@ import type {
 // ====================================================================
 // ====================================================================
 
-export type TGenerateXalorModes = 'default' | 'mock' | 'clone' | 'cast';
 export type TGenerateXalorResultMap<K extends keyof ISolidRegistry> = {
   default: TSolidBranded<K, ISolidRegistry[K]>;
   mock: TSolidBranded<K, ISolidRegistry[K]>;
@@ -34,13 +34,6 @@ export type TGenerateXalorReturn<
 // VALIDATE XALOR API TYPES
 // ====================================================================
 // ====================================================================
-
-export type TValidateXalorModes =
-  | 'guard'
-  | 'assert'
-  | 'parse'
-  | 'parseAsync'
-  | 'audit';
 
 export type TValidateXalorResultMap<K extends keyof ISolidRegistry> = {
   guard: TTypeGuard<ISolidRegistry[K]>;

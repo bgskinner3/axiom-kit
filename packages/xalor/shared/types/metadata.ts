@@ -98,8 +98,3 @@ export type TValidationContext = {
   currentKey?: string;
   depth: number;
 };
-
-/**
- * API TRIGGER NAMES
- */
-export type TSentryTriggerName = (typeof SENTRY_TRIGGER_NAMES)[number];

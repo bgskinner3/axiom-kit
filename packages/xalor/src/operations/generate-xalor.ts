@@ -3,9 +3,8 @@ import type {
   ISolidRegistry,
   TGenerateXalorReturn,
   TGenerateXalorStrategyEngine,
-  TGenerateXalorModes,
 } from '../models/types';
-import type { TSolidBranded } from '../../shared';
+import type { TSolidBranded, TGenerateXalorModes } from '../../shared';
 export function generateXalor<
   K extends keyof ISolidRegistry,
   M extends 'default',

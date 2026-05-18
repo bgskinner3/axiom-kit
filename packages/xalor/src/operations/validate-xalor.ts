@@ -1,12 +1,15 @@
 import { XalethorService } from '../xalor-service';
 import type {
   ISolidRegistry,
-  TValidateXalorModes,
   TValidateXalorReturn,
   TTValidateStrategyEngine,
 } from '../models/types';
 import { buildValidationTools, markAsSolid } from '../utils';
-import type { TTypeGuard, TXalorAuditReport } from '../../shared';
+import type {
+  TTypeGuard,
+  TXalorAuditReport,
+  TValidateXalorModes,
+} from '../../shared';
 // --- OVERLOAD 1: THE GUARD ---
 export function validateXalor<
   K extends keyof ISolidRegistry,
