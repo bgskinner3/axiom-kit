@@ -46,7 +46,7 @@ export const XALOR_MINING_ROUTER_MAPPER: TXalorMinerRouterMap = {
     const typeArgs = node.typeArguments ?? [];
 
     let keyName: string | undefined;
-    let mode: TGenerateXalorModes | undefined; // 🛡️ Zero any-cast! Enforce your exact literal type union contract
+    let mode: TGenerateXalorModes | undefined;
 
     if (typeArgs.length >= 2) {
       const keyType = checker.getTypeFromTypeNode(typeArgs[0]);

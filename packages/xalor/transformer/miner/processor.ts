@@ -1,121 +1,50 @@
 // transformer/miner/processor.ts
-import type { ObjectLiteralExpression } from 'typescript';
-import type { TCreateSolidMetadata, TSolidVisitorProcessor } from '../types';
-import { generateShapeAST } from '../reifiers';
-import { IS_SOLID_CONFIG_ITEMS } from '../../shared';
-
-// function resolveGenerateXalorCall(
-//   node: ts.CallExpression,
-//   checker: ts.TypeChecker,
-// ) {
-//   const typeArgs = node.typeArguments ?? [];
-//   const args = node.arguments ?? [];
-
-//   let key: string | undefined;
-//   let mode: string | undefined;
-//   let data: unknown;
-
-//   // --- CASE 1: generics <K, M>
-//   if (typeArgs.length >= 2) {
-//     const keyType = checker.getTypeFromTypeNode(typeArgs[0]);
-//     const modeType = checker.getTypeFromTypeNode(typeArgs[1]);
-
-//     if (keyType.isStringLiteral()) key = keyType.value;
-//     if (modeType.isStringLiteral()) mode = modeType.value;
-//   }
-
-//   // --- CASE 2: runtime args
-//   if (args.length >= 1 && !key) {
-//     const maybeKey = args[0];
-//     if (ts.isStringLiteral(maybeKey)) {
-//       key = maybeKey.text;
-//     }
-//   }
-
-//   if (args.length >= 2 && !mode) {
-//     const maybeMode = args[1];
-//     if (ts.isStringLiteral(maybeMode)) {
-//       mode = maybeMode.text;
-//     }
-//   }
-
-//   if (args.length >= 3) {
-//     data = args[2];
-//   }
-
-//   return { key, mode, data };
-// }
-function createSolidMetadata({
-  factory,
-  areaString,
-  key,
-  shape,
-}: TCreateSolidMetadata): ObjectLiteralExpression {
-  return factory.createObjectLiteralExpression([
-    /* prettier-ignore */ factory.createPropertyAssignment('key', factory.createStringLiteral(key)),
-    /* prettier-ignore */ factory.createPropertyAssignment('area',factory.createStringLiteral(areaString)),
-    /* prettier-ignore */ factory.createPropertyAssignment('version', factory.createStringLiteral(IS_SOLID_CONFIG_ITEMS.solidVersion)),
-    /* prettier-ignore */ factory.createPropertyAssignment('shape', generateShapeAST(factory, shape)),
-  ]);
-}
+import type { CallExpression, Expression } from 'typescript';
+import type { TProcessorTarget } from '../types';
+import { PROCESSOR_REWRITE_MAPPER } from './mappers';
+import { isGenerateTarget, isRegisterTarget } from '../utils';
 /**
+ * SOLID VISITOR PROCESSOR (The AST Synthesizer)
  *
  * ROLE:
- * - The "Rewriter." It intercepts the ghost call and replaces it with a
- *   high-performance runtime registration.
+ * The primary mechanical rewriter of the Xalor compilation engine. It intercepts
+ * transient TypeScript call expressions at build time and mutates their argument
+ * signatures into explicit, pre-baked runtime configurations.
  *
  * STRATEGY:
- * - Geometric Injection: Calculates the GPS coordinate (line:char) at the
- *   last possible second to ensure pinpoint accuracy for the Auditor.
- * - AST Reification: Converts the JSON "Solid Shape" into a physical
- *   JavaScript Object Literal using the TypeScript Factory.
- * - Optimized Overloading: Handles both "Registration" and "Validation"
- *   intents by intelligently managing function arguments.
+ * Uses a strict Discriminated Union interface model (`TProcessorTarget`). By channeling
+ * properties through closed type predicates (`isRegisterTarget`, `isGenerateTarget`),
+ * it forces complete execution branch isolation. This allows producers to inject deep
+ * structural graphs and consumer hooks to map metadata strings seamlessly, entirely
+ * neutralizing procedural switch statements or unsafe type overrides.
  *
  * WHY:
- * - This satisfies Commandment II (Build-time Construction).
- * - It ensures that the runtime doesn't have to "think" or "calculate"—it
- *   just receives the pre-baked truth from the build.
+ * Satisfies Commandment II (Build-Time Construction Rule) and Commandment IV
+ * (Operation Isolation). It pre-bakes structural truths directly into the final
+ * compiled application code blocks so that the live execution thread remains completely
+ * zero-allocation and never has to parse types manually at runtime.
  */
 export function solidVisitorProcessor({
   node,
-  shape,
   sourceFile,
   factory,
-  key,
-}: TSolidVisitorProcessor) {
-  const { line, character } = sourceFile.getLineAndCharacterOfPosition(
-    node.getStart(),
-  );
+  target,
+  shape,
+}: TProcessorTarget): CallExpression {
+  let finalArgs: Expression[] = [];
 
-  const areaString = `${sourceFile.fileName}:${line + 1}:${character + 1}`;
-  // const functionName = getFunctionName(node);
-  // if (functionName === 'generateXalor') {
-  //   const { key: resolvedKey, mode } = resolveGenerateXalorCall(node, checker);
+  if (isRegisterTarget(target)) {
+    const { line, character } = sourceFile.getLineAndCharacterOfPosition(
+      node.getStart(),
+    );
+    const areaString = `${sourceFile.fileName}:${line + 1}:${character + 1}`;
 
-  //   console.log(resolvedKey, mode, 'HERE');
+    /* prettier-ignore */ finalArgs = PROCESSOR_REWRITE_MAPPER.registerXalor( target, node, factory, areaString, shape,);
+  }
 
-  //   const metadata = createSolidMetadata({
-  //     factory,
-  //     areaString: mode ?? '',
-  //     shape,
-  //     key: resolvedKey ?? key,
-  //   });
-
-  //   const finalArgs =
-  //     node.arguments.length === 0 ? [metadata] : [node.arguments[0], metadata];
-
-  //   return factory.updateCallExpression(
-  //     node,
-  //     node.expression,
-  //     node.typeArguments,
-  //     finalArgs,
-  //   );
-  // }
-
-  const metadata = createSolidMetadata({ factory, areaString, shape, key });
-  const finalArgs =
-    node.arguments.length === 0 ? [metadata] : [node.arguments[0], metadata];
+  if (isGenerateTarget(target)) {
+    /* prettier-ignore */ finalArgs = PROCESSOR_REWRITE_MAPPER.generateXalor(target, node, factory);
+  }
 
   return factory.updateCallExpression(
     node,
@@ -124,23 +53,35 @@ export function solidVisitorProcessor({
     finalArgs,
   );
 }
-/**
 
-ORIGNAL
- */
+// TODO: REMOVE
+// ROGIANL
 
+// export type TCreateSolidMetadata = {
+//   shape: TSolidShape;
+//   factory: NodeFactory;
+//   key: string;
+//   areaString: string;
+// };
+// export type TSolidVisitorProcessor = {
+//   node: CallExpression;
+//   shape: TSolidShape;
+//   sourceFile: SourceFile;
+//   factory: NodeFactory;
+//   key: string;
+// };
 //  function createSolidMetadata({
 //   factory,
 //   areaString,
 //   key,
 //   shape,
 // }: TCreateSolidMetadata): ObjectLiteralExpression {
-// return factory.createObjectLiteralExpression([
-//   /* prettier-ignore */ factory.createPropertyAssignment('key', factory.createStringLiteral(key)),
-//   /* prettier-ignore */ factory.createPropertyAssignment('area',factory.createStringLiteral(areaString)),
-//   /* prettier-ignore */ factory.createPropertyAssignment('version', factory.createStringLiteral(IS_SOLID_CONFIG_ITEMS.solidVersion)),
-//   /* prettier-ignore */ factory.createPropertyAssignment('shape', generateShapeAST(factory, shape)),
-// ]);
+//   return factory.createObjectLiteralExpression([
+//     /* prettier-ignore */ factory.createPropertyAssignment('key', factory.createStringLiteral(key)),
+//     /* prettier-ignore */ factory.createPropertyAssignment('area',factory.createStringLiteral(areaString)),
+//     /* prettier-ignore */ factory.createPropertyAssignment('version', factory.createStringLiteral(IS_SOLID_CONFIG_ITEMS.solidVersion)),
+//     /* prettier-ignore */ factory.createPropertyAssignment('shape', generateShapeAST(factory, shape)),
+//   ]);
 // }
 // /**
 //  *

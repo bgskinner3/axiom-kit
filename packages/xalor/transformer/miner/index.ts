@@ -1,7 +1,6 @@
 // transformer/miner/index.ts
 import { resolveMiningTarget } from './mining-target';
-// import { solidVisitorProcessor } from './processor';
-import { solidVisitorProcessor } from './processor-new';
+import { solidVisitorProcessor } from './processor';
 import { visitEachChild } from 'typescript';
 import { reifyType } from '../reifiers';
 import { isSolidCall, isRegisterTarget, isGenerateTarget } from '../utils';

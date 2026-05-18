@@ -52,6 +52,7 @@ export function bootloader(
   }
 }
 //ORGINAL
+// TODO: REMOVE
 // export function bootloader(rootDir: string): void {
 //   try {
 //     const archive = new XalethorService();

@@ -29,7 +29,6 @@ export const PROCESSOR_REWRITE_MAPPER: TProcessorRewriteMap = {
     const keyLiteral = factory.createStringLiteral(raw.keyName ?? 'unknown');
     const modeLiteral = factory.createStringLiteral(raw.mode ?? 'default');
 
-    // If the user passed an existing variable to clone/cast, preserve it in slot 2 (Index 0)
     return node.arguments.length > 0
       ? [keyLiteral, modeLiteral, node.arguments[0]]
       : [keyLiteral, modeLiteral];

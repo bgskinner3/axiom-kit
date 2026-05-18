@@ -55,9 +55,21 @@ export function isSolidCall(
 }
 
 /**
+ * GET API NAME (The Sentry Identifier)
  *
- * @param node
- * @returns
+ * ROLE:
+ * Scans a CallExpression node to identify and isolate the exact Xalor entry-point string token.
+ *
+ * STRATEGY:
+ * - Structural Uniformity: Checks both direct identifiers (`registerXalor()`) and property access
+ *   namespaces (`Xalor.registerXalor()`) to map out all permissible calling signatures.
+ * - Flat Routing: Resolves names to variables immediately, avoiding switch statements or nested
+ *   loops while validating strings directly against your shared configuration arrays.
+ *
+ * WHY:
+ * Satisfies Commandment IV (Operation Isolation). It normalizes the identifier lookup down
+ * to an explicit `TSentryTriggerName`, allowing downstream routers to sort functions polymorphically
+ * without handling complex AST patterns multiple times.
  */
 export function getAPIName(node: ts.CallExpression): TSentryTriggerName {
   const expression = node.expression;

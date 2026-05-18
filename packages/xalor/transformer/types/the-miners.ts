@@ -1,7 +1,5 @@
 import type {
   TypeChecker,
-  CallExpression,
-  NodeFactory,
   SourceFile,
   Type,
   Node,
@@ -9,30 +7,6 @@ import type {
   TransformationContext,
 } from 'typescript';
 import type { TSolidShape, TVaultSyncPayload } from '../../shared';
-
-/**
- * TYPE: TCreateSolidMetadata
- *
- * Arguments for generating the runtime Metadata ObjectLiteral during transformation.
- */
-export type TCreateSolidMetadata = {
-  shape: TSolidShape;
-  factory: NodeFactory;
-  key: string;
-  areaString: string;
-};
-/**
- * TYPE: TSolidVisitorProcessor
- *
- * Context required to rewrite a Node and inject metadata into the AST.
- */
-export type TSolidVisitorProcessor = {
-  node: CallExpression;
-  shape: TSolidShape;
-  sourceFile: SourceFile;
-  factory: NodeFactory;
-  key: string;
-};
 
 /**
  * Encapsulates the context needed for the recursive structural expansion
