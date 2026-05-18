@@ -1,6 +1,6 @@
-import type { TSolidShape, TTypeGuard, TSolidMetadata } from '../../../shared';
-import { isObject, isKeyInObject, isNull } from '../../../shared';
-
+import type { TSolidShape, TTypeGuard, TSolidMetadata } from '../../types';
+import { isObject, isKeyInObject } from './objects';
+import { isNull } from './primitives';
 /**
  * FOCUSED SHAPE GUARDS
  *

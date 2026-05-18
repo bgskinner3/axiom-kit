@@ -9,7 +9,7 @@ import {
   isIntersectionShape,
   isUnionShape,
   isReferenceShape,
-} from '../../src/utils';
+} from '../../shared';
 import type { TSolidShape } from '../../shared';
 /**
  *  The AST Generator (Build-Time Emission)

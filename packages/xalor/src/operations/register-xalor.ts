@@ -1,6 +1,6 @@
 import { XalethorService } from '../xalor-service';
 import type { ISolidRegistry } from '../models/types';
-import { isMetaData } from '../utils';
+import { isMetaData } from '../../shared';
 
 export function registerXalor<
   _K extends keyof ISolidRegistry | (string & {}),

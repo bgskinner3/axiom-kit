@@ -17,7 +17,7 @@ import {
   isIntersectionShape,
   isUnionShape,
   isReferenceShape,
-} from '../utils/guards';
+} from '../../shared';
 import { validateShape } from '../validation/validate-shape';
 /**
  * 💎 SHAPE_VALIDATION_MAPPER MAPPING TABLE
