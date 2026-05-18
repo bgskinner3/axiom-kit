@@ -1,11 +1,14 @@
 import type { TPersistParams } from '../models/types';
-import type { TTripleKV, TSolidShape } from '../../shared';
+import type { TTripleKV } from '../../shared';
 import { IS_SOLID_CONFIG_ITEMS, logDev } from '../../shared';
 import { serialize } from '../utils';
-import { EXTRACT_SHAPE_NORMALIZERS, BUILD_SHAPE_INFLATORS } from '../mappers';
 import * as fs from 'fs';
 import * as path from 'path';
 import { XalethorVaultKeeper } from './vault-keeper';
+import {
+  inflateAndNormalizeShape,
+  extractAndNormalizeShape,
+} from '../../shared';
 /**
  * XALETHOR VAULT ARCHIVE
  *
@@ -26,69 +29,6 @@ import { XalethorVaultKeeper } from './vault-keeper';
 export class XalethorVaultArchive {
   private static lifeCyclePaths = IS_SOLID_CONFIG_ITEMS.lifeCyclePaths;
 
-  /**
-   * RECURSIVE RE-SHREDDER
-   *
-   * ROLE:
-   * Deeply normalizes structural objects into a flat content-addressable pool.
-   *
-   * STRATEGY:
-   * - Structural Shredding: Only 'object' kinds are replaced with 'sh_' reference keys.
-   * - Value Inlining: Primitives, Literals, Unions, Arrays, and Brands maintain inline
-   *   payload positioning to prevent intermediate map hop overhead during system boots.
-   */
-  private static extractAndNormalizeShape(
-    shape: TSolidShape,
-    flatPool: Record<string, TSolidShape>,
-  ): TSolidShape {
-    if (!shape) return shape;
-
-    const executeNormalizer = <K extends TSolidShape['kind']>(
-      kind: K,
-      targetShape: Extract<TSolidShape, { kind: K }>,
-    ): TSolidShape => {
-      const normalizer = EXTRACT_SHAPE_NORMALIZERS[kind];
-      return normalizer(
-        targetShape,
-        flatPool,
-        this.extractAndNormalizeShape.bind(this),
-      );
-    };
-
-    return executeNormalizer(shape.kind, shape);
-  }
-  /**
-   * RECURSIVE RE-ASSEMBLER
-   *
-   * ROLE:
-   * Deeply inflates content-addressable reference hashes into fully expanded,
-   * nested layout graphs ready for active RAM lookups.
-   *
-   * STRATEGY:
-   * - Relational Expansion: Follows storage references ('sh_') and rebuilds full parent maps.
-   * - Performance Shielding: Unpacks structures *prior* to runtime cache insertions,
-   *   ensuring the Bouncer validation engine can perform linear synchronous checks.
-   */
-  private static inflateAndNormalizeShape(
-    shape: TSolidShape,
-    blueprintsPool: Record<string, TSolidShape>,
-  ): TSolidShape {
-    if (!shape) return shape;
-
-    const executeInflator = <K extends TSolidShape['kind']>(
-      kind: K,
-      targetShape: Extract<TSolidShape, { kind: K }>,
-    ): TSolidShape => {
-      const inflator = BUILD_SHAPE_INFLATORS[kind];
-      return inflator(
-        targetShape,
-        blueprintsPool,
-        this.inflateAndNormalizeShape.bind(this), // Pass continuation loop
-      );
-    };
-
-    return executeInflator(shape.kind, shape);
-  }
   /**
    * 🛠️ WORKER: ENSURE BASELINE CACHE (Cold-Start Guard)
    *
@@ -155,7 +95,7 @@ export class XalethorVaultArchive {
 
     registry.forEach((meta, key) => {
       // 🚀 Run the deep normalization pass
-      const pointerReference = this.extractAndNormalizeShape(
+      const pointerReference = extractAndNormalizeShape(
         meta.shape,
         snapshot.blueprints,
       );
@@ -228,7 +168,7 @@ export class XalethorVaultArchive {
         if (!rawShape) continue;
 
         // Expand the content addressable hash into a complete, raw reference tree
-        const fullyInflatedShape = this.inflateAndNormalizeShape(
+        const fullyInflatedShape = inflateAndNormalizeShape(
           rawShape,
           snapshot.blueprints,
         );
@@ -270,4 +210,70 @@ export class XalethorVaultArchive {
 //     fs.rmSync(target, { recursive: true, force: true });
 //     console.log('[xalor] 🧹 Cache purged.');
 //   }
+// }
+
+// MIGRATED TO SHARED folder
+// TODO REMOVE BEFORE PROD
+/**
+ * RECURSIVE RE-ASSEMBLER
+ *
+ * ROLE:
+ * Deeply inflates content-addressable reference hashes into fully expanded,
+ * nested layout graphs ready for active RAM lookups.
+ *
+ * STRATEGY:
+ * - Relational Expansion: Follows storage references ('sh_') and rebuilds full parent maps.
+ * - Performance Shielding: Unpacks structures *prior* to runtime cache insertions,
+ *   ensuring the Bouncer validation engine can perform linear synchronous checks.
+ */
+// private static inflateAndNormalizeShape(
+//   shape: TSolidShape,
+//   blueprintsPool: Record<string, TSolidShape>,
+// ): TSolidShape {
+//   if (!shape) return shape;
+
+//   const executeInflator = <K extends TSolidShape['kind']>(
+//     kind: K,
+//     targetShape: Extract<TSolidShape, { kind: K }>,
+//   ): TSolidShape => {
+//     const inflator = BUILD_SHAPE_INFLATORS[kind];
+//     return inflator(
+//       targetShape,
+//       blueprintsPool,
+//       this.inflateAndNormalizeShape.bind(this), // Pass continuation loop
+//     );
+//   };
+
+//   return executeInflator(shape.kind, shape);
+// }
+// /**
+//  * RECURSIVE RE-SHREDDER
+//  *
+//  * ROLE:
+//  * Deeply normalizes structural objects into a flat content-addressable pool.
+//  *
+//  * STRATEGY:
+//  * - Structural Shredding: Only 'object' kinds are replaced with 'sh_' reference keys.
+//  * - Value Inlining: Primitives, Literals, Unions, Arrays, and Brands maintain inline
+//  *   payload positioning to prevent intermediate map hop overhead during system boots.
+//  */
+// private static extractAndNormalizeShape(
+//   shape: TSolidShape,
+//   flatPool: Record<string, TSolidShape>,
+// ): TSolidShape {
+//   if (!shape) return shape;
+
+//   const executeNormalizer = <K extends TSolidShape['kind']>(
+//     kind: K,
+//     targetShape: Extract<TSolidShape, { kind: K }>,
+//   ): TSolidShape => {
+//     const normalizer = EXTRACT_SHAPE_NORMALIZERS[kind];
+//     return normalizer(
+//       targetShape,
+//       flatPool,
+//       this.extractAndNormalizeShape.bind(this),
+//     );
+//   };
+
+//   return executeNormalizer(shape.kind, shape);
 // }
