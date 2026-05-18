@@ -1,7 +1,6 @@
 import {
   IS_SOLID_SHAPE_KINDS_CONFIG,
   IS_SOLID_CONFIG_ITEMS,
-  SENTRY_TRIGGER_NAMES,
 } from '../constants';
 import type { TSolidShape } from './blueprints';
 import type { TSolidError } from './vault';

@@ -1,7 +1,7 @@
 // transformer/utils/baseline-guard.ts
 import * as fs from 'fs';
 import * as path from 'path';
-import { logDev } from '../../shared';
+import { logDev } from '../../../shared';
 
 /**
  * 🛠️ WORKER: ENSURE BASELINE CACHE (Cold-Start Guard)

@@ -13,7 +13,7 @@ import {
 } from '../../shared';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ensureBaselineCache } from './baseline-guard';
+import { ensureBaselineCache } from './guards';
 /**
  *
  * ROLE:

@@ -126,7 +126,7 @@ export function solidVisitorProcessor({
 }
 /**
 
-
+ORIGNAL
  */
 
 //  function createSolidMetadata({
@@ -135,12 +135,12 @@ export function solidVisitorProcessor({
 //   key,
 //   shape,
 // }: TCreateSolidMetadata): ObjectLiteralExpression {
-//   return factory.createObjectLiteralExpression([
-//     /* prettier-ignore */ factory.createPropertyAssignment('key', factory.createStringLiteral(key)),
-//     /* prettier-ignore */ factory.createPropertyAssignment('area',factory.createStringLiteral(areaString)),
-//     /* prettier-ignore */ factory.createPropertyAssignment('version', factory.createStringLiteral(IS_SOLID_CONFIG_ITEMS.solidVersion)),
-//     /* prettier-ignore */ factory.createPropertyAssignment('shape', generateShapeAST(factory, shape)),
-//   ]);
+// return factory.createObjectLiteralExpression([
+//   /* prettier-ignore */ factory.createPropertyAssignment('key', factory.createStringLiteral(key)),
+//   /* prettier-ignore */ factory.createPropertyAssignment('area',factory.createStringLiteral(areaString)),
+//   /* prettier-ignore */ factory.createPropertyAssignment('version', factory.createStringLiteral(IS_SOLID_CONFIG_ITEMS.solidVersion)),
+//   /* prettier-ignore */ factory.createPropertyAssignment('shape', generateShapeAST(factory, shape)),
+// ]);
 // }
 // /**
 //  *

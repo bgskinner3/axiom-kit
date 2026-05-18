@@ -1,9 +1,10 @@
 // transformer/miner/index.ts
 import { resolveMiningTarget } from './mining-target';
-import { solidVisitorProcessor } from './processor';
+// import { solidVisitorProcessor } from './processor';
+import { solidVisitorProcessor } from './processor-new';
 import { visitEachChild } from 'typescript';
 import { reifyType } from '../reifiers';
-import { isSolidCall } from '../utils';
+import { isSolidCall, isRegisterTarget, isGenerateTarget } from '../utils';
 import type { Visitor, Node } from 'typescript';
 import { flushToRegistry } from './flush-registry';
 import { getSpatialIdentity } from './spatial-identity';
@@ -48,23 +49,20 @@ export function theMiner({
     if (!target) {
       return visitEachChild(node, visitor, context);
     }
+    if (isRegisterTarget(target)) {
+      const { keyName, keyType, shapeType } = target;
+      /* prettier-ignore */ logDev( `[xalor:stage-2] Targeted Key: "${keyName}" (Resolution: ${keyType.isStringLiteral() ? 'Static' : 'Dynamic'})`, { service: 'transformer/index.ts' });
+      /* prettier-ignore */ const identity = getSpatialIdentity({ node, sourceFile, shapeType, checker });
+      enforceCollisionLaw(keyName, identity.area, sessionRegistry);
+      const fragments = new Map<string, TSolidShape>();
 
-    const { keyName, keyType, shapeType } = target;
-    /* prettier-ignore */ logDev( `[xalor:stage-2] Targeted Key: "${keyName}" (Resolution: ${keyType.isStringLiteral() ? 'Static' : 'Dynamic'})`, { service: 'transformer/index.ts' });
-    /* prettier-ignore */ const identity = getSpatialIdentity({ node, sourceFile, shapeType, checker });
-    enforceCollisionLaw(keyName, identity.area, sessionRegistry);
-    const fragments = new Map<string, TSolidShape>();
+      const shape = reifyType({
+        type: shapeType,
+        checker,
+        ctx: createMiningCtx(keyName, fragments),
+      });
+      /* prettier-ignore */ logDev( `[xalor:stage-4] Reification complete for "${keyName}". Found ${fragments.size} fragments.`, { service: 'transformer/index.ts' });
 
-    const shape = reifyType({
-      type: shapeType,
-      checker,
-      ctx: createMiningCtx(keyName, fragments),
-    });
-    /* prettier-ignore */ logDev( `[xalor:stage-4] Reification complete for "${keyName}". Found ${fragments.size} fragments.`, { service: 'transformer/index.ts' });
-    if (keyType.isStringLiteral()) {
-      // GPS: Map the physical location and TypeScript identity
-
-      // SYNC: Flush fragments and the main payload to the Global Vault
       flushToRegistry({
         key: keyName,
         shape,
@@ -75,7 +73,15 @@ export function theMiner({
       });
       /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${keyName}" successfully solidified.`, { service: 'transformer/index.ts' });
       // PROCESS: Rewrite the AST call to inject the metadata
-      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ shape, factory, key: keyName, sourceFile, node,});
+      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ node, sourceFile, factory, target, shape,});
+      return markAsPure(updatedCall);
+    }
+    if (isGenerateTarget(target)) {
+      const { keyName, mode: _ } = target;
+
+      /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${keyName}" successfully solidified.`, { service: 'transformer/index.ts' });
+      // PROCESS: Rewrite the AST call to inject the metadata
+      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ node, sourceFile, factory, target,});
       return markAsPure(updatedCall);
     }
 
@@ -83,7 +89,21 @@ export function theMiner({
   };
   return visitor;
 }
-
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * ORIGNAL
+ */
 // export function theMiner({
 //   program,
 //   context,
