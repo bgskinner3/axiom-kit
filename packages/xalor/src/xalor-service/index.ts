@@ -5,6 +5,7 @@ import type {
   TSolidBranded,
   TSolidShape,
 } from '../../shared';
+import { isSet } from '../../shared';
 import { XalethorVaultKeeper } from './vault-keeper';
 import { XalethorVaultValidator } from './vault-validator';
 import { XalethorVaultAuditor } from './vault-auditor';
@@ -104,8 +105,10 @@ export class XalethorService {
     shape: TSolidShape,
     set: Set<string>,
   ): ISolidRegistry[K] {
-    const pickPredicate = (fieldKey: string, propertiesSet: Set<string>) =>
-      propertiesSet.has(fieldKey);
+    const pickPredicate = (
+      fieldKey: string,
+      propertiesSet: Set<string> | Record<string, string>,
+    ) => (isSet(propertiesSet) ? propertiesSet.has(fieldKey) : true);
     /* prettier-ignore */ return XalethorVaultTransformer.transformPickAndOmit<K>({data,shape,filterSet: set,predicate: pickPredicate});
   }
   public static executeOmitSanitizer<K extends keyof ISolidRegistry>(
@@ -113,8 +116,25 @@ export class XalethorService {
     shape: TSolidShape,
     set: Set<string>,
   ): ISolidRegistry[K] {
-    const omitPredicate = (fieldKey: string, propertiesSet: Set<string>) =>
-      !propertiesSet.has(fieldKey);
+    const omitPredicate = (
+      fieldKey: string,
+      propertiesSet: Set<string> | Record<string, string>,
+    ) => (isSet(propertiesSet) ? !propertiesSet.has(fieldKey) : true);
     /* prettier-ignore */ return XalethorVaultTransformer.transformPickAndOmit<K>({data,shape,filterSet: set,predicate: omitPredicate});
+  }
+  public static executeRenameSanitizer<K extends keyof ISolidRegistry>(
+    data: unknown,
+    shape: TSolidShape,
+    mappings: Record<string, string>,
+  ): ISolidRegistry[K] {
+    /* prettier-ignore */ return XalethorVaultTransformer.transformRename<K>({ data, shape, mappings });
+  }
+  public static executeMergeSanitizer<K extends keyof ISolidRegistry>(
+    dataOne: unknown,
+    dataTwo: unknown,
+    shape: TSolidShape,
+  ): ISolidRegistry[K] {
+    /* prettier-ignore */
+    return XalethorVaultTransformer.transformMerge<K>({ dataOne, dataTwo, shape });
   }
 }

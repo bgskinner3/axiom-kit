@@ -12,7 +12,11 @@ import type {
 
 // ====================================================================
 // ====================================================================
+// ====================================================================
+// ====================================================================
 // GENERATOR XALOR API TYPES
+// ====================================================================
+// ====================================================================
 // ====================================================================
 // ====================================================================
 
@@ -35,7 +39,11 @@ export type TGenerateXalorReturn<
 
 // ====================================================================
 // ====================================================================
+// ====================================================================
+// ====================================================================
 // VALIDATE XALOR API TYPES
+// ====================================================================
+// ====================================================================
 // ====================================================================
 // ====================================================================
 
@@ -57,66 +65,122 @@ export type TTValidateStrategyEngine<K extends keyof ISolidRegistry> = {
     d: unknown,
   ) => TValidateXalorResultMap<K>[Mode];
 };
-
+// ====================================================================
+// ====================================================================
 // ====================================================================
 // ====================================================================
 // TRANSFORM XALOR API TYPES
 // ====================================================================
 // ====================================================================
-// I. DISCRIMINATED CONTEXTS (Explicit Mode Associations)
+// ====================================================================
+// ====================================================================
+
+/**
+ * INDIVIDUAL TRANSFORM MODE PARAMETERS
+ *
+ * ROLE:
+ * Isolated property structural contracts defining distinct data mutation configurations.
+ *
+ * DESIGN SPECIFICATIONS:
+ * Satisfies Commandment IV (Operation Isolation). Separating user-land property parameters
+ * blocks ensures that each transformation vector holds explicit, type-safe data criteria
+ * without loose shared interface pollution holes.
+ */
 export type TPickOmitContext<K extends keyof ISolidRegistry> = {
-  readonly mode: 'pick' | 'omit';
   readonly data: unknown;
   readonly keys: readonly (keyof ISolidRegistry[K])[];
 };
 export type TRenameContext = {
-  readonly mode: 'rename';
   readonly data: unknown;
   readonly mappings: Record<string, string>;
 };
 export type TMergeContext = {
-  readonly mode: 'merge';
   readonly dataOne: unknown;
   readonly dataTwo: unknown;
 };
-export type TSimpleDataContext<M extends 'flatten'> = {
-  readonly mode: M;
+export type TFlattenDataContext = {
   readonly data: unknown;
 };
-export type TTransformContext<K extends keyof ISolidRegistry> =
-  | TPickOmitContext<K>
-  | TRenameContext
-  | TMergeContext
-  | TSimpleDataContext<'flatten'>;
+// ----------------------------------------------------------------------------------------------------
+/**
+ * AUTOMATED PARAMETERS LOOKUP DICTIONARY
+ *
+ * ROLE:
+ * Single source of truth index ledger linking strategy tokens to narrow context blocks.
+ */
 
+export type TTransformXalorParamMap<K extends keyof ISolidRegistry> = {
+  readonly pick: TPickOmitContext<K>;
+  readonly omit: TPickOmitContext<K>;
+  readonly rename: TRenameContext;
+  readonly merge: TMergeContext;
+  readonly flatten: TFlattenDataContext;
+};
+/**
+ * AUTOMATED OUTPUTS LOOKUP DICTIONARY
+ *
+ * ROLE:
+ * Single source of truth index ledger linking strategy tokens to narrow resulting structures.
+ */
 export type TTransformXalorResultMap<K extends keyof ISolidRegistry> = {
   readonly pick: ISolidRegistry[K];
   readonly omit: ISolidRegistry[K];
   readonly rename: ISolidRegistry[K];
   readonly merge: ISolidRegistry[K];
-  /** 📊 Flattened paths result in flat dot-notation analytical dictionaries */
-  readonly flatten: Record<string, string | number | boolean>;
+  readonly flatten: void; // Record<string, string | number | boolean>;
 };
+// ----------------------------------------------------------------------------------------------------
+/**
+ * TYPE-PARAMETERIZED DISCRIMINATED TRANSFORM CONTEXT
+ *
+ * ROLE:
+ * Generically locks down the required parameter payload properties block
+ * based on the precise mode literal argument passed to the generic slot.
+ *
+ * WHY:
+ * Satisfies Commandment I and V. Enforces complete compile-time validation for
+ * user-land calls like `transformXalor<"KEY", "pick">({ mode: 'pick', data, keys })`,
+ * instantly flagging mismatched field keys inside the developer's IDE.
+ */
+export type TTransformContext<
+  K extends keyof ISolidRegistry,
+  M extends TTransformXalorModes = TTransformXalorModes,
+> = {
+  readonly mode: M;
+} & TTransformXalorParamMap<K>[M];
 
-/** 🎛️ AUTOMATED RETURN TYPE DISPATCHER MAP */
+/**
+ * AUTOMATED DYNAMIC RETURN TYPE DISPATCHER
+ *
+ * ROLE:
+ * Computes and links the precise structural return type based on the active strategy token.
+ */
 export type TTransformXalorReturn<
   K extends keyof ISolidRegistry,
   M extends TTransformXalorModes,
-> = TTransformXalorResultMap<K>[M & keyof TTransformXalorResultMap<K>];
+> = TTransformXalorResultMap<K>[M];
 
 /**
- * 🗺️ FIXED STRATEGY ENGINE CONTRACT
- * Enforces that every method in the lookup map accepts identical argument shapes uniformly.
+ * AUTOMATED STRATEGY SWITCHBOARD ENGINE CONTRACT
+ *
+ * ROLE:
+ * Links each unique 'Mode' token string key directly to its matching narrow
+ * parameter object shape AND narrow output result shape simultaneously.
+ *
  */
 export type TTransformStrategyEngine<K extends keyof ISolidRegistry> = {
-  readonly [Mode in keyof TTransformXalorResultMap<K>]: (
+  readonly [Mode in TTransformXalorModes]: (
     key: K,
-    ctx: TTransformContext<K>,
+    ctx: TTransformXalorParamMap<K>[Mode],
   ) => TTransformXalorResultMap<K>[Mode];
 };
 
 // ====================================================================
 // ====================================================================
+// ====================================================================
+// ====================================================================
 // Build XALOR API TYPES
+// ====================================================================
+// ====================================================================
 // ====================================================================
 // ====================================================================

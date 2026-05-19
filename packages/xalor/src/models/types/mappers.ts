@@ -139,42 +139,89 @@ export type TCastingPrimitiveMapper = {
   ) => TPrimitiveTypeMap[K] | unknown;
 };
 
+// ========================================================================
+// ========================================================================
+// TRANSFORMER API
+// ========================================================================
+// ========================================================================
+
+/** 📥 Dependency envelope payload layout for Selection operations */
+export type TPickOmitDependency = {
+  readonly mode: 'pick' | 'omit';
+  readonly set: Set<string>;
+};
+
+/** 📥 Dependency envelope payload layout for Naming Alignments */
+export type TRenameDependency = {
+  readonly mode: 'rename';
+  readonly mappings: Record<string, string>;
+};
+
+/** 📥 Dependency envelope payload layout for Twin-Object Aggregations */
+export type TMergeDependency = {
+  readonly mode: 'merge';
+  readonly patchData: unknown;
+};
+
+/** 🎛️ AUTHORITATIVE MASTER STRATEGY DEPENDENCY UNION */
+export type TTransformDependency =
+  | TPickOmitDependency
+  | TRenameDependency
+  | TMergeDependency;
+
+// ========================================================================
+// 🎛️ RECURSIVE ROUTER MATRIX SCHEMAS (Zero Repetition / Zero Any)
+// ========================================================================
+
 /**
- * TRANSFORMER API
- * OMIT AND PICK MAPPER
- * ROLE:
- * Governs the rigid lookup contract for your polymorphic transformation engine.
+ * 🎛️ RECURSIVE TRANSFORMATION STRUCTURAL WORKER CONTRACT
  *
+ * ROLE:
+ * Governs the signature loop callback driving deep recursive tree walks.
+ *
+ * WHY:
+ * Parameterized to default directly to your authoritative TTransformDependency
+ * contract union. This allows selection, renaming, and merging tracks to share
+ * the exact same recursion wire with absolute static type safety.
  */
-export type TTransformRecursionLoop = (
+export type TTransformRecursionLoop<D = TTransformDependency> = (
   data: unknown,
   shape: TSolidShape,
-  filterSet: Set<string>,
+  dependency: D,
   depth: number,
 ) => unknown;
 
-export type TShapeTransformMapperMapper = {
-  readonly [K in TSolidShape['kind']]: (
-    shape: Extract<TSolidShape, { kind: K }>,
+/**
+ * 🗺️ UNIVERSAL AUTOMATED SHAPE TRANSFORMATION MAPPER SCHEMA
+ *
+ * ROLE:
+ * Types the single-allocation master matrix table with absolute precision.
+ *
+ * WHY:
+ * Guarantees that every method row inside the polymorphic lookup map matches
+ * your universal dependencies contract shape natively, clearing compilation blocks.
+ */
+export type TUniversalTransformMapper = {
+  readonly [Kind in TSolidShape['kind']]: (
+    shape: Extract<TSolidShape, { kind: Kind }>,
     data: unknown,
-    filterSet: Set<string>,
+    dependency: TTransformDependency,
     depth: number,
-    recurse: TTransformRecursionLoop,
+    recurse: TTransformRecursionLoop<TTransformDependency>,
   ) => unknown;
 };
-// export type TTransformRecursionLoop<K extends keyof ISolidRegistry> = (
-//   data: unknown,
-//   shape: TSolidShape,
-//   filterSet: Set<string>,
-//   depth: number,
-// ) => ISolidRegistry[K];
 
-// export type TShapeTransformMapperMapper<K extends keyof ISolidRegistry> = {
-//   readonly [SK in TSolidShape['kind']]: (
-//     shape: Extract<TSolidShape, { kind: SK }>,
-//     data: unknown,
-//     filterSet: Set<string>,
-//     depth: number,
-//     recurse: TTransformRecursionLoop<K>,
-//   ) => ISolidRegistry[K];
-// };
+export type TMapperObject = {
+  shape: Parameters<TUniversalTransformMapper['object']>[0];
+  data: Parameters<TUniversalTransformMapper['object']>[1];
+  dependency: Parameters<TUniversalTransformMapper['object']>[2];
+  depth: Parameters<TUniversalTransformMapper['object']>[3];
+  recurse: Parameters<TUniversalTransformMapper['object']>[4];
+};
+export type TMapperArray = {
+  shape: Parameters<TUniversalTransformMapper['array']>[0];
+  data: Parameters<TUniversalTransformMapper['array']>[1];
+  dependency: Parameters<TUniversalTransformMapper['array']>[2];
+  depth: Parameters<TUniversalTransformMapper['array']>[3];
+  recurse: Parameters<TUniversalTransformMapper['array']>[4];
+};

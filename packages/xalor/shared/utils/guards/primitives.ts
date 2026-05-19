@@ -96,3 +96,13 @@ export const isSymbol: TTypeGuard<symbol> = (value): value is symbol =>
 export const isDefined: TTypeGuard<unknown> = (
   value,
 ): value is NonNullable<unknown> => value !== null && value !== undefined;
+/**
+ * @utilType Guard
+ * @name isSet
+ * @category Guards Core
+ * @description Validates that a value is an instance of a Set.
+ * @link #isset
+ */
+export const isSet: TTypeGuard<Set<unknown>> = <T, U>(
+  term: Set<T> | U,
+): term is Set<T> => term instanceof Set;

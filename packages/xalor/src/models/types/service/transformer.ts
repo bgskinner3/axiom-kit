@@ -1,41 +1,64 @@
 import type { TSolidShape } from '../../../../shared';
-/**
- * TTransformPickAndOmit
- *
- * Params for service XalethorVaultTransformer
- */
+import type { TTransformDependency } from '../mappers';
+
+// ========================================================================
+// 🎛️ I. PUBLIC DEVELOPER API BOUNDARY CONTRACTS
+// ========================================================================
+
+/** 🎛️ UNIVERSAL TRANSFORM PREDICATE CLOSURE ENGINE CONTRACT */
 export type TTransformPredicate = (
   key: string,
-  propertiesSet: Set<string>,
+  propertiesSet: Set<string> | Record<string, string>,
 ) => boolean;
+
+/** 📥 Params for public service method XalethorVaultTransformer.transformPickAndOmit */
 export type TTransformPickAndOmit = {
-  data: unknown;
-  shape: TSolidShape;
-  filterSet: Set<string>;
-  predicate: TTransformPredicate;
+  readonly data: unknown;
+  readonly shape: TSolidShape;
+  readonly filterSet: Set<string>;
+  readonly predicate: TTransformPredicate;
 };
-export type TSanitizePickOmitTransformBase = {
-  val: unknown;
-  currentShape: TSolidShape;
-  set: Set<string>;
-  depth: number;
+
+/** 🚀 Params for public service method XalethorVaultTransformer.transformRename */
+export type TTransformRename = {
+  readonly data: unknown;
+  readonly shape: TSolidShape;
+  readonly mappings: Record<string, string>;
 };
+
+/** 🧬 Params for public service method XalethorVaultTransformer.transformMerge */
+export type TTransformMerge = {
+  readonly dataOne: unknown;
+  readonly dataTwo: unknown;
+  readonly shape: TSolidShape;
+};
+
+// ========================================================================
+// 🎛️ III. SHARED RECURSIVE ENGINE INTERNAL CONTEXT CONTRACTS
+// ========================================================================
+
+/**
+ * 🎛️ TSanitizeTransformBase
+ *
+ * ROLE:
+ * Base shared parameter context driving internal transformation loops.
+ */
+export type TSanitizeTransformBase = {
+  readonly val: unknown;
+  readonly currentShape: TSolidShape;
+  readonly dependency: TTransformDependency; // 🚀 Unified tracking container union
+  readonly depth: number;
+};
+
+/** 📥 Internal parameter context wrapper for your object slicing worker */
 export type TSanitizeSlicedObject = {
   readonly currentShape: Extract<TSolidShape, { kind: 'object' }>;
   readonly seenObjectsMap: Map<unknown, unknown>;
-  readonly predicate: TTransformPredicate;
-} & TSanitizePickOmitTransformBase;
+  readonly predicate?: TTransformPredicate;
+} & TSanitizeTransformBase;
 
-export type TSanitizePickOmit = {
+/** 📥 Internal parameter context wrapper for your core sanitizer gate */
+export type TTransformSanitize = {
   readonly seenObjectsMap: Map<unknown, unknown>;
-  readonly predicate: TTransformPredicate;
-} & TSanitizePickOmitTransformBase;
-// TSanitizePickOmitTransform & {
-// readonly currentShape: Extract<TSolidShape, { kind: 'object' }>;
-// readonly seenObjectsMap: Map<unknown, unknown>;
-// readonly predicate: (key: string, propertiesSet: Set<string>) => boolean;
-//   }
-// TSanitizePickOmitTransform & {
-// readonly seenObjectsMap: Map<unknown, unknown>;
-// readonly predicate: (key: string, propertiesSet: Set<string>) => boolean;
-//   }
+  readonly predicate?: TTransformPredicate;
+} & TSanitizeTransformBase;

@@ -46,7 +46,7 @@ export class XalethorVaultValidator {
   }
   public static validateKey(key: string): void {
     if (!this.has(key)) {
-      // 🚩 In production, we'll use the Auditor to provide the exact fix
+      // In production, we'll use the Auditor to provide the exact fix
       throw new Error(
         `[xalor] 🚨 MISSING BLUEPRINT: The key "${key}" is not registered in the Vault. ` +
           `Ensure you have a build-time isXalor<'${key}', Type>() call.`,

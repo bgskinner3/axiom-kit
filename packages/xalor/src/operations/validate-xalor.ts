@@ -57,12 +57,12 @@ export function validateXalor<
         return guard(v) && markAsSolid<K, ISolidRegistry[K]>(v);
       };
 
-      return runtimeGuard; // ✅ Compiles safely with zero assertions
+      return runtimeGuard;
     },
 
     assert: (key, val) => {
       const { assert } = buildValidationTools(key);
-      return assert(val); // ✅ Compiles safely (returns void)
+      return assert(val);
     },
 
     parse: (key, val) => {
@@ -79,7 +79,6 @@ export function validateXalor<
         if (XalethorService.validateShape(_val, key)) {
           if (markAsSolid<K, ISolidRegistry[K]>(_val)) return _val;
         }
-        // 🎯 FIX: Direct rejection pipeline prevents uncaught microtask exceptions
         return Promise.reject(
           new Error(
             `[xalor] Async parser validation failed for blueprint key: ${key}`,

@@ -33,8 +33,7 @@ export class XalethorVaultKeeper {
     return ensureGlobalVault();
   }
   /**
-   * Registers a single type into the Triple-KV system.
-   * Replaces 'Registry.registerShape'.
+   * Replaces 'Registry.registerShape'. ****
    */
   public static solidify(rawMetadata: TSolidMetadata): void {
     const metadata = preRegisterMetadata(rawMetadata);
@@ -50,8 +49,7 @@ export class XalethorVaultKeeper {
   }
 
   /**
-   * 📤 RETRIEVAL: Reconstructs the ghost-identity for the public API
-   * 🎯 UPDATED: Resilient to partial or missing metadata drawers.
+   * RETRIEVAL: Reconstructs the ghost-identity for the public API
    */
   public static resolve(key: string): TStrictSolidMetaData | undefined {
     const shape = this.vault.blueprints.get(key);
@@ -60,8 +58,6 @@ export class XalethorVaultKeeper {
     const manifest = this.vault.manifest.get(key);
     const registry = this.vault.registry.get(key);
 
-    // 🛡️ RECOVERY FIX: If manifest or registry are missing (e.g. in basic unit tests),
-    // we inline realistic fallback primitives so the Auditor engine can still execute.
     return {
       key,
       shape,
