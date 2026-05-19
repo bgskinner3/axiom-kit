@@ -19,8 +19,8 @@ export function transformerMapperArray({
     const list1 = isArray(data) ? data : [];
     const list2 = isArray(dependency.patchData) ? dependency.patchData : [];
     const maxLength = Math.max(list1.length, list2.length);
-
     const copy: unknown[] = [];
+
     for (let i = 0; i < maxLength; i++) {
       const itemChildDependency: TMergeDependency = {
         mode: 'merge',
@@ -32,10 +32,15 @@ export function transformerMapperArray({
   }
 
   // Standard single-source stream array passthrough
+
   if (!isArray(data)) return [];
   const copy: unknown[] = [];
+
+  // ✔️ ARCHITECTURALLY PURE: Removed the duplicate, broken 'if' block override filter lines!
+  // This loop cleanly passes your pre-calculated child subsets down the tree wire natively.
   for (let i = 0; i < data.length; i++) {
     copy[i] = recurse(data[i], shape.items, dependency, depth + 1);
   }
+
   return copy;
 }

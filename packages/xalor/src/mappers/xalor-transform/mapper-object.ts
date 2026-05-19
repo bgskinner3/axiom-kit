@@ -1,4 +1,8 @@
-import type { TMergeDependency, TMapperObject } from '../../models/types';
+import type {
+  TMergeDependency,
+  TMapperObject,
+  TPickOmitDependency,
+} from '../../models/types';
 import { isObject, isNull, isArray } from '../../../shared';
 
 /**
@@ -28,19 +32,61 @@ export function transformerMapperObject({
    */
   if (dependency.mode === 'pick' || dependency.mode === 'omit') {
     const activeSet = dependency.set;
-    const isAllowed =
-      dependency.mode === 'pick'
-        ? (k: string) => activeSet.has(k)
-        : (k: string) => !activeSet.has(k);
 
     for (const key of Object.keys(blueprintProps)) {
       const propertyContainer = blueprintProps[key];
+
       if (
         propertyContainer?.shape &&
         Object.prototype.hasOwnProperty.call(dataRef, key)
       ) {
-        if (isAllowed(key)) {
-          /* prettier-ignore */ cleanObj[key] = recurse( dataRef[key], propertyContainer.shape, dependency, depth + 1,);
+        const hasRootMatch = activeSet.has(key);
+        const hasNestedMatch = Array.from(activeSet).some((path) =>
+          path.startsWith(`${key}.`),
+        );
+
+        const isAllowed =
+          dependency.mode === 'pick'
+            ? hasRootMatch || hasNestedMatch
+            : !hasRootMatch && !hasNestedMatch;
+
+        if (isAllowed) {
+          const childSet = new Set<string>();
+
+          for (const path of activeSet) {
+            if (path.startsWith(`${key}.`)) {
+              childSet.add(path.slice(key.length + 1));
+            } else if (path === key && dependency.mode === 'pick') {
+              // ✔️ FIX: Expand properties natively if the node is explicitly an object schema
+              if (propertyContainer.shape.kind === 'object') {
+                for (const childKey of Object.keys(
+                  propertyContainer.shape.properties,
+                )) {
+                  childSet.add(childKey);
+                }
+              }
+              // ✔️ FIX: Expand item shapes natively if the node is explicitly an array schema node
+              if (
+                propertyContainer.shape.kind === 'array' &&
+                propertyContainer.shape.items.kind === 'object'
+              ) {
+                for (const childKey of Object.keys(
+                  propertyContainer.shape.items.properties,
+                )) {
+                  childSet.add(childKey);
+                }
+              }
+            }
+          }
+
+          // If childSet remains completely empty but passed checks, handle as terminal leaf node
+          const nextDependency: TPickOmitDependency = {
+            mode: dependency.mode,
+            set: childSet.size > 0 ? childSet : new Set([key]),
+          };
+
+          /* prettier-ignore */
+          cleanObj[key] = recurse(dataRef[key], propertyContainer.shape, nextDependency, depth + 1);
         }
       }
     }

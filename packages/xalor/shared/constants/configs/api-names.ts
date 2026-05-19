@@ -73,3 +73,42 @@ export const TRANSFORM_MODE_TRIGGERS = [
   'flatten',
   'merge',
 ] as const;
+
+/**
+ * STEPS TO UPDATE TRANFORMER REGISTRY
+ *
+ * I. CONSTANTS, TYPES AND KEYS
+ *  - include a const object like above including all the different modes
+ *  - import const object to create the necessary type
+ *  - ADD NEW API NAME TO object SENTRY_TRIGGER_NAMES
+ *
+ * II. CONSTANTS, TYPES AND KEYS PT 2
+ *   - in our transformer file another type file exists we need to update fields
+ *   a. miner-targets.ts b. processor-targets.ts
+ *   - miner-targets.ts
+ *     - create a new RawPayload type
+ *     - apply the payload type to the TXalorMinerRouterMap and teh TResolvedMiningRouterReturn
+ *   - processor-targets.ts
+ *     - create a new Processor type tied to our new API
+ *     - add new processor type to the TProcessorRewriteMap with proepr key
+ *     - ctreate a new ProcessorTarget type
+ *     - add new ProcessorTarget type to TProcessorTarget
+ *
+ *  III. UTILS & GUARDS
+ *   - under predicate-guards.ts we will create a api gaurd
+ *   - labeled is--name of api--Target
+ *
+ *   IV. MIeNR FILE PT.I "MAPPERs"
+ *   - here we will touch two files miner-resolver.ts and processor-rewrite.ts
+ *   - miner-resolver.ts: we will update teh XALOR_MINING_ROUTER_MAPPER
+ *     - importing the necessary 'raw payload', 'mode triggers object' and its typed value
+ *   - processor-rewrite.ts: here we will update teh PROCESSOR_REWRITE_MAPPER
+ *    - adding the apprpirate key to the new map
+ *
+ *  V. MIeNR FILE PT.II "CORE"
+ *  - here we will touch two files mining-target.ts and processor.ts
+ *  a. mining-target.ts
+ *    - we will add our new api naem to the contiontionals in resolveMiningTarget
+ *  b. processor.ts
+ *    - here we will use our type guard for the correct processor condtiontional
+ */

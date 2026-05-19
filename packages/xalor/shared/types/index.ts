@@ -5,3 +5,4 @@ export * from './metadata';
 export * from './vault';
 export * from './genesis';
 export * from './api-contracts';
+export * from './utility';

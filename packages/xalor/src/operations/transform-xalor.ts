@@ -1,14 +1,12 @@
 import { XalethorService } from '../xalor-service';
 import type {
   ISolidRegistry,
-  TTransformXalorParamMap,
   TTransformStrategyEngine,
   TTransformContext,
   TFlattenDataContext,
   TMergeContext,
   TRenameContext,
   TPickOmitContext,
-  TTransformXalorResultMap,
 } from '../models/types';
 import type { TTransformXalorModes } from '../../shared';
 
@@ -124,9 +122,9 @@ export function transformXalor<
   K extends keyof ISolidRegistry,
   M extends TTransformXalorModes,
 >(
-  ctx: TTransformContext<K, M>,
   injectedKey?: K,
   injectedMode?: M,
+  ctx?: TTransformContext<K, M>,
 ): ISolidRegistry[K] | Record<string, string | number | boolean> | void {
   if (!injectedKey || !injectedMode || !ctx) {
     throw new Error(
@@ -167,13 +165,5 @@ export function transformXalor<
     },
   } satisfies TTransformStrategyEngine<K>;
 
-  const executeStrategy = <ModeToken extends TTransformXalorModes>(
-    runContext: {
-      readonly mode: ModeToken;
-    } & TTransformXalorParamMap<K>[ModeToken],
-  ): TTransformXalorResultMap<K>[ModeToken] => {
-    return TRANSFORMATION_MODES[runContext.mode](injectedKey, runContext);
-  };
-
-  return executeStrategy(ctx);
+  return TRANSFORMATION_MODES[injectedMode](injectedKey, ctx);
 }

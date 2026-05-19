@@ -1,5 +1,10 @@
 import type { TSolidShape } from '../../../../shared';
-import type { TTransformDependency } from '../mappers';
+import type {
+  TTransformDependency,
+  TPickOmitDependency,
+  TMergeDependency,
+  TRenameDependency,
+} from '../mappers';
 
 // ========================================================================
 // 🎛️ I. PUBLIC DEVELOPER API BOUNDARY CONTRACTS
@@ -9,6 +14,7 @@ import type { TTransformDependency } from '../mappers';
 export type TTransformPredicate = (
   key: string,
   propertiesSet: Set<string> | Record<string, string>,
+  depth: number,
 ) => boolean;
 
 /** 📥 Params for public service method XalethorVaultTransformer.transformPickAndOmit */
@@ -62,3 +68,53 @@ export type TTransformSanitize = {
   readonly seenObjectsMap: Map<unknown, unknown>;
   readonly predicate?: TTransformPredicate;
 } & TSanitizeTransformBase;
+
+// ==============================================================================================================
+// OBJECT PROPERTY FORKS
+// @see XalethorVaultTransformer.sliceObjectProperties
+// ==============================================================================================================
+/**
+ * @name TTransformWorkerBase
+ * @description Context envelope governing cross-module structural data migration tracking.
+ */
+
+type TTransformWorkerBase = TSanitizeSlicedObject & {
+  /** The clean target object instance container currently receiving sliced property weights */
+  readonly cleanObj: Record<string, unknown>;
+  /** Authoritative un-casted source reference data pointer context entering mutation lanes */
+  readonly dataRef: unknown;
+  /** Complete schema properties dictionary node map retrieved directly from the Vault blueprint graph */
+  readonly props: Record<
+    string,
+    {
+      readonly name: string;
+      readonly optional: boolean;
+      readonly shape: TSolidShape;
+    }
+  >;
+  /** Closed system recursion handler function tunnel routing context allocations deeper down call stacks */
+  readonly sanitizeHandler: (params: TTransformSanitize) => unknown;
+};
+/**
+ * @name TExecutePickOmitFork
+ * @description Parameter context targeting property filtering execution pipelines.
+ */
+export type TExecutePickOmitFork = TTransformWorkerBase & {
+  readonly dependency: TPickOmitDependency;
+};
+
+/**
+ * @name TExecuteRenameFork
+ * @description Parameter context targeting nominal key translation lookups.
+ */
+export type TExecuteRenameFork = TTransformWorkerBase & {
+  readonly dependency: TRenameDependency;
+};
+
+/**
+ * @name TExecuteMergeFork
+ * @description Parameter context targeting twin-object entity aggregations.
+ */
+export type TExecuteMergeFork = TTransformWorkerBase & {
+  readonly dependency: TMergeDependency;
+};

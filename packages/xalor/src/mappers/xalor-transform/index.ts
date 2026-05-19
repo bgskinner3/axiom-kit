@@ -2,7 +2,7 @@ import type {
   TUniversalTransformMapper,
   TShapeFlattenMapper,
 } from '../../models/types';
-import { isUndefined } from '../../../shared';
+// import { isUndefined } from '../../../shared';
 import { XalethorVaultKeeper } from '../../xalor-service/vault-keeper';
 import { validateShape, createInitialContext } from '../../validation';
 import { transformerMapperObject } from './mapper-object';
@@ -18,22 +18,25 @@ import { isObject, isNull, isArray } from '../../../shared';
  *
  */
 export const TRANSFORM_SHAPE_MAPPER: TUniversalTransformMapper = {
-  // Primitives represent immutable terminal leaf nodes
   primitive: (_shape, data, dependency) => {
-    return dependency.mode === 'merge' && isUndefined(data)
+    return dependency.mode === 'merge' && data === undefined
       ? dependency.patchData
       : data;
   },
+
   literal: (shape, data, dependency) => {
     const activeValue =
-      dependency.mode === 'merge' && isUndefined(data)
+      dependency.mode === 'merge' && data === undefined
         ? dependency.patchData
         : data;
     return activeValue === shape.value ? activeValue : null;
   },
+
+  // ✔️ FIX: Positional forwarding matches signature tuple bounds perfectly!
   object: (shape, data, dependency, depth, recurse) =>
     transformerMapperObject({ shape, data, dependency, depth, recurse }),
 
+  // ✔️ FIX: Positional forwarding matches signature tuple bounds perfectly!
   array: (shape, data, dependency, depth, recurse) =>
     transformerMapperArray({ shape, data, dependency, depth, recurse }),
 
@@ -72,7 +75,7 @@ export const TRANSFORM_SHAPE_MAPPER: TUniversalTransformMapper = {
 } as const satisfies TUniversalTransformMapper;
 
 /**
- * 🗺️ UNIVERSAL AUTOMATED FLATTEN SHAPE MAPPER MATRIX
+ * UNIVERSAL AUTOMATED FLATTEN SHAPE MAPPER MATRIX
  *
  * ROLE:
  * The single source of truth matrix driving matrix decompression and dot-notation flat mapping.

@@ -3,6 +3,7 @@ import type {
   TRegisterRawPayload,
   TGenerateRawPayload,
   TValidateRawPayload,
+  TTransformerRawPayload,
 } from '../../types';
 
 // ========================================================================
@@ -34,4 +35,11 @@ export function isValidateTarget(
   target: TResolvedMiningRouterReturn,
 ): target is TValidateRawPayload {
   return target !== null && target.apiName === 'validateXalor';
+}
+
+/** IS Transformer TARGET TYPE GUARD */
+export function isTransformerTarget(
+  target: TResolvedMiningRouterReturn,
+): target is TTransformerRawPayload {
+  return target !== null && target.apiName === 'transformXalor';
 }

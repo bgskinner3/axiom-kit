@@ -3,6 +3,7 @@ import type {
   TTypeGuard,
   TSolidBranded,
   TXalorAuditReport,
+  TDeepKeyOf,
 } from '../../../shared';
 import type {
   TGenerateXalorModes,
@@ -88,7 +89,7 @@ export type TTValidateStrategyEngine<K extends keyof ISolidRegistry> = {
  */
 export type TPickOmitContext<K extends keyof ISolidRegistry> = {
   readonly data: unknown;
-  readonly keys: readonly (keyof ISolidRegistry[K])[];
+  readonly keys: readonly TDeepKeyOf<ISolidRegistry[K]>[];
 };
 export type TRenameContext = {
   readonly data: unknown;

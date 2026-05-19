@@ -3,6 +3,7 @@ import type {
   TGenerateRawPayload,
   TRegisterRawPayload,
   TValidateRawPayload,
+  TTransformerRawPayload,
 } from './miner-targets';
 import type { TSolidShape } from '../../shared';
 
@@ -37,6 +38,15 @@ export type TValidateProcessor = (
   factory: ts.NodeFactory,
 ) => ts.Expression[];
 /**
+ * 🎛️ TRansformer REWRITER SIGNATURE (🚀 Newly Incorporated!)
+ * Defines the functional parameter injection routine for type-consuming validation blocks.
+ */
+export type TTransformerProcessor = (
+  raw: TTransformerRawPayload,
+  node: ts.CallExpression,
+  factory: ts.NodeFactory,
+) => ts.Expression[];
+/**
  * 🗺️ FIXED PROCESSOR REWRITE MAP SCHEMA
  *
  * ROLE:
@@ -49,7 +59,8 @@ export type TValidateProcessor = (
 export type TProcessorRewriteMap = {
   readonly registerXalor: TRegisterProcessor;
   readonly generateXalor: TGenerateProcessor;
-  readonly validateXalor: TValidateProcessor; // 🚀 Incorporated!
+  readonly validateXalor: TValidateProcessor;
+  readonly transformXalor: TTransformerProcessor;
 };
 // ========================================================================
 // DISCRIMINATED REWRITER CONTEXTS
@@ -81,6 +92,12 @@ type TValidateProcessorTarget = TBaseProcessorTargetParams & {
   /** 🎯 INDUSTRIAL CONTROLLERS REQ LOGIC: shape is strictly prohibited here */
   readonly shape?: undefined;
 };
+/** 🛡️ VALIDATE PASS CONFIGURATION (The Consumer Validation Lane - 🚀 Newly Incorporated!) */
+type TTransformerProcessorTarget = TBaseProcessorTargetParams & {
+  readonly target: TTransformerRawPayload;
+  /** 🎯 INDUSTRIAL CONTROLLERS REQ LOGIC: shape is strictly prohibited here */
+  readonly shape?: undefined;
+};
 /**
  * 🎛️ AUTHORITATIVE DISCRIMINATED PROCESSOR PARAMETERS UNION
  *
@@ -94,4 +111,5 @@ type TValidateProcessorTarget = TBaseProcessorTargetParams & {
 export type TProcessorTarget =
   | TRegisterProcessorTarget
   | TGenerateProcessorTarget
-  | TValidateProcessorTarget;
+  | TValidateProcessorTarget
+  | TTransformerProcessorTarget;

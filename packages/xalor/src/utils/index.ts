@@ -5,3 +5,4 @@ export * from './iterator-utils';
 export * from './transformers';
 export * from './operations';
 export * from './common';
+export * from './vault-service';

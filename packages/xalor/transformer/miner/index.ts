@@ -8,6 +8,7 @@ import {
   isRegisterTarget,
   isGenerateTarget,
   isValidateTarget,
+  isTransformerTarget,
 } from '../utils';
 import type { Visitor, Node } from 'typescript';
 import { flushToRegistry } from './flush-registry';
@@ -89,6 +90,14 @@ export function theMiner({
       return markAsPure(updatedCall);
     }
     if (isValidateTarget(target)) {
+      const { keyName, mode: _ } = target;
+
+      /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${keyName}" successfully solidified.`, { service: 'transformer/index.ts' });
+      // PROCESS: Rewrite the AST call to inject the metadata
+      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ node, sourceFile, factory, target,});
+      return markAsPure(updatedCall);
+    }
+    if (isTransformerTarget(target)) {
       const { keyName, mode: _ } = target;
 
       /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${keyName}" successfully solidified.`, { service: 'transformer/index.ts' });

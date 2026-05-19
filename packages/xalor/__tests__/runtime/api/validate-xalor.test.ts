@@ -1,4 +1,4 @@
-// __tests__/runtime/api/generate-xalor.test.ts
+// __tests__/runtime/api/validate-xalor.test.ts
 import { validateXalor } from '../../../src/operations';
 import { TEST_SHAPE_REGISTRY } from '../../utils/constants';
 import { seedTestVault } from '../../utils';
