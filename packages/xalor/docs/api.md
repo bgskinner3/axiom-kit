@@ -1,62 +1,309 @@
-> 🚧 **Early Development / Preview Release**
->
-> Xalor is currently under active development.
-> Some APIs and configuration steps may change before v1.0.
-> Expect frequent updates and structural improvements.
+# Xalor Runtime API
 
-# Avliable RuntimeAPIS
+ - A unified interface for validating, generating, transforming, and building Xalor schemas at runtime.
 
-I. registerXalor
-II. validateXalor
-III. generateXalor
-IV. transformXalor
-mapXalor
-mergeXalor
-projectXalor
-V. buildXalor
 
+## Table of Contents
+
+1. [registerXalor](#registerxalor)
+
+2. [validateXalor](#validatexalor)
+   - [Type Guard Strategy (`guard`)](#i-type-guard-strategy-guard)
+   - [Assertion Strategy (`assert`)](#ii-assertion-strategy-assert)
+   - [Synchronous Parser (`parse`)](#iii-synchronous-parser-parse)
+   - [Async Parser (`parseasync`)](#iv-async-parser-parseasync)
+   - [Diagnostic Audit Strategy (`audit`)](#v-diagnostic-audit-strategy-audit)
+
+3. [generateXalor](#generatexalor)
+   - [Default Skeleton Strategy (`default`)](#i-default-skeleton-strategy-default)
+   - [Mock Generation Strategy (`mock`)](#ii-mock-generation-strategy-mock)
+   - [Structural Clone Strategy (`clone`)](#iii-structural-clone-strategy-clone)
+   - [Runtime Cast Strategy (`cast`)](#iv-runtime-cast-strategy-cast)
+
+
+4. [transformXalor](#transformxalor)
+
+5. [buildXalor](#buildxalor)
 
 ---
 
+&nbsp;
 
-## 🛡️ Validation API: `validateXalor` Reference
+# Register Xalor
 
-The `validateXalor` API acts as the runtime switchboard for Xalor’s validation engine.
+### 🟢 Active
 
-It provides a single polymorphic entry point that translates build-time TypeScript types into runtime validation strategies.
+#### Registers a Xalor schema, runtime definition, or type configuration into the active runtime registry.
 
-At execution time, the engine routes each payload through a set of specialized validation modes, each optimized for a different safety and performance profile.
+This method is responsible for:
 
+- linking runtime validators
+- attaching generation strategies
+- enabling transformation pipelines
+- exposing registered schema metadata
 
-| Mode         | Strategy Name           | Return Type                 | Behavior                                                                            | Best Use Case                                             |
-| ------------ | ----------------------- | --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `guard`      | Soft Type Guard         | `TTypeGuard<T>`             | Returns a boolean (`true/false`) after structural validation. No exceptions thrown. | Express/Koa middleware, array filtering, defensive checks |
-| `assert`     | Terminal Asserter       | `void`                      | Throws immediately if validation fails (fail-fast execution).                       | Webhooks, env validation, startup safety checks           |
-| `parse`      | Synchronous Parser      | `TSolidBranded<T>`          | Validates and returns a branded immutable type instance.                            | DB hydration, config parsing, trusted transforms          |
-| `parseAsync` | Promise Parser          | `Promise<TSolidBranded<T>>` | Async validation with safe promise-based rejection flow.                            | Edge functions, message queues, streaming systems         |
-| `audit`      | Soft-Fail Diagnostician | `TXalorAuditReport`         | Never throws. Returns full diagnostic report of validation state.                   | Debug UIs, form validation, observability layers          |
+---
 
+&nbsp;
 
+# Validate Xalor
 
-| Method    | What it does                                           | Purpose                                    |
-| --------- | ------------------------------------------------------ | ------------------------------------------ |
-| `map`     | Transforms a value while preserving its shape contract | Normalize or enrich runtime data           |
-| `pick`    | Selects a subset of fields from a value                | Create lightweight views (DTOs, UI models) |
-| `omit`    | Removes specific fields from a value                   | Strip sensitive or internal data           |
-| `flatten` | Converts nested objects into flat structures           | Simplify hierarchical data for processing  |
-| `merge`   | Combines multiple objects into one structure           | Aggregate or enrich runtime data           |
-| `rename`  | Renames fields in a type-safe transformation           | Align external/internal naming conventions |
-| `pipe`    | Chains multiple transformations in sequence            | Build declarative transformation pipelines |
+### 🟢 Active
 
+#### `validateXalor` supports multiple runtime validation strategies depending on the desired execution model and error-handling behavior.
 
+---
 
-| Method        | What it does                                           | Purpose                             |
-| ------------- | ------------------------------------------------------ | ----------------------------------- |
-| `extend`      | Adds new fields to an existing registered type         | Create enriched derived types       |
-| `pick`        | Builds a new type from selected fields                 | Create lightweight derived schemas  |
-| `omit`        | Creates a new type excluding selected fields           | Build safe or stripped variants     |
-| `compose`     | Combines multiple registered types into one            | Multi-entity domain modeling        |
-| `map`         | Applies a function to derive a new type structure      | Runtime-driven type evolution       |
-| `derive`      | Infers and registers a new type from output shape      | Adaptive or dynamic schema creation |
-| `alias`       | Creates a new key pointing to an existing type         | Versioning or semantic renaming     |
-| `materialize` | Finalizes and commits a derived type into the registry | Persist build-time graph nodes      |
+&nbsp;
+
+# I. Type Guard Strategy (`'guard'`)
+
+### Creates a reusable runtime type guard function.
+
+### Behavior
+
+- Returns a `TTypeGuard<T>`
+- Performs runtime structural validation
+- Returns a boolean result
+- Narrows types safely within conditional branches
+
+## Usage
+
+```ts
+const isUser = validateXalor<'USER_TEST', 'guard'>();
+
+if (isUser(payload)) {
+  console.log(payload.username);
+}
+```
+
+---
+
+## II. Assertion Strategy (`'assert'`)
+
+### Performs runtime validation and throws immediately on failure.
+
+### Behavior
+
+- Returns `void`
+- Throws a validation error if validation fails
+- Narrows the validated value downstream after execution
+
+## Usage
+
+```ts
+const payload: unknown = getIncomingRequest();
+
+validateXalor<'USER_TEST', 'assert'>(payload);
+
+console.log(payload.id);
+```
+
+---
+
+## III. Synchronous Parser (`'parse'`)
+
+### Validates and returns the typed runtime value synchronously.
+
+### Behavior
+
+- Returns validated typed data
+- Throws on validation failure
+- Supports runtime branding and schema hydration
+
+## Usage
+
+```ts
+const user = validateXalor<'USER_TEST', 'parse'>(rawData);
+```
+
+---
+
+## IV. Async Parser (`'parseAsync'`)
+
+### Asynchronously validates and resolves typed runtime data.
+
+### Behavior
+
+- Returns `Promise<T>`
+- Rejects on validation failure
+- Supports async validation pipelines and external resolvers
+
+## Usage
+
+```ts
+const user = await validateXalor<'USER_TEST', 'parseAsync'>(networkData);
+```
+
+---
+
+## V. Diagnostic Audit Strategy (`'audit'`)
+
+### Produces a structured validation report without throwing.
+
+### Behavior
+
+- Returns a diagnostic result object
+- Collects validation issues
+- Does not throw
+- Useful for tooling, debugging, and reporting pipelines
+
+## Usage
+
+```ts
+const report = validateXalor<'USER_TEST', 'audit'>(corruptedData);
+
+if (!report.valid) {
+  report.issues.forEach((issue) => {
+    console.log(`${issue.path}: ${issue.rule}`);
+  });
+}
+// LOGS:
+// {
+//   valid: false,
+//   issues: [
+//     {
+//       path: 'username',
+//       expected: '{\n  kind: primitive,\n  type: string\n}',
+//       received: '"missing"',
+//       rule: 'missing_property'
+//     }
+//   ]
+// }
+```
+
+&nbsp;
+
+&nbsp;
+
+# Generate XALOR
+
+### 🟢 Active
+
+### `generateXalor` supports multiple runtime generation strategies for creating, cloning, coercing, and simulating typed runtime data structures.
+
+This method supports:
+
+- runtime type validation
+- safe parsing
+- structured validation errors
+- strict or permissive validation modes
+
+---
+
+&nbsp;
+
+## I. Default Skeleton Strategy (`'default'`)
+
+### Creates a clean zero-state object from the registered schema blueprint.
+
+### Behavior
+
+- Generates structurally valid default objects
+- Applies primitive fallback values
+- Initializes arrays and nested objects
+- Returns fully typed runtime-safe structures
+
+## Default Primitive Mapping
+
+| Type      | Default Value |
+| --------- | ------------- |
+| `string`  | `""`          |
+| `number`  | `0`           |
+| `boolean` | `false`       |
+| `array`   | `[]`          |
+| `object`  | `{}`          |
+
+## Usage
+
+```ts
+const freshUser = generateXalor<'USER_TEST', 'default'>();
+```
+
+---
+
+## II. Mock Generation Strategy (`'mock'`)
+
+### Generates randomized mock data from the registered schema.
+
+### Behavior
+
+- Produces structurally valid randomized objects
+- Generates realistic primitive placeholder values
+- Randomizes optional field inclusion
+- Generates variable collection sizes
+- Useful for testing, prototyping, and fixtures
+
+## Usage
+
+```ts
+const mockUser = generateXalor<'USER_TEST', 'mock'>();
+```
+
+---
+
+## III. Structural Clone Strategy (`'clone'`)
+
+### Creates a deep schema-aligned clone from existing runtime input.
+
+### Behavior
+
+- Removes undeclared properties
+- Preserves only schema-defined fields
+- Produces clean runtime-safe objects
+- Supports circular-safe cloning pipelines
+
+## Usage
+
+```ts
+const dirtyInput = {
+  id: 1,
+  username: 'skinner',
+  strayGarbage: 'DROP TABLE Users;',
+};
+
+const cleanUser = generateXalor<'USER_TEST', 'clone'>(dirtyInput);
+```
+
+---
+
+## IV. Runtime Cast Strategy (`'cast'`)
+
+### Coerces loose runtime values into schema-compatible types.
+
+### Behavior
+
+- Converts compatible primitive values
+- Coerces strings into numbers and booleans
+- Supports case-insensitive literal alignment
+- Wraps compatible singleton values into arrays
+- Produces structurally aligned runtime output
+
+## Usage
+
+```ts
+const looseInput = {
+  id: '5562',
+  username: 991,
+  active: 'TRUE',
+};
+
+const strictUser = generateXalor<'USER_TEST', 'cast'>(looseInput);
+```
+
+&nbsp;
+
+&nbsp;
+
+# Transform Xalor
+
+### STATUS - IN PROGRESS
+
+---
+
+&nbsp;
+
+# Build Xalor
+
+### STATUS - IN PROGRESS
+
