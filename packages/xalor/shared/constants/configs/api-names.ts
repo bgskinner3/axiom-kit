@@ -13,7 +13,7 @@
  */
 export const SENTRY_TRIGGER_NAMES = [
   'registerXalor',
-  // 'validateXalor',
+  'validateXalor',
   'generateXalor',
 ] as const;
 

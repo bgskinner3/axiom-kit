@@ -2,7 +2,7 @@
 import { validateShape } from '../../src/validation/validate-shape';
 import { XalethorVaultKeeper } from '../../src/xalor-service/vault-keeper';
 import { createInitialContext } from '../../src/validation/context';
-import type { TSolidShape } from '../../src/models/types';
+import type { TSolidShape } from '../../shared';
 
 /**
  * 🛡️ ENGINE: VALIDATOR ORCHESTRATOR

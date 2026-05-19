@@ -2,7 +2,7 @@
 import type { CallExpression, Expression } from 'typescript';
 import type { TProcessorTarget } from '../types';
 import { PROCESSOR_REWRITE_MAPPER } from './mappers';
-import { isGenerateTarget, isRegisterTarget } from '../utils';
+import { isGenerateTarget, isRegisterTarget, isValidateTarget } from '../utils';
 /**
  * SOLID VISITOR PROCESSOR (The AST Synthesizer)
  *
@@ -44,6 +44,10 @@ export function solidVisitorProcessor({
 
   if (isGenerateTarget(target)) {
     /* prettier-ignore */ finalArgs = PROCESSOR_REWRITE_MAPPER.generateXalor(target, node, factory);
+  }
+
+  if (isValidateTarget(target)) {
+    /* prettier-ignore */ finalArgs = PROCESSOR_REWRITE_MAPPER.validateXalor(target, node, factory);
   }
 
   return factory.updateCallExpression(

@@ -28,7 +28,9 @@ export function resolveMiningTarget(
   if (apiName === 'generateXalor') {
     return XALOR_MINING_ROUTER_MAPPER.generateXalor(node, checker);
   }
-
+  if (apiName === 'validateXalor') {
+    return XALOR_MINING_ROUTER_MAPPER.validateXalor(node, checker);
+  }
   return null;
 }
 

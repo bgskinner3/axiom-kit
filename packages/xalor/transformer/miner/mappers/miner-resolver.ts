@@ -2,10 +2,14 @@ import type {
   TXalorMinerRouterMap,
   TRegisterRawPayload,
   TGenerateRawPayload,
+  TValidateRawPayload,
 } from '../../types';
-import { isKeyOfArray, GENERATOR_MODE_TRIGGERS } from '../../../shared';
-// import type { TGenerateXalorModes, TValidateXalorModes } from '../../../shared';
-import type { TGenerateXalorModes } from '../../../shared';
+import {
+  isKeyOfArray,
+  GENERATOR_MODE_TRIGGERS,
+  VALIDATION_MODE_TRIGGERS,
+} from '../../../shared';
+import type { TGenerateXalorModes, TValidateXalorModes } from '../../../shared';
 
 export const XALOR_MINING_ROUTER_MAPPER: TXalorMinerRouterMap = {
   registerXalor: (node, checker): TRegisterRawPayload => {
@@ -65,5 +69,34 @@ export const XALOR_MINING_ROUTER_MAPPER: TXalorMinerRouterMap = {
     }
 
     return { keyName, mode, apiName: 'generateXalor' };
+  },
+  validateXalor: (node, checker): TValidateRawPayload => {
+    const typeArgs = node.typeArguments ?? [];
+
+    let keyName: string | undefined;
+    let mode: TValidateXalorModes | undefined;
+
+    // Pattern targeted: validateXalor<'KEY', 'guard' | 'parse'>()
+    if (typeArgs.length >= 2) {
+      const keyType = checker.getTypeFromTypeNode(typeArgs[0]);
+      const modeType = checker.getTypeFromTypeNode(typeArgs[1]);
+
+      if (keyType.isStringLiteral()) {
+        keyName = keyType.value;
+      }
+
+      if (
+        modeType.isStringLiteral() &&
+        isKeyOfArray(VALIDATION_MODE_TRIGGERS)(modeType.value)
+      ) {
+        mode = modeType.value;
+      }
+    }
+
+    return {
+      keyName,
+      mode,
+      apiName: 'validateXalor',
+    };
   },
 } satisfies TXalorMinerRouterMap;

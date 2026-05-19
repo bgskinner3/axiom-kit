@@ -33,4 +33,12 @@ export const PROCESSOR_REWRITE_MAPPER: TProcessorRewriteMap = {
       ? [keyLiteral, modeLiteral, node.arguments[0]]
       : [keyLiteral, modeLiteral];
   },
+  validateXalor: (raw, node, factory) => {
+    const keyLiteral = factory.createStringLiteral(raw.keyName ?? 'unknown');
+    const modeLiteral = factory.createStringLiteral(raw.mode ?? 'default');
+
+    return node.arguments.length > 0
+      ? [keyLiteral, modeLiteral, node.arguments[0]]
+      : [keyLiteral, modeLiteral];
+  },
 } satisfies TProcessorRewriteMap;

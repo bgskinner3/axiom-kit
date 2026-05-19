@@ -1,4 +1,4 @@
-import type { TGenerateXalorModes } from '../../shared';
+import type { TGenerateXalorModes, TValidateXalorModes } from '../../shared';
 import ts from 'typescript';
 // ========================================================================
 // ========================================================================
@@ -58,6 +58,18 @@ export type TGenerateRawPayload = {
 
   readonly apiName: 'generateXalor';
 };
+/**
+ * RAW VALIDATION PAYLOAD
+ *
+ * ROLE:
+ * Governs the lightweight metadata strings extracted from a validateXalor call.
+ * Contains no heavy type graphs because validateXalor only consumes schemas.
+ */
+export type TValidateRawPayload = {
+  readonly keyName: string | undefined;
+  readonly mode: TValidateXalorModes | undefined;
+  readonly apiName: 'validateXalor';
+};
 // ========================================================================
 // ========================================================================
 // MAPPER TYPES
@@ -76,8 +88,10 @@ export type TGenerateRawPayload = {
 export type TXalorMinerRouterMap = {
   readonly registerXalor: TExtractRawRegistry<TRegisterRawPayload>;
   readonly generateXalor: TExtractRawRegistry<TGenerateRawPayload>;
+  readonly validateXalor: TExtractRawRegistry<TValidateRawPayload>;
 };
 
 export type TResolvedMiningRouterReturn =
   | TRegisterRawPayload
-  | TGenerateRawPayload;
+  | TGenerateRawPayload
+  | TValidateRawPayload;

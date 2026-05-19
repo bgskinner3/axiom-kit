@@ -3,7 +3,12 @@ import { resolveMiningTarget } from './mining-target';
 import { solidVisitorProcessor } from './processor';
 import { visitEachChild } from 'typescript';
 import { reifyType } from '../reifiers';
-import { isSolidCall, isRegisterTarget, isGenerateTarget } from '../utils';
+import {
+  isSolidCall,
+  isRegisterTarget,
+  isGenerateTarget,
+  isValidateTarget,
+} from '../utils';
 import type { Visitor, Node } from 'typescript';
 import { flushToRegistry } from './flush-registry';
 import { getSpatialIdentity } from './spatial-identity';
@@ -76,6 +81,14 @@ export function theMiner({
       return markAsPure(updatedCall);
     }
     if (isGenerateTarget(target)) {
+      const { keyName, mode: _ } = target;
+
+      /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${keyName}" successfully solidified.`, { service: 'transformer/index.ts' });
+      // PROCESS: Rewrite the AST call to inject the metadata
+      /* prettier-ignore */ const updatedCall = solidVisitorProcessor({ node, sourceFile, factory, target,});
+      return markAsPure(updatedCall);
+    }
+    if (isValidateTarget(target)) {
       const { keyName, mode: _ } = target;
 
       /* prettier-ignore */ logDev( `[xalor:stage-6] Vault synchronized: "${keyName}" successfully solidified.`, { service: 'transformer/index.ts' });

@@ -1,16 +1,10 @@
 import ts from 'typescript';
-import type { TGenerateRawPayload, TRegisterRawPayload } from './miner-targets';
+import type {
+  TGenerateRawPayload,
+  TRegisterRawPayload,
+  TValidateRawPayload,
+} from './miner-targets';
 import type { TSolidShape } from '../../shared';
-// type TRegisterRawPayload = {
-//   /** The unique lookup identification string extracted from generic slot 0 */
-//   readonly keyName: string;
-
-//   readonly keyType: ts.Type;
-//   /** The actual structural TS Type extracted to be turned into a JSON blueprint */
-//   readonly shapeType: TSolidShape;
-
-//   readonly apiName: 'registerXalor';
-// };
 
 /**
  * 🎛️ REGISTRATION REWRITER SIGNATURE
@@ -33,7 +27,15 @@ export type TGenerateProcessor = (
   node: ts.CallExpression,
   factory: ts.NodeFactory,
 ) => ts.Expression[];
-
+/**
+ * 🎛️ VALIDATION REWRITER SIGNATURE (🚀 Newly Incorporated!)
+ * Defines the functional parameter injection routine for type-consuming validation blocks.
+ */
+export type TValidateProcessor = (
+  raw: TValidateRawPayload,
+  node: ts.CallExpression,
+  factory: ts.NodeFactory,
+) => ts.Expression[];
 /**
  * 🗺️ FIXED PROCESSOR REWRITE MAP SCHEMA
  *
@@ -47,6 +49,7 @@ export type TGenerateProcessor = (
 export type TProcessorRewriteMap = {
   readonly registerXalor: TRegisterProcessor;
   readonly generateXalor: TGenerateProcessor;
+  readonly validateXalor: TValidateProcessor; // 🚀 Incorporated!
 };
 // ========================================================================
 // DISCRIMINATED REWRITER CONTEXTS
@@ -72,7 +75,12 @@ type TGenerateProcessorTarget = TBaseProcessorTargetParams & {
   /** 🎯 INDUSTRIAL CONTROLLERS REQ LOGIC: shape is strictly prohibited here */
   readonly shape?: undefined;
 };
-
+/** 🛡️ VALIDATE PASS CONFIGURATION (The Consumer Validation Lane - 🚀 Newly Incorporated!) */
+type TValidateProcessorTarget = TBaseProcessorTargetParams & {
+  readonly target: TValidateRawPayload;
+  /** 🎯 INDUSTRIAL CONTROLLERS REQ LOGIC: shape is strictly prohibited here */
+  readonly shape?: undefined;
+};
 /**
  * 🎛️ AUTHORITATIVE DISCRIMINATED PROCESSOR PARAMETERS UNION
  *
@@ -85,4 +93,5 @@ type TGenerateProcessorTarget = TBaseProcessorTargetParams & {
  */
 export type TProcessorTarget =
   | TRegisterProcessorTarget
-  | TGenerateProcessorTarget;
+  | TGenerateProcessorTarget
+  | TValidateProcessorTarget;

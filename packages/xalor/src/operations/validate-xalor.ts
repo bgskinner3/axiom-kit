@@ -14,32 +14,32 @@ import type {
 export function validateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'guard',
->(data: unknown, injectedKey: K, mode: _M): TTypeGuard<ISolidRegistry[K]>;
+>(): TTypeGuard<ISolidRegistry[K]>;
 // --- OVERLOAD 2: THE ASSERTION ---
 export function validateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'assert',
->(data: unknown, injectedKey: K, mode: _M): asserts data is ISolidRegistry[K];
+>(data: unknown): asserts data is ISolidRegistry[K];
 // --- OVERLOAD 3: THE PARSER ---
 export function validateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'parse',
->(data: unknown, injectedKey: K, mode: _M): ISolidRegistry[K];
+>(data: unknown): ISolidRegistry[K];
 // --- OVERLOAD 4: THE ASYNC PARSER ---
 export function validateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'parseAsync',
->(data: unknown, injectedKey: K, mode: _M): Promise<ISolidRegistry[K]>;
+>(data: unknown): Promise<ISolidRegistry[K]>;
 // --- OVERLOAD 5: THE AUDIT ---
 export function validateXalor<
-  K extends keyof ISolidRegistry,
+  _K extends keyof ISolidRegistry,
   _M extends 'audit',
->(data: unknown, injectedKey: K, mode: _M): TXalorAuditReport;
+>(data: unknown): TXalorAuditReport;
 // --- IMPLEMENTATION ---
 export function validateXalor<
   K extends keyof ISolidRegistry,
   M extends TValidateXalorModes,
->(data: unknown, injectedKey: K, mode: M): TValidateXalorReturn<K, M> {
+>(injectedKey?: K, mode?: M, data?: unknown): TValidateXalorReturn<K, M> {
   if (!injectedKey || !mode) {
     throw new Error(
       `[xalor] 🚨 GATEWAY BLOCK: 'validateXalor' executed without compiled metadata properties.\n` +
@@ -48,7 +48,7 @@ export function validateXalor<
   }
 
   const VALIDATOR_MODES: TTValidateStrategyEngine<K> = {
-    guard: (_val, key) => {
+    guard: (key) => {
       const { guard } = buildValidationTools(key);
 
       const runtimeGuard: TTypeGuard<ISolidRegistry[K]> = (
@@ -60,12 +60,12 @@ export function validateXalor<
       return runtimeGuard; // ✅ Compiles safely with zero assertions
     },
 
-    assert: (val, key) => {
+    assert: (key, val) => {
       const { assert } = buildValidationTools(key);
       return assert(val); // ✅ Compiles safely (returns void)
     },
 
-    parse: (val, key) => {
+    parse: (key, val) => {
       if (XalethorService.validateShape(val, key)) {
         if (markAsSolid<K, ISolidRegistry[K]>(val)) {
           return val;
@@ -74,7 +74,7 @@ export function validateXalor<
       return XalethorService.panic(key);
     },
 
-    parseAsync: async (val, key) => {
+    parseAsync: async (key, val) => {
       return Promise.resolve(val).then((_val) => {
         if (XalethorService.validateShape(_val, key)) {
           if (markAsSolid<K, ISolidRegistry[K]>(_val)) return _val;
@@ -88,7 +88,7 @@ export function validateXalor<
       });
     },
 
-    audit: (val, key) => {
+    audit: (key, val) => {
       const isValid = XalethorService.validateShape(val, key);
       const rawErrors = XalethorService.getKeyErrors(key);
 
@@ -96,5 +96,5 @@ export function validateXalor<
     },
   } satisfies TTValidateStrategyEngine<K>;
 
-  return VALIDATOR_MODES[mode](data, injectedKey);
+  return VALIDATOR_MODES[mode](injectedKey, data);
 }

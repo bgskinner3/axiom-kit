@@ -49,8 +49,8 @@ export type TValidateXalorReturn<
 
 export type TTValidateStrategyEngine<K extends keyof ISolidRegistry> = {
   readonly [Mode in TValidateXalorModes]: (
-    data: unknown,
-    key: K,
+    k: K,
+    d: unknown,
   ) => TValidateXalorResultMap<K>[Mode];
 };
 
