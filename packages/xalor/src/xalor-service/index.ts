@@ -1,10 +1,20 @@
-import type { TPersistParams, ISolidRegistry } from '../models/types';
-import type { TSolidMetadata, TSolidError, TSolidBranded } from '../../shared';
+import type {
+  TPersistParams,
+  ISolidRegistry,
+  TTransformPredicate,
+} from '../models/types';
+import type {
+  TSolidMetadata,
+  TSolidError,
+  TSolidBranded,
+  TSolidShape,
+} from '../../shared';
 import { XalethorVaultKeeper } from './vault-keeper';
 import { XalethorVaultValidator } from './vault-validator';
 import { XalethorVaultAuditor } from './vault-auditor';
 import { XalethorVaultArchive } from './vault-archive';
 import { XalethorVaultGenerator } from './vault-generator';
+import { XalethorVaultTransformer } from './vault-transformer';
 
 export class XalethorService {
   // ============================================================
@@ -88,6 +98,28 @@ export class XalethorService {
     key: K,
   ): TSolidBranded<K, ISolidRegistry[K]> {
     return XalethorVaultGenerator.getCast(data, key);
+  }
+
+  // ============================================================
+  // Transformer
+  // ============================================================
+  public static executePickSanitizer<K extends keyof ISolidRegistry>(
+    data: unknown,
+    shape: TSolidShape,
+    set: Set<string>,
+  ): ISolidRegistry[K] {
+    const pickPredicate = (fieldKey: string, propertiesSet: Set<string>) =>
+      propertiesSet.has(fieldKey);
+    /* prettier-ignore */ return XalethorVaultTransformer.transformPickAndOmit<K>({data,shape,filterSet: set,predicate: pickPredicate});
+  }
+  public static executeOmitSanitizer<K extends keyof ISolidRegistry>(
+    data: unknown,
+    shape: TSolidShape,
+    set: Set<string>,
+  ): ISolidRegistry[K] {
+    const omitPredicate = (fieldKey: string, propertiesSet: Set<string>) =>
+      !propertiesSet.has(fieldKey);
+    /* prettier-ignore */ return XalethorVaultTransformer.transformPickAndOmit<K>({data,shape,filterSet: set,predicate: omitPredicate});
   }
 }
 

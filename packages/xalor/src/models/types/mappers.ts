@@ -138,3 +138,43 @@ export type TCastingPrimitiveMapper = {
     data: unknown,
   ) => TPrimitiveTypeMap[K] | unknown;
 };
+
+/**
+ * TRANSFORMER API
+ * OMIT AND PICK MAPPER
+ * ROLE:
+ * Governs the rigid lookup contract for your polymorphic transformation engine.
+ *
+ */
+export type TTransformRecursionLoop = (
+  data: unknown,
+  shape: TSolidShape,
+  filterSet: Set<string>,
+  depth: number,
+) => unknown;
+
+export type TShapeTransformMapperMapper = {
+  readonly [K in TSolidShape['kind']]: (
+    shape: Extract<TSolidShape, { kind: K }>,
+    data: unknown,
+    filterSet: Set<string>,
+    depth: number,
+    recurse: TTransformRecursionLoop,
+  ) => unknown;
+};
+// export type TTransformRecursionLoop<K extends keyof ISolidRegistry> = (
+//   data: unknown,
+//   shape: TSolidShape,
+//   filterSet: Set<string>,
+//   depth: number,
+// ) => ISolidRegistry[K];
+
+// export type TShapeTransformMapperMapper<K extends keyof ISolidRegistry> = {
+//   readonly [SK in TSolidShape['kind']]: (
+//     shape: Extract<TSolidShape, { kind: SK }>,
+//     data: unknown,
+//     filterSet: Set<string>,
+//     depth: number,
+//     recurse: TTransformRecursionLoop<K>,
+//   ) => ISolidRegistry[K];
+// };

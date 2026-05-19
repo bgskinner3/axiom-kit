@@ -24,6 +24,7 @@
    - [Structural Exclusion (`omit`)](#ii-structural-exclusion-omit)
    - [Nominal Alignment (`rename`)](#iii-nominal-alignment-rename)
    - [Matrix Decompression (`flatten`)](#iv-matrix-decompression-flatten)
+   - [Entity Aggregation (`merge`)](#v-entity-aggregation-merge)
 
 5. [matchXalor](#match-xalor)
 
@@ -570,6 +571,74 @@ console.log(flatRecord);
 //   orderId: "ORD-991",
 //   meta.timestamp: 1715974000,
 //   items[0].SKU: "XAL-CORE"
+// }
+```
+
+---
+
+## V. Entity Aggregation (`merge`)
+
+### Description
+
+Deeply combines a baseline object with patch or extension data while ensuring the resulting structure remains compliant with the target schema blueprint.
+
+---
+
+### Behavior
+
+- Recursively merges nested object properties
+- Overwrites baseline keys with non-undefined patch values
+- Retains existing properties when not provided in the patch
+- Prevents undeclared properties from leaking outside the schema contract
+
+---
+
+### Use Cases
+
+- Multi-step form state aggregation
+- Partial database cache updates
+- Dynamic user configuration patching
+- Microservice response merging
+
+---
+
+### Example
+
+```ts
+const currentBaseUser = {
+  id: 501,
+  username: 'brennan_dev',
+  active: true,
+  preference: {
+    theme: 'light',
+    notify: false,
+  },
+};
+
+const deltaPatchPayload = {
+  active: false,
+  preference: {
+    theme: 'dark',
+  }, // Partial patch override
+};
+
+const mergedResult = transformXalor<'USER_PROFILE', 'USER_PROFILE'>(
+  'USER_PROFILE',
+  'USER_PROFILE',
+  currentBaseUser,
+  'merge',
+  deltaPatchPayload,
+);
+
+console.log(mergedResult);
+// {
+//   id: 501,
+//   username: 'brennan_dev',
+//   active: false,
+//   preference: {
+//     theme: 'dark',
+//     notify: false
+//   }
 // }
 ```
 
