@@ -10,7 +10,8 @@ import type {
   TPickOmitContext,
 } from '../models/types';
 import type { TTransformXalorModes } from '../../shared';
-
+// TODO: Wrap up rename, flatten and merge runtime functions
+// TODO: REGISTER API WITH TRANFORMER BUILD FOR TYPE INJECTION
 // --- OVERLOAD 1: THE SELECTIVE RETENTION LANE (pick) ---
 export function transformXalor<
   K extends keyof ISolidRegistry,
@@ -55,7 +56,7 @@ export function transformXalor<
         `Ensure your build-time transformer plugin is active.`,
     );
   }
-  // const VALIDATOR_MODES: TTransformStrategyEngine<K> =
+  // const TRANSFORMATION_MODES: TTransformStrategyEngine<K> =
   //   {
   //     pick: () =>
   //   } satisfies TTransformStrategyEngine<K>
@@ -63,28 +64,6 @@ export function transformXalor<
 }
 
 /**
- *
- *
- *
- *
-  const TRANSFORMATION_MODES: TTransformStrategyEngine<K> = {
-    // Both strategies pull variables from the exact same typed block context cleanly!
-    pick: (key, c) => XalethorService.producePick(key, (c as TPickOmitContext<K>).data, (c as TPickOmitContext<K>).keys),
-    omit: (key, c) => XalethorService.produceOmit(key, (c as TPickOmitContext<K>).data, (c as TPickOmitContext<K>).keys),
-    
-    rename: (key, c) => XalethorService.produceRename(key, c.data, (c as TRenameContext).mappings),
-    merge: (key, c) => XalethorService.produceMerge(key, (c as TMergeContext).dataOne, (c as TMergeContext).dataTwo),
-    flatten: (key, c) => XalethorService.produceFlatten(key, c.data),
-  } as unknown as TTransformStrategyEngine<K>;
- *
- *
- *
- *
- */
-
-/**
- pick
- omit
  rename
  flatten
  merge

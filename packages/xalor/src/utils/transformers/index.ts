@@ -49,7 +49,6 @@ export function preRegisterMetadata(
     area: RECTIFIER_REGISTRY_MAPPER.area(input),
     version: RECTIFIER_REGISTRY_MAPPER.version(input),
     shape: RECTIFIER_REGISTRY_MAPPER.shape(input),
-
     filePath: RECTIFIER_REGISTRY_MAPPER.filePath(input),
     symbolName: RECTIFIER_REGISTRY_MAPPER.symbolName(input),
     typeName: RECTIFIER_REGISTRY_MAPPER.typeName(input),

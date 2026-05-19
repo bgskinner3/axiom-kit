@@ -1,8 +1,4 @@
-import type {
-  TPersistParams,
-  ISolidRegistry,
-  TTransformPredicate,
-} from '../models/types';
+import type { TPersistParams, ISolidRegistry } from '../models/types';
 import type {
   TSolidMetadata,
   TSolidError,
@@ -122,11 +118,3 @@ export class XalethorService {
     /* prettier-ignore */ return XalethorVaultTransformer.transformPickAndOmit<K>({data,shape,filterSet: set,predicate: omitPredicate});
   }
 }
-
-/**
- XalethorVaultArchive
- XalethorVaultAuditor
- XalethorVaultKeeper
- XalethorVaultValidator
- XalethorVaultGenerator
- */
