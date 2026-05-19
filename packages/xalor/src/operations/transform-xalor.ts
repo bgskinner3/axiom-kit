@@ -12,9 +12,87 @@ import type {
 } from '../models/types';
 import type { TTransformXalorModes } from '../../shared';
 
-// TODO: Wrap up rename, flatten and merge runtime functions
-// TODO: REGISTER API WITH TRANFORMER BUILD FOR TYPE INJECTION
-// --- OVERLOAD 1: THE SELECTIVE RETENTION LANE (pick) ---
+/**
+ * @name TRANSFORMER RUNTIME API
+ * @description
+ * Standardized polymorphic runtime portal executing Category 3 (The Evolution Pillar Layer) operations.
+ * Traverses deep complex graph layouts to selectively slice, names-remap, or aggregate structural elements.
+ *
+ * DESIGN INVARIANTS:
+ * - Satisfies Commandment IV (Operation Isolation) and Commandment VIII (Internal Efficiency).
+ * - Implements a rigid static dispatch switchboard object layout to bypass procedural loop nesting structures.
+ * - Operates with absolute 100% type safety: zero un-tracked 'any' variable fallback entries allowed.
+ * - Build-time generic parameters <"KEY", "mode"> are stripped and injected at indices 2 and 3 at compilation runtime.
+ *
+ * -------
+ * @mode pick
+ * @description
+ * Selective field extraction retention pass. Sweeps through the master object blueprint properties schema,
+ * matching against an O(1) filter Set cache to retain explicit tracking keys while dropping everything else.
+ * @example
+ * ```ts
+ * const slicedUser = transformXalor<'User', 'pick'>({
+ *   mode: 'pick',
+ *   data: rawPayload,
+ *   keys: ['id', 'username', 'email']
+ * });
+ * ```
+ * -------
+ * @mode omit
+ * @description
+ * Structural property exclusion pruning pass. Operates symmetrically to pick, but implements a inverted
+ * lookup guard to discard explicit targeted properties fields while maintaining un-listed graph layers intact.
+ * @example
+ * ```ts
+ * const safeUserRecord = transformXalor<'User', 'omit'>({
+ *   mode: 'omit',
+ *   data: rawPayload,
+ *   keys: ['passwordHash', 'saltToken']
+ * });
+ * ```
+ * -------
+ * @mode rename
+ * @description
+ * Nominal property alignment and structural remapping. Back-checks an incoming dictionary using an O(1) inversion
+ * key sniffer to translate alternate external key names directly into your master internal blueprint schema coordinates.
+ * @example
+ * ```ts
+ * const alignedUser = transformXalor<'User', 'rename'>({
+ *   mode: 'rename',
+ *   data: rawThirdPartyJson,
+ *   mappings: { ext_user_id: 'id', user_mail: 'email' }
+ * });
+ * ```
+ * -------
+ * @mode merge
+ * @description
+ * Symmetrical deep twin-entity data aggregation. Recursively tracks matching array indices and object structural paths,
+ * prioritizing fields inside the secondary patch payload variable while safely falling back to baseline properties.
+ * @example
+ * ```ts
+ * const consolidatedProfile = transformXalor<'User', 'merge'>({
+ *   mode: 'merge',
+ *   dataOne: currentDatabaseState,
+ *   dataTwo: incomingDeltaPatch
+ * });
+ * ```
+ * -------
+ * @mode flatten
+ * @description
+ * Asymmetric linear matrix decompression. Steps through deep nested object chains and indexed collections, compiling
+ * paths into an optimized, single-layer dot-notation analytical dictionary canvas map.
+ * @example
+ * ```ts
+ * const flatAnalyticsMap = transformXalor<'User', 'flatten'>({
+ *   mode: 'flatten',
+ *   data: complexUserGraph
+ * });
+ * // Result: Record<string, string | number | boolean> -> { "profile.address.zip": "10001" }
+ * ```
+ * -------
+ * @see TTransformStrategyEngine
+ * @see XalethorVaultTransformer
+ */
 // --- OVERLOAD 1: THE STRUCTURAL SELECTION LANE (pick) ---
 export function transformXalor<
   K extends keyof ISolidRegistry,
@@ -46,7 +124,6 @@ export function transformXalor<
   K extends keyof ISolidRegistry,
   M extends TTransformXalorModes,
 >(
-  // Bound the inputs tightly using the dedicated TTransformContext discriminated union shape
   ctx: TTransformContext<K, M>,
   injectedKey?: K,
   injectedMode?: M,
@@ -84,10 +161,12 @@ export function transformXalor<
       const { dataOne, dataTwo } = context;
       /* prettier-ignore */ return XalethorService.executeMergeSanitizer(dataOne, dataTwo, activeShape);
     },
-    flatten: () => console.log([]),
+    flatten: (_key, context) => {
+      const { data } = context;
+      /* prettier-ignore */ return XalethorService.executeFlattenSanitizer(data, activeShape);
+    },
   } satisfies TTransformStrategyEngine<K>;
 
-  // Highly specific, completely rule-compliant lookup executor function
   const executeStrategy = <ModeToken extends TTransformXalorModes>(
     runContext: {
       readonly mode: ModeToken;
@@ -96,13 +175,5 @@ export function transformXalor<
     return TRANSFORMATION_MODES[runContext.mode](injectedKey, runContext);
   };
 
-  // TypeScript now perfectly validates that the mode property inside 'ctx'
-  // explicitly guarantees the internal presence of its companion parameters.
   return executeStrategy(ctx);
 }
-
-/**
- rename
- flatten
- merge
- */

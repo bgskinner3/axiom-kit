@@ -138,13 +138,15 @@ export type TCastingPrimitiveMapper = {
     data: unknown,
   ) => TPrimitiveTypeMap[K] | unknown;
 };
-
+// ========================================================================
+// ========================================================================
 // ========================================================================
 // ========================================================================
 // TRANSFORMER API
 // ========================================================================
 // ========================================================================
-
+// ========================================================================
+// ========================================================================
 /** 📥 Dependency envelope payload layout for Selection operations */
 export type TPickOmitDependency = {
   readonly mode: 'pick' | 'omit';
@@ -224,4 +226,35 @@ export type TMapperArray = {
   dependency: Parameters<TUniversalTransformMapper['array']>[2];
   depth: Parameters<TUniversalTransformMapper['array']>[3];
   recurse: Parameters<TUniversalTransformMapper['array']>[4];
+};
+// ---------------------------------------------------------------------------------------------------
+/**
+ * 🗺️ FIXED HIERARCHICAL FLATTEN SHAPE MAP SCHEMA
+ *
+ * ROLE:
+ * Governs the rigid lookup contract for the universal matrix decompression engine.
+ *
+ * WHY:
+ * Satisfies Commandment IV (Operation Isolation) and Commandment V (Graph Integrity).
+ * Bounding each row's signature parameter to its extracted shape kind constraint
+ * ensures that your flat map handlers compile seamlessly with absolute 100% static
+ * type validation, completely eliminating the 'any' keyword from your processing loops.
+ */
+export type TShapeFlattenMapper = {
+  readonly [K in TSolidShape['kind']]: (
+    shape: Extract<TSolidShape, { kind: K }>,
+    val: unknown,
+    accumulator: Record<string, string | number | boolean>,
+    currentPath: string,
+    depth: number,
+    seenObjectsMap: Set<unknown>,
+    recurse: (
+      v: unknown,
+      s: TSolidShape,
+      a: Record<string, string | number | boolean>,
+      p: string,
+      d: number,
+      seen: Set<unknown>,
+    ) => void,
+  ) => void;
 };

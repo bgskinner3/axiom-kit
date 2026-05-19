@@ -15,7 +15,11 @@ import { XalethorVaultTransformer } from './vault-transformer';
 
 export class XalethorService {
   // ============================================================
+  // ============================================================
+  // ============================================================
   // XalethorVaultKeeper
+  // ============================================================
+  // ============================================================
   // ============================================================
   public static solidify(raw: TSolidMetadata): void {
     XalethorVaultKeeper.solidify(raw);
@@ -33,7 +37,11 @@ export class XalethorService {
     return XalethorVaultKeeper.resolve(key);
   }
   // ============================================================
+  // ============================================================
+  // ============================================================
   // VALIDATOR
+  // ============================================================
+  // ============================================================
   // ============================================================
   public static validateShape(data: unknown, key: string): boolean {
     return XalethorVaultValidator.validateShape(data, key);
@@ -42,7 +50,11 @@ export class XalethorService {
     return XalethorVaultValidator.has(key);
   }
   // ============================================================
+  // ============================================================
+  // ============================================================
   // AUDITOR
+  // ============================================================
+  // ============================================================
   // ============================================================
   public static panic(key: string): never {
     return XalethorVaultAuditor.panic(key);
@@ -62,7 +74,11 @@ export class XalethorService {
     );
   }
   // ============================================================
+  // ============================================================
+  // ============================================================
   // ARCHIVE
+  // ============================================================
+  // ============================================================
   // ============================================================
   public persist(params: TPersistParams): void {
     return XalethorVaultArchive.persist(params);
@@ -72,7 +88,11 @@ export class XalethorService {
   }
 
   // ============================================================
+  // ============================================================
+  // ============================================================
   // GENERATOR
+  // ============================================================
+  // ============================================================
   // ============================================================
   public static produceDefault<K extends keyof ISolidRegistry>(
     key: K,
@@ -96,9 +116,12 @@ export class XalethorService {
   ): TSolidBranded<K, ISolidRegistry[K]> {
     return XalethorVaultGenerator.getCast(data, key);
   }
-
+  // ============================================================
+  // ============================================================
   // ============================================================
   // Transformer
+  // ============================================================
+  // ============================================================
   // ============================================================
   public static executePickSanitizer<K extends keyof ISolidRegistry>(
     data: unknown,
@@ -136,5 +159,12 @@ export class XalethorService {
   ): ISolidRegistry[K] {
     /* prettier-ignore */
     return XalethorVaultTransformer.transformMerge<K>({ dataOne, dataTwo, shape });
+  }
+  public static executeFlattenSanitizer(
+    data: unknown,
+    shape: TSolidShape,
+  ): Record<string, string | number | boolean> {
+    /* prettier-ignore */
+    return XalethorVaultTransformer.transformFlatten({ data, shape });
   }
 }

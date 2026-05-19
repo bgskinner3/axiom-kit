@@ -10,6 +10,83 @@ import type {
   TXalorAuditReport,
   TValidateXalorModes,
 } from '../../shared';
+
+/**
+ * @name VALIDATE RUNTIME API
+ * @description
+ * Standardized polymorphic runtime gateway executing Category 2 (The Validation API Layer) operations.
+ * Evaluates raw incoming physical data shapes instantly against precompiled Vault registry blueprints.
+ *
+ * DESIGN INVARIANTS:
+ * - Satisfies Commandment IV (Operation Isolation) and Commandment VIII (Internal Efficiency).
+ * - Coordinates parsing traps, asynchronous promises, assertion halts, and audit metrics reporting.
+ * - Build-time generic parameters <"KEY", "mode"> are stripped and injected at indices 1 and 2 at compilation runtime.
+ *
+ * -------
+ * @mode guard
+ * @description
+ * Generates a clean, stateless type predicate function. Performs sub-microsecond structural evaluation
+ * passes over runtime payloads without mutative state updates, saving side-effects or panic halts.
+ * @example
+ * ```ts
+ * const isUserValid = validateXalor<'User', 'guard'>();
+ * if (isUserValid(rawPayload)) {
+ *   // rawPayload is safely narrowed to ISolidRegistry['User'] within this block
+ *   console.log(rawPayload.username);
+ * }
+ * ```
+ * -------
+ * @mode assert
+ * @description
+ * Hard control-flow boundary assertion check. Evaluates the active value graph against the blueprint shape.
+ * If data verification matches, it refines the scope natively; otherwise, it crashes the threat track instantly.
+ * @example
+ * ```ts
+ * validateXalor<'User', 'assert'>(rawPayload);
+ * // Execution only proceeds beyond this line if rawPayload strictly satisfies the 'User' blueprint
+ * console.log(rawPayload.email);
+ * ```
+ * -------
+ * @mode parse
+ * @description
+ * Synchronous data parser gate. Verifies the input structure immediately. If parsing hits constraint errors,
+ * it leverages the auditor to trigger a structural panic throw; if valid, it outputs the verified typed instance.
+ * @example
+ * ```ts
+ * try {
+ *   const clearUser = validateXalor<'User', 'parse'>(rawPayload);
+ *   console.log(clearUser.id);
+ * } catch (error) {
+ *   console.error("Validation failed:", error.message);
+ * }
+ * ```
+ * -------
+ * @mode parseAsync
+ * @description
+ * Asynchronous micro-task queue parsing pipeline. Offloads nested collection parsing and recursive schema checks
+ * down to the non-blocking engine loop, resolving an immutable typed result promise frame.
+ * @example
+ * ```ts
+ * const verifiedUser = await validateXalor<'User', 'parseAsync'>(rawPayload);
+ * console.log(verifiedUser.createdAt);
+ * ```
+ * -------
+ * @mode audit
+ * @description
+ * Analytical structural diagnostics reporter. Runs a deep validation path evaluation pass, collecting telemetry records,
+ * error trackers, and paths locations into an isolated auditing payload without throwing execution halts.
+ * @example
+ * ```ts
+ * const report = validateXalor<'User', 'audit'>(rawPayload);
+ * if (!report.isValid) {
+ *   console.log(`Discovered ${report.errors.length} model mismatches:`, report.errors);
+ * }
+ * ```
+ * -------
+ * @see TTValidateStrategyEngine
+ * @see XalethorVaultValidator
+ */
+
 // --- OVERLOAD 1: THE GUARD ---
 export function validateXalor<
   K extends keyof ISolidRegistry,

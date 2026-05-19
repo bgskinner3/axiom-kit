@@ -127,7 +127,7 @@ export type TTransformXalorResultMap<K extends keyof ISolidRegistry> = {
   readonly omit: ISolidRegistry[K];
   readonly rename: ISolidRegistry[K];
   readonly merge: ISolidRegistry[K];
-  readonly flatten: void; // Record<string, string | number | boolean>;
+  readonly flatten: Record<string, string | number | boolean>;
 };
 // ----------------------------------------------------------------------------------------------------
 /**

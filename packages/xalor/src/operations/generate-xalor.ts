@@ -5,22 +5,89 @@ import type {
   TGenerateXalorStrategyEngine,
 } from '../models/types';
 import type { TSolidBranded, TGenerateXalorModes } from '../../shared';
+
+/**
+ * @name GENERATE RUNTIME API
+ * @description
+ * Standardized polymorphic runtime gateway executing Category 1 (The Generation Pillar Layer) operations.
+ * Seeds, physically scrubs, or structurally coaxes baseline schemas out of precompiled Vault registry blueprints.
+ *
+ * DESIGN INVARIANTS:
+ * - Satisfies Commandment IV (Operation Isolation) and Commandment VIII (Internal Efficiency).
+ * - Coordinates structural seed cloning, mock data synthesis, and deep primitive shape casting.
+ * - Build-time generic parameters <"KEY", "mode"> are stripped and injected at indices 1 and 2 at compilation runtime.
+ *
+ * -------
+ * @mode default
+ * @description
+ * Zero-state blueprint instantiation. Materializes a pristine object model matching your target contract
+ * with guaranteed schema-valid default leaf values, satisfying initial entity baseline setups cleanly.
+ * @example
+ * ```ts
+ * const emptyUser = generateXalor<'User', 'default'>();
+ * // Returns a valid user object initialized with default string/number structures
+ * console.log(emptyUser.username); // ""
+ * ```
+ * -------
+ * @mode mock
+ * @description
+ * Constraint-aware stochastic data simulation. Iterates across your shape graph configurations to dynamically
+ * manufacture realistic, property-compliant mock values, fully optimized for unit testing matrices.
+ * @example
+ * ```ts
+ * const randomUser = generateXalor<'User', 'mock'>();
+ * // Returns a randomly seeded, structurally valid user object instance
+ * console.log(randomUser.email); // "f7x9a@example.com"
+ * ```
+ * -------
+ * @mode clone
+ * @description
+ * Deep property-scrubbing structural wash. Loops down through an untrusted input payload, copy-instantiating
+ * class prototypes while stripping away un-declared rogue properties to preserve strict runtime data memory integrity.
+ * @example
+ * ```ts
+ * const cleanUser = generateXalor<'User', 'clone'>(dirtyIncomingRequestJson);
+ * // Returns a completely stripped clone carrying zero extra properties beyond the 'User' blueprint
+ * console.log(cleanUser.id);
+ * ```
+ * -------
+ * @mode cast
+ * @description
+ * Type coercion data shaping pipeline. Symmetrically coerces, un-boxes, or parses loose incoming runtime properties
+ * into the strict primitive type layouts explicitly demanded by the blueprint schema, matching data layers safely.
+ * @example
+ * ```ts
+ * const correctUser = generateXalor<'User', 'cast'>({
+ *   id: 12345, // Number coerced safely to String if the blueprint demands a string key token
+ *   isActive: "true" // String coerced safely to Boolean
+ * });
+ * ```
+ * -------
+ * @see TGenerateXalorStrategyEngine
+ * @see XalethorVaultGenerator
+ */
+
+// --- OVERLOAD 1: THE DEFAULT ---
 export function generateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'default',
 >(): TSolidBranded<K, ISolidRegistry[K]>;
+// --- OVERLOAD 2: THE MOCK ---
 export function generateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'mock',
 >(): TSolidBranded<K, ISolidRegistry[K]>;
+// --- OVERLOAD 3: THE CLONE ---
 export function generateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'clone',
 >(data: unknown): TSolidBranded<K, ISolidRegistry[K]>;
+// --- OVERLOAD 5: THE CAST ---
 export function generateXalor<
   K extends keyof ISolidRegistry,
   _M extends 'cast',
 >(data: unknown): TSolidBranded<K, ISolidRegistry[K]>;
+// --- IMPLEMENTATION ---
 export function generateXalor<
   K extends keyof ISolidRegistry,
   M extends TGenerateXalorModes,
@@ -43,49 +110,3 @@ export function generateXalor<
 
   return GENERATOR_MODES[mode](key, data);
 }
-
-// ## 🏗️ Category 3: Generator API (The Factory Layer)
-
-// **Role:**
-
-// ### Future Enterprise Additions
-
-// - `generateXalor({ mode: 'template', baselineData })`
-//   Merges user properties into a type-safe template, injecting required defaults if values are omitted.
-
-// - `generateXalor({ mode: 'fixture', seed })`
-//   Deterministic mock generation where providing a specific seed returns the exact same dataset every time—critical for reliable unit testing graphs.
-
-/**
- * Future Enterprise Additions: generateXalor
- *    `generateXalor({ mode: 'template', baselineData })`
- * I. The Template Core Engine (mode: 'template')
- *   - What It Is: An intelligent configuration merger that fuses incoming user payloads with your blueprint’s default structure.
- *      It acts as a defensive hydration filter, ensuring partial data states are instantly built out into valid, complete object
- *      records before they reach your system backend layers
- *   - What It Does: When a developer inputs an incomplete data object, the template engine captures the payload and scans the type layout.
- *     Instead of failing validation or throwing missing property flags, it preserves the user's explicit values and automatically injects
- *     type-safe, required zero-state defaults into any omitted properties
- *   - Operational Mechanism: Under the hood, it passes your data through the casting engine (getCast) to massage string variables, calls the
- *     default materializer (getDefault) to generate a clean skeleton layer, and flatly spreads them together ({ ...defaults, ...userInput })
- *     into a fully compliant structural record.
- *   - Use Cases
- *     - Under the hood, it passes your data through the casting engine (getCast) to massage string variables, calls the default materializer (getDefault) to generate a clean skeleton layer, and flatly spreads them together ({ ...defaults, ...userInput }) into a fully compliant structural record.
- *.    - Form State Hydration: Initializing complex multi-step settings panels where the database passes an incomplete or fresh profile object that must be built out into a complete skeleton map immediately on the client side.
-     
-      `generateXalor({ mode: 'fixture', seed })`  
- * II .The Deterministic Test Fixture (mode: 'fixture')
- *   - What It Is: A seedable simulation engine that upgrades random mock generation into a reproducible data pipeline. It removes
- *     volatile entropy from your testing code while still outputting complex structural payloads
- *   - What It Does: Standard random mock generation (mode: 'mock') is excellent for fast UI prototyping, but it introduces non-deterministic
- *     text strings and floats that destroy testing stability. The fixture engine replaces the native Math.random() utility inside your mock
- *     drawers with an isolated Pseudo-Random Number Generator (PRNG) Seed Core. Providing a specific number seed forces the engine to
- *     emit the exact same line-precise strings, values, and array collection trees on every single execution run
- *   - Operational Mechanism: The generator tracks a thread-safe mathematical seed iteration counter down your recursive shape mappers.
- *    Passing seed 12345 always outputs user "Alice" with age 28; passing seed 67890 always yields user "Bob" with age 42 across any
- *    local or remote operating machine.
- *   - Use Cases
- *     - Reliable Integration Testing: Generating vast mock database states for local unit-testing matrices where assert statements require predictable values to ensure test logs never become flaky.
- *     - Deterministic Front-End Snapshots: Driving headless UI snapshot tests (such as Jest or Playwright runs) where a single layout variation in a random string length would otherwise cause visual tests to trigger false alerts.
- *
- */

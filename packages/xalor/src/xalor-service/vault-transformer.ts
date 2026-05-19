@@ -12,12 +12,23 @@ import type {
   TPickOmitDependency,
   TTransformMerge,
 } from '../models/types';
-import { TRANSFORM_SHAPE_MAPPER } from '../mappers';
+import { TRANSFORM_SHAPE_MAPPER, TRANSFORM_FLATTEN_MAPPER } from '../mappers';
 import { markAsSolid } from '../utils';
 import { isObject, isNull, isSet } from '../../shared';
 import type { TSolidShape } from '../../shared';
 
 export class XalethorVaultTransformer {
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
+  // PRIVATE AND PUBLIC METHODS FOR MODES
+  //
+  // MERGE, OMIT, PICK, RENAME
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
   /**
    * 🚀 UNIVERSAL STRATEGY DISPATCHER
    *
@@ -41,7 +52,7 @@ export class XalethorVaultTransformer {
       /* prettier-ignore */
       return this.sanitize({ val: v, currentShape: s, dependency: f, depth: d, seenObjectsMap, predicate });
     };
-
+    // TODO: FI TYPE ISSUE
     /* prettier-ignore */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return internalStrategyWorker(targetShape as any, targetValue, dependency, depth, recurseCallback);
@@ -270,5 +281,83 @@ export class XalethorVaultTransformer {
     throw new Error(
       `[xalor] Critical Failure: Failed to brand merge mutation output structure graph.`,
     );
+  }
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
+  // PRIVATE AND PUBLIC METHODS FOR MODE -- Flat
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
+  // ====================================================================
+  private static dispatchFlattenShape<SK extends TSolidShape['kind']>(
+    targetKind: SK,
+    targetShape: Extract<TSolidShape, { kind: SK }>,
+    targetValue: unknown,
+    accumulator: Record<string, string | number | boolean>,
+    currentPath: string,
+    depth: number,
+    seenObjectsMap: Set<unknown>,
+  ): void {
+    const executeStrategy = <K extends TSolidShape['kind']>(
+      kindToken: K,
+      shapeNode: Extract<TSolidShape, { kind: K }>,
+    ): void => {
+      const internalStrategyWorker = TRANSFORM_FLATTEN_MAPPER[kindToken];
+      /* prettier-ignore */
+      const recurseCallback = (v: unknown, s: TSolidShape, a: Record<string, string | number | boolean>, p: string, d: number, seen: Set<unknown>) => {
+        this.executeFlattenProcessor(v, s, a, p, d, seen);
+      };
+      // TODO: FI TYPE ISSUE
+      /* prettier-ignore */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      internalStrategyWorker(shapeNode as any, targetValue, accumulator, currentPath, depth, seenObjectsMap, recurseCallback);
+    };
+
+    executeStrategy(targetKind, targetShape);
+  }
+  private static executeFlattenProcessor(
+    val: unknown,
+    currentShape: TSolidShape,
+    accumulator: Record<string, string | number | boolean>,
+    currentPath: string,
+    depth: number,
+    seenObjectsMap: Set<unknown>,
+  ): void {
+    // THE DEPTH LAW (Security control check)
+    if (depth > 25) return;
+
+    // Circular loop memory stack boundary intercept validation
+    if (isObject(val) && !isNull(val)) {
+      if (seenObjectsMap.has(val)) return;
+      seenObjectsMap.add(val);
+    }
+
+    if (!currentShape) return;
+
+    const kind = currentShape.kind;
+
+    /* prettier-ignore */
+    this.dispatchFlattenShape(kind, currentShape, val, accumulator, currentPath, depth, seenObjectsMap);
+  }
+  /**
+   * 📊 PUBLIC EXECUTOR: HIERARCHICAL DECOMPRESSION ('flatten')
+   *
+   * ROLE:
+   * Initializes a fresh linear state accumulator canvas tracking context frame for flat mappings.
+   */
+  public static transformFlatten({
+    data,
+    shape,
+  }: {
+    readonly data: unknown;
+    readonly shape: TSolidShape;
+  }): Record<string, string | number | boolean> {
+    const accumulator: Record<string, string | number | boolean> = {};
+    const seenObjectsMap = new Set<unknown>();
+    /* prettier-ignore */
+    this.executeFlattenProcessor(data, shape, accumulator, '', 0, seenObjectsMap);
+    return accumulator;
   }
 }
