@@ -43,71 +43,7 @@ export function generateXalor<
 
   return GENERATOR_MODES[mode](key, data);
 }
-/**
- * ============================================================================
- * 🎲 GENERATE XALOR API STRATEGY SPECIFICATIONS
- * ============================================================================
- *
- * I. PRISTINE DEFAULT SKELETON ('default')
- * - WHAT IT DOES:
- *   Materializes a completely clean, zero-state structural model instance from a blueprint.
- * - HOW IT WORKS:
- *   Traverses the type blueprint graph and maps each item to its definitive minimum zero
- *   fallback (numbers to `0`, strings to `""`, booleans to `false`, arrays to `[]`).
- * - HOW TO USE:
- *   @example
- *   ```ts
- *   const freshUser = generateXalor<'USER_TEST', 'default'>();
- *   // Returns: { id: 0, username: "", active: false } with full nominal branding!
- *   ```
- *
- * ============================================================================
- * II. STOCHASTIC RANDOM MOCK ('mock')
- * - WHAT IT DOES:
- *   Generates highly realistic, randomized mock data objects for simulation testing.
- * - HOW IT WORKS:
- *   Fires a recursive data-generation scan across the schema, introducing structural
- *   entropy. Required fields are absolute, optionals have a 50% appearance rate, strings
- *   are filled with text blocks, and collections are variably sized between 1 and 3 items.
- * - HOW TO USE:
- *   @example
- *   ```ts
- *   const mockUser = generateXalor<'USER_TEST', 'mock'>();
- *   // Returns realistic randomized object frames filling structural primitives effortlessly.
- *   ```
- *
- * ============================================================================
- * III. PURIFIED STRUCTURAL CLONE ('clone')
- * - WHAT IT DOES:
- *   Performs a deep, circular-safe scrubbing copy of an existing data payload object.
- * - HOW IT WORKS:
- *   Iterates through the fields defined in your type blueprint, ignoring raw incoming
- *   keys. This physically strips un-declared, dirty, or malicious variables out of the
- *   resulting object map to optimize memory layers and protect database boundaries.
- * - HOW TO USE:
- *   @example
- *   ```ts
- *   const dirtyInput = { id: 1, username: 'skinner', strayGarbage: 'DROP TABLE Users;' };
- *   const cleanUser = generateXalor<'USER_TEST', 'clone'>(dirtyInput);
- *   // Returns a brand new structural reference completely purged of 'strayGarbage'!
- *   ```
- *
- * ============================================================================
- * IV. SYMMETRIC COERCION CAST ('cast')
- * - WHAT IT DOES:
- *   Coerces loose runtime payloads cleanly into the exact structural and primitive types required.
- * - HOW IT WORKS:
- *   Symmetrically transforms data vectors. It transforms numeric text strings into native numbers,
- *   aligns loose strings to match uppercase/lowercase case-insensitive literal values, and
- *   intelligently wraps standalone variables into arrays if the blueprint maps a collection array.
- * - HOW TO USE:
- *   @example
- *   ```ts
- *   const looseInput = { id: '5562', username: 991, active: 'TRUE' };
- *   const strictUser = generateXalor<'USER_TEST', 'cast'>(looseInput);
- *   // Returns: { id: 5562, username: "991", active: true } - perfectly aligned to contracts!
- *   ```
- */
+
 // ## 🏗️ Category 3: Generator API (The Factory Layer)
 
 // **Role:**

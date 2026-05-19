@@ -1,29 +1,31 @@
 # Xalor Runtime API
 
- - A unified interface for validating, generating, transforming, and building Xalor schemas at runtime.
-
+- A unified interface for validating, generating, transforming, and building Xalor schemas at runtime.
 
 ## Table of Contents
 
-1. [registerXalor](#registerxalor)
+1. [registerXalor](#register-xalor)
 
-2. [validateXalor](#validatexalor)
+2. [validateXalor](#validate-xalor)
    - [Type Guard Strategy (`guard`)](#i-type-guard-strategy-guard)
    - [Assertion Strategy (`assert`)](#ii-assertion-strategy-assert)
    - [Synchronous Parser (`parse`)](#iii-synchronous-parser-parse)
    - [Async Parser (`parseasync`)](#iv-async-parser-parseasync)
    - [Diagnostic Audit Strategy (`audit`)](#v-diagnostic-audit-strategy-audit)
 
-3. [generateXalor](#generatexalor)
+3. [generateXalor](#generate-xalor)
    - [Default Skeleton Strategy (`default`)](#i-default-skeleton-strategy-default)
    - [Mock Generation Strategy (`mock`)](#ii-mock-generation-strategy-mock)
    - [Structural Clone Strategy (`clone`)](#iii-structural-clone-strategy-clone)
    - [Runtime Cast Strategy (`cast`)](#iv-runtime-cast-strategy-cast)
 
+4. [transformXalor](#transform-xalor)
+   - [Selective Retention (`pick`)](#i-selective-retention-pick)
+   - [Structural Exclusion (`omit`)](#ii-structural-exclusion-omit)
+   - [Nominal Alignment (`rename`)](#iii-nominal-alignment-rename)
+   - [Matrix Decompression (`flatten`)](#iv-matrix-decompression-flatten)
 
-4. [transformXalor](#transformxalor)
-
-5. [buildXalor](#buildxalor)
+5. [matchXalor](#match-xalor)
 
 ---
 
@@ -33,7 +35,9 @@
 
 ### 🟢 Active
 
-#### Registers a Xalor schema, runtime definition, or type configuration into the active runtime registry.
+#### `registerXalor` is the schema registration engine of the Xalor system.
+
+It is responsible for defining, storing, and initializing runtime schema blueprints used across validation, generation, and transformation layers.
 
 This method is responsible for:
 
@@ -41,6 +45,68 @@ This method is responsible for:
 - attaching generation strategies
 - enabling transformation pipelines
 - exposing registered schema metadata
+
+## Core Responsibility
+
+`registerXalor` establishes a canonical schema definition in the global runtime registry, enabling type-safe operations across the Xalor system.
+
+It supports both compile-time inferred registration and runtime schema capture.
+
+## Overload Strategies
+
+### I. Declarative Type Registration
+
+#### Registers a schema using a compile-time type definition only.
+
+#### Behavior
+
+- Extracts structure from generic type parameter
+- Compiles schema metadata at build time
+- Produces a fully inferred runtime schema definition
+- No runtime object required
+
+#### Example
+
+```ts
+interface IUser {
+  id: number;
+  username: string;
+}
+
+registerXalor<'USER_PROFILE', IUser>();
+```
+
+---
+
+### II. Runtime Schema Inference Registration
+
+#### Registers a schema by inferring structure from an existing runtime object.
+
+#### Behavior
+
+- Extracts object shape at runtime
+- Converts structure into schema metadata
+- Stores inferred schema in registry
+- Supports dynamic schema creation
+
+#### Example
+
+```ts
+const devConfig = {
+  environment: 'production',
+  clusterNodes: [1, 2, 3],
+};
+
+registerXalor<'APP_CONFIG'>(devConfig);
+```
+
+---
+
+## Description
+
+`registerXalor` is used when a schema must be introduced into the system before it can participate in validation, generation, or transformation workflows.
+
+It acts as the foundation layer of the Xalor runtime architecture.
 
 ---
 
@@ -295,15 +361,234 @@ const strictUser = generateXalor<'USER_TEST', 'cast'>(looseInput);
 
 &nbsp;
 
-# Transform Xalor
+# 🔄 transformXalor
 
-### STATUS - IN PROGRESS
+### 🟡 In Progress
+
+### `transformXalor` is the runtime data transformation engine of the Xalor system.
+
+It is responsible for safely converting validated data structures between schema contracts using explicit transformation strategies.
+
+## Core Responsibility
+
+`transformXalor` takes a verified source object and transforms it into a target schema shape using deterministic, strategy-driven operations.
+
+## Supported Capabilities
+
+- Schema-to-schema data transformation
+- Safe property selection and exclusion
+- Key renaming and structural remapping
+- Nested structure flattening
+- Type-safe runtime data morphing
+- Controlled schema boundary transitions
+
+&nbsp;
+
+## I. Selective Retention (`pick`)
+
+### Description
+
+Creates a new object containing only the selected properties from the source schema.
+
+### Behavior
+
+- Filters object by allowed key list
+- Removes all non-selected properties
+- Produces DTO-safe output structures
+- Schema-aware field validation applied
+
+### Use Cases
+
+- API DTO construction
+- UI view models
+- Public-safe data exposure
+
+### Example
+
+```ts
+const rawUser = {
+  id: 101,
+  email: 'brennan@xalor.io',
+  phone: '555-0192',
+  role: 'admin',
+  token: 'jwt_991',
+};
+
+const publicContact = transformXalor<'USER_PROFILE', 'USER_PROFILE'>(
+  'USER_PROFILE',
+  'USER_PROFILE',
+  rawUser,
+  'pick',
+  ['email', 'phone'],
+);
+
+console.log(publicContact);
+// {
+//   email: 'brennan@xalor.io',
+//   phone: '555-0192'
+// }
+```
+
+---
+
+## II. Structural Exclusion (`omit`)
+
+### Description
+
+Creates a full schema object while removing explicitly excluded properties.
+
+### Behavior
+
+- Preserves schema shape
+- Removes sensitive or restricted fields
+- Prevents sensitive data leakage
+- Enforces schema compliance after exclusion
+
+### Use Cases
+
+- Security filtering
+- Backend → frontend sanitization
+- Sensitive field removal
+
+### Example
+
+```ts
+const rawUser = {
+  id: 101,
+  email: 'brennan@xalor.io',
+  phone: '555-0192',
+  role: 'admin',
+  token: 'jwt_991',
+};
+
+const safeUser = transformXalor<'USER_PROFILE', 'USER_PROFILE'>(
+  'USER_PROFILE',
+  'USER_PROFILE',
+  rawUser,
+  'omit',
+  ['token', 'role'],
+);
+
+console.log(safeUser);
+// {
+//   id: 101,
+//   email: 'brennan@xalor.io',
+//   phone: '555-0192'
+// }
+```
+
+---
+
+## III. Nominal Alignment (`rename`)
+
+### Description
+
+Transforms object keys from one schema naming convention to another.
+
+### Behavior
+
+- Maps keys via dictionary configuration
+- Coerces values into destination schema types
+- Supports cross-system integration mapping
+- Preserves structural integrity during rename
+
+### Use Cases
+
+- API integration mapping
+- snake_case → camelCase conversion
+- third-party payload normalization
+
+### Example
+
+```ts
+const networkInput = {
+  external_id: '8842',
+  user_name: 'neon_rider',
+  is_verified: 'TRUE',
+};
+
+const formattedData = transformXalor<'EXTERNAL_PAYLOAD', 'INTERNAL_USER'>(
+  'EXTERNAL_PAYLOAD',
+  'INTERNAL_USER',
+  networkInput,
+  'rename',
+  {
+    external_id: 'id',
+    user_name: 'username',
+    is_verified: 'active',
+  },
+);
+
+console.log(formattedData);
+// {
+//   id: 8842,
+//   username: 'neon_rider',
+//   active: true
+// }
+```
+
+---
+
+## IV. Matrix Decompression (`flatten`)
+
+### Description
+
+Flattens nested object structures into dot-notation key-value maps.
+
+### Behavior
+
+- Recursively traverses nested objects
+- Converts hierarchy into flat key paths
+- Preserves arrays using index notation
+- Produces analytics-friendly output
+
+### Use Cases
+
+- Logging pipelines
+- CSV export preparation
+- analytics indexing
+- relational DB mapping
+
+### Example
+
+```ts
+const nestedOrder = {
+  orderId: 'ORD-991',
+  meta: { timestamp: 1715974000 },
+  items: [{ SKU: 'XAL-CORE' }],
+};
+
+const flatRecord = transformXalor<'STORE_ORDER', 'FLAT_ORDER_VIEW'>(
+  'STORE_ORDER',
+  'FLAT_ORDER_VIEW',
+  nestedOrder,
+  'flatten',
+);
+
+console.log(flatRecord);
+// {
+//   orderId: "ORD-991",
+//   meta.timestamp: 1715974000,
+//   items[0].SKU: "XAL-CORE"
+// }
+```
 
 ---
 
 &nbsp;
 
-# Build Xalor
+# Match Xalor
 
-### STATUS - IN PROGRESS
+### 🟡 In Progress
 
+### `matchXalor` is the runtime pattern dispatch engine of the Xalor system.
+
+It routes unknown or polymorphic input data to the first matching schema handler based on structural validation.
+
+## Supported Capabilities
+
+- Structural pattern matching over runtime data
+- Schema-driven handler dispatch
+- Automatic type narrowing per matched branch
+- Safe fallback execution path
+- Ordered evaluation of registered handlers

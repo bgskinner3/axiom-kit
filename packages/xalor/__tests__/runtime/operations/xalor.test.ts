@@ -1,4 +1,4 @@
-describe('Guard ISXalor', () => {
+describe('Xalor BUILDTIME TEST PLACEHOLDER', () => {
   it('is a placeholder', () => {
     expect(true).toBe(true);
   });

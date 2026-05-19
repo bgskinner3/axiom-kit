@@ -7,33 +7,26 @@
 </p>
 
 <div align="center">
-
   <a href="https://www.npmjs.com/package/@bgskinner2/xalor">
-    <img src="https://img.shields.io/npm/v/@bgskinner2/xalor.svg" />
+    <img src="https://img.shields.io/npm/v/@bgskinner2/xalor.svg" alt="NPM Version" />
   </a>
-
   <a href="https://www.npmjs.com/package/@bgskinner2/xalor">
-    <img src="https://img.shields.io/npm/types/@bgskinner2/xalor.svg" />
+    <img src="https://img.shields.io/npm/types/@bgskinner2/xalor.svg" alt="TypeScript Support" />
   </a>
-
-  <a href="https://github.com/YOUR_REPO/blob/main/LICENSE">
-    <img src="https://img.shields.io/npm/l/@bgskinner2/xalor.svg" />
+  <a href="https://github.com">
+    <img src="https://img.shields.io/npm/l/@bgskinner2/xalor.svg" alt="License" />
   </a>
-
   <a href="https://bundlephobia.com/package/@bgskinner2/xalor">
-    <img src="https://img.shields.io/bundlephobia/minzip/@bgskinner2/xalor" />
+    <img src="https://img.shields.io/bundlephobia/minzip/@bgskinner2/xalor" alt="Minizip Size" />
   </a>
-
 </div>
 
 &nbsp;
 
 <p align="center">
-    📦  <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/Installation.md">Installation</a>
-  •
-  📖 <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/api.md">Docs</a>
-  •
-  ⚙️ <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/api.md">API Ref</a>
+  📦 <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/Installation.md">Installation</a> • 
+  📖 <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/api.md">Documentation</a> • 
+  ⚙️ <a href="https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/api.md">API Reference</a>
 </p>
 
 ---
@@ -41,30 +34,24 @@
 &nbsp;
 
 <div align="center">
-
-<p style="font-size:20px; max-width:700px;">
-“A build-time TypeScript engine that turns your native types into a live runtime validation and generation system — without duplicating schemas or shipping validation libraries.”
-</p>
-
+  <p style="font-size:20px; max-width:700px;">
+    <em>“A build-time TypeScript engine that turns your native types into a live runtime validation and generation system — without duplicating schemas or shipping heavy validation libraries.”</em>
+  </p>
 </div>
 
 &nbsp;
 
 ## 💥 The Runtime Gap
 
-TypeScript ends at compile time. Your application does not.
+TypeScript ends at compile time. Your application does not. At runtime, type safety is historically rebuilt manually across the development stack:
 
-At runtime, type safety is rebuilt manually across the stack:
+- APIs trust external payload data inputs by default.
+- Validation parameters are re-implemented loosely inside custom schemas, guards, and DTO structures.
+- Heavy validation libraries like Zod or io-ts duplicate your TypeScript models entirely at runtime.
+- Structural type drift inevitably emerges between compile-time definitions and execution realities.
+- Every system boundary re-expresses the same data rules in a completely different form.
 
-- APIs trust external data by default
-- Validation is re-implemented in schemas, guards, and DTOs
-- Libraries like Zod/io-ts duplicate TypeScript models at runtime
-- Type drift emerges between compile-time and execution
-- Every boundary re-expresses the same rules in a different form
-
-**Result:** type safety becomes duplicated intent, not enforced structure.
-
-At runtime, TypeScript is no longer a constraint — it is just documentation.
+**The Result:** Type safety becomes a tax of duplicated intent, rather than an enforced structural law. At runtime, TypeScript ceases to be a constraint — it becomes mere documentation.
 
 &nbsp;
 
@@ -80,18 +67,14 @@ At runtime, TypeScript is no longer a constraint — it is just documentation.
 
 ## ⚡ The Inversion
 
-Xalor removes the boundary between compile-time and runtime by compiling TypeScript types into persistent runtime metadata.
+Xalor permanently removes the boundary between compile-time and runtime by compiling your native TypeScript types into persistent, content-addressed metadata graphs. Your types are no longer erased after build — they become a live structural registry that powers complex runtime behaviors.
 
-Your types are no longer erased after build — they become a live structural registry that powers runtime behavior.
+Instead of declaring heavy schemas alongside your types, Xalor treats standard TypeScript code as the **Single Source of Truth** and compiles it directly into an active runtime type system.
 
-Instead of defining schemas alongside types (Zod, io-ts, custom guards), Xalor treats TypeScript as the single source of truth and compiles it directly into a runtime type system.
-
-That means:
-
-❌ No schema duplication  
-❌ No type drift between compile-time and runtime  
-❌ No validation libraries shipped in your bundle  
-❌ No re-declared models across layers
+- ❌ **No schema duplication** (Write types once, derive everything else).
+- ❌ **No type drift** between compile-time layout and production execution.
+- ❌ **No external validation libraries** shipped in your production client bundle.
+- ❌ **No re-declared models** across different layer boundaries.
 
 Just native TypeScript types → compiled into a live runtime system.
 
@@ -111,8 +94,6 @@ Everything else is derived.
 </p>
 
 &nbsp;
-
-
 
 ## ⚖️ Xalor vs Schema-Based Runtime Systems
 
@@ -156,7 +137,6 @@ No runtime setup required — just install, configure once, and use native TypeS
 
 &nbsp;
 
-
 ## 🧪 API Peek
 
 ### `registerXalor<"KEY", Type>()` (The Registor)
@@ -164,8 +144,7 @@ No runtime setup required — just install, configure once, and use native TypeS
 A single gateway for registering types into the global Xalor registry.  
 Supports multiple overload patterns through a unified API surface.
 
-
-###  🧬 Type Injection 
+### 🧬 Type Injection
 
 ```ts
 type TUser = {
@@ -188,6 +167,7 @@ type TUser = {
 
 registerXalor<'USER_KEY', TUser>();
 ```
+
 ### 📦 Object Inference (flexible API)
 
 Or Just pass Your Whole Data Object
@@ -211,7 +191,6 @@ const userData = {
  * This allows rapid prototyping without explicit type declarations.
  */
 registerXalor<'USER_TEST_4'>(userData);
-
 ```
 
 Either way you register to the vault your type its pormised to be gloablly acessible and aviablbe to any other of our runtime APis
@@ -223,7 +202,6 @@ Either way you register to the vault your type its pormised to be gloablly acess
 ### `validateXalor` (The Validator)
 
 A multi-mode runtime type gateway for checking, asserting, and parsing data from your compiled TypeScript registry.
-
 
 ### 🛡️ Guard (type-safe predicate)
 
@@ -242,15 +220,11 @@ const isUser = validateXalor<'USER', 'guard'>();
 if (isUser(data)) {
   // fully typed as User
 }
-
 ```
 
 ### ⚡ Parse (safe transformation)
 
-
-
 ```ts
-
 /**
  * Parses unknown input into a strongly typed "USER" object.
  *
@@ -263,7 +237,6 @@ const user = parseUser(data);
 
 // Example of internal failure handling (conceptual):
 // return fallbackValue;
-
 ```
 
 All APIs are powered by a single compiled TypeScript registry, enabling shared access across validation, parsing, and generation layers without duplicated schemas or external validation systems.
@@ -274,33 +247,18 @@ All APIs are powered by a single compiled TypeScript registry, enabling shared a
 
 &nbsp;
 
-&nbsp;
+---
 
 ## ✨ Core Features
 
-- ✔ **Native TypeScript → runtime system**  
-  Your types become executable at build-time
+- ✔ **Native TypeScript → Runtime System:** Your types become executable code variables at build-time.
+- ✔ **Persistent Structural Type Graph (Vault System):** Types are safely cached, reused, and never re-declared.
+- ✔ **Shared IDE + Runtime Registry:** One uniform data vocabulary powering both editor completion and execution.
+- ✔ **Zero Schema Duplication:** Wipes out the need for duplicate, mirrored Zod-style data schemas.
+- ✔ **Tree-Shakeable by Design:** Multi-line pure annotations allow minifiers to strip unused metadata completely.
+- ✔ **Zero-Footprint Runtime Overhead:** Complex operations are handled entirely during builds, not inside the execution thread.
 
-- ✔ **Persistent structural type graph (Vault system)**  
-  Types are stored, reused, and never redefined
-
-- ✔ **Shared IDE + runtime registry**  
-  One registry powering both autocomplete and execution
-
-- ✔ **Zero schema duplication**  
-  No Zod-style mirrored definitions
-
-- ✔ **Global type store access**  
-  Types are accessible anywhere in the runtime layer
-
-- ✔ **Tree-shakeable by design**  
-  Only what you use is included in the bundle
-
-- ✔ **Build-time compilation (no runtime overhead)**  
-  Everything is generated during build, not execution
-
-👉 **Full feature set:** [All Features](https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/features.md)
-
+👉 **Explore the full feature manifest:** [Framework Features Guide](https://github.com/bgskinner3/axiom-kit/blob/main/packages/xalor/docs/features.md)
 
 ---
 
