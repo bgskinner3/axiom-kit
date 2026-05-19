@@ -99,4 +99,84 @@ export const TEST_SHAPE_REGISTRY = {
       },
     },
   },
+  /**
+   * 🕸️ TYPE 4: THE MULTI-LAYER MATRIX (The Highly Deep Analytical Document Layer)
+   * Target Interface Shape:
+   * {
+   *   orderId: string;
+   *   items: {
+   *     SKU: string;
+   *     quantity: number;
+   *     logistics: {
+   *       warehouseCode: string;
+   *       dimensions: { weight: number; fragile: boolean; }
+   *     }
+   *   }[]
+   * }
+   */
+  DEEPLY_NESTED_STORE: {
+    kind: 'object',
+    properties: {
+      orderId: {
+        name: 'orderId',
+        optional: false,
+        shape: { kind: 'primitive', type: 'string' },
+      },
+      items: {
+        name: 'items',
+        optional: false,
+        shape: {
+          kind: 'array',
+          items: {
+            kind: 'object',
+            properties: {
+              SKU: {
+                name: 'SKU',
+                optional: false,
+                shape: { kind: 'primitive', type: 'string' },
+              },
+              quantity: {
+                name: 'quantity',
+                optional: false,
+                shape: { kind: 'primitive', type: 'number' },
+              },
+              logistics: {
+                name: 'logistics',
+                optional: false,
+                shape: {
+                  kind: 'object',
+                  properties: {
+                    warehouseCode: {
+                      name: 'warehouseCode',
+                      optional: false,
+                      shape: { kind: 'primitive', type: 'string' },
+                    },
+                    dimensions: {
+                      name: 'dimensions',
+                      optional: false,
+                      shape: {
+                        kind: 'object',
+                        properties: {
+                          weight: {
+                            name: 'weight',
+                            optional: false,
+                            shape: { kind: 'primitive', type: 'number' },
+                          },
+                          fragile: {
+                            name: 'fragile',
+                            optional: false,
+                            shape: { kind: 'primitive', type: 'boolean' },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 } as const satisfies Record<string, TSolidShape>;

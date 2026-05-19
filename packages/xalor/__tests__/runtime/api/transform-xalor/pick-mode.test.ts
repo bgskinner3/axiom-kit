@@ -1,7 +1,7 @@
 // __tests__/runtime/api/transform-xalor.test.ts
-import { transformXalor } from '../../../src/operations';
-import { TEST_SHAPE_REGISTRY } from '../../utils/constants';
-import { seedTestVault, logEngineTrace } from '../../utils';
+import { transformXalor } from '../../../../src/operations';
+import { TEST_SHAPE_REGISTRY } from '../../../utils/constants';
+import { seedTestVault, logEngineTrace } from '../../../utils';
 
 const TEST_LOGS = {
   PICK_MODE_TEST_ONE: false,
@@ -12,9 +12,9 @@ const TEST_LOGS = {
 } as const;
 
 /**
- pnpm run test -- __tests__/runtime/api/transform-xalor.test.ts
+ pnpm run test -- __tests__/runtime/api/transform-xalor/pick-mode.test.ts
  */
-declare module '../../../src/models/types' {
+declare module '../../../../src/models/types' {
   interface ISolidRegistry {
     USER_TEST: {
       id: number;
@@ -170,13 +170,15 @@ describe('Runtime Generator API', () => {
         Object.prototype.hasOwnProperty.call(resultLiteral, 'extraNoise'),
       ).toBe(false);
     });
+
     it('🛡️ should successfully retain only deep-nested properties requested via advanced dot-notation paths', () => {
       const mockOrder = {
         orderId: 'ORD-2026',
         items: [
-          { SKU: 'AAA', quantity: 5 },
-          { SKU: 'BBB', quantity: 12 },
+          { SKU: 'AAA', quantity: 5, rogueTag: 'noise_one' },
+          { SKU: 'BBB', quantity: 12, rogueTag: 'noise_two' },
         ],
+        extraNoiseField: 'root_clutter_to_be_removed',
       };
 
       // ✔️ NEW ADVANCED FEATURE ENFORCED!
@@ -203,126 +205,7 @@ describe('Runtime Generator API', () => {
           { SKU: 'BBB' }, // 💎 'quantity' and 'rogueTag' are successfully sliced away!
         ],
       });
-
-      // Airtight deep assertion verifications check out flawlessly 100% green
-      expect(
-        Object.prototype.hasOwnProperty.call(result.items[0], 'quantity'),
-      ).toBe(false);
     });
-    // it('🛡️ should successfully retain only deep-nested properties requested via advanced dot-notation paths', () => {
-    //   // const mockOrder = {
-    //   //   orderId: 'ORD-2026',
-    //   //   items: [
-    //   //     { SKU: 'AAA', quantity: 5, rogueTag: 'noise_one' },
-    //   //     { SKU: 'BBB', quantity: 12, rogueTag: 'noise_two' },
-    //   //   ],
-    //   //   extraNoiseField: 'root_clutter_to_be_removed',
-    //   // };
-    //   const mockOrder = {
-    //     orderId: 'ORD-2026',
-    //     items: [
-    //       { SKU: 'AAA', quantity: 5 },
-    //       { SKU: 'BBB', quantity: 12 },
-    //     ],
-    //     // extraNoiseField: 'root_clutter_to_be_removed',
-    //   };
-
-    //   // ✔️ NEW ADVANCED FEATURE ENFORCED!
-    //   // Here we explicitly pick the 'orderId' and ONLY the 'SKU' property inside your child collection!
-    //   const result = transformXalor<'STORE_ORDER', 'pick'>({
-    //     data: mockOrder,
-    //     keys: ['orderId', 'items.SKU'],
-    //   });
-
-    //   logEngineTrace({
-    //     enabled: TEST_LOGS.PICK_MODE_TEST_FIVE,
-    //     mode: 'pick',
-    //     operation: 'Advanced Dot-Notation Deep Slicing Pass',
-    //     target: 'STORE_ORDER',
-    //     behavior:
-    //       'Pruning nested collection fields ("quantity") dynamically on the stack trace frame via path parsing.',
-    //     output: result,
-    //   });
-
-    //   expect(result).toEqual({
-    //     orderId: 'ORD-2026',
-    //     items: [
-    //       { SKU: 'AAA' }, // 💎 'quantity' and 'rogueTag' are successfully sliced away!
-    //       { SKU: 'BBB' }, // 💎 'quantity' and 'rogueTag' are successfully sliced away!
-    //     ],
-    //   });
-
-    //   // Airtight deep assertion verifications check out flawlessly 100% green
-    //   expect(
-    //     Object.prototype.hasOwnProperty.call(result.items[0], 'quantity'),
-    //   ).toBe(false);
-    //   // expect(
-    //   //   Object.prototype.hasOwnProperty.call(result.items[0], 'rogueTag'),
-    //   // ).toBe(false);
-    //   // expect(
-    //   //   Object.prototype.hasOwnProperty.call(result, 'extraNoiseField'),
-    //   // ).toBe(false);
-    // });
-    // STOPPP
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-    // it('🛡️ should intercept cyclic references instantly to protect memory frames and handle loops gracefully', () => {
-    //   type TSelfReferentialGraph = {
-    //     id: number;
-    //     username: string;
-    //     self: TSelfReferentialGraph | null;
-    //   };
-
-    //   const cyclicUser: TSelfReferentialGraph = {
-    //     id: 7,
-    //     username: 'LoopMaster',
-    //     self: null,
-    //   };
-    //   cyclicUser.self = cyclicUser; // Physical cyclic back-reference link
-
-    //   const result = transformXalor<'USER_TEST', 'pick'>({
-    //     data: cyclicUser,
-    //     keys: ['id', 'self'],
-    //   }) as any;
-
-    //   expect(result.id).toBe(7);
-    //   expect(Object.prototype.hasOwnProperty.call(result, 'username')).toBe(
-    //     false,
-    //   );
-    //   // Verify that cyclic reference mapping resolved cleanly to the cached clone frame container mapping reference!
-    //   expect(result.self).toBe(result);
-    // });
-
-    // it('🛡️ should immediately trigger a gateway breakout exception if executed without compiled parameters', () => {
-    //   const triggerFaultyExecution = () => {
-    //     // Simulates a developer skipping the Scout transformer compilation pass completely
-    //     transformXalor({ mode: 'pick', data: {}, keys: [] });
-    //   };
-
-    //   expect(triggerFaultyExecution).toThrow(
-    //     "[xalor] 🚨 GATEWAY BLOCK: 'transformXalor' executed without compiled metadata properties.",
-    //   );
-    // });
-
-    // it('🛡️ should immediately trigger a validation panic execution halt if requested key token does not exist inside the storage bunker', () => {
-    //   const triggerMissingBlueprintFault = () => {
-    //     transformXalor(
-    //       { mode: 'pick', data: {}, keys: [] },
-    //       'NON_EXISTENT_BLUEPRINT_KEY' as any,
-    //       'pick',
-    //     );
-    //   };
-
-    //   expect(triggerMissingBlueprintFault).toThrow(
-    //     '[xalor] 🚨 Transformation failed: Blueprint missing from Vault for key: NON_EXISTENT_BLUEPRINT_KEY',
-    //   );
-    // });
   });
 
   // //============================================================================================

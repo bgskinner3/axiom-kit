@@ -4,6 +4,7 @@ import type {
   TExecuteMergeFork,
   TExecuteRenameFork,
   TExecutePickOmitFork,
+  TPickOmitDependency,
 } from '../../models/types';
 /**
  * 🔍 PREDICATE EXECUTIONER: FIELD SELECTIVE RETENTION (PICK MODE)
@@ -64,16 +65,34 @@ export const omitPredicateExecutioner = (
   propertiesSet: Set<string> | Record<string, string>,
   _depth: number,
 ) => {
+  // if (!isSet(propertiesSet)) return true;
+
+  // const hasDirectMatch = propertiesSet.has(fieldKey);
+
+  // const hasNestedMatch = Array.from(propertiesSet).some((path) => {
+  //   const pathSegments = path.split('.');
+  //   return pathSegments.includes(fieldKey) || path.startsWith(`${fieldKey}.`);
+  // });
+
+  // return !hasDirectMatch && !hasNestedMatch;
   if (!isSet(propertiesSet)) return true;
 
+  // 🔍 Identify if the current key is an exact, explicit root drop target
   const hasDirectMatch = propertiesSet.has(fieldKey);
 
+  // 🔍 Identify if the current key is merely a parent namespace for a deep path
   const hasNestedMatch = Array.from(propertiesSet).some((path) => {
     const pathSegments = path.split('.');
     return pathSegments.includes(fieldKey) || path.startsWith(`${fieldKey}.`);
   });
 
-  return !hasDirectMatch && !hasNestedMatch;
+  // ✔️ FIX: If it is an exact match, omit it (false). If it is a nested path branch,
+  // allow it through (true) so the child workers can strip fields down the line!
+  if (hasDirectMatch) return false;
+  if (hasNestedMatch) return true;
+
+  // Unlisted properties remain completely untouched and flow through natively
+  return true;
 };
 //sliceObjectProperties
 // ========================================================================================================
@@ -113,14 +132,49 @@ export function executePickOmitFork({
         Object.prototype.hasOwnProperty.call(val || {}, key)
       ) {
         if (predicate(key, activeSet, depth) && isObject(dataRef)) {
-          const rawSourceValue = dataRef[key];
-          /* prettier-ignore */ cleanObj[key] = sanitizeHandler({ val: rawSourceValue, currentShape: metadata.shape, dependency, depth: depth + 1, seenObjectsMap, predicate });
+          const rawSourceValue = (dataRef as Record<string, unknown>)[key];
+
+          // 🔍 STEP A: Compile a clean, stripped child subset filter Set down the wire!
+          const childSet = new Set<string>();
+          for (const path of activeSet) {
+            if (path.startsWith(`${key}.`)) {
+              // Strip the parent namespace prefix: e.g. "items.logistics" -> becomes exactly "logistics"
+              childSet.add(path.slice(key.length + 1));
+            } else if (path === key && dependency.mode === 'pick') {
+              // Unpack child object structures completely if the parent node itself was explicitly picked
+              if (metadata.shape.kind === 'object') {
+                for (const childKey of Object.keys(metadata.shape.properties)) {
+                  childSet.add(childKey);
+                }
+              }
+              // Unpack child array items properties cleanly to bypass collection dropping traps
+              if (
+                metadata.shape.kind === 'array' &&
+                metadata.shape.items.kind === 'object'
+              ) {
+                for (const childKey of Object.keys(
+                  metadata.shape.items.properties,
+                )) {
+                  childSet.add(childKey);
+                }
+              }
+            }
+          }
+
+          // 🔍 STEP B: Bind the computed sub-paths block cleanly to a new child dependency context tracking object
+          const childDependency: TPickOmitDependency = {
+            mode: dependency.mode,
+            set: childSet.size > 0 ? childSet : activeSet,
+          };
+
+          /* prettier-ignore */ cleanObj[key] = sanitizeHandler({ val: rawSourceValue, currentShape: metadata.shape, dependency: childDependency, depth: depth + 1, seenObjectsMap, predicate,});
         }
       }
     }
   }
   return cleanObj;
 }
+
 /**
  * 🔪 UTILITY WORKER: NOMINAL ALIGNMENTS (RENAME MODE)
  *
