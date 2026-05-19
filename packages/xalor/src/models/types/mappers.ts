@@ -4,6 +4,7 @@ import type {
   TSolidMetadata,
   TValidationContext,
   TXalorRuleKind,
+  TAuditorKeywords,
 } from '../../../shared';
 
 /**
@@ -105,7 +106,9 @@ export type TValidatorMapper = {
  * Leverages a dual-tuple multi-dimensional readonly design format to enforce
  * static evaluation safety across deep parsing translation runs.
  */
-export type TRuleAuditorMapper = readonly [readonly string[], TXalorRuleKind][];
+export type TRuleAuditorMapper = Readonly<
+  Record<TAuditorKeywords, TXalorRuleKind>
+>;
 
 /**
  * 🎛️ TSHAPE_CAST_MAPPER_MAP

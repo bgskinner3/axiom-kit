@@ -73,9 +73,15 @@ export function validateObject(
     }
 
     // 2. Recurse
-    if (!validateShape(value, metadata.shape, ctx)) {
-      ctx.path = originalPath;
-      return false;
+    // if (!validateShape(value, metadata.shape, ctx)) {
+    // ctx.path = originalPath;
+    // return false;
+    // }
+    if (metadata.shape) {
+      if (!validateShape(value, metadata.shape, ctx)) {
+        ctx.path = originalPath;
+        return false;
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 import type { TRuleAuditorMapper } from '../models/types';
+
 /**
  * ============================================================================
  * DIAGNOSTIC ENGINE MAPPER: RULE MATCHERS MATRIX
@@ -9,11 +10,16 @@ import type { TRuleAuditorMapper } from '../models/types';
  * into deterministic, strongly typed error category enums. It acts as the primary
  * translator layer for the Auditor Layer (Category 2 Validation API - Soft Fails).
  */
-export const RULE_MATCHERS_MAPPER: TRuleAuditorMapper = [
-  [['missing', 'required'], 'missing_property'],
-  [['literal'], 'literal_mismatch'],
-  [['excess', 'stray'], 'excess_property'],
-  [['union'], 'union_exhausted'],
-  [['depth', 'overflow'], 'depth_overflow'],
-  [['intersection'], 'intersection_breached'],
-] satisfies TRuleAuditorMapper;
+export const RULE_KEYWORDS_MAP: TRuleAuditorMapper = {
+  missing: 'missing_property',
+  required: 'missing_property',
+  literal: 'literal_mismatch',
+  excess: 'excess_property',
+  stray: 'excess_property',
+  union: 'union_exhausted',
+  overflow: 'depth_overflow',
+  depth: 'depth_overflow',
+  intersection: 'intersection_breached',
+  primitive: 'primitive_mismatch',
+  type: 'primitive_mismatch',
+} satisfies TRuleAuditorMapper;

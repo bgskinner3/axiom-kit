@@ -92,7 +92,7 @@ export function validateXalor<
       const isValid = XalethorService.validateShape(val, key);
       const rawErrors = XalethorService.getKeyErrors(key);
 
-      return XalethorService.auditReport(isValid, rawErrors);
+      return XalethorService.auditReport(key, isValid, rawErrors);
     },
   } satisfies TTValidateStrategyEngine<K>;
 

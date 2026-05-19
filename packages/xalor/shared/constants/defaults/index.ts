@@ -61,3 +61,23 @@ export const DEFAULT_TYPE_COLORS: Record<
   warn: 'yellow',
   log: 'yellow',
 } satisfies Record<string, keyof typeof ANSI_COLOR_CODES>;
+/**
+ * 🔑 MASTER AUDITOR KEYWORDS LEDGER
+ *
+ * ROLE:
+ * The single source of truth defining the absolute array list of string tokens
+ * scanned by the diagnostic translation engine.
+ */
+export const AUDITOR_KEYWORDS = [
+  'missing',
+  'required',
+  'literal',
+  'excess',
+  'stray',
+  'union',
+  'overflow',
+  'depth',
+  'intersection',
+  'primitive',
+  'type',
+] as const;

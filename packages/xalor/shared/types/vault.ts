@@ -1,5 +1,5 @@
 import type { TSolidShape } from './blueprints';
-
+import { AUDITOR_KEYWORDS } from '../constants';
 /**
  * 📍 VAULT ENTRIES
  * Shredded GPS and Identity data for the Triple-KV system.
@@ -59,7 +59,16 @@ export type TXalorRuleKind =
   | 'union_exhausted'
   | 'intersection_breached'
   | 'depth_overflow';
-
+/**
+ * 🏷️ AUDITOR KEYWORD TYPE UNION
+ *
+ * ROLE:
+ * Automatically derives a strict string literal type union from the master keys ledger.
+ * Resolves natively to:
+ * | 'missing' | 'required' | 'literal' | 'excess' | 'stray' | 'union'
+ * | 'overflow' | 'depth' | 'intersection' | 'primitive' | 'type'
+ */
+export type TAuditorKeywords = (typeof AUDITOR_KEYWORDS)[number];
 /**
  * 📦 TXALOR ISSUE
  * A deeply detailed, scannable record representing a single structural violation.
@@ -85,4 +94,3 @@ export type TXalorAuditReport = {
   /** An array containing deterministic diagnostic traces for each failure found */
   issues: TXalorIssue[];
 };
-// TXalorAuditReport, TXalorIssue, TXalorRuleKind

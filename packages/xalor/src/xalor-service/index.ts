@@ -43,8 +43,16 @@ export class XalethorService {
   public static getKeyErrors(key: string): TSolidError[] {
     return XalethorVaultAuditor.getErrors(key);
   }
-  public static auditReport(isValid: boolean, rawErrors: TSolidError[]) {
-    return XalethorVaultAuditor.compileAuditReport(isValid, rawErrors);
+  public static auditReport(
+    targetKey: string,
+    isValid: boolean,
+    rawErrors: TSolidError[],
+  ) {
+    return XalethorVaultAuditor.compileAuditReport(
+      targetKey,
+      isValid,
+      rawErrors,
+    );
   }
   // ============================================================
   // ARCHIVE
